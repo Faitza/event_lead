@@ -22,6 +22,7 @@
   <div class="notice notice-info my-2"><i class="bi bi-info-circle-fill"></i><div>Vous pourrez revenir sur ce lien pour mettre à jour votre réponse tant que vous n'avez pas confirmé votre présence.</div></div>
   {% endif %}
 
+  {% include "partials/_help_hint.html" with summary="Une erreur dans ma réponse ?" text="Avant de confirmer, la flèche de retour permet de corriger. Une fois la présence confirmée, la réponse est définitive : écrivez-nous en expliquant l'erreur." faq="invite-modifier" topic="invitation" %}
   <form method="post" class="d-flex gap-2">
     {% csrf_token %}
     <a href="{% if selected_gifts %}{% url 'events:invitation_gift_list' guest.magic_token %}{% elif state.status == 'confirmed' and event.gifts.exists %}{% url 'events:invitation_gift_question' guest.magic_token %}{% else %}{% url 'events:invitation' guest.magic_token %}{% endif %}" class="btn btn-light btn-lg"><i class="bi bi-arrow-left"></i></a>

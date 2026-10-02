@@ -25,13 +25,15 @@
               <button type="button" class="pay-method" data-method="stripe"><span class="pm-logo pm-stripe"><i class="bi bi-credit-card-2-front fs-5"></i></span><span><strong class="d-block">Carte bancaire</strong><span class="small text-muted">Visa, Mastercard (USD)</span></span></button>
               <button type="button" class="pay-method" data-method="paypal"><span class="pm-logo pm-paypal">PP</span><span><strong class="d-block">PayPal</strong><span class="small text-muted">Compte ou carte</span></span></button>
             </div>
-            {% if PAYMENT_DEMO_MODE %}<p class="small text-muted text-center mt-3 mb-0"><i class="bi bi-info-circle me-1"></i>Mode démonstration : aucun montant réel n'est débité.</p>{% endif %}
+            <p class="small text-muted text-center mt-3 mb-0">Un souci pour payer ? <a href="{% url 'core:help' %}?sujet=payment#demande" target="_blank" rel="noopener">Demander de l'aide</a></p>
+            {% if PAYMENT_DEMO_MODE %}<p class="small text-muted text-center mt-2 mb-0"><i class="bi bi-info-circle me-1"></i>Mode démonstration : aucun montant réel n'est débité.</p>{% endif %}
           </div>
 
           <div class="pay-step" data-step="moncash">
             <label class="form-label" for="mc-phone">Numéro MonCash</label>
             <div class="input-group mb-1"><span class="input-group-text">+509</span><input id="mc-phone" name="phone" class="form-control {% if form.phone.errors and form.method.value == 'moncash' %}is-invalid{% endif %}" placeholder="3712 3456" inputmode="tel" required pattern="(\+?509)?\s?[2-5]\d{3}\s?-?\d{4}" value="{% if form.method.value == 'moncash' %}{{ form.phone.value|default:'' }}{% endif %}"></div>
             {% if form.method.value == 'moncash' %}{{ form.phone.errors }}{% endif %}
+            <div class="form-text">Un code de confirmation à 6 chiffres vous est envoyé par SMS à ce numéro. Gardez votre téléphone à portée de main.</div>
             <button type="button" id="moncash-send-otp" class="btn btn-soft w-100 mt-2 {% if form.method.value == 'moncash' %}d-none{% endif %}">Recevoir le code de confirmation</button>
             <div id="moncash-otp-block" class="mt-3 {% if form.method.value != 'moncash' %}d-none{% endif %}">
               <label class="form-label" for="mc-otp">Code OTP reçu par SMS</label>

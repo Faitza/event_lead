@@ -1,0 +1,79 @@
+{% extends "base.html" %}
+{% block title %}Aide{% endblock %}
+{% block meta_description %}Réponses aux questions fréquentes des invités, des Organisateurs VIP et de l'équipe EventLead, et un moyen simple d'écrire à l'équipe par WhatsApp ou par formulaire.{% endblock %}
+{% block content %}
+{% include "partials/_banner.html" with eyebrow="Aide" title="Une question ?" accent="Nous sommes là" text="Des réponses simples pour les invités, les Organisateurs VIP et l'équipe, et un moyen rapide de nous écrire." %}
+<section class="section pt-5">
+  <div class="container">
+    <div class="row g-4 g-lg-5">
+      <div class="col-lg-8">
+        <nav class="cat-filter justify-content-start" aria-label="Aller à un profil">
+          {% for profile in profiles %}<a href="#aide-{{ profile.key }}" class="cat-chip"><i class="bi {{ profile.icon }}"></i>{{ profile.title }}</a>{% endfor %}
+        </nav>
+        {% for profile in profiles %}
+        <section id="aide-{{ profile.key }}" class="faq-group">
+          <div class="eyebrow-row"><span class="diamond"></span><span class="eyebrow">{{ profile.title }}</span></div>
+          <p class="faq-intro">{{ profile.intro }}</p>
+          {% for slug, question, answer in profile.questions %}
+          <details class="faq-item" id="faq-{{ slug }}">
+            <summary>{{ question }}</summary>
+            <p>{{ answer }}</p>
+          </details>
+          {% endfor %}
+        </section>
+        {% endfor %}
+      </div>
+      <div class="col-lg-4">
+        <aside class="frame help-aside">
+          <div class="frame-in d-flex flex-column gap-3">
+            <span class="icon-bubble gold"><i class="bi bi-whatsapp"></i></span>
+            <h2 class="mb-0" style="font-size:1.6rem">Écrire à l'équipe</h2>
+            <p class="mb-0" style="color:#4B5563">Une question qui n'est pas ici ? Écrivez-nous sur WhatsApp, ou remplissez le formulaire plus bas. Nous répondons par WhatsApp ou par e-mail.</p>
+            <a href="https://wa.me/{{ CONTACT_WHATSAPP }}?text={{ "Bonjour EventLead, j'ai besoin d'aide."|urlencode }}" target="_blank" rel="noopener" class="btn btn-whatsapp btn-lg"><i class="bi bi-whatsapp me-2"></i>Écrire sur WhatsApp</a>
+            <a href="#demande" class="btn btn-outline-primary">Remplir le formulaire</a>
+            <div class="contact-item"><i class="bi bi-envelope"></i><a href="mailto:{{ CONTACT_EMAIL }}" style="color:inherit">{{ CONTACT_EMAIL }}</a></div>
+            <div class="contact-item"><i class="bi bi-telephone"></i>{{ CONTACT_PHONE }}</div>
+          </div>
+        </aside>
+      </div>
+    </div>
+
+    <div class="row mt-5" id="demande">
+      <div class="col-lg-8">
+        <div class="eyebrow-row mb-2"><span class="diamond"></span><span class="eyebrow">Formulaire</span></div>
+        <h2 class="section-title mb-4" style="font-size:2.2rem">J'ai besoin d'aide</h2>
+        {% if sent %}
+        <div class="notice notice-success" role="status"><i class="bi bi-check-circle-fill"></i><div><strong>Merci, votre demande est bien arrivée.</strong> Nous vous répondons par le moyen de contact que vous avez indiqué.</div></div>
+        <a href="{% url 'core:help' %}#demande" class="btn btn-outline-primary mt-3">Poser une autre question</a>
+        {% else %}
+        <form method="post" action="{% url 'core:help' %}#demande" class="frame" novalidate>
+          {% csrf_token %}
+          <div class="frame-in bg-white">
+            {% if form.non_field_errors %}<div class="notice notice-danger mb-3"><i class="bi bi-exclamation-circle"></i><div>{{ form.non_field_errors|join:" " }}</div></div>{% endif %}
+            <div class="row">
+              <div class="col-md-6">{% include "partials/_field.html" with field=form.name %}</div>
+              <div class="col-md-6">{% include "partials/_field.html" with field=form.contact %}</div>
+            </div>
+            {% include "partials/_field.html" with field=form.topic %}
+            {% include "partials/_field.html" with field=form.message %}
+            <div class="hp-field" aria-hidden="true"><label for="{{ form.website.id_for_label }}">{{ form.website.label }}</label>{{ form.website }}</div>
+            <button class="btn btn-primary btn-lg"><i class="bi bi-send me-2"></i>Envoyer ma demande</button>
+          </div>
+        </form>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock %}
+{% block extra_js %}
+<script>
+  // Ouvre la question visée par l'adresse (#faq-...) : les petites aides du parcours y renvoient.
+  function openTargetedFaq() {
+    var el = location.hash ? document.getElementById(location.hash.slice(1)) : null;
+    if (el && el.tagName === "DETAILS") { el.open = true; el.scrollIntoView(); }
+  }
+  openTargetedFaq();
+  window.addEventListener("hashchange", openTargetedFaq);
+</script>
+{% endblock %}

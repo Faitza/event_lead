@@ -23,6 +23,7 @@
         <a class="nav-link" href="{% url 'core:landing' %}#services">Services</a>
         <a class="nav-link" href="{% url 'core:landing' %}#a-propos">À propos</a>
         <a class="nav-link" href="{% url 'core:landing' %}#contact">Contact</a>
+        <a class="nav-link {% if request.resolver_match.url_name == 'help' %}active{% endif %}" href="{% url 'core:help' %}">Aide</a>
       </nav>
       <div class="d-flex align-items-center gap-2 mt-3 mt-lg-0 flex-wrap">
         {% if user.is_authenticated %}

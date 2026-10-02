@@ -1,0 +1,44 @@
+{% extends "dashboard/base_dashboard.html" %}
+{% block title %}Demandes d'aide{% endblock %}
+{% block dash_content %}
+<div class="page-head">
+  <div><h1>Demandes d'aide</h1><p>Questions envoyées depuis la page Aide. Suivez chaque demande jusqu'à sa résolution.</p></div>
+  <a href="{% url 'dashboard:help_export_csv' %}{% if status %}?statut={{ status }}{% endif %}" class="btn btn-light"><i class="bi bi-download me-2"></i>Exporter en CSV</a>
+</div>
+<div class="d-flex flex-wrap gap-2 mb-3" role="tablist" aria-label="Filtrer par statut">
+  <a href="{% url 'dashboard:help_list' %}" class="btn btn-sm {% if not status %}btn-primary{% else %}btn-light{% endif %}">Toutes <span class="opacity-75">({{ total }})</span></a>
+  {% for value, label, count in tabs %}
+  <a href="{% url 'dashboard:help_list' %}?statut={{ value }}" class="btn btn-sm {% if status == value %}btn-primary{% else %}btn-light{% endif %}">{{ label }}{% if value != 'in_progress' %}s{% endif %} <span class="opacity-75">({{ count }})</span></a>
+  {% endfor %}
+</div>
+<div class="el-card">
+  {% for r in help_requests %}
+  <div class="p-3 border-bottom {% if r.status == 'new' %}bg-soft{% endif %}">
+    <div class="d-flex flex-wrap justify-content-between align-items-start gap-2">
+      <div>
+        <strong>{{ r.name }}</strong>
+        <span class="text-muted small">&middot;
+          {% if r.contact_is_email %}<a href="mailto:{{ r.contact }}">{{ r.contact }}</a>
+          {% elif r.whatsapp_number %}<a href="https://wa.me/{{ r.whatsapp_number }}" target="_blank" rel="noopener"><i class="bi bi-whatsapp me-1"></i>{{ r.contact }}</a>
+          {% else %}{{ r.contact }}{% endif %}
+        </span>
+      </div>
+      <span class="badge-el {{ r.status_badge }}">{{ r.get_status_display }}</span>
+    </div>
+    <div class="mt-1"><span class="badge-el badge-gold">{{ r.get_topic_display }}</span> <span class="small text-muted ms-1">{{ r.created_at|date:"j F Y H:i" }}</span></div>
+    <p class="mb-2 mt-2 small">{{ r.message|linebreaksbr }}</p>
+    <form method="post" action="{% url 'dashboard:help_set_status' r.pk %}" class="d-flex align-items-center gap-2">
+      {% csrf_token %}
+      <input type="hidden" name="filter" value="{{ status }}">
+      <label class="small text-muted" for="status-{{ r.pk }}">Statut</label>
+      <select id="status-{{ r.pk }}" name="status" class="form-select form-select-sm w-auto" style="min-width:9.5rem" onchange="this.form.submit()">
+        {% for value, label in statuses %}<option value="{{ value }}" {% if r.status == value %}selected{% endif %}>{{ label }}</option>{% endfor %}
+      </select>
+      <noscript><button class="btn btn-sm btn-soft">Enregistrer</button></noscript>
+    </form>
+  </div>
+  {% empty %}
+  <div class="empty-state"><i class="bi bi-life-preserver"></i><p class="mt-2 mb-0">{% if status %}Aucune demande avec ce statut.{% else %}Aucune demande d'aide pour le moment.{% endif %}</p></div>
+  {% endfor %}
+</div>
+{% endblock %}

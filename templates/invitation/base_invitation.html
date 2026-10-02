@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 {% block title %}Invitation - {{ event.title }}{% endblock %}
+{% block help_fab %}{% endblock %}
 {% block body %}
 <div class="inv-shell">
   <div class="inv-topbar">
@@ -27,6 +28,7 @@
       </div>
       {% endif %}
       {% block inv_content %}{% endblock %}
+      <p class="help-foot">Une question ? <a href="https://wa.me/{{ CONTACT_WHATSAPP }}?text={{ "Bonjour EventLead, j'ai besoin d'aide avec mon invitation."|urlencode }}" target="_blank" rel="noopener">Écrire sur WhatsApp</a> <span aria-hidden="true">&middot;</span> <a href="{% url 'core:help' %}" target="_blank" rel="noopener">Voir l'aide</a></p>
     </div>
   </div>
 </div>

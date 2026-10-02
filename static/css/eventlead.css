@@ -192,6 +192,9 @@ h1 em, h2 em, h3 em, .disp em { color: var(--el-gold); font-style: italic; }
 .el-nav .container { min-height: 124px; transition: min-height var(--el-ease); }
 .el-nav.scrolled .container { min-height: 104px; }
 .el-nav .navbar-nav { gap: 30px; }
+.el-nav .nav-link { white-space: nowrap; }
+@media (min-width: 992px) and (max-width: 1399px) { .el-nav .navbar-nav { gap: 18px; } }
+@media (min-width: 1400px) { .el-nav .navbar-nav { gap: 22px; } }
 .el-nav .nav-link, .navl { font-size: .8125rem; font-weight: 500; letter-spacing: .14em; text-transform: uppercase; color: var(--el-primary-dark); padding: 8px 0 !important; border-bottom: 2px solid transparent; border-radius: 0; transition: border-color var(--el-ease), color var(--el-ease); background: transparent; }
 .el-nav .nav-link:hover, .el-nav .nav-link.active, .navl:hover, .navl.active { color: var(--el-primary-dark); border-color: var(--el-gold); background: transparent; }
 .user-pill { display: inline-flex; align-items: center; gap: .5rem; padding: .25rem .7rem .25rem .25rem; border-radius: 999px; background: var(--el-tint); color: var(--el-text); font-weight: 500; font-size: .9rem; }
@@ -694,3 +697,36 @@ h1 em, h2 em, h3 em, .disp em { color: var(--el-gold); font-style: italic; }
   .service-cell { padding: 32px 26px; }
   .frame > .frame-in { padding: 1.4rem; }
 }
+
+/* ===== Espace d'aide ===== */
+.fab-help { position: fixed; right: 18px; bottom: calc(18px + env(safe-area-inset-bottom, 0px)); z-index: 1030; display: inline-flex; align-items: center; justify-content: center; gap: .55rem; height: 54px; min-width: 54px; padding: 0 1.2rem 0 1.05rem; border-radius: 999px; background: #10B981; color: #053B2A; font-size: .9rem; font-weight: 600; text-decoration: none; box-shadow: 0 8px 24px rgba(5, 59, 42, .3); transition: background-color var(--el-ease), transform var(--el-ease); }
+.fab-help i { font-size: 1.5rem; line-height: 1; }
+.fab-help:hover { background: #0EA371; color: #053B2A; transform: translateY(-2px); }
+.fab-help:focus-visible { outline: 3px solid var(--el-gold); outline-offset: 3px; }
+@media (max-width: 767px) {
+  .fab-help { width: 54px; padding: 0; }
+  .fab-help span { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+}
+.faq-group { scroll-margin-top: 110px; margin-bottom: 3rem; }
+.faq-intro { color: #4B5563; margin: .7rem 0 1.2rem; }
+.faq-item { scroll-margin-top: 110px; background: #fff; border: 1px solid var(--el-border); border-radius: 14px; margin-bottom: .6rem; transition: border-color var(--el-ease), box-shadow var(--el-ease); }
+.faq-item summary { display: flex; justify-content: space-between; align-items: center; gap: 1rem; padding: 1rem 1.2rem; cursor: pointer; list-style: none; font-weight: 500; color: var(--el-primary-dark); }
+.faq-item summary::-webkit-details-marker { display: none; }
+.faq-item summary::after { content: "\f282"; font-family: "bootstrap-icons"; flex: none; color: var(--el-gold-text); transition: transform var(--el-ease); }
+.faq-item summary:focus-visible { outline: 3px solid var(--el-gold); outline-offset: -3px; border-radius: 14px; }
+.faq-item[open] { border-color: rgba(212, 175, 55, .75); box-shadow: 0 6px 20px rgba(44, 3, 59, .06); }
+.faq-item[open] summary::after { transform: rotate(180deg); }
+.faq-item p { margin: 0; padding: 0 1.2rem 1.15rem; color: #4B5563; }
+.help-aside { position: sticky; top: 110px; }
+.hp-field { position: absolute; left: -10000px; width: 1px; height: 1px; overflow: hidden; }
+.notice-success { background: rgba(16, 185, 129, .1); color: #065F46; border: 1px solid rgba(16, 185, 129, .3); }
+.help-hint { font-size: .8125rem; color: var(--el-muted); }
+.help-hint summary { display: inline-flex; align-items: center; gap: .4rem; cursor: pointer; list-style: none; color: var(--el-primary); }
+.help-hint summary::-webkit-details-marker { display: none; }
+.help-hint summary i { color: var(--el-gold-text); }
+.help-hint summary:hover { text-decoration: underline; }
+.help-hint .hint-body { margin-top: .5rem; padding: .75rem .9rem; border-radius: 10px; background: var(--el-bg-soft); border: 1px solid var(--el-border); color: #4B5563; }
+.help-hint .hint-body a { font-weight: 600; }
+.help-foot { margin: auto 0 0; padding-top: .5rem; text-align: center; font-size: .8125rem; color: var(--el-muted); }
+.dash-sidebar .side-link { white-space: nowrap; }
+.dash-sidebar .side-count { margin-left: auto; margin-right: .7rem; min-width: 22px; padding: 1px 7px; border-radius: 999px; background: var(--el-primary); color: #fff; font-size: .75rem; font-weight: 600; text-align: center; }

@@ -23,6 +23,7 @@
       <div class="empty-state small">La liste de cadeaux est vide.</div>
     {% endfor %}
   </div>
+  {% include "partials/_help_hint.html" with summary="Un cadeau a disparu de la liste ?" text="Un autre invité l'a choisi avant vous et il n'en reste plus. La liste se met à jour toute seule : choisissez-en un autre." faq="invite-cadeau-disparu" %}
   <div class="sticky-action d-flex gap-2">
     <a href="{% url 'events:invitation_gift_question' guest.magic_token %}" class="btn btn-light btn-lg"><i class="bi bi-arrow-left"></i></a>
     <button id="confirm-gifts" class="btn btn-primary flex-grow-1" disabled>Confirmer (<span id="selected-count">0</span> cadeau(x) sélectionné(s))</button>

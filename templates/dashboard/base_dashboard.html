@@ -1,6 +1,7 @@
 {% extends "base.html" %}
 {% load el_tags %}
 {% block body_class %}bg-light{% endblock %}
+{% block help_fab %}{% endblock %}
 {% block body %}
 <div class="dash">
   <aside class="dash-sidebar">
@@ -17,6 +18,7 @@
     <a class="side-link {% active '/admin-dashboard/paiements/' %}" href="{% url 'dashboard:payment_history' %}"><i class="bi bi-credit-card"></i>Paiements</a>
     <div class="nav-section">Communauté</div>
     <a class="side-link {% active '/admin-dashboard/messages/' %}" href="{% url 'dashboard:inbox' %}"><i class="bi bi-chat-square-heart"></i>Messages et avis</a>
+    <a class="side-link {% active '/admin-dashboard/aide/' %}" href="{% url 'dashboard:help_list' %}"><i class="bi bi-life-preserver"></i>Demandes d'aide{% if new_help_requests %}<span class="side-count" title="Demandes nouvelles">{{ new_help_requests }}</span>{% endif %}</a>
     <a class="side-link" href="{% url 'admin:index' %}"><i class="bi bi-database-gear"></i>Back-office Django</a>
     <a class="side-link" href="{% url 'core:landing' %}" target="_blank"><i class="bi bi-box-arrow-up-right"></i>Voir le site</a>
     <div class="mt-auto pt-4">

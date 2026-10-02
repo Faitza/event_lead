@@ -22,6 +22,7 @@
     <main>{% block content %}{% endblock %}</main>
     {% include "partials/_footer.html" %}
   {% endblock %}
+  {% block help_fab %}{% include "partials/_help_fab.html" %}{% endblock %}
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
   <script src="{% static 'js/eventlead.js' %}"></script>
   {% block extra_js %}{% endblock %}

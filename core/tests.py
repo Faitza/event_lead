@@ -7,6 +7,7 @@ from django.urls import reverse
 from django.utils import timezone
 
 from accounts.models import CustomUser
+from core.models import HelpRequest
 from ads.models import Ad
 from events.models import Event, EventCategory, Guest
 from gifts.models import Gift, GiftClaim
@@ -422,6 +423,178 @@ class EventCategoryTests(TestCase):
         self.assertNotContains(r, "Concert kompa")
 
 
+class HelpSpaceTests(TestCase):
+    def setUp(self):
+        self.admin = make_user("adm@x.ht", role="admin")
+
+    def post_help(self, **extra):
+        data = {"name": "Marie", "contact": "marie@example.com", "topic": "payment", "message": "Le code ne vient pas.", "website": ""}
+        data.update(extra)
+        return self.client.post(reverse("core:help"), data)
+
+    # -- page publique -------------------------------------------------------
+    def test_help_page_has_three_profiles_and_key_answers(self):
+        r = self.client.get(reverse("core:help"))
+        self.assertEqual(r.status_code, 200)
+        for title in ("Invité ou visiteur", "Organisateur VIP", "Équipe EventLead"):
+            self.assertContains(r, title)
+        for slug in ("invite-sans-compte", "invite-cadeau", "paiement-moncash", "paiement-natcash", "vip-devenir"):
+            self.assertContains(r, f'id="faq-{slug}"')
+        self.assertContains(r, "Dois-je créer un compte")
+
+    def test_help_page_does_not_ask_to_log_in(self):
+        self.assertEqual(self.client.get(reverse("core:help")).status_code, 200)
+
+    def test_whatsapp_floating_button_uses_the_contact_number(self):
+        from django.conf import settings
+
+        for url in (reverse("core:landing"), reverse("core:help"), reverse("events:explore")):
+            r = self.client.get(url)
+            self.assertContains(r, 'class="fab-help"', msg_prefix=url)
+            self.assertContains(r, f"https://wa.me/{settings.CONTACT_WHATSAPP}?text=", msg_prefix=url)
+
+    def test_no_floating_button_in_dashboard_or_invitation(self):
+        self.client.force_login(self.admin)
+        self.assertNotContains(self.client.get(reverse("dashboard:home")), 'class="fab-help"')
+        self.client.logout()
+        guest = Guest.objects.create(event=make_event(), name="Carla", phone="+509 3712 3456")
+        r = self.client.get(reverse("events:invitation", args=[guest.magic_token]))
+        self.assertNotContains(r, 'class="fab-help"')
+        self.assertContains(r, "Écrire sur WhatsApp")
+
+    # -- formulaire ----------------------------------------------------------
+    def test_help_request_is_saved_as_new(self):
+        r = self.post_help()
+        self.assertRedirects(r, reverse("core:help") + "?envoye=1#demande", fetch_redirect_response=False)
+        req = HelpRequest.objects.get()
+        self.assertEqual((req.name, req.contact, req.topic, req.status), ("Marie", "marie@example.com", "payment", "new"))
+        self.assertContains(self.client.get(reverse("core:help"), {"envoye": "1"}), "votre demande est bien arrivée")
+
+    def test_help_request_accepts_a_phone_number(self):
+        self.post_help(contact="+509 3712 3456")
+        self.assertEqual(HelpRequest.objects.get().whatsapp_number, "50937123456")
+
+    def test_help_request_rejects_a_bad_contact_or_empty_message(self):
+        for bad in ({"contact": "pas-un-contact"}, {"contact": "nom@"}, {"message": ""}, {"name": ""}):
+            r = self.post_help(**bad)
+            self.assertEqual(r.status_code, 200, bad)
+        self.assertEqual(HelpRequest.objects.count(), 0)
+
+    def test_help_form_honeypot_saves_nothing(self):
+        self.post_help(website="http://spam.example")
+        self.assertEqual(HelpRequest.objects.count(), 0)
+
+    def test_help_form_prefills_topic_and_logged_in_user(self):
+        r = self.client.get(reverse("core:help"), {"sujet": "gift"})
+        self.assertEqual(r.context["form"].initial["topic"], "gift")
+        self.client.force_login(self.admin)
+        r = self.client.get(reverse("core:help"), {"sujet": "n-importe-quoi"})
+        self.assertEqual(r.context["form"].initial["contact"], "adm@x.ht")
+        self.assertNotIn("topic", r.context["form"].initial)
+
+    def test_whatsapp_number_normalisation(self):
+        make = lambda contact: HelpRequest(name="x", contact=contact, message="m")
+        self.assertEqual(make("3712 3456").whatsapp_number, "50937123456")
+        self.assertEqual(make("+1 305 555 0100").whatsapp_number, "13055550100")
+        self.assertEqual(make("a@b.ht").whatsapp_number, "")
+        self.assertEqual(make("12345").whatsapp_number, "")
+
+    # -- aides dans le parcours ----------------------------------------------
+    def test_guest_flow_has_quiet_hints(self):
+        event = make_event()
+        Gift.objects.create(event=event, name="Lampe", icon_name="bi-lamp")
+        guest = Guest.objects.create(event=event, name="Carla", phone="+509 3712 3456")
+        url = lambda name: reverse(f"events:{name}", args=[guest.magic_token])
+        self.assertContains(self.client.get(url("invitation")), "Pas de compte à créer ?")
+        self.client.post(url("invitation"), {"status": "confirmed", "companions": 0})
+        self.client.post(url("invitation_gift_question"), {"wants_gift": "yes"})
+        self.assertContains(self.client.get(url("invitation_gift_list")), "Un cadeau a disparu de la liste ?")
+        self.client.post(url("invitation_gift_list"), {"gifts": [event.gifts.first().pk]})
+        r = self.client.get(url("invitation_recap"))
+        self.assertContains(r, "Une erreur dans ma réponse ?")
+        self.assertContains(r, "?sujet=invitation#demande")
+
+    def test_every_hint_target_exists_in_the_faq(self):
+        from core.help import HELP_PROFILES
+
+        slugs = {slug for profile in HELP_PROFILES for slug, _, _ in profile["questions"]}
+        for slug in ("invite-sans-compte", "invite-cadeau-disparu", "invite-modifier"):
+            self.assertIn(slug, slugs)
+
+    def test_payment_modal_has_sms_hint_and_help_link(self):
+        guest_user = make_user("g@x.ht")
+        event = make_event(event_type="public", price_htg=Decimal("1000"))
+        self.client.force_login(guest_user)
+        r = self.client.get(reverse("payments:checkout", args=[event.pk]))
+        self.assertContains(r, "code de confirmation à 6 chiffres")
+        self.assertContains(r, "?sujet=payment#demande")
+
+    # -- tableau de bord -----------------------------------------------------
+    def test_dashboard_help_pages_are_admin_only(self):
+        req = HelpRequest.objects.create(name="Marie", contact="m@x.ht", message="Aide")
+        urls = [reverse("dashboard:help_list"), reverse("dashboard:help_export_csv")]
+        for url in urls:
+            self.assertEqual(self.client.get(url).status_code, 302, url)
+        self.client.force_login(make_user("vip3@x.ht", role="organizer", is_vip=True))
+        for url in urls:
+            self.assertEqual(self.client.get(url).status_code, 403, url)
+        self.assertEqual(self.client.post(reverse("dashboard:help_set_status", args=[req.pk]), {"status": "resolved"}).status_code, 403)
+        req.refresh_from_db()
+        self.assertEqual(req.status, "new")
+        self.client.force_login(self.admin)
+        for url in urls:
+            self.assertEqual(self.client.get(url).status_code, 200, url)
+
+    def test_admin_changes_status_and_filter_is_kept(self):
+        req = HelpRequest.objects.create(name="Marie", contact="m@x.ht", message="Aide")
+        self.client.force_login(self.admin)
+        url = reverse("dashboard:help_set_status", args=[req.pk])
+        r = self.client.post(url, {"status": "in_progress", "filter": "new"})
+        self.assertRedirects(r, reverse("dashboard:help_list") + "?statut=new")
+        req.refresh_from_db()
+        self.assertEqual(req.status, "in_progress")
+        self.client.post(url, {"status": "pas-un-statut"})
+        req.refresh_from_db()
+        self.assertEqual(req.status, "in_progress")
+        self.client.post(url, {"status": "resolved"})
+        req.refresh_from_db()
+        self.assertEqual(req.status, "resolved")
+
+    def test_status_change_requires_post(self):
+        req = HelpRequest.objects.create(name="Marie", contact="m@x.ht", message="Aide")
+        self.client.force_login(self.admin)
+        self.assertEqual(self.client.get(reverse("dashboard:help_set_status", args=[req.pk])).status_code, 405)
+
+    def test_admin_list_filters_by_status_and_shows_counts(self):
+        HelpRequest.objects.create(name="Nouvelle Personne", contact="a@x.ht", message="m1")
+        HelpRequest.objects.create(name="Personne Resolue", contact="b@x.ht", message="m2", status="resolved")
+        self.client.force_login(self.admin)
+        r = self.client.get(reverse("dashboard:help_list"), {"statut": "new"})
+        self.assertContains(r, "Nouvelle Personne")
+        self.assertNotContains(r, "Personne Resolue")
+        self.assertEqual(self.client.get(reverse("dashboard:help_list"), {"statut": "bidon"}).context["status"], "")
+
+    def test_admin_sidebar_and_home_show_new_requests(self):
+        HelpRequest.objects.create(name="Marie", contact="m@x.ht", message="Aide")
+        HelpRequest.objects.create(name="Paul", contact="p@x.ht", message="Aide", status="resolved")
+        self.client.force_login(self.admin)
+        r = self.client.get(reverse("dashboard:home"))
+        self.assertContains(r, "1 demande d'aide nouvelle")
+        self.assertContains(r, 'class="side-count"')
+
+    def test_csv_export_is_filtered_and_safe_for_spreadsheets(self):
+        HelpRequest.objects.create(name="Marie", contact="+509 3712 3456", topic="payment", message="=CMD()", status="new")
+        HelpRequest.objects.create(name="Paul", contact="p@x.ht", message="Fait", status="resolved")
+        self.client.force_login(self.admin)
+        r = self.client.get(reverse("dashboard:help_export_csv"), {"statut": "new"})
+        text = r.content.decode("utf-8")
+        self.assertTrue(text.startswith("\ufeffReçue le;Nom;"))
+        self.assertIn("Marie;+509 3712 3456;Un paiement ou un billet;'=CMD();Nouvelle", text)
+        self.assertNotIn("Paul", text)
+        self.assertIn("demandes-aide-eventlead.csv", r["Content-Disposition"])
+        self.assertIn("Paul", self.client.get(reverse("dashboard:help_export_csv")).content.decode("utf-8"))
+
+
 class PaymentTests(TestCase):
     def setUp(self):
         self.user = make_user("new@x.ht", role="organizer")
@@ -469,7 +642,7 @@ class SmokeTests(TestCase):
 
     def test_public_pages(self):
         event = Event.objects.public_active().first()
-        for url in [reverse("core:landing"), reverse("events:explore"), reverse("payments:ticketing"),
+        for url in [reverse("core:landing"), reverse("core:help"), reverse("events:explore"), reverse("payments:ticketing"),
                     reverse("accounts:login"), reverse("accounts:register"), reverse("accounts:register_organizer"),
                     reverse("ads:list"), reverse("events:public_detail", args=[event.pk])]:
             self.assertEqual(self.client.get(url).status_code, 200, url)
@@ -489,7 +662,7 @@ class SmokeTests(TestCase):
             reverse("dashboard:guest_edit", args=[guest.pk]), reverse("dashboard:gift_list"),
             reverse("dashboard:gift_create"), reverse("dashboard:gift_edit", args=[gift.pk]),
             reverse("dashboard:ad_list"), reverse("dashboard:ad_create"), reverse("dashboard:ad_edit", args=[ad.pk]),
-            reverse("dashboard:category_list"), reverse("dashboard:category_create"),
+            reverse("dashboard:help_list"), reverse("dashboard:category_list"), reverse("dashboard:category_create"),
             reverse("dashboard:category_edit", args=[category.pk]),
             reverse("dashboard:payment_history"), reverse("dashboard:inbox"),
             reverse("dashboard:guest_export_csv"), reverse("dashboard:gift_export_csv"),

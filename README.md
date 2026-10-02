@@ -34,7 +34,7 @@ Mot de passe commun : `EventLead2026!`
 
 La commande affiche aussi un lien magique `/invitation/<uuid>/` d'un invité en attente pour tester le parcours complet sans connexion. `python manage.py seed_demo --reset` repart de zéro.
 
-Le jeu de démonstration contient 6 catégories (Mariage, Gala, Anniversaire, Baptême, Conférence, Concert), 6 événements rangés dans ces catégories (4 publics, un mariage privé, un anniversaire passé pour tester l'évaluation), 11 invités à différents statuts, 8 cadeaux sur le mariage (dont 4 déjà choisis), 3 publicités actives (une seule, « Pâtisserie Kay Dous », est dans la séquence après réponse), 3 avis et 4 paiements.
+Le jeu de démonstration contient 6 catégories (Mariage, Gala, Anniversaire, Baptême, Conférence, Concert), 6 événements rangés dans ces catégories (4 publics, un mariage privé, un anniversaire passé pour tester l'évaluation), 11 invités à différents statuts, 8 cadeaux sur le mariage (dont 4 déjà choisis), 3 publicités actives (une seule, « Pâtisserie Kay Dous », est dans la séquence après réponse), 3 avis, 4 paiements et 3 demandes d'aide (une nouvelle, une en cours, une résolue).
 
 ## Paiements en mode démo
 
@@ -60,7 +60,7 @@ Sans ces valeurs, le bouton « Continuer avec Google » est affiché désactivé
 | App | Contenu |
 |---|---|
 | `accounts` | `CustomUser` (rôle, téléphone, avatar, `is_vip`), connexion e-mail, inscription invité / organisateur, décorateurs `@role_required` et `@vip_organizer_required` |
-| `core` | Landing page (Accueil, événements publics, Services, À propos, Contact), `Review`, `ContactMessage`, tableau de bord admin, commande `seed_demo`, tests |
+| `core` | Landing page (Accueil, événements publics, Services, À propos, Contact), `Review`, `ContactMessage`, `HelpRequest`, page Aide, tableau de bord admin, commande `seed_demo`, tests |
 | `events` | `Event`, `EventCategory`, `Guest`, `EventEvaluation`, CRUD admin (événements, catégories, invités), exports CSV/PDF, géocodage, portail Organisateur, flux invité multi-étapes |
 | `gifts` | `Gift`, `GiftClaim`, `services.py` (écriture atomique), gestion admin et export CSV |
 | `ads` | `Ad`, page publicité avec compte à rebours, suivi des vues et clics |
@@ -72,11 +72,12 @@ Sans ces valeurs, le bouton « Continuer avec Google » est affiché désactivé
 |---|---|
 | `/` | Accueil : défilé des publications, événements publics et billets, puis services, avis et contact |
 | `/connexion/`, `/inscription/`, `/inscription/organisateur/` | Authentification |
-| `/admin-dashboard/` (+ `evenements/`, `categories/`, `invites/`, `cadeaux/`, `publicites/`, `paiements/`, `messages/`) | Administrateur |
+| `/admin-dashboard/` (+ `evenements/`, `categories/`, `invites/`, `cadeaux/`, `publicites/`, `paiements/`, `messages/`, `aide/`) | Administrateur |
 | `/organisateur/` | Portail Organisateur VIP |
 | `/organisateur/devenir-vip/` | Paiement de l'accès VIP |
 | `/invitation/<uuid:token>/` | Flux invité (présence, cadeaux, récapitulatif, confirmation), sans compte ni connexion : le lien personnel suffit |
 | `/invitation/<uuid:token>/publicite/<int:ad_id>/` | Page publicité |
+| `/aide/` | Aide : questions fréquentes par profil, WhatsApp, formulaire « J'ai besoin d'aide » (`?sujet=` présélectionne le sujet) |
 | `/evenements/` (+ `?categorie=<identifiant>`) | Exploration des événements publics, filtrable par catégorie |
 | `/billetterie/` | Billetterie |
 | `/django-admin/` | Back-office Django natif |
@@ -96,6 +97,14 @@ La page d'accueil affiche un défilé qui alterne publications actives, événem
 ## Catégories d'événements
 
 Un événement peut avoir une catégorie (`Event.category`, facultative). L'administrateur gère les catégories dans `/admin-dashboard/categories/` (nom, icône Bootstrap Icons, ordre d'affichage) et choisit la catégorie dans le formulaire d'événement. Supprimer une catégorie ne supprime pas ses événements : ils n'ont simplement plus de catégorie. Sur l'accueil et sur `/evenements/`, une rangée de filtres au-dessus des événements publics (`?categorie=<identifiant>`, filtre côté serveur) ne propose que les catégories qui ont au moins un événement public à venir ; chaque carte d'événement porte un badge de catégorie. Un identifiant inconnu est ignoré. Le défilé « À l'affiche » n'est pas filtré. Après un `git pull`, lancez `python manage.py migrate` ; `python manage.py seed_demo --reset` recrée les catégories de démonstration.
+
+## Espace d'aide
+
+- **Page Aide** (`/aide/`, lien dans le menu et le pied de page) : questions fréquentes classées par profil (invité ou visiteur, Organisateur VIP, équipe EventLead). Les textes sont dans `core/help.py` ; chaque question a un identifiant stable (`/aide/#faq-invite-cadeau` ouvre directement la réponse). Les réponses décrivent ce que fait le site aujourd'hui : à relire si le fonctionnement change.
+- **Bouton WhatsApp flottant** sur toutes les pages publiques, avec le numéro de la page Contact (`CONTACT_WHATSAPP` dans `.env`). Il n'apparaît ni dans le tableau de bord ni dans le parcours d'invitation (où une ligne discrète « Une question ? » le remplace, pour ne pas gêner le bouton d'action).
+- **Formulaire « J'ai besoin d'aide »** : nom, e-mail ou numéro, sujet, message. L'e-mail ou le numéro est vérifié, un champ piège écarte les robots. Chaque envoi crée une `HelpRequest` au statut « Nouvelle ».
+- **Tableau de bord** (`/admin-dashboard/aide/`) : liste filtrable par statut (nouvelle, en cours, résolue), changement de statut en un clic, lien WhatsApp ou e-mail vers la personne, export CSV (`aide/export.csv`, protégé contre les formules de tableur), compteur dans le menu et sur l'accueil du tableau de bord.
+- **Petites aides dans le parcours** : lignes repliées, sans bruit, à l'étape présence (« Pas de compte à créer ? »), à la liste des cadeaux, au récapitulatif, et dans la fenêtre de paiement (code reçu par SMS pour MonCash, lien « Demander de l'aide »). Elles renvoient vers la page Aide dans un nouvel onglet, pour ne pas perdre la réponse en cours. Pas de chat automatique.
 
 ## Règles métier du module cadeaux
 
@@ -118,7 +127,7 @@ Chaque invité possède un `magic_token`. Dans `/admin-dashboard/invites/`, l'ad
 python manage.py test
 ```
 
-50 tests couvrent la règle « dernière unité », la transaction annulée en cas de conflit, le caractère définitif des réponses, le parcours invité complet jusqu'à la publicité puis l'accueil, le défilé de l'accueil, les redirections après connexion, les règles d'accès par rôle, le paiement VIP et l'affichage de chaque page principale, l'absence de connexion forcée sur le parcours invité et la page d'accueil publique, et les catégories d'événements (gestion réservée à l'administrateur, filtre, badge, événements privés jamais exposés).
+69 tests couvrent la règle « dernière unité », la transaction annulée en cas de conflit, le caractère définitif des réponses, le parcours invité complet jusqu'à la publicité puis l'accueil, le défilé de l'accueil, les redirections après connexion, les règles d'accès par rôle, le paiement VIP et l'affichage de chaque page principale, l'absence de connexion forcée sur le parcours invité et la page d'accueil publique, les catégories d'événements (gestion réservée à l'administrateur, filtre, badge, événements privés jamais exposés) et l'espace d'aide (page, bouton WhatsApp, formulaire, statuts, export CSV, aides du parcours).
 
 ## Production
 

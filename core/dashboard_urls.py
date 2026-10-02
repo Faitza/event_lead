@@ -15,6 +15,10 @@ urlpatterns = [
     path("messages/", core_admin.inbox, name="inbox"),
     path("messages/<int:pk>/lu/", core_admin.message_toggle_read, name="message_toggle_read"),
     path("avis/<int:pk>/publication/", core_admin.review_toggle, name="review_toggle"),
+    # Demandes d'aide
+    path("aide/", core_admin.help_list, name="help_list"),
+    path("aide/export.csv", core_admin.help_export_csv, name="help_export_csv"),
+    path("aide/<int:pk>/statut/", core_admin.help_set_status, name="help_set_status"),
     # Événements
     path("evenements/", events_admin.event_list, name="event_list"),
     path("evenements/nouveau/", events_admin.event_create, name="event_create"),

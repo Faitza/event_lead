@@ -13,7 +13,7 @@ from django.utils import timezone
 
 from accounts.models import CustomUser
 from ads.models import Ad
-from core.models import ContactMessage, Review
+from core.models import ContactMessage, HelpRequest, Review
 from events.models import Event, EventCategory, EventEvaluation, Guest
 from gifts.models import Gift, GiftClaim
 from payments.models import Payment
@@ -37,6 +37,7 @@ class Command(BaseCommand):
             Ad.objects.all().delete()
             Review.objects.all().delete()
             ContactMessage.objects.all().delete()
+            HelpRequest.objects.all().delete()
             CustomUser.objects.filter(email__endswith="@eventlead.ht").delete()
 
         if Event.objects.exists():
@@ -197,6 +198,18 @@ class Command(BaseCommand):
 
         ContactMessage.objects.create(name="Stéphanie Noël", email="stephanie@example.com", phone="+509 3333 4444",
                                       message="Bonjour, je prépare un baptême pour 80 personnes en mars. Pouvez-vous m'envoyer une démonstration ?")
+
+        help_specs = [
+            ("Marie-Ange Dorvil", "marieange@example.com", "invitation", "in_progress", 30,
+             "Je n'arrive pas à retrouver mon lien d'invitation pour le mariage de Sarah et Jean-Marc. Pouvez-vous me le renvoyer ?"),
+            ("Roseline Augustin", "+509 3455 6677", "gift", "resolved", 50,
+             "J'ai choisi un cadeau par erreur. Est-il possible de le changer ?"),
+            ("Patrick Étienne", "+509 3888 1212", "payment", "new", 3,
+             "Je n'ai pas reçu le code par SMS en payant mon billet avec MonCash. Que faire ?"),
+        ]
+        for name, contact, topic, status, hours_ago, message in help_specs:
+            req = HelpRequest.objects.create(name=name, contact=contact, topic=topic, status=status, message=message)
+            HelpRequest.objects.filter(pk=req.pk).update(created_at=timezone.now() - timedelta(hours=hours_ago))
 
         wedding_guest = guests["Wilson Charles"]
         self.stdout.write(self.style.SUCCESS("Données de démonstration créées."))

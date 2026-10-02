@@ -10,8 +10,9 @@ from ads.models import Ad
 from events.listing import public_events_by_category
 from events.models import Event
 
-from .forms import ContactForm, ReviewForm
-from .models import Review
+from .forms import ContactForm, HelpRequestForm, ReviewForm
+from .help import HELP_PROFILES
+from .models import HelpRequest, Review
 
 SERVICES = [
     ("bi-calendar2-heart", "Un tableau de bord pour tout piloter", "Mariage, gala, baptême ou conférence : créez l'événement, localisez le lieu sur une carte et gardez la main du début à la fin."),
@@ -76,3 +77,24 @@ def submit_contact(request):
     else:
         messages.error(request, "Le message n'a pas pu être envoyé. Vérifiez les champs.")
     return redirect(reverse("core:landing") + "#contact")
+
+
+def help_page(request):
+    """Questions fréquentes par profil, WhatsApp et formulaire « J'ai besoin d'aide »."""
+    if request.method == "POST":
+        form = HelpRequestForm(request.POST)
+        if form.is_valid():
+            if not form.cleaned_data["website"]:  # champ piège vide : vraie personne
+                form.save()
+            return redirect(reverse("core:help") + "?envoye=1#demande")
+    else:
+        initial = {}
+        if request.GET.get("sujet") in HelpRequest.Topic.values:
+            initial["topic"] = request.GET["sujet"]
+        if request.user.is_authenticated:
+            initial["name"] = request.user.display_name
+            initial["contact"] = request.user.email
+        form = HelpRequestForm(initial=initial)
+    return render(request, "core/help.html", {
+        "profiles": HELP_PROFILES, "form": form, "sent": request.GET.get("envoye") == "1" and request.method == "GET",
+    })

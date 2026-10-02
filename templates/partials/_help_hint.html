@@ -1,0 +1,12 @@
+{# Petite aide repliée, sans bruit : summary, text, et au choix faq (id d'une question) et topic (sujet du formulaire). #}
+<details class="help-hint">
+  <summary><i class="bi bi-question-circle" aria-hidden="true"></i>{{ summary }}</summary>
+  <div class="hint-body">
+    <p class="mb-0">{{ text }}</p>
+    <p class="mb-0 mt-2">
+      {% if faq %}<a href="{% url 'core:help' %}#faq-{{ faq }}" target="_blank" rel="noopener">Voir la réponse complète</a>{% endif %}
+      {% if faq and topic %}<span aria-hidden="true">&middot;</span>{% endif %}
+      {% if topic %}<a href="{% url 'core:help' %}?sujet={{ topic }}#demande" target="_blank" rel="noopener">Écrire à l'équipe</a>{% endif %}
+    </p>
+  </div>
+</details>

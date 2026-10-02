@@ -32,6 +32,7 @@
   </div>
   {% endif %}
   <button class="btn btn-primary btn-lg w-100 mt-2" style="height:54px">Suivant<i class="bi bi-arrow-right ms-2"></i></button>
+  {% include "partials/_help_hint.html" with summary="Pas de compte à créer ?" text="Ce lien est personnel : il suffit pour répondre, sans compte ni mot de passe. Gardez-le pour revenir sur votre réponse tant qu'elle n'est pas confirmée." faq="invite-sans-compte" topic="invitation" %}
 </form>
 {% endblock %}
 {% block extra_js %}

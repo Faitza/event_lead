@@ -4,7 +4,10 @@
 {% block dash_content %}
 <div class="page-head">
   <div><h1>Tableau de bord</h1><p>Vue d'ensemble de vos événements, invités, cadeaux et publicités.</p></div>
-  {% if unread_messages %}<a href="{% url 'dashboard:inbox' %}" class="btn btn-soft"><i class="bi bi-envelope me-2"></i>{{ unread_messages }} message{{ unread_messages|pluralize }} non lu{{ unread_messages|pluralize }}</a>{% endif %}
+  <div class="d-flex flex-wrap gap-2">
+    {% if unread_messages %}<a href="{% url 'dashboard:inbox' %}" class="btn btn-soft"><i class="bi bi-envelope me-2"></i>{{ unread_messages }} message{{ unread_messages|pluralize }} non lu{{ unread_messages|pluralize }}</a>{% endif %}
+    {% if new_help %}<a href="{% url 'dashboard:help_list' %}?statut=new" class="btn btn-soft"><i class="bi bi-life-preserver me-2"></i>{{ new_help }} demande{{ new_help|pluralize }} d'aide nouvelle{{ new_help|pluralize }}</a>{% endif %}
+  </div>
 </div>
 <div class="row g-3 mb-4">
   <div class="col-sm-6 col-xl-3"><div class="el-card stat-card"><span class="icon-bubble"><i class="bi bi-calendar2-event"></i></span><div><div class="value">{{ stats.events }}</div><div class="label">événements &middot; {{ stats.events_upcoming }} à venir</div></div></div></div>

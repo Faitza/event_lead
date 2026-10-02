@@ -2,9 +2,15 @@ from django.conf import settings
 
 from events.models import Event
 
+from .models import HelpRequest
+
 
 def _next_public_event():
     return Event.objects.public_active().upcoming().first()
+
+
+def _new_help_requests():
+    return HelpRequest.objects.filter(status=HelpRequest.Status.NEW).count()
 
 
 def site_settings(request):
@@ -17,4 +23,5 @@ def site_settings(request):
         "PAYMENT_DEMO_MODE": settings.PAYMENT_DEMO_MODE,
         # Appelable : la requête n'est exécutée que si le gabarit l'utilise.
         "next_public_event": _next_public_event,
+        "new_help_requests": _new_help_requests,
     }
