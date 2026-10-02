@@ -2,39 +2,37 @@
 {% load static %}
 {% block extra_head %}<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.css">{% endblock %}
 {% block inv_content %}
-<div class="el-card overflow-hidden mb-3">{% include "invitation/_event_summary.html" %}</div>
-<form method="post" class="el-card el-card-body mb-3" novalidate>
+{% include "invitation/_event_summary.html" %}
+<form method="post" class="d-flex flex-column gap-3" novalidate>
   {% csrf_token %}
-  <h2 class="h5 fw-bold text-primary mb-1">Serez-vous présent(e) ?</h2>
-  <p class="text-muted small mb-3">Votre réponse aide l'hôte à tout préparer.</p>
-  <div class="rsvp-options mb-3">
-    {% for radio in form.status %}
-      {{ radio.tag }}
-      <label for="{{ radio.id_for_label }}" class="{% if radio.data.value == 'confirmed' %}yes{% elif radio.data.value == 'declined' %}no{% else %}maybe{% endif %}">
-        <i class="bi {% if radio.data.value == 'confirmed' %}bi-check-circle{% elif radio.data.value == 'declined' %}bi-x-circle{% else %}bi-question-circle{% endif %}"></i>{{ radio.choice_label }}
-      </label>
-    {% endfor %}
-  </div>
-  {{ form.status.errors }}
-  {% if event.allow_companions %}
-  <div id="companions-block" class="mb-3" style="display:none">
-    <label class="form-label" for="{{ form.companions.id_for_label }}">Nombre d'accompagnants <span class="text-muted fw-normal">(maximum {{ event.max_companions }})</span></label>
-    <div class="d-flex align-items-center gap-3">
-      <div class="counter"><button type="button" data-step="-1" aria-label="Moins"><i class="bi bi-dash"></i></button>{{ form.companions }}<button type="button" data-step="1" aria-label="Plus"><i class="bi bi-plus"></i></button></div>
-      <span class="small text-muted">personne(s) en plus de vous</span>
+  <fieldset class="border-0 p-0 m-0 d-flex flex-column gap-3">
+    <legend class="disp float-none w-auto p-0 mb-0" style="font-size:1.75rem;color:var(--el-primary-dark)">Serez-vous <em style="color:inherit">présent(e)</em> ?</legend>
+    <div class="rsvp-options">
+      {% for radio in form.status %}
+        {{ radio.tag }}
+        <label for="{{ radio.id_for_label }}" class="{% if radio.data.value == 'confirmed' %}yes{% elif radio.data.value == 'declined' %}no{% else %}maybe{% endif %}">
+          <i class="bi {% if radio.data.value == 'confirmed' %}bi-check-lg{% elif radio.data.value == 'declined' %}bi-x-lg{% else %}bi-question-lg{% endif %}"></i>{{ radio.choice_label }}
+        </label>
+      {% endfor %}
     </div>
-    {{ form.companions.errors }}
+    {{ form.status.errors }}
+  </fieldset>
+  {% if event.allow_companions %}
+  <div id="companions-block" class="inv-pane companions-pane" style="display:none">
+    <div><div style="font-weight:500">Accompagnants</div><div class="small text-muted">{{ event.max_companions }} au maximum</div></div>
+    <div class="counter"><button type="button" data-step="-1" aria-label="Retirer un accompagnant"><i class="bi bi-dash-lg"></i></button>{{ form.companions }}<button type="button" data-step="1" aria-label="Ajouter un accompagnant"><i class="bi bi-plus-lg"></i></button></div>
+  </div>
+  {{ form.companions.errors }}
+  {% endif %}
+  {% if event.has_location %}
+  <div class="d-flex flex-column gap-2">
+    <div class="map-box" data-map data-lat="{{ event.latitude|stringformat:'f' }}" data-lng="{{ event.longitude|stringformat:'f' }}" data-label="{{ event.venue }}" role="img" aria-label="Carte du lieu de la réception"></div>
+    <div class="d-flex justify-content-between align-items-center small gap-2"><span class="text-muted">{{ event.venue|truncatechars:48 }}</span>
+      <a class="fw-semibold" target="_blank" rel="noopener" href="https://www.openstreetmap.org/?mlat={{ event.latitude|stringformat:'f' }}&mlon={{ event.longitude|stringformat:'f' }}#map=17/{{ event.latitude|stringformat:'f' }}/{{ event.longitude|stringformat:'f' }}">Ouvrir l'itinéraire</a></div>
   </div>
   {% endif %}
-  <button class="btn btn-primary btn-lg w-100 mt-2">Suivant<i class="bi bi-arrow-right ms-2"></i></button>
+  <button class="btn btn-primary btn-lg w-100 mt-2" style="height:54px">Suivant<i class="bi bi-arrow-right ms-2"></i></button>
 </form>
-{% if event.has_location %}
-<div class="el-card el-card-body">
-  <h2 class="h6 fw-bold text-primary mb-3"><i class="bi bi-map me-2"></i>Comment s'y rendre</h2>
-  <div class="map-box" data-map data-lat="{{ event.latitude|stringformat:'f' }}" data-lng="{{ event.longitude|stringformat:'f' }}" data-label="{{ event.venue }}"></div>
-  <a class="btn btn-soft btn-sm mt-3" target="_blank" rel="noopener" href="https://www.openstreetmap.org/?mlat={{ event.latitude|stringformat:'f' }}&mlon={{ event.longitude|stringformat:'f' }}#map=17/{{ event.latitude|stringformat:'f' }}/{{ event.longitude|stringformat:'f' }}"><i class="bi bi-signpost-split me-1"></i>Ouvrir l'itinéraire</a>
-</div>
-{% endif %}
 {% endblock %}
 {% block extra_js %}
 <script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.js"></script>
@@ -45,7 +43,7 @@
     if (!block) return;
     function sync() {
       var yes = document.querySelector("input[name=status][value=confirmed]");
-      block.style.display = yes && yes.checked ? "" : "none";
+      block.style.display = yes && yes.checked ? "flex" : "none";
     }
     document.querySelectorAll("input[name=status]").forEach(function (r) { r.addEventListener("change", sync); });
     sync();

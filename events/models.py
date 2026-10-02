@@ -5,14 +5,15 @@ from django.conf import settings
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
 from django.db.models import Q
+from django.templatetags.static import static
 from django.urls import reverse
 from django.utils import timezone
 
 PLACEHOLDER_COVERS = [
-    "https://images.unsplash.com/photo-1519167758481-83f550bb49b3?w=1200&q=70&auto=format&fit=crop",
-    "https://images.unsplash.com/photo-1505236858219-8359eb29e329?w=1200&q=70&auto=format&fit=crop",
-    "https://images.unsplash.com/photo-1492684223066-81342ee5ff30?w=1200&q=70&auto=format&fit=crop",
-    "https://images.unsplash.com/photo-1464366400600-7168b8af9bc3?w=1200&q=70&auto=format&fit=crop",
+    "img/photos/event-gala.jpg",
+    "img/photos/event-kompa.jpg",
+    "img/photos/event-salon.jpg",
+    "img/photos/event-chorale.jpg",
 ]
 
 
@@ -104,7 +105,7 @@ class Event(models.Model):
     def cover_url(self):
         if self.cover_image:
             return self.cover_image.url
-        return PLACEHOLDER_COVERS[(self.pk or 0) % len(PLACEHOLDER_COVERS)]
+        return static(PLACEHOLDER_COVERS[(self.pk or 0) % len(PLACEHOLDER_COVERS)])
 
     @property
     def has_location(self):

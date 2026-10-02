@@ -28,20 +28,33 @@ def home_url_for(user):
     return reverse("accounts:guest_space")
 
 
+def post_login_url_for(user):
+    """Après connexion : l'accueil (défilé des publications, événements et billets).
+
+    L'administrateur arrive sur son tableau de bord et un organisateur non payé
+    reste dirigé vers le paiement de l'accès VIP.
+    """
+    if user.is_admin_role:
+        return reverse("dashboard:home")
+    if user.is_organizer and not user.is_vip:
+        return reverse("payments:vip")
+    return reverse("core:landing")
+
+
 def login_view(request):
     if request.user.is_authenticated:
-        return redirect(home_url_for(request.user))
+        return redirect(post_login_url_for(request.user))
     form = LoginForm(request, data=request.POST or None)
     if request.method == "POST" and form.is_valid():
         login(request, form.user, backend="accounts.backends.EmailBackend")
         messages.success(request, f"Bienvenue, {form.user.display_name}.")
-        return redirect(_safe_next(request) or home_url_for(form.user))
+        return redirect(_safe_next(request) or post_login_url_for(form.user))
     return render(request, "accounts/login.html", {"form": form, "next": _safe_next(request) or ""})
 
 
 def register_view(request, organizer=False):
     if request.user.is_authenticated:
-        return redirect(home_url_for(request.user))
+        return redirect(post_login_url_for(request.user))
     form = RegisterForm(request.POST or None)
     if request.method == "POST" and form.is_valid():
         role = CustomUser.Role.ORGANIZER if organizer else CustomUser.Role.GUEST
@@ -51,7 +64,7 @@ def register_view(request, organizer=False):
             messages.info(request, "Compte créé. Dernière étape : activez votre accès Organisateur VIP.")
             return redirect("payments:vip")
         messages.success(request, "Votre compte a été créé avec succès.")
-        return redirect(_safe_next(request) or home_url_for(user))
+        return redirect(_safe_next(request) or post_login_url_for(user))
     return render(request, "accounts/register.html", {"form": form, "organizer": organizer})
 
 

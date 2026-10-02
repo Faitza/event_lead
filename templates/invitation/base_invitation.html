@@ -4,22 +4,30 @@
 <div class="inv-shell">
   <div class="inv-topbar">
     <div class="inv-container d-flex align-items-center justify-content-between">
-      <a href="{% url 'core:landing' %}" class="d-flex align-items-center gap-2">{% include "partials/_logo.html" %}<span class="logo-word">EventLead</span></a>
-      <span class="small text-muted">Bonjour {{ guest.name }}</span>
+      <a href="{% url 'core:landing' %}" aria-label="EventLead, accueil">{% include "partials/_logo.html" %}</a>
+      {% if step_total and step_index %}<span class="small">Étape {{ step_index }} sur {{ step_total }}</span>{% else %}<span class="small">Bonjour {{ guest.name }}</span>{% endif %}
     </div>
   </div>
-  <header class="inv-header photo-bg" style="background-image:url('{{ event.cover_url }}')">
-    <div class="inv-container">
-      {% if step_total %}
-      <div class="stepper" aria-label="Étape {{ step_index }} sur {{ step_total }}">
-        {% for s in steps %}<span class="step {% if forloop.counter < step_index %}done{% elif forloop.counter == step_index %}current{% endif %}"></span>{% endfor %}
+  <div class="inv-container">
+    <div class="inv-card">
+      <img src="{{ event.cover_url }}" alt="" onerror="this.style.visibility='hidden'">
+      <div class="veil"></div><div class="sunburst" aria-hidden="true"></div><div class="rule" aria-hidden="true"></div>
+      <div class="inner">
+        <span class="eyebrow">Vous êtes invité(e) à</span>
+        <h1 class="disp">{{ event.title }}</h1>
+        <span class="when">{{ event.date|date:"l j F Y"|capfirst }} &middot; {{ event.time|time:"H\hi" }}</span>
       </div>
-      <div class="stepper-label"><span>Étape {{ step_index }}/{{ step_total }}</span><span>{% for s in steps %}{% if forloop.counter == step_index %}{{ s }}{% endif %}{% endfor %}</span></div>
-      {% endif %}
     </div>
-  </header>
-  <div class="inv-container inv-body">
-    {% block inv_content %}{% endblock %}
+  </div>
+  <div class="inv-container flex-grow-1 d-flex flex-column" style="padding:0">
+    <div class="inv-sheet">
+      {% if step_total %}
+      <div class="stepper" role="img" aria-label="Étape {{ step_index }} sur {{ step_total }}">
+        {% for s in steps %}<span class="step {% if forloop.counter < step_index %}done{% elif forloop.counter == step_index %}current{% endif %}" title="{{ s }}"></span>{% if not forloop.last %}<span class="rule"></span>{% endif %}{% endfor %}
+      </div>
+      {% endif %}
+      {% block inv_content %}{% endblock %}
+    </div>
   </div>
 </div>
 {% endblock %}

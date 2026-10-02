@@ -4,6 +4,8 @@ Plateforme web de gestion d'événements pour Haïti et la Caraïbe : invitation
 
 Stack : Python 3.11+, Django 5.1, PostgreSQL (SQLite en développement), django-allauth (Google), Leaflet + OpenStreetMap, geopy/Nominatim, xhtml2pdf, Bootstrap 5 + Bootstrap Icons. Interface 100 % en français, sans emoji.
 
+Direction visuelle « carton d'invitation de gala » : Bodoni Moda + Jost (+ Pinyon Script pour la signature), filets et losanges dorés, photos en arche, billets perforés, barres blanches porteuses du logo. Les jetons de design sont dans `static/css/eventlead.css`.
+
 ## Démarrage rapide
 
 ```bash
@@ -25,14 +27,14 @@ Mot de passe commun : `EventLead2026!`
 
 | Rôle | E-mail | Point d'entrée |
 |---|---|---|
-| Administrateur | `admin@eventlead.ht` | `/admin-dashboard/` |
-| Organisateur VIP (payé) | `organisateur@eventlead.ht` | `/organisateur/` |
+| Administrateur | `admin@eventlead.ht` | `/admin-dashboard/` après connexion |
+| Organisateur VIP (payé) | `organisateur@eventlead.ht` | accueil `/` après connexion, portail `/organisateur/` via « Mon espace » |
 | Organisateur non payé | `nouveau.organisateur@eventlead.ht` | bloqué sur `/organisateur/devenir-vip/` |
-| Invité | `invite@eventlead.ht` | `/mon-espace/` |
+| Invité | `invite@eventlead.ht` | accueil `/` après connexion, `/mon-espace/` via « Mon espace » |
 
 La commande affiche aussi un lien magique `/invitation/<uuid>/` d'un invité en attente pour tester le parcours complet sans connexion. `python manage.py seed_demo --reset` repart de zéro.
 
-Le jeu de démonstration contient 5 événements (3 publics, un mariage privé, un anniversaire passé pour tester l'évaluation), 11 invités à différents statuts, 8 cadeaux sur le mariage (dont 4 déjà choisis), 2 publicités actives, 3 avis et 4 paiements.
+Le jeu de démonstration contient 5 événements (3 publics, un mariage privé, un anniversaire passé pour tester l'évaluation), 11 invités à différents statuts, 8 cadeaux sur le mariage (dont 4 déjà choisis), 3 publicités actives (une seule, « Pâtisserie Kay Dous », est dans la séquence après réponse), 3 avis et 4 paiements.
 
 ## Paiements en mode démo
 
@@ -68,7 +70,7 @@ Sans ces valeurs, le bouton « Continuer avec Google » est affiché désactivé
 
 | URL | Rôle |
 |---|---|
-| `/` | Landing page publique |
+| `/` | Accueil : défilé des publications, événements publics et billets, puis services, avis et contact |
 | `/connexion/`, `/inscription/`, `/inscription/organisateur/` | Authentification |
 | `/admin-dashboard/` (+ `evenements/`, `invites/`, `cadeaux/`, `publicites/`, `paiements/`, `messages/`) | Administrateur |
 | `/organisateur/` | Portail Organisateur VIP |
@@ -78,6 +80,16 @@ Sans ces valeurs, le bouton « Continuer avec Google » est affiché désactivé
 | `/evenements/` | Exploration des événements publics |
 | `/billetterie/` | Billetterie |
 | `/django-admin/` | Back-office Django natif |
+
+## Parcours après une réponse à une invitation
+
+1. L'invité confirme sa réponse (`/invitation/<uuid>/recapitulatif/`).
+2. Redirection automatique vers la première publicité marquée « afficher après la réponse » (`/invitation/<uuid>/publicite/<id>/`), avec le message de remerciement. Le bouton « Passer » s'active après le compte à rebours et enchaîne les publicités suivantes.
+3. Fin de séquence, ou aucune publicité active : redirection vers l'accueil (`/#affiche`), où se trouvent le défilé et les événements publics.
+
+## Accueil et défilé
+
+La page d'accueil affiche un défilé qui alterne publications actives, événements publics à venir et billets (événements publics payants, avec prix en HTG et en USD). Il se met en pause au survol, au focus clavier ou avec le bouton « Mettre en pause », et devient une bande défilable à la main si l'utilisateur préfère les animations réduites. Après connexion, un invité ou un organisateur VIP arrive sur cet accueil, avec un bandeau de bienvenue à la place du grand héros ; l'administrateur arrive sur son tableau de bord.
 
 ## Règles métier du module cadeaux
 
@@ -100,11 +112,11 @@ Chaque invité possède un `magic_token`. Dans `/admin-dashboard/invites/`, l'ad
 python manage.py test
 ```
 
-25 tests couvrent la règle « dernière unité », la transaction annulée en cas de conflit, le caractère définitif des réponses, le parcours invité complet jusqu'à la publicité, les règles d'accès par rôle, le paiement VIP et l'affichage de chaque page principale.
+32 tests couvrent la règle « dernière unité », la transaction annulée en cas de conflit, le caractère définitif des réponses, le parcours invité complet jusqu'à la publicité puis l'accueil, le défilé de l'accueil, les redirections après connexion, les règles d'accès par rôle, le paiement VIP et l'affichage de chaque page principale.
 
 ## Production
 
 - `DEBUG=False`, `SECRET_KEY`, `ALLOWED_HOSTS` et `DATABASE_URL` (PostgreSQL) dans l'environnement.
 - `python manage.py collectstatic`, servir `staticfiles/` (WhiteNoise ou serveur web).
 - Médias : définir `DEFAULT_FILE_STORAGE_BACKEND` (S3 via `django-storages`, ou Cloudinary) et installer le paquet correspondant.
-- Les photos d'ambiance sont des placeholders Unsplash ; remplacez-les par les photos du client (couvertures d'événements via l'admin, images de la landing dans `templates/core/landing.html`).
+- Les photos d'ambiance (`static/img/photos/`) sont des visuels de remplacement : remplacez-les par les photos du client (couvertures d'événements via l'admin, images de l'accueil dans `templates/core/landing.html`). Les polices sont chargées depuis Google Fonts.

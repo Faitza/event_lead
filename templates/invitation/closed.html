@@ -1,9 +1,9 @@
 {% extends "invitation/base_invitation.html" %}
 {% block inv_content %}
-<div class="el-card el-card-body text-center p-5">
-  <span class="icon-bubble warning lg mb-3"><i class="bi bi-calendar-x"></i></span>
-  <h1 class="h5 fw-bold text-primary">Les réponses sont closes</h1>
-  <p class="text-muted">{% if event.status == 'cancelled' %}Cet événement a été annulé.{% else %}Cet événement n'accepte plus de réponses.{% endif %}</p>
-  <a href="{% url 'events:explore' %}" class="btn btn-primary">Voir les événements publics</a>
+<div class="text-center d-flex flex-column gap-3 align-items-center py-3">
+  <span class="icon-bubble warning lg"><i class="bi bi-calendar-x"></i></span>
+  <h1>Les réponses sont <em style="color:inherit">closes</em></h1>
+  <p class="text-muted mb-0">{% if event.status == 'cancelled' %}Cet événement a été annulé.{% else %}Cet événement n'accepte plus de réponses.{% endif %}</p>
+  <a href="{% url 'core:landing' %}#affiche" class="btn btn-primary">Voir les événements publics</a>
 </div>
 {% endblock %}

@@ -4,7 +4,8 @@
 {% block body %}
 <div class="dash">
   <aside class="dash-sidebar">
-    <a href="{% url 'dashboard:home' %}" class="brand">{% include "partials/_logo.html" %}<span class="logo-word">EventLead</span></a>
+    <a href="{% url 'dashboard:home' %}" class="brand" aria-label="EventLead, tableau de bord">{% include "partials/_logo.html" %}</a>
+    <div class="ornament brand-rule" aria-hidden="true"><span class="diamond"></span></div>
     <div class="nav-section">Pilotage</div>
     <a class="side-link {% if request.resolver_match.url_name == 'home' %}active{% endif %}" href="{% url 'dashboard:home' %}"><i class="bi bi-speedometer2"></i>Tableau de bord</a>
     <a class="side-link {% active '/admin-dashboard/evenements/' %}" href="{% url 'dashboard:event_list' %}"><i class="bi bi-calendar2-event"></i>Événements</a>

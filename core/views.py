@@ -1,9 +1,13 @@
+from itertools import zip_longest
+
+from django.conf import settings
 from django.contrib import messages
 from django.db.models import Avg
 from django.shortcuts import redirect, render
 from django.urls import reverse
 from django.views.decorators.http import require_POST
 
+from ads.models import Ad
 from events.models import Event, Guest
 
 from .forms import ContactForm, ReviewForm
@@ -19,12 +23,30 @@ SERVICES = [
 ]
 
 
+def build_parade(minimum=6):
+    """Défilé de la page d'accueil : publications, événements publics et billets, en alternance."""
+    ads = list(Ad.objects.filter(is_active=True)[:6])
+    events = list(Event.objects.public_active().upcoming()[:6])
+    tickets = [e for e in events if e.is_paid]
+    rows = zip_longest(
+        [("ad", a) for a in ads],
+        [("event", e) for e in events],
+        [("ticket", t) for t in tickets],
+    )
+    items = [item for row in rows for item in row if item]
+    if items and len(items) < minimum:
+        items = (items * (minimum // len(items) + 1))[:max(minimum, len(items))]
+    return items
+
+
 def landing(request):
     reviews = Review.objects.filter(is_published=True)[:6]
     avg = Review.objects.filter(is_published=True).aggregate(a=Avg("stars"))["a"]
-    public_events = Event.objects.public_active().upcoming()[:4]
+    public_events = Event.objects.public_active().upcoming()[:6]
     context = {
         "public_events": public_events,
+        "parade": build_parade(),
+        "usd_rate": settings.HTG_TO_USD_RATE,
         "services": SERVICES,
         "reviews": reviews,
         "stats": {

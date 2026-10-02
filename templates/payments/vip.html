@@ -2,12 +2,15 @@
 {% load static humanize %}
 {% block title %}Devenir Organisateur VIP{% endblock %}
 {% block content %}
-<section class="photo-bg text-white" style="background-image:url('https://images.unsplash.com/photo-1519167758481-83f550bb49b3?w=1600&q=55&auto=format&fit=crop')">
-  <div class="container py-5">
-    <div class="row align-items-center g-5 py-lg-4">
+<section class="page-banner" style="padding:72px 0">
+  <img class="hero-bg" src="{% static 'img/photos/hero-bg.jpg' %}" alt="">
+  <div class="hero-veil"></div>
+  <div class="sunburst" aria-hidden="true"></div>
+  <div class="container inner">
+    <div class="row align-items-center g-4 g-lg-5 py-lg-4">
       <div class="col-lg-6">
         <span class="badge-el badge-vip mb-3"><i class="bi bi-gem"></i>VIP</span>
-        <h1 class="display-6 fw-bold">Devenir Organisateur VIP</h1>
+        <h1 class="disp mb-3">Devenir Organisateur <em>VIP</em></h1>
         <p class="opacity-75">Votre compte est créé. Il ne reste qu'une étape : le paiement de votre accès. Le portail Organisateur s'ouvre dès sa confirmation.</p>
         <div class="vip-perk"><span class="icon-bubble gold"><i class="bi bi-calendar2-week"></i></span><div><strong>Tous les événements publics en détail</strong><div class="small opacity-75">Capacité, présences et accompagnants.</div></div></div>
         <div class="vip-perk"><span class="icon-bubble gold"><i class="bi bi-envelope-heart"></i></span><div><strong>Vos événements privés</strong><div class="small opacity-75">Accès aux événements où vous êtes invité.</div></div></div>
@@ -15,13 +18,13 @@
         <div class="vip-perk mb-0"><span class="icon-bubble gold"><i class="bi bi-patch-check"></i></span><div><strong>Badge doré VIP</strong><div class="small opacity-75">Visible à côté de votre nom.</div></div></div>
       </div>
       <div class="col-lg-5 offset-lg-1">
-        <div class="el-card el-card-body text-body p-4">
+        <div class="frame"><div class="frame-in text-body">
           <div class="text-muted small">Accès Organisateur VIP &middot; paiement unique</div>
           <div class="price-tag">{{ amount_htg|floatformat:0|intcomma }} HTG</div>
           <div class="text-muted small mb-4">&asymp; {{ amount_usd }} USD</div>
           <button class="btn btn-gold btn-lg w-100" data-bs-toggle="modal" data-bs-target="#paymentModal"><i class="bi bi-gem me-2"></i>Activer mon accès VIP</button>
           <p class="small text-muted text-center mt-3 mb-0">Accès en lecture seule aux événements : la gestion reste réservée à l'équipe EventLead.</p>
-        </div>
+        </div></div>
       </div>
     </div>
   </div>

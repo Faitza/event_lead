@@ -4,8 +4,8 @@
 <section class="section">
   <div class="container">
     <div class="page-head">
-      <div><h1>Bonjour {{ user.display_name }}</h1><p>Vos invitations et les événements à découvrir.</p></div>
-      <a href="{% url 'events:explore' %}" class="btn btn-primary"><i class="bi bi-compass me-2"></i>Explorer les événements</a>
+      <div><div class="eyebrow-row mb-3"><span class="diamond"></span><span class="eyebrow">Mon espace</span></div><h1>Bonjour <em>{{ user.display_name }}</em></h1><p>Vos invitations et les événements à découvrir.</p></div>
+      <a href="{% url 'core:landing' %}#affiche" class="btn btn-primary"><i class="bi bi-compass me-2"></i>Explorer les événements</a>
     </div>
     <div class="el-card mb-4">
       <div class="el-card-header"><h2><i class="bi bi-envelope-heart me-2"></i>Mes invitations</h2></div>

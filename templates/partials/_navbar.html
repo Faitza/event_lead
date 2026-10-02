@@ -1,23 +1,32 @@
 {% load static %}
-<nav class="el-nav navbar navbar-expand-lg">
+{% with next_event=next_public_event %}
+{% if next_event %}
+<div class="el-announce">
+  <div class="inner">
+    <span class="msg"><span class="diamond"></span>Prochain événement public &middot; {{ next_event.title }} &middot; {{ next_event.date|date:"j F Y" }}</span>
+    <a href="{% if next_event.price_htg %}{% url 'payments:checkout' next_event.pk %}{% else %}{{ next_event.get_absolute_url }}{% endif %}">{% if next_event.price_htg %}Réserver un billet{% else %}Voir l'événement{% endif %}</a>
+  </div>
+</div>
+{% endif %}
+{% endwith %}
+<header class="el-nav navbar navbar-expand-lg">
   <div class="container">
-    <a class="navbar-brand d-flex align-items-center gap-2" href="{% url 'core:landing' %}">
-      {% include "partials/_logo.html" %}<span class="logo-word">EventLead</span>
-    </a>
+    <a class="navbar-brand m-0 d-flex" href="{% url 'core:landing' %}" aria-label="EventLead, accueil">{% include "partials/_logo.html" %}</a>
     <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav" aria-controls="mainNav" aria-expanded="false" aria-label="Menu">
       <i class="bi bi-list fs-2 text-primary"></i>
     </button>
     <div class="collapse navbar-collapse" id="mainNav">
-      <ul class="navbar-nav mx-auto">
-        <li class="nav-item"><a class="nav-link" href="{% url 'core:landing' %}#accueil">Accueil</a></li>
-        <li class="nav-item"><a class="nav-link" href="{% url 'core:landing' %}#services">Services</a></li>
-        <li class="nav-item"><a class="nav-link" href="{% url 'core:landing' %}#a-propos">À propos</a></li>
-        <li class="nav-item"><a class="nav-link" href="{% url 'core:landing' %}#contact">Contact</a></li>
-        <li class="nav-item"><a class="nav-link" href="{% url 'payments:ticketing' %}">Billetterie</a></li>
-      </ul>
-      <div class="d-flex align-items-center gap-2 mt-3 mt-lg-0">
+      <nav class="navbar-nav mx-auto" aria-label="Navigation du site">
+        <a class="nav-link {% if request.resolver_match.url_name == 'landing' %}active{% endif %}" href="{% url 'core:landing' %}">Accueil</a>
+        <a class="nav-link {% if request.resolver_match.url_name == 'explore' %}active{% endif %}" href="{% url 'events:explore' %}">Événements</a>
+        <a class="nav-link {% if request.resolver_match.url_name == 'ticketing' %}active{% endif %}" href="{% url 'payments:ticketing' %}">Billetterie</a>
+        <a class="nav-link" href="{% url 'core:landing' %}#services">Services</a>
+        <a class="nav-link" href="{% url 'core:landing' %}#a-propos">À propos</a>
+        <a class="nav-link" href="{% url 'core:landing' %}#contact">Contact</a>
+      </nav>
+      <div class="d-flex align-items-center gap-2 mt-3 mt-lg-0 flex-wrap">
         {% if user.is_authenticated %}
-          <a href="{% url 'accounts:dispatch' %}" class="btn btn-soft btn-sm"><i class="bi bi-grid-1x2 me-1"></i>Mon espace</a>
+          <a href="{% url 'accounts:dispatch' %}" class="btn btn-outline-primary btn-sm"><i class="bi bi-grid-1x2 me-1"></i>Mon espace</a>
           <div class="dropdown">
             <button class="user-pill border-0" data-bs-toggle="dropdown" aria-expanded="false">
               {% if user.avatar %}<img src="{{ user.avatar.url }}" class="avatar" alt="">{% else %}<span class="avatar">{{ user.initials }}</span>{% endif %}
@@ -32,10 +41,10 @@
             </ul>
           </div>
         {% else %}
-          <a href="{% url 'accounts:login' %}" class="btn btn-outline-primary btn-sm">Connexion</a>
-          <a href="{% url 'accounts:register' %}" class="btn btn-primary btn-sm">Créer un compte</a>
+          <a href="{% url 'accounts:register_organizer' %}" class="btn btn-outline-gold btn-sm">Devenir VIP</a>
+          <a href="{% url 'accounts:login' %}" class="btn btn-primary btn-sm">Connexion</a>
         {% endif %}
       </div>
     </div>
   </div>
-</nav>
+</header>

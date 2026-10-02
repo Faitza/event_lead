@@ -115,7 +115,7 @@ class InvitationFlowTests(TestCase):
 
     def test_full_flow_with_gift(self):
         r = self.client.get(self.url("invitation"))
-        self.assertContains(r, "Serez-vous présent")
+        self.assertContains(r, "Serez-vous")
         r = self.client.post(self.url("invitation"), {"status": "confirmed", "companions": 2})
         self.assertRedirects(r, self.url("invitation_gift_question"))
         r = self.client.post(self.url("invitation_gift_question"), {"wants_gift": "yes"})
@@ -125,17 +125,19 @@ class InvitationFlowTests(TestCase):
         self.assertRedirects(r, self.url("invitation_recap"))
         self.assertContains(self.client.get(self.url("invitation_recap")), "Confirmer définitivement")
         r = self.client.post(self.url("invitation_recap"))
-        self.assertRedirects(r, self.url("invitation_done"))
+        self.assertRedirects(r, self.url("invitation_done"), fetch_redirect_response=False)
         self.guest.refresh_from_db()
         self.assertEqual(self.guest.status, "confirmed")
         self.assertEqual(self.guest.companions, 2)
         self.assertTrue(self.guest.wants_gift)
         self.assertIsNotNone(self.guest.replied_at)
         self.assertEqual(self.gift.claims.get().guest, self.guest)
-        # Confirmation -> publicité -> exploration
-        self.assertContains(self.client.get(self.url("invitation_done")), self.url("invitation_ad", self.ad.pk))
+        # Confirmation -> redirection automatique vers la publicité -> accueil
+        r = self.client.get(self.url("invitation_done"))
+        self.assertRedirects(r, self.url("invitation_ad", self.ad.pk), fetch_redirect_response=False)
         r = self.client.get(self.url("invitation_ad", self.ad.pk))
-        self.assertContains(r, reverse("events:explore"))
+        self.assertContains(r, reverse("core:landing") + "#affiche")
+        self.assertContains(r, "Merci Carla")
         self.ad.refresh_from_db()
         self.assertEqual(self.ad.views, 1)
         self.client.get(reverse("ads:click", args=[self.ad.pk]))
@@ -143,8 +145,24 @@ class InvitationFlowTests(TestCase):
         self.assertEqual(self.ad.clicks, 1)
         # Retour sur le lien : réponse figée, pas de formulaire
         r = self.client.get(self.url("invitation"))
-        self.assertContains(r, "Votre réponse est enregistrée")
+        self.assertContains(r, "Cette réponse est définitive")
         self.assertNotContains(r, 'name="status"')
+
+    def test_without_ads_done_page_leads_to_home(self):
+        Ad.objects.all().delete()
+        self.client.post(self.url("invitation"), {"status": "declined"})
+        self.client.post(self.url("invitation_recap"))
+        r = self.client.get(self.url("invitation_done"))
+        self.assertContains(r, reverse("core:landing") + "#affiche")
+
+    def test_ads_chain_ends_on_home(self):
+        second = Ad.objects.create(title="Pub 2", message="m", sponsor_link="https://example.com/2", order=2)
+        self.client.post(self.url("invitation"), {"status": "declined"})
+        self.client.post(self.url("invitation_recap"))
+        r = self.client.get(self.url("invitation_ad", self.ad.pk))
+        self.assertContains(r, self.url("invitation_ad", second.pk))
+        r = self.client.get(self.url("invitation_ad", second.pk))
+        self.assertContains(r, reverse("core:landing") + "#affiche")
 
     def test_gift_steps_skipped_when_declining(self):
         r = self.client.post(self.url("invitation"), {"status": "declined"})
@@ -169,6 +187,56 @@ class InvitationFlowTests(TestCase):
         r = self.client.post(self.url("invitation"), {"status": "confirmed", "companions": 5})
         self.assertEqual(r.status_code, 200)
         self.assertContains(r, "Maximum 2")
+
+
+class HomeParadeTests(TestCase):
+    """Accueil : défilé des publications, événements publics et billets."""
+
+    def setUp(self):
+        self.free = make_event(title="Conférence ouverte", event_type="public", status="active")
+        self.paid = make_event(title="Gala payant", event_type="public", status="active", price_htg=Decimal("3500"))
+        self.private = make_event(title="Mariage secret")
+        self.ad = Ad.objects.create(title="Pâtisserie Test", message="Gâteaux", sponsor_link="https://example.com")
+        Ad.objects.create(title="Pub inactive", message="x", sponsor_link="https://example.com", is_active=False)
+
+    def test_parade_mixes_ads_events_and_tickets(self):
+        r = self.client.get(reverse("core:landing"))
+        self.assertContains(r, 'id="affiche"')
+        self.assertContains(r, "Pâtisserie Test")
+        self.assertContains(r, "Conférence ouverte")
+        self.assertContains(r, "p-card ticket")
+        self.assertContains(r, reverse("payments:checkout", args=[self.paid.pk]))
+        self.assertNotContains(r, "Mariage secret")
+        self.assertNotContains(r, "Pub inactive")
+        kinds = [k for k, _ in r.context["parade"]]
+        self.assertTrue({"ad", "event", "ticket"} <= set(kinds))
+
+    def test_parade_hidden_when_nothing_to_show(self):
+        Event.objects.all().delete()
+        Ad.objects.all().delete()
+        self.assertNotContains(self.client.get(reverse("core:landing")), 'id="affiche"')
+
+    def test_logged_in_visitor_gets_welcome_and_parade(self):
+        make_user("g@x.ht")
+        self.client.login(email="g@x.ht", password=PASSWORD)
+        r = self.client.get(reverse("core:landing"))
+        self.assertContains(r, "Bonjour")
+        self.assertContains(r, 'id="affiche"')
+
+    def test_login_redirects_to_home(self):
+        make_user("g@x.ht")
+        r = self.client.post(reverse("accounts:login"), {"email": "g@x.ht", "password": PASSWORD})
+        self.assertRedirects(r, reverse("core:landing"), fetch_redirect_response=False)
+
+    def test_login_redirects_by_role(self):
+        make_user("a@x.ht", role="admin")
+        make_user("v@x.ht", role="organizer", is_vip=True)
+        make_user("o@x.ht", role="organizer")
+        for email, target in [("a@x.ht", reverse("dashboard:home")), ("v@x.ht", reverse("core:landing")),
+                              ("o@x.ht", reverse("payments:vip"))]:
+            self.client.logout()
+            r = self.client.post(reverse("accounts:login"), {"email": email, "password": PASSWORD})
+            self.assertRedirects(r, target, fetch_redirect_response=False)
 
 
 class AccessRulesTests(TestCase):

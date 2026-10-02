@@ -1,39 +1,90 @@
 {% extends "base.html" %}
 {% load static humanize %}
 {% block title %}Gérez vos événements avec élégance{% endblock %}
-{% block extra_head %}
-<link rel="preload" as="image" href="https://images.unsplash.com/photo-1519167758481-83f550bb49b3?w=1800&q=70&auto=format&fit=crop">
-{% endblock %}
+{% block extra_head %}<link rel="preload" as="image" href="{% static 'img/photos/hero-bg.jpg' %}">{% endblock %}
 {% block content %}
 
 {# ============================== ACCUEIL ============================== #}
-<section id="accueil" class="hero photo-bg" style="background-image:url('https://images.unsplash.com/photo-1519167758481-83f550bb49b3?w=1800&q=70&auto=format&fit=crop')">
-  <div class="container">
-    <div class="row align-items-center g-5">
-      <div class="col-lg-7 reveal">
-        <span class="eyebrow">Haïti &middot; Caraïbe</span>
-        <h1 class="mt-3 mb-4">Gérez vos événements <span class="accent">avec élégance</span></h1>
-        <p class="lead mb-4">Mariages, galas, conférences : envoyez vos invitations par WhatsApp ou e-mail, suivez les réponses en direct et offrez à vos invités une liste de cadeaux sans doublon.</p>
+{% if user.is_authenticated %}
+<section id="accueil" class="hero-welcome">
+  <div class="sunburst" aria-hidden="true"></div>
+  <div class="container inner d-flex flex-wrap align-items-end justify-content-between gap-4">
+    <div>
+      <div class="eyebrow-row light mb-3"><span class="diamond"></span><span class="eyebrow">Accueil</span></div>
+      <h1 class="disp">Bonjour <em>{{ user.display_name }}</em></h1>
+      <p class="mb-0 mt-2" style="color:var(--el-tint-strong)">Publications, événements publics et billets du moment, rassemblés pour vous.</p>
+    </div>
+    <div class="d-flex flex-wrap gap-2">
+      <a href="{% url 'accounts:dispatch' %}" class="btn btn-gold"><i class="bi bi-grid-1x2 me-2"></i>Mon espace</a>
+      <a href="{% url 'payments:ticketing' %}" class="btn btn-light-ghost"><i class="bi bi-ticket-perforated me-2"></i>Billetterie</a>
+    </div>
+  </div>
+</section>
+{% else %}
+<section id="accueil" class="hero">
+  <img class="hero-bg" src="{% static 'img/photos/hero-bg.jpg' %}" alt="">
+  <div class="hero-veil"></div>
+  <div class="sunburst" aria-hidden="true"></div>
+  <div class="container hero-inner">
+    <div class="row align-items-center g-4 g-lg-5">
+      <div class="col-lg-7 d-flex flex-column gap-4">
+        <div class="eyebrow-row light"><span class="diamond"></span><span class="eyebrow">Haïti &middot; Caraïbe &middot; Diaspora</span></div>
+        <h1 class="disp">Gérez vos événements avec <em>élégance</em></h1>
+        <p class="lead mb-0">Invitations par WhatsApp ou e-mail, réponses suivies en temps réel, liste de cadeaux partagée et paiement MonCash, NatCash, carte ou PayPal.</p>
         <div class="d-flex flex-wrap gap-3">
-          <a href="{% url 'accounts:register' %}" class="btn btn-gold btn-lg"><i class="bi bi-stars me-2"></i>Commencer maintenant</a>
-          <a href="#evenements" class="btn btn-light-ghost btn-lg"><i class="bi bi-play-circle me-2"></i>Découvrir</a>
-        </div>
-        <div class="hero-stats">
-          <div><div class="value">{{ stats.events|intcomma }}</div><div class="label">événements organisés</div></div>
-          <div><div class="value">{{ stats.invitations|intcomma }}</div><div class="label">invitations envoyées</div></div>
-          <div><div class="value">{{ stats.satisfaction }}&nbsp;%</div><div class="label">de satisfaction</div></div>
+          <a href="{% url 'accounts:register' %}" class="btn btn-gold btn-lg">Commencer maintenant</a>
+          <a href="#affiche" class="btn btn-light-ghost btn-lg">Découvrir</a>
         </div>
       </div>
-      <div class="col-lg-5 d-none d-lg-block reveal">
-        <div class="hero-card">
-          <div class="text-center py-3"><span class="logo-chip p-3"><img src="{% static 'img/logo.png' %}" alt="EventLead" width="112" height="120"></span></div>
-          <div class="d-grid gap-2 mt-2">
-            <div class="d-flex align-items-center gap-3 p-2"><span class="icon-bubble gold"><i class="bi bi-whatsapp"></i></span><div><strong>Invitation envoyée</strong><div class="small opacity-75">Lien personnel, sans mot de passe</div></div></div>
-            <div class="d-flex align-items-center gap-3 p-2"><span class="icon-bubble gold"><i class="bi bi-check2-circle"></i></span><div><strong>Présence confirmée</strong><div class="small opacity-75">Accompagnants inclus</div></div></div>
-            <div class="d-flex align-items-center gap-3 p-2"><span class="icon-bubble gold"><i class="bi bi-gift"></i></span><div><strong>Cadeau réservé</strong><div class="small opacity-75">Aussitôt verrouillé pour les autres</div></div></div>
+      <div class="col-lg-5">
+        <div class="hero-stage">
+          <div class="arch-frame"><div class="arch-img"><img src="{% static 'img/photos/hero-arch.jpg' %}" alt="Lumières de réception"></div></div>
+          <div class="hero-invite">
+            <span class="eyebrow">Exemple d'invitation privée</span>
+            <span class="names">Nadège &amp; Ricardo</span>
+            <span class="small text-muted">Samedi 14 novembre 2026 &middot; Pétion-Ville</span>
+            <div class="rsvp-bar"><div style="width:57%;background:#10B981"></div><div style="width:26%;background:#F59E0B"></div><div style="width:17%;background:#EF4444"></div></div>
+            <div class="d-flex justify-content-between small" style="color:#4B5563"><span><strong>142</strong> confirmés</span><span>248 invités</span></div>
           </div>
         </div>
       </div>
+    </div>
+  </div>
+</section>
+{% endif %}
+
+{# ===== DÉFILÉ : publications, événements publics et billets ===== #}
+{% if parade %}
+<section id="affiche" class="parade-section" aria-labelledby="affiche-titre">
+  <div class="sunburst" aria-hidden="true"></div>
+  <div class="container position-relative">
+    <div class="parade-legend">
+      <div class="d-flex flex-column gap-3">
+        <div class="eyebrow-row light"><span class="diamond"></span><span class="eyebrow">À l'affiche</span></div>
+        <h2 id="affiche-titre" class="disp mb-0">Publications, événements et billets</h2>
+      </div>
+      <div class="d-flex flex-wrap align-items-center gap-3">
+        <div class="chips"><span class="chip">Publication</span><span class="chip">Événement public</span><span class="chip">Billet</span></div>
+        <button type="button" class="parade-toggle" id="parade-toggle" aria-pressed="false">Mettre en pause</button>
+      </div>
+    </div>
+  </div>
+  <div class="parade" id="parade" role="region" aria-label="Défilé des publications, événements publics et billets">
+    <div class="parade-track">
+      {% for kind, obj in parade %}{% include "partials/_parade_card.html" %}{% endfor %}
+      {% for kind, obj in parade %}<div class="d-flex" aria-hidden="true">{% include "partials/_parade_card.html" with dup=True %}</div>{% endfor %}
+    </div>
+  </div>
+</section>
+{% endif %}
+
+{# ============================ CHIFFRES ============================ #}
+<section class="stat-strip" aria-label="Chiffres clés">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-4 stat"><div class="value">{{ stats.events|intcomma }}</div><div class="label">événements organisés</div></div>
+      <div class="col-md-4 stat"><div class="value">{{ stats.invitations|intcomma }}</div><div class="label">invitations envoyées</div></div>
+      <div class="col-md-4 stat"><div class="value">{{ stats.satisfaction }}&nbsp;%</div><div class="label">de satisfaction</div></div>
     </div>
   </div>
 </section>
@@ -41,147 +92,161 @@
 {# ===================== ÉVÉNEMENTS PUBLICS À VENIR ===================== #}
 <section id="evenements" class="section">
   <div class="container">
-    <div class="d-flex flex-wrap justify-content-between align-items-end gap-3 mb-4 reveal">
-      <div>
-        <span class="eyebrow">À ne pas manquer</span>
-        <h2 class="section-title mt-2 mb-0">Événements publics à venir</h2>
+    <div class="d-flex flex-wrap justify-content-between align-items-end gap-3 mb-5 reveal">
+      <div class="d-flex flex-column gap-3">
+        <div class="eyebrow-row"><span class="diamond"></span><span class="eyebrow">Ouverts à tous</span></div>
+        <h2 class="section-title mb-0">Événements publics à venir</h2>
       </div>
-      <a href="{% url 'events:explore' %}" class="btn btn-outline-primary">Voir tous les événements<i class="bi bi-arrow-right ms-2"></i></a>
+      <a href="{% url 'payments:ticketing' %}" class="btn btn-outline-primary">Voir la billetterie</a>
     </div>
-    <div class="row g-4">
+    <div class="row g-4 g-lg-5">
       {% for event in public_events %}
-        <div class="col-sm-6 col-lg-3 reveal">{% include "partials/_event_card.html" %}</div>
+        <div class="col-md-6 col-lg-4 reveal">{% include "partials/_event_card.html" %}</div>
       {% empty %}
         <div class="col-12"><div class="el-card empty-state"><i class="bi bi-calendar2-heart"></i><p class="mt-2 mb-0">Aucun événement public pour le moment. Revenez bientôt.</p></div></div>
+      {% endfor %}
+    </div>
+    {% if public_events %}<div class="text-center mt-5"><a href="{% url 'events:explore' %}" class="btn btn-outline-primary">Voir tous les événements publics<i class="bi bi-arrow-right ms-2"></i></a></div>{% endif %}
+  </div>
+</section>
+
+{# ============================== SERVICES ============================== #}
+<section id="services" class="section section-white">
+  <div class="container">
+    <div class="d-flex flex-column align-items-center text-center gap-3 mb-5 reveal">
+      <div class="eyebrow-row center"><span class="diamond"></span></div>
+      <span class="eyebrow">Services</span>
+      <h2 class="section-title mb-0" style="max-width:14em">Tout le cycle de l'événement, au même endroit</h2>
+    </div>
+    <div class="service-grid reveal">
+      {% for icon, title, text in services %}
+      <div class="service-cell">
+        <span class="icon-bubble"><i class="bi {{ icon }}"></i></span>
+        <h3>{{ title }}</h3>
+        <p>{{ text }}</p>
+      </div>
       {% endfor %}
     </div>
   </div>
 </section>
 
-{# ============================== SERVICES ============================== #}
-<section id="services" class="section section-soft">
-  <div class="container">
-    <div class="text-center mb-5 reveal">
-      <span class="eyebrow">Nos services</span>
-      <h2 class="section-title mt-2">Tout pour un événement réussi</h2>
-      <p class="text-muted mx-auto" style="max-width:560px">Une seule plateforme, de l'invitation au dernier cadeau, pensée pour les réalités d'Haïti : WhatsApp, MonCash et NatCash.</p>
+{# ============================== BANDEAU VIP ============================== #}
+<section class="vip-band">
+  <div class="sunburst" aria-hidden="true"></div>
+  <div class="container position-relative d-flex flex-wrap align-items-center gap-4" style="max-width:1100px">
+    <div class="vip-seal"><span>VIP</span></div>
+    <div class="flex-grow-1" style="flex-basis:380px">
+      <h2 class="disp mb-2">Devenez Organisateur VIP</h2>
+      <p class="mb-0" style="color:var(--el-tint-strong);max-width:38em">Accédez au détail de tous les événements publics, aux événements privés où vous êtes invité et à l'évaluation après la fête.</p>
     </div>
-    <div class="row g-4">
-      {% for icon, title, text in services %}
-      <div class="col-md-6 col-lg-4 reveal">
-        <div class="el-card service-card">
-          <span class="icon-bubble"><i class="bi {{ icon }}"></i></span>
-          <h3>{{ title }}</h3>
-          <p class="text-muted mb-0">{{ text }}</p>
-        </div>
-      </div>
-      {% endfor %}
-    </div>
-    <div class="cta-band photo-bg mt-5 reveal" style="background-image:url('https://images.unsplash.com/photo-1505236858219-8359eb29e329?w=1400&q=60&auto=format&fit=crop')">
-      <div class="row align-items-center g-4">
-        <div class="col-lg-8">
-          <span class="badge-el badge-vip mb-3"><i class="bi bi-gem"></i>VIP</span>
-          <h3 class="fw-bold mb-2">Devenez Organisateur VIP</h3>
-          <p class="mb-0 opacity-75">Accédez à tous les événements publics en détail, aux événements privés où vous êtes invité, et évaluez vos expériences.</p>
-        </div>
-        <div class="col-lg-4 text-lg-end">
-          <a href="{% if user.is_authenticated %}{% url 'accounts:become_organizer' %}{% else %}{% url 'accounts:register_organizer' %}{% endif %}" class="btn btn-gold btn-lg">Devenir Organisateur VIP</a>
-        </div>
-      </div>
-    </div>
+    <a href="{% if user.is_authenticated %}{% url 'accounts:become_organizer' %}{% else %}{% url 'accounts:register_organizer' %}{% endif %}" class="btn btn-gold btn-lg">Devenir Organisateur VIP</a>
   </div>
 </section>
 
 {# ============================== À PROPOS ============================== #}
 <section id="a-propos" class="section">
-  <div class="container">
-    <div class="row g-5 align-items-stretch">
+  <div class="container d-flex flex-column gap-5">
+    <div class="row g-4 g-lg-5 align-items-center">
       <div class="col-lg-6 reveal">
-        <div class="about-photo">
-          <img src="https://images.unsplash.com/photo-1464366400600-7168b8af9bc3?w=1100&q=65&auto=format&fit=crop" alt="Table de réception décorée" loading="lazy" onerror="this.style.visibility='hidden'">
-          <div class="caption"><span class="brand-script fs-2">EventLead</span><p class="mb-0 small opacity-75">Né à Port-au-Prince, pensé pour la Caraïbe.</p></div>
-        </div>
+        <div class="about-arch"><div class="pic"><img src="{% static 'img/photos/about.jpg' %}" alt="Décoration de réception" loading="lazy"></div></div>
       </div>
-      <div class="col-lg-6 reveal">
-        <span class="eyebrow">À propos</span>
-        <h2 class="section-title mt-2 mb-3">L'art de recevoir, simplifié</h2>
-        <p class="text-muted">EventLead accompagne les familles, les entreprises et les organisateurs professionnels. Nous avons conçu une plateforme qui respecte vos invités : pas de mot de passe à retenir, une réponse en quelques secondes depuis WhatsApp, et une liste de cadeaux où personne n'offre deux fois la même chose.</p>
-        <div class="row g-3 my-3">
-          <div class="col-4 key-figure"><div class="value">{{ stats.events|intcomma }}</div><div class="small text-muted">événements</div></div>
-          <div class="col-4 key-figure"><div class="value">{{ stats.invitations|intcomma }}</div><div class="small text-muted">invités</div></div>
-          <div class="col-4 key-figure"><div class="value">{{ stats.satisfaction }}&nbsp;%</div><div class="small text-muted">satisfaits</div></div>
-        </div>
-        <h3 class="h6 fw-bold mt-4 mb-3">Ils nous font confiance</h3>
-        <div class="row g-3">
-          {% for review in reviews|slice:":4" %}
-          <div class="col-md-6">
-            <div class="el-card review-card">
-              <div class="stars mb-2" aria-label="{{ review.stars }} sur 5">{% for i in "12345" %}<i class="bi bi-star{% if forloop.counter <= review.stars %}-fill{% endif %}"></i>{% endfor %}</div>
-              <p class="small mb-2">« {{ review.text|truncatechars:160 }} »</p>
-              <div class="small fw-semibold text-primary">{{ review.name }}</div>
-            </div>
-          </div>
-          {% empty %}
-          <div class="col-12 text-muted small">Soyez le premier à laisser un avis.</div>
-          {% endfor %}
+      <div class="col-lg-6 reveal d-flex flex-column gap-3">
+        <div class="eyebrow-row"><span class="diamond"></span><span class="eyebrow">À propos</span></div>
+        <h2 class="section-title mb-0">Fini les listes sur WhatsApp et les cadeaux en double</h2>
+        <p class="mb-0" style="font-size:1.0625rem;line-height:1.7;color:#4B5563;max-width:34em">EventLead réunit les invités, les réponses, les cadeaux et les paiements dans une seule plateforme, pensée pour une connexion mobile et pour les familles dispersées entre Port-au-Prince, Miami et Montréal.</p>
+        <div class="d-flex flex-wrap pt-2">
+          <div class="key-figure pe-4"><div class="value">4</div><div class="label">modes de paiement</div></div>
+          <div class="key-figure px-4" style="border-left:1px solid var(--el-border)"><div class="value">70&nbsp;%</div><div class="label">de réponses visées</div></div>
+          <div class="key-figure ps-4" style="border-left:1px solid var(--el-border)"><div class="value">0</div><div class="label">cadeau en double</div></div>
         </div>
       </div>
     </div>
 
-    <div class="el-card mt-5 reveal">
-      <div class="el-card-body">
-        <div class="row g-4 align-items-center">
-          <div class="col-lg-4">
-            <span class="icon-bubble gold mb-3"><i class="bi bi-chat-heart"></i></span>
-            <h3 class="h5 fw-bold">Donnez votre avis</h3>
-            <p class="text-muted small mb-0">Votre retour nous aide à améliorer EventLead pour toute la communauté.</p>
+    <div class="row g-4 align-items-stretch">
+      <div class="col-lg-8 reveal d-flex flex-column gap-4">
+        {% with first=reviews.0 %}
+        {% if first %}
+        <figure class="testi-main">
+          <div class="stars fs-5" aria-label="{{ first.stars }} étoiles sur 5">{% for i in "12345" %}<i class="bi bi-star{% if forloop.counter <= first.stars %}-fill{% endif %}"></i>{% endfor %}</div>
+          <blockquote>&laquo; {{ first.text|truncatechars:220 }} &raquo;</blockquote>
+          <figcaption>{{ first.name }}</figcaption>
+        </figure>
+        {% endif %}
+        {% endwith %}
+        <div class="row g-4">
+          {% for review in reviews|slice:"1:3" %}
+          <div class="col-md-6">
+            <figure class="testi">
+              <div class="stars" aria-label="{{ review.stars }} étoiles sur 5">{% for i in "12345" %}<i class="bi bi-star{% if forloop.counter <= review.stars %}-fill{% endif %}"></i>{% endfor %}</div>
+              <blockquote>&laquo; {{ review.text|truncatechars:140 }} &raquo;</blockquote>
+              <figcaption>{{ review.name }}</figcaption>
+            </figure>
           </div>
-          <div class="col-lg-8">
-            <form method="post" action="{% url 'core:submit_review' %}" class="row g-3">
-              {% csrf_token %}
-              <div class="col-md-6"><label class="form-label" for="id_name">Votre nom</label><input type="text" name="name" id="id_name" class="form-control" required maxlength="100"></div>
-              <div class="col-md-6">
-                <span class="form-label d-block">Votre note</span>
-                <div class="star-input">
-                  {% for i in "54321" %}<input type="radio" name="stars" id="star{{ i }}" value="{{ i }}" {% if i == "5" %}checked{% endif %}><label for="star{{ i }}" title="{{ i }} sur 5"><i class="bi bi-star-fill"></i></label>{% endfor %}
-                </div>
-              </div>
-              <div class="col-12"><label class="form-label" for="id_text">Votre avis</label><textarea name="text" id="id_text" rows="3" class="form-control" required placeholder="Partagez votre expérience avec EventLead"></textarea></div>
-              <div class="col-12"><button class="btn btn-primary"><i class="bi bi-send me-2"></i>Publier mon avis</button></div>
-            </form>
-          </div>
+          {% endfor %}
         </div>
+        {% if not reviews %}<p class="text-muted">Soyez le premier à laisser un avis.</p>{% endif %}
+      </div>
+      <div class="col-lg-4 reveal">
+        <form method="post" action="{% url 'core:submit_review' %}" class="frame h-100">
+          {% csrf_token %}
+          <div class="frame-in d-flex flex-column gap-3">
+            <h3 class="mb-0" style="font-size:1.75rem">Laisser un avis</h3>
+            <div><label class="form-label" for="id_name">Nom</label><input type="text" name="name" id="id_name" class="form-control" required maxlength="100"></div>
+            <div>
+              <span class="form-label d-block">Note</span>
+              <div class="star-input">
+                {% for i in "54321" %}<input type="radio" name="stars" id="star{{ i }}" value="{{ i }}" {% if i == "5" %}checked{% endif %}><label for="star{{ i }}" title="{{ i }} sur 5"><i class="bi bi-star-fill"></i></label>{% endfor %}
+              </div>
+            </div>
+            <div><label class="form-label" for="id_text">Votre avis</label><textarea name="text" id="id_text" rows="4" class="form-control" required placeholder="Partagez votre expérience avec EventLead"></textarea></div>
+            <button class="btn btn-primary align-self-start">Publier mon avis</button>
+          </div>
+        </form>
       </div>
     </div>
   </div>
 </section>
 
 {# ============================== CONTACT ============================== #}
-<section id="contact" class="section section-soft">
+<section id="contact" class="section section-white">
   <div class="container">
-    <div class="row g-5">
-      <div class="col-lg-5 reveal">
-        <span class="eyebrow">Contact</span>
-        <h2 class="section-title mt-2 mb-3">Parlons de votre événement</h2>
-        <p class="text-muted mb-4">Une question, un devis, une démonstration ? Notre équipe vous répond rapidement.</p>
-        <div class="contact-item"><span class="icon-bubble"><i class="bi bi-geo-alt"></i></span><div><strong>Adresse</strong><div class="text-muted">{{ CONTACT_ADDRESS }}</div></div></div>
-        <div class="contact-item"><span class="icon-bubble"><i class="bi bi-envelope"></i></span><div><strong>E-mail</strong><div><a href="mailto:{{ CONTACT_EMAIL }}">{{ CONTACT_EMAIL }}</a></div></div></div>
-        <div class="contact-item"><span class="icon-bubble"><i class="bi bi-telephone"></i></span><div><strong>Téléphone</strong><div class="text-muted">{{ CONTACT_PHONE }}</div></div></div>
-        <a href="https://wa.me/{{ CONTACT_WHATSAPP }}?text={{ 'Bonjour EventLead, je souhaite organiser un événement.'|urlencode }}" target="_blank" rel="noopener" class="btn btn-whatsapp btn-lg mt-2"><i class="bi bi-whatsapp me-2"></i>Écrire sur WhatsApp</a>
+    <div class="row g-4 g-lg-5 align-items-center">
+      <div class="col-lg-5 reveal d-flex flex-column gap-3">
+        <div class="eyebrow-row"><span class="diamond"></span><span class="eyebrow">Contact</span></div>
+        <h2 class="section-title mb-2">Parlons de votre prochain événement</h2>
+        <div class="contact-item"><i class="bi bi-geo-alt"></i>{{ CONTACT_ADDRESS }}</div>
+        <div class="contact-item"><i class="bi bi-envelope"></i><a href="mailto:{{ CONTACT_EMAIL }}" style="color:inherit">{{ CONTACT_EMAIL }}</a></div>
+        <div class="contact-item"><i class="bi bi-telephone"></i>{{ CONTACT_PHONE }}</div>
+        <a href="https://wa.me/{{ CONTACT_WHATSAPP }}?text={{ 'Bonjour EventLead, je souhaite organiser un événement.'|urlencode }}" target="_blank" rel="noopener" class="btn btn-whatsapp btn-lg align-self-start"><i class="bi bi-whatsapp me-2"></i>Écrire sur WhatsApp</a>
       </div>
       <div class="col-lg-7 reveal">
-        <div class="el-card el-card-body">
-          <form method="post" action="{% url 'core:submit_contact' %}" class="row g-3">
-            {% csrf_token %}
+        <form method="post" action="{% url 'core:submit_contact' %}" class="frame" style="background:var(--el-bg)">
+          {% csrf_token %}
+          <div class="frame-in bg-white row g-3 mx-0" style="padding:2.25rem 1.5rem 2.25rem 1.5rem">
+            <h3 class="col-12 mb-1" style="font-size:1.9rem">Écrivez-nous</h3>
             <div class="col-md-6"><label class="form-label" for="c_name">Nom complet</label><input id="c_name" name="name" class="form-control" required maxlength="100"></div>
-            <div class="col-md-6"><label class="form-label" for="c_email">Adresse e-mail</label><input id="c_email" type="email" name="email" class="form-control" required></div>
-            <div class="col-12"><label class="form-label" for="c_phone">Téléphone</label><input id="c_phone" name="phone" class="form-control" maxlength="30" placeholder="+509 ..."></div>
-            <div class="col-12"><label class="form-label" for="c_message">Message</label><textarea id="c_message" name="message" rows="5" class="form-control" required placeholder="Parlez-nous de votre événement"></textarea></div>
-            <div class="col-12"><button class="btn btn-primary btn-lg w-100"><i class="bi bi-send me-2"></i>Envoyer le message</button></div>
-          </form>
-        </div>
+            <div class="col-md-6"><label class="form-label" for="c_phone">Téléphone</label><input id="c_phone" name="phone" class="form-control" maxlength="30" placeholder="+509 ..."></div>
+            <div class="col-12"><label class="form-label" for="c_email">Adresse e-mail</label><input id="c_email" type="email" name="email" class="form-control" required></div>
+            <div class="col-12"><label class="form-label" for="c_message">Message</label><textarea id="c_message" name="message" rows="4" class="form-control" required placeholder="Parlez-nous de votre événement"></textarea></div>
+            <div class="col-12"><button class="btn btn-primary btn-lg">Envoyer le message</button></div>
+          </div>
+        </form>
       </div>
     </div>
   </div>
 </section>
+{% endblock %}
+{% block extra_js %}
+<script>
+  // Défilé : pause / reprise (le survol et le focus clavier mettent aussi en pause en CSS)
+  (function () {
+    var btn = document.getElementById("parade-toggle"), box = document.getElementById("parade");
+    if (!btn || !box) return;
+    btn.addEventListener("click", function () {
+      var paused = box.classList.toggle("paused");
+      btn.setAttribute("aria-pressed", paused ? "true" : "false");
+      btn.textContent = paused ? "Reprendre" : "Mettre en pause";
+    });
+  })();
+</script>
 {% endblock %}

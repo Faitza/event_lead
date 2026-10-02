@@ -185,22 +185,24 @@ def _ad_sequence():
 
 
 def _after_ads_url():
-    return reverse("events:explore")
+    """Fin du parcours : la page d'accueil, au défilé des publications et des événements publics."""
+    return reverse("core:landing") + "#affiche"
 
 
 def invitation_done(request, token):
-    """Étape 5 : succès puis redirection automatique vers la publicité."""
+    """Étape 5 : après la réponse, redirection automatique vers une publication puis l'accueil."""
     guest = _load_guest(token)
     if guest.replied_at is None:
         return redirect("events:invitation", token=token)
     ads = _ad_sequence()
-    next_url = reverse("events:invitation_ad", args=[token, ads[0]]) if ads else _after_ads_url()
+    if ads:
+        return redirect("events:invitation_ad", token=token, ad_id=ads[0])
     claims = GiftClaim.objects.filter(guest=guest).select_related("gift")
-    return render(request, "invitation/step_done.html", _ctx(guest, "Confirmation", next_url=next_url, claims=claims))
+    return render(request, "invitation/step_done.html", _ctx(guest, "Confirmation", next_url=_after_ads_url(), claims=claims))
 
 
 def invitation_ad(request, token, ad_id):
-    """Page publicité affichée après la réponse (section 7)."""
+    """Page publicité affichée après la réponse (section 7), puis retour à l'accueil."""
     guest = _load_guest(token)
     ad = get_object_or_404(Ad, pk=ad_id, is_active=True)
     Ad.objects.filter(pk=ad.pk).update(views=F("views") + 1)

@@ -1,5 +1,11 @@
 from django.conf import settings
 
+from events.models import Event
+
+
+def _next_public_event():
+    return Event.objects.public_active().upcoming().first()
+
 
 def site_settings(request):
     return {
@@ -9,4 +15,6 @@ def site_settings(request):
         "CONTACT_ADDRESS": settings.CONTACT_ADDRESS,
         "GOOGLE_LOGIN_ENABLED": bool(settings.GOOGLE_CLIENT_ID and settings.GOOGLE_CLIENT_SECRET),
         "PAYMENT_DEMO_MODE": settings.PAYMENT_DEMO_MODE,
+        # Appelable : la requête n'est exécutée que si le gabarit l'utilise.
+        "next_public_event": _next_public_event,
     }

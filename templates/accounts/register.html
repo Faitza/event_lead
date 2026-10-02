@@ -1,18 +1,19 @@
 {% extends "accounts/auth_base.html" %}
 {% block title %}{% if organizer %}Inscription Organisateur{% else %}Créer un compte{% endif %}{% endblock %}
-{% block visual_title %}{% if organizer %}Rejoignez le cercle des Organisateurs VIP{% else %}Bienvenue sur EventLead{% endif %}{% endblock %}
+{% block visual_eyebrow %}{% if organizer %}Organisateur VIP{% else %}Nouveau compte{% endif %}{% endblock %}
+{% block visual_title %}{% if organizer %}Rejoignez le cercle des <em>Organisateurs VIP</em>{% else %}Bienvenue sur <em>EventLead</em>{% endif %}{% endblock %}
 {% block visual_text %}{% if organizer %}Après votre inscription, un paiement unique active votre badge VIP et votre portail Organisateur.{% else %}Répondez à vos invitations, choisissez vos cadeaux et découvrez les événements publics.{% endif %}{% endblock %}
 {% block panel %}
 {% if organizer %}
-  <span class="badge-el badge-vip mb-2"><i class="bi bi-gem"></i>VIP</span>
-  <h1 class="h3 fw-bold text-primary mb-1">Inscription Organisateur</h1>
-  <p class="text-muted mb-4">Étape 1 sur 2 : votre compte. Étape 2 : le paiement VIP.</p>
+  <div class="text-center"><span class="badge-el badge-vip mb-2"><i class="bi bi-gem"></i>VIP</span></div>
+  <h1>Inscription Organisateur</h1>
+  <p class="text-muted text-center mb-4">Étape 1 sur 2 : votre compte. Étape 2 : le paiement VIP.</p>
 {% else %}
-  <h1 class="h3 fw-bold text-primary mb-1">Créer un compte</h1>
-  <p class="text-muted mb-4">Gratuit, en moins d'une minute.</p>
+  <h1>Créer un compte</h1>
+  <p class="text-muted text-center mb-4">Gratuit, en moins d'une minute.</p>
 {% endif %}
 {% include "partials/_google_button.html" %}
-<div class="divider">ou avec votre e-mail</div>
+<div class="divider"><span class="diamond"></span></div>
 <form method="post" novalidate>
   {% csrf_token %}
   {% if form.non_field_errors %}<div class="notice notice-danger mb-3"><i class="bi bi-exclamation-circle"></i><div>{{ form.non_field_errors|join:" " }}</div></div>{% endif %}

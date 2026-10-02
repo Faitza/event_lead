@@ -1,35 +1,22 @@
 <footer class="el-footer">
-  <div class="container">
-    <div class="row g-4">
-      <div class="col-lg-4">
-        <div class="d-flex align-items-center gap-2 mb-3 on-dark">{% include "partials/_logo.html" %}<span class="logo-word">EventLead</span></div>
-        <p class="small mb-0">La plateforme élégante pour organiser vos mariages, galas et conférences en Haïti et dans la Caraïbe.</p>
-      </div>
-      <div class="col-6 col-lg-2">
-        <h4>Navigation</h4>
-        <ul class="list-unstyled small d-grid gap-2">
-          <li><a href="{% url 'core:landing' %}#services">Services</a></li>
-          <li><a href="{% url 'events:explore' %}">Événements publics</a></li>
-          <li><a href="{% url 'payments:ticketing' %}">Billetterie</a></li>
-        </ul>
-      </div>
-      <div class="col-6 col-lg-3">
-        <h4>Espace pro</h4>
-        <ul class="list-unstyled small d-grid gap-2">
-          <li><a href="{% url 'accounts:register_organizer' %}">Devenir Organisateur VIP</a></li>
-          <li><a href="{% url 'accounts:login' %}">Connexion</a></li>
-        </ul>
-      </div>
-      <div class="col-lg-3">
-        <h4>Contact</h4>
-        <ul class="list-unstyled small d-grid gap-2">
-          <li><i class="bi bi-geo-alt me-2"></i>{{ CONTACT_ADDRESS }}</li>
-          <li><i class="bi bi-envelope me-2"></i><a href="mailto:{{ CONTACT_EMAIL }}">{{ CONTACT_EMAIL }}</a></li>
-          <li><i class="bi bi-whatsapp me-2"></i><a href="https://wa.me/{{ CONTACT_WHATSAPP }}" target="_blank" rel="noopener">{{ CONTACT_PHONE }}</a></li>
-        </ul>
-      </div>
+  <div class="el-footer-top">
+    <div class="container d-flex flex-wrap gap-4 align-items-center justify-content-between">
+      <a href="{% url 'core:landing' %}" class="d-flex" aria-label="EventLead, accueil">{% include "partials/_logo.html" %}</a>
+      <nav class="links" aria-label="Liens du pied de page">
+        <a class="navl" href="{% url 'events:explore' %}">Événements</a>
+        <a class="navl" href="{% url 'core:landing' %}#services">Services</a>
+        <a class="navl" href="{% url 'core:landing' %}#a-propos">À propos</a>
+        <a class="navl" href="{% url 'core:landing' %}#contact">Contact</a>
+        <a class="navl" href="{% url 'payments:ticketing' %}">Billetterie</a>
+        <a class="navl" href="{% url 'accounts:register_organizer' %}">Organisateur VIP</a>
+      </nav>
     </div>
-    <hr class="border-secondary opacity-25 my-4">
-    <p class="small mb-0 text-center">&copy; {% now "Y" %} EventLead. Tous droits réservés.</p>
+  </div>
+  <div class="el-footer-bottom">
+    <div class="container d-flex flex-wrap gap-2 align-items-center justify-content-between">
+      <span>&copy; {% now "Y" %} EventLead &middot; Tous droits réservés</span>
+      <span class="script" aria-hidden="true">EventLead</span>
+      <span>Haïti &middot; Caraïbe &middot; Diaspora</span>
+    </div>
   </div>
 </footer>

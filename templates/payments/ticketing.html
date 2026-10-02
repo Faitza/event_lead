@@ -1,36 +1,32 @@
 {% extends "base.html" %}
+{% load humanize %}
 {% block title %}Billetterie{% endblock %}
 {% block content %}
-<section class="photo-bg text-white py-5" style="background-image:url('https://images.unsplash.com/photo-1492684223066-81342ee5ff30?w=1600&q=55&auto=format&fit=crop')">
-  <div class="container py-4">
-    <span class="eyebrow">Billetterie</span>
-    <h1 class="display-6 fw-bold mt-2">Réservez vos billets</h1>
-    <p class="opacity-75 mb-0">Payez en gourdes avec MonCash ou NatCash, ou en dollars par carte et PayPal.</p>
-  </div>
-</section>
 <section class="section pt-5">
   <div class="container">
-    <div class="row g-4">
+    <div class="page-title">
+      <div class="eyebrow-row"><span class="diamond"></span><span class="eyebrow">Événements payants</span></div>
+      <h1 class="disp">Billetterie</h1>
+      <p class="text-muted mb-0">Prix en gourdes, avec l'équivalent en dollars au taux de 1 HTG = {{ rate }} USD. Paiement par MonCash, NatCash, carte ou PayPal.</p>
+    </div>
+    <div class="d-flex flex-column gap-4">
       {% for event in events %}
-      <div class="col-md-6 col-lg-4 reveal">
-        <div class="event-card">
-          <div class="cover"><img src="{{ event.cover_url }}" alt="" loading="lazy" onerror="this.style.visibility='hidden'"><span class="badge-el"><i class="bi bi-ticket-perforated"></i>Billet</span>
-            <div class="date-chip"><div class="d">{{ event.date|date:"d" }}</div><div class="m">{{ event.date|date:"M" }}</div></div></div>
-          <div class="body">
-            <h3>{{ event.title }}</h3>
-            <div class="meta mb-3"><i class="bi bi-geo-alt"></i>{{ event.venue|truncatechars:40 }}</div>
-            <div class="d-flex justify-content-between align-items-end">
-              <div><div class="fw-bold fs-4 text-primary">{{ event.price_htg|floatformat:0 }} HTG</div><div class="small text-muted">&asymp; {{ event.price_usd }} USD</div></div>
-              <a href="{% url 'payments:checkout' event.pk %}" class="btn btn-primary">Acheter</a>
-            </div>
-          </div>
+      <article class="ticket-row reveal">
+        <div class="t-img"><img src="{{ event.cover_url }}" alt="" loading="lazy" onerror="this.style.visibility='hidden'"></div>
+        <div class="t-main">
+          <span class="eyebrow" style="font-size:.6875rem">{{ event.date|date:"l j F Y"|capfirst }}</span>
+          <h2 class="disp"><a href="{{ event.get_absolute_url }}" style="color:inherit">{{ event.title }}</a></h2>
+          <span class="small text-muted"><i class="bi bi-geo-alt me-1" style="color:var(--el-gold-text)"></i>{{ event.venue|truncatechars:56 }}</span>
         </div>
-      </div>
+        <div class="t-buy">
+          <span class="d-flex align-items-baseline gap-2 flex-wrap"><span class="htg">{{ event.price_htg|floatformat:0|intcomma }} HTG</span><span class="small text-muted">&asymp; {{ event.price_usd }} USD</span></span>
+          <a href="{% url 'payments:checkout' event.pk %}" class="btn btn-primary">Acheter un billet</a>
+        </div>
+      </article>
       {% empty %}
-      <div class="col-12"><div class="el-card empty-state"><i class="bi bi-ticket-perforated"></i><p class="mt-2 mb-0">Aucun événement payant pour le moment.</p></div></div>
+      <div class="el-card empty-state"><i class="bi bi-ticket-perforated"></i><p class="mt-2 mb-0">Aucun événement payant pour le moment.</p></div>
       {% endfor %}
     </div>
-    <p class="small text-muted text-center mt-4">Taux de conversion appliqué : 1 HTG = {{ rate }} USD.</p>
   </div>
 </section>
 {% endblock %}
