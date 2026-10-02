@@ -2,12 +2,14 @@
 {% block title %}Invitation - {{ event.title }}{% endblock %}
 {% block body %}
 <div class="inv-shell">
+  <div class="inv-topbar">
+    <div class="inv-container d-flex align-items-center justify-content-between">
+      <a href="{% url 'core:landing' %}" class="d-flex align-items-center gap-2">{% include "partials/_logo.html" %}<span class="logo-word">EventLead</span></a>
+      <span class="small text-muted">Bonjour {{ guest.name }}</span>
+    </div>
+  </div>
   <header class="inv-header photo-bg" style="background-image:url('{{ event.cover_url }}')">
     <div class="inv-container">
-      <div class="d-flex align-items-center justify-content-between on-dark">
-        <a href="{% url 'core:landing' %}" class="d-flex align-items-center gap-2">{% include "partials/_logo.html" %}<span class="logo-word">EventLead</span></a>
-        <span class="small opacity-75">Bonjour {{ guest.name }}</span>
-      </div>
       {% if step_total %}
       <div class="stepper" aria-label="Étape {{ step_index }} sur {{ step_total }}">
         {% for s in steps %}<span class="step {% if forloop.counter < step_index %}done{% elif forloop.counter == step_index %}current{% endif %}"></span>{% endfor %}

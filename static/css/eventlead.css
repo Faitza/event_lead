@@ -219,15 +219,16 @@ a:hover { color: var(--el-primary-light); }
    Tableau de bord (sidebar violette)
    -------------------------------------------------------------------------- */
 .dash { display: flex; min-height: 100vh; }
-.dash-sidebar { width: 260px; flex-shrink: 0; background: var(--el-gradient); color: rgba(255, 255, 255, .78); padding: 1.25rem 1rem; position: sticky; top: 0; height: 100vh; overflow-y: auto; display: flex; flex-direction: column; }
-.dash-sidebar .brand { display: flex; align-items: center; gap: .65rem; padding: .25rem .5rem 1.5rem; color: #fff; }
-.dash-sidebar .brand .logo-word { color: #fff; font-size: 1.7rem; }
-.dash-sidebar .nav-section { font-size: .7rem; text-transform: uppercase; letter-spacing: .12em; color: rgba(255, 255, 255, .45); padding: 1rem .75rem .4rem; }
-.dash-sidebar a.side-link { display: flex; align-items: center; gap: .75rem; padding: .62rem .75rem; border-radius: 12px; color: rgba(255, 255, 255, .8); font-weight: 500; margin-bottom: 2px; transition: background-color var(--el-ease), color var(--el-ease); }
-.dash-sidebar a.side-link i { font-size: 1.1rem; }
-.dash-sidebar a.side-link:hover { background: rgba(255, 255, 255, .08); color: #fff; }
-.dash-sidebar a.side-link.active { background: #fff; color: var(--el-primary); box-shadow: 0 6px 16px rgba(0, 0, 0, .18); }
-.dash-sidebar a.side-link.active i { color: var(--el-gold-dark); }
+.dash-sidebar { width: 260px; flex-shrink: 0; background: #fff; color: var(--el-text); border-right: 1px solid var(--el-border); padding: 1.25rem 1rem; position: sticky; top: 0; height: 100vh; overflow-y: auto; display: flex; flex-direction: column; }
+.dash-sidebar .brand { display: flex; align-items: center; gap: .65rem; padding: .25rem .5rem 1.5rem; }
+.dash-sidebar .brand .logo-word { font-size: 1.7rem; }
+.dash-sidebar .nav-section { font-size: .7rem; text-transform: uppercase; letter-spacing: .12em; color: #9CA3AF; padding: 1rem .75rem .4rem; }
+.dash-sidebar .side-link { display: flex; align-items: center; gap: .75rem; padding: .62rem .75rem; border-radius: 12px; color: var(--el-text); font-weight: 500; margin-bottom: 2px; transition: background-color var(--el-ease), color var(--el-ease); }
+.dash-sidebar .side-link i { font-size: 1.1rem; color: var(--el-muted); transition: color var(--el-ease); }
+.dash-sidebar .side-link:hover { background: var(--el-bg-soft); color: var(--el-primary); }
+.dash-sidebar .side-link:hover i { color: var(--el-primary); }
+.dash-sidebar .side-link.active { background: var(--el-primary); color: #fff; box-shadow: 0 6px 16px rgba(69, 6, 92, .22); }
+.dash-sidebar .side-link.active i { color: var(--el-gold); }
 .dash-sidebar .side-count { margin-left: auto; background: var(--el-gold); color: var(--el-primary-dark); font-size: .7rem; font-weight: 700; padding: .1rem .45rem; border-radius: 999px; }
 .dash-main { flex: 1; min-width: 0; }
 .dash-topbar { background: #fff; border-bottom: 1px solid var(--el-border); padding: .85rem 2rem; display: flex; align-items: center; justify-content: space-between; gap: 1rem; position: sticky; top: 0; z-index: 1020; }
@@ -285,10 +286,11 @@ a:hover { color: var(--el-primary-light); }
    Flux invité (mobile d'abord)
    -------------------------------------------------------------------------- */
 .inv-shell { min-height: 100vh; background: var(--el-bg-soft); }
+.inv-topbar { background: #fff; border-bottom: 1px solid var(--el-border); padding: .75rem 0; position: sticky; top: 0; z-index: 1020; }
 .inv-header { color: #fff; padding: 1.25rem 0 4.5rem; }
 .inv-container { max-width: 620px; margin: 0 auto; padding: 0 1rem; }
 .inv-body { margin-top: -3.5rem; padding-bottom: 3rem; }
-.stepper { display: flex; align-items: center; gap: .35rem; margin-top: 1.25rem; }
+.stepper { display: flex; align-items: center; gap: .35rem; }
 .stepper .step { flex: 1; height: 5px; border-radius: 999px; background: rgba(255, 255, 255, .22); position: relative; overflow: hidden; }
 .stepper .step::after { content: ""; position: absolute; inset: 0; background: var(--el-gold); transform: scaleX(0); transform-origin: left; transition: transform .3s ease; }
 .stepper .step.done::after, .stepper .step.current::after { transform: scaleX(1); }
@@ -419,3 +421,7 @@ a:hover { color: var(--el-primary-light); }
   .cta-band { padding: 2rem 1.25rem; }
   .el-card-body { padding: 1.15rem; }
 }
+
+/* Barres blanches porteuses du logo : le logo s affiche sans pastille */
+.el-nav .logo-chip, .dash-sidebar .logo-chip, .inv-topbar .logo-chip { box-shadow: none; padding: 0; }
+.el-nav .logo-chip img, .dash-sidebar .logo-chip img, .inv-topbar .logo-chip img { height: 44px; }
