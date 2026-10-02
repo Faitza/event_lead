@@ -8,7 +8,7 @@ from django.utils import timezone
 
 from accounts.models import CustomUser
 from ads.models import Ad
-from events.models import Event, Guest
+from events.models import Event, EventGroup, Guest
 from gifts.models import Gift, GiftClaim
 from gifts.services import GiftUnavailableError, ResponseLockedError, confirm_response
 from payments.models import Payment
@@ -390,3 +390,117 @@ class SmokeTests(TestCase):
         event = Event.objects.filter(price_htg__gt=0).first()
         self.assertEqual(self.client.get(reverse("payments:checkout", args=[event.pk])).status_code, 200)
         self.assertEqual(self.client.get(reverse("payments:vip")).status_code, 200)
+
+
+class EventGroupTests(TestCase):
+    """Groupes d'événements : gestion par l'administrateur et présentation publique."""
+
+    def setUp(self):
+        self.admin = make_user("adm@x.ht", role="admin")
+        self.day1 = make_event(title="Ouverture du festival", event_type="public", status="active")
+        self.day2 = make_event(title="Clôture du festival", event_type="public", status="active",
+                               date=timezone.localdate() + timedelta(days=11), price_htg=Decimal("2000"))
+        self.alone = make_event(title="Conférence seule", event_type="public", status="active",
+                                date=timezone.localdate() + timedelta(days=20))
+        self.secret = make_event(title="Dîner privé du festival")
+
+    def make_group(self, *events, title="Festival test"):
+        group = EventGroup.objects.create(title=title, description="Deux jours de fête")
+        Event.objects.filter(pk__in=[e.pk for e in events]).update(group=group)
+        return group
+
+    def post_group(self, url, events, title="Festival test"):
+        self.client.force_login(self.admin)
+        return self.client.post(url, {"title": title, "description": "x", "events": [e.pk for e in events]})
+
+    # ---- tableau de bord
+    def test_admin_creates_group_and_attaches_events(self):
+        r = self.post_group(reverse("dashboard:group_create"), [self.day1, self.day2])
+        self.assertRedirects(r, reverse("dashboard:group_list"))
+        group = EventGroup.objects.get(title="Festival test")
+        self.assertEqual(set(group.events.all()), {self.day1, self.day2})
+
+    def test_admin_detaches_and_moves_events(self):
+        group = self.make_group(self.day1, self.day2)
+        self.post_group(reverse("dashboard:group_edit", args=[group.pk]), [self.day1])
+        self.day2.refresh_from_db()
+        self.assertIsNone(self.day2.group)
+        other = EventGroup.objects.create(title="Autre groupe")
+        self.post_group(reverse("dashboard:group_edit", args=[other.pk]), [self.day1], title="Autre groupe")
+        self.day1.refresh_from_db()
+        self.assertEqual(self.day1.group, other)
+
+    def test_deleting_group_keeps_its_events(self):
+        group = self.make_group(self.day1, self.day2)
+        self.client.force_login(self.admin)
+        self.assertContains(self.client.get(reverse("dashboard:group_delete", args=[group.pk])), "ne sont pas supprimés")
+        self.client.post(reverse("dashboard:group_delete", args=[group.pk]))
+        self.assertFalse(EventGroup.objects.exists())
+        self.day1.refresh_from_db()
+        self.assertIsNone(self.day1.group)
+        self.assertTrue(Event.objects.filter(pk=self.day2.pk).exists())
+
+    def test_event_form_can_set_the_group(self):
+        group = EventGroup.objects.create(title="Mariage")
+        self.client.force_login(self.admin)
+        r = self.client.post(reverse("dashboard:event_edit", args=[self.secret.pk]), {
+            "title": self.secret.title, "group": group.pk, "event_type": "private", "status": "active",
+            "date": self.secret.date.isoformat(), "time": "15:00", "venue": self.secret.venue,
+            "latitude": 18.51, "longitude": -72.28, "max_guests": 50, "max_companions": 0, "evaluation_delay_days": 3,
+        })
+        self.assertEqual(r.status_code, 302, getattr(r, "context", None) and r.context["form"].errors)
+        self.secret.refresh_from_db()
+        self.assertEqual(self.secret.group, group)
+
+    def test_group_pages_are_admin_only_and_render(self):
+        group = self.make_group(self.day1)
+        self.client.force_login(make_user("vip@x.ht", role="organizer", is_vip=True))
+        self.assertEqual(self.client.get(reverse("dashboard:group_list")).status_code, 403)
+        self.client.force_login(self.admin)
+        for url in (reverse("dashboard:group_list"), reverse("dashboard:group_create"),
+                    reverse("dashboard:group_edit", args=[group.pk]), reverse("dashboard:event_list")):
+            self.assertEqual(self.client.get(url).status_code, 200, url)
+
+    # ---- pages publiques
+    def test_group_is_one_card_with_its_public_events_only(self):
+        self.make_group(self.day1, self.day2, self.secret)
+        for url in (reverse("core:landing"), reverse("events:explore")):
+            r = self.client.get(url)
+            self.assertContains(r, 'class="event-arch group-arch"', count=1, msg_prefix=url)
+            self.assertContains(r, "Ouverture du festival")
+            self.assertContains(r, "Clôture du festival")
+            self.assertContains(r, "Conférence seule")
+            self.assertNotContains(r, "Dîner privé du festival")
+        cards = self.client.get(reverse("events:explore")).context["cards"]
+        self.assertEqual([c["kind"] for c in cards], ["group", "event"])
+        self.assertEqual(cards[0]["count"], 2)
+
+    def test_group_without_public_event_is_hidden(self):
+        self.make_group(self.secret, title="Groupe privé")
+        r = self.client.get(reverse("events:explore"))
+        self.assertNotContains(r, "Groupe privé")
+        self.assertNotContains(r, "group-arch")
+
+    def test_parade_shows_a_group_as_one_card(self):
+        self.make_group(self.day1, self.day2)
+        from core.views import build_parade
+
+        kinds = [k for k, _ in build_parade(minimum=1)]
+        self.assertEqual(kinds.count("group"), 1)
+        self.assertEqual(kinds.count("event"), 1)  # la conférence seule
+        self.assertIn("ticket", kinds)  # le billet de la clôture reste achetable
+        self.assertContains(self.client.get(reverse("core:landing")), "Festival test")
+
+    def test_event_page_lists_the_other_events_of_its_group(self):
+        self.make_group(self.day1, self.day2, self.secret)
+        r = self.client.get(reverse("events:public_detail", args=[self.day1.pk]))
+        self.assertContains(r, "Dans le même groupe")
+        self.assertContains(r, "Clôture du festival")
+        self.assertNotContains(r, "Dîner privé du festival")
+
+    def test_invitation_flow_is_unchanged_for_grouped_events(self):
+        self.make_group(self.secret, self.day1)
+        guest = Guest.objects.create(event=self.secret, name="Carla", phone="+509 3712 3456")
+        r = self.client.get(reverse("events:invitation", args=[guest.magic_token]))
+        self.assertContains(r, "Serez-vous")
+        self.assertContains(r, "Dîner privé du festival")

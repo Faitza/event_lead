@@ -353,6 +353,23 @@ h1 em, h2 em, h3 em, .disp em { color: var(--el-gold); font-style: italic; }
 .event-arch .foot .price { font-family: var(--font-display); font-size: 1.4rem; color: var(--el-primary); white-space: nowrap; flex: none; }
 @media (max-width: 575px) { .event-arch .arch-img { height: 280px; } }
 
+/* Groupe d'événements : une seule carte qui contient ses événements */
+.group-arch .gdesc { margin: 0; font-size: .9375rem; line-height: 1.55; color: #4B5563; }
+.group-events { list-style: none; margin: 8px 0 0; padding: 0; border-top: 1px solid var(--el-border); }
+.group-events li + li { border-top: 1px solid var(--el-border); }
+.group-events a { display: grid; grid-template-columns: 48px 1fr auto; gap: 14px; align-items: center; padding: 12px 0; color: var(--el-text); }
+.group-events a:hover { color: var(--el-primary); }
+.group-events .gd { text-align: center; font-size: .6875rem; line-height: 1.1; letter-spacing: .14em; text-transform: uppercase; color: var(--el-gold-text); }
+.group-events .gd b { display: block; font-family: var(--font-display); font-weight: 400; font-size: 1.7rem; letter-spacing: 0; color: var(--el-primary-dark); }
+.group-events .gt { min-width: 0; font-size: .9375rem; font-weight: 500; line-height: 1.25; }
+.group-events .gt small { display: block; margin-top: 3px; font-weight: 400; font-size: .8125rem; color: var(--el-muted); }
+.group-events .gp { font-family: var(--font-display); font-size: 1.1rem; color: var(--el-primary); white-space: nowrap; }
+.group-picker { max-height: 360px; overflow-y: auto; border: 1px solid var(--el-border); border-radius: 12px; padding: 6px 16px; background: #fff; }
+.group-picker .form-check { display: flex; align-items: flex-start; gap: 10px; margin: 0; padding: 10px 0; }
+.group-picker .form-check + .form-check { border-top: 1px solid var(--el-border); }
+.group-picker .form-check-input { float: none; margin: 3px 0 0; flex: none; }
+.group-picker .form-check-label { font-size: .9375rem; }
+
 /* Services : grille à filets 1px */
 .service-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 1px; background: var(--el-border); border: 1px solid var(--el-border); border-radius: 16px; overflow: hidden; }
 .service-cell { background: #fff; padding: 44px 40px; display: flex; flex-direction: column; gap: 16px; transition: background-color var(--el-ease); }

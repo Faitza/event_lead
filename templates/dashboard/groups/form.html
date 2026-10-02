@@ -1,0 +1,36 @@
+{% extends "dashboard/base_dashboard.html" %}
+{% block title %}{% if is_new %}Nouveau groupe{% else %}Modifier le groupe{% endif %}{% endblock %}
+{% block dash_content %}
+<div class="page-head">
+  <div><h1>{% if is_new %}Nouveau groupe{% else %}{{ group.title }}{% endif %}</h1><p>Un groupe apparaît sur une seule carte dans les listes publiques, avec ses événements publics à l'intérieur.</p></div>
+  <a href="{% url 'dashboard:group_list' %}" class="btn btn-light"><i class="bi bi-arrow-left me-2"></i>Retour</a>
+</div>
+<form method="post" enctype="multipart/form-data" novalidate>
+  {% csrf_token %}
+  <div class="row g-4">
+    <div class="col-xl-7">
+      <div class="el-card el-card-body mb-4">
+        {% include "partials/_field.html" with field=form.title %}
+        {% include "partials/_field.html" with field=form.description %}
+      </div>
+      <div class="el-card el-card-body">
+        <h2 class="h6 fw-bold text-primary mb-3"><i class="bi bi-calendar2-event me-2"></i>Événements du groupe</h2>
+        <p class="form-text mt-0">Cochez les événements à rattacher, décochez ceux à détacher. Les événements privés restent invisibles au public, même dans un groupe.</p>
+        <div class="group-picker">
+          {% for checkbox in form.events %}
+          <label class="form-check" for="{{ checkbox.id_for_label }}">{{ checkbox.tag }}<span class="form-check-label">{{ checkbox.choice_label }}</span></label>
+          {% empty %}<p class="text-muted mb-0">Aucun événement pour le moment.</p>{% endfor %}
+        </div>
+        {{ form.events.errors }}
+      </div>
+    </div>
+    <div class="col-xl-5">
+      <div class="el-card el-card-body mb-4">
+        {% if group and group.cover_image %}<img src="{{ group.cover_image.url }}" alt="" class="w-100 mb-3" style="border-radius:12px;max-height:180px;object-fit:cover">{% endif %}
+        {% include "partials/_field.html" with field=form.cover_image %}
+      </div>
+      <button class="btn btn-primary btn-lg w-100"><i class="bi bi-check2 me-2"></i>Enregistrer</button>
+    </div>
+  </div>
+</form>
+{% endblock %}

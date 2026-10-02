@@ -7,6 +7,7 @@ from django.urls import reverse
 from django.views.decorators.http import require_POST
 
 from ads.models import Ad
+from events.listing import group_events, public_cards
 from events.models import Event
 
 from .forms import ContactForm, ReviewForm
@@ -23,13 +24,14 @@ SERVICES = [
 
 
 def build_parade(minimum=6):
-    """Défilé de la page d'accueil : publications, événements publics et billets, en alternance."""
+    """Défilé de la page d'accueil : publications, événements publics (un groupe = une carte) et billets."""
     ads = list(Ad.objects.filter(is_active=True)[:6])
-    events = list(Event.objects.public_active().upcoming()[:6])
-    tickets = [e for e in events if e.is_paid]
+    events = list(Event.objects.public_active().upcoming().select_related("group"))
+    cards = group_events(events)[:6]
+    tickets = [e for e in events if e.is_paid][:6]
     rows = zip_longest(
         [("ad", a) for a in ads],
-        [("event", e) for e in events],
+        [(c["kind"], c["event"] if c["kind"] == "event" else c) for c in cards],
         [("ticket", t) for t in tickets],
     )
     items = [item for row in rows for item in row if item]
@@ -40,9 +42,8 @@ def build_parade(minimum=6):
 
 def landing(request):
     reviews = Review.objects.filter(is_published=True)[:6]
-    public_events = Event.objects.public_active().upcoming()[:6]
     context = {
-        "public_events": public_events,
+        "public_cards": public_cards(limit=6),
         "parade": build_parade(),
         "usd_rate": settings.HTG_TO_USD_RATE,
         "services": SERVICES,

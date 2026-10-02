@@ -15,6 +15,7 @@
       <div class="el-card el-card-body mb-4">
         <h2 class="h6 fw-bold text-primary mb-3"><i class="bi bi-info-circle me-2"></i>Informations générales</h2>
         {% include "partials/_field.html" with field=form.title %}
+        {% include "partials/_field.html" with field=form.group %}
         <div class="row">
           <div class="col-md-6">{% include "partials/_field.html" with field=form.event_type %}</div>
           <div class="col-md-6">{% include "partials/_field.html" with field=form.status %}</div>

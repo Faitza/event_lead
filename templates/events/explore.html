@@ -5,8 +5,8 @@
 <section class="section pt-5">
   <div class="container">
     <div class="row g-4 g-lg-5">
-      {% for event in events %}
-        <div class="col-md-6 col-lg-4 reveal">{% include "partials/_event_card.html" %}</div>
+      {% for card in cards %}
+        <div class="col-md-6 col-lg-4 reveal">{% include "partials/_public_card.html" %}</div>
       {% empty %}
         <div class="col-12"><div class="el-card empty-state"><i class="bi bi-calendar2-heart"></i><p class="mt-2 mb-0">Aucun événement public à venir pour le moment.</p></div></div>
       {% endfor %}

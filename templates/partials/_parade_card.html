@@ -22,6 +22,20 @@
     <div class="where">{{ obj.venue|truncatechars:32 }} &middot; {% if obj.is_paid %}{{ obj.price_htg|floatformat:0|intcomma }} HTG{% else %}Gratuit{% endif %}</div>
   </div>
 </a>
+{% elif kind == "group" %}
+<a class="p-card p-event" href="{% url 'events:explore' %}#groupe-{{ obj.group.pk }}"{% if dup %} tabindex="-1"{% endif %}>
+  <div class="arch-frame">
+    <div class="arch-img">
+      <img src="{{ obj.cover_url }}" alt="" loading="lazy" onerror="this.style.visibility='hidden'">
+      <div class="date"><span class="d">{{ obj.first_date|date:"d" }}</span><span class="m">{{ obj.first_date|date:"M Y" }}</span></div>
+      <span class="tag">Groupe</span>
+    </div>
+  </div>
+  <div class="meta">
+    <h3>{{ obj.group.title }}</h3>
+    <div class="where">{{ obj.count }} événement{{ obj.count|pluralize }} &middot; voir le programme</div>
+  </div>
+</a>
 {% else %}
 <div class="p-card ticket">
   <div class="top">

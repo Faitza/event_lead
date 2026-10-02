@@ -14,7 +14,7 @@ from django.utils import timezone
 from accounts.models import CustomUser
 from ads.models import Ad
 from core.models import ContactMessage, Review
-from events.models import Event, EventEvaluation, Guest
+from events.models import Event, EventEvaluation, EventGroup, Guest
 from gifts.models import Gift, GiftClaim
 from payments.models import Payment
 
@@ -33,6 +33,7 @@ class Command(BaseCommand):
             GiftClaim.objects.all().delete()
             Payment.objects.all().delete()
             Event.objects.all().delete()
+            EventGroup.objects.all().delete()
             Ad.objects.all().delete()
             Review.objects.all().delete()
             ContactMessage.objects.all().delete()
@@ -92,6 +93,32 @@ class Command(BaseCommand):
             max_guests=60, evaluation_delay_days=3, created_by=admin,
             description="Dîner surprise pour les 60 ans de Mme Duval.",
         )
+
+        # ------------------------------------------------------------------ Groupes d'événements
+        closing = Event.objects.create(
+            title="Soirée de clôture du Festival Kompa", event_type="public", status="active",
+            date=concert.date + timedelta(days=1), time=time(20, 0),
+            venue="Wahoo Bay Beach, Route Nationale 1, Arcahaie", latitude=18.8133, longitude=-72.5272,
+            max_guests=800, price_htg=Decimal("2000"), created_by=admin,
+            description="Dernière soirée du festival : têtes d'affiche, feu d'artifice et danse jusqu'au bout de la nuit.",
+        )
+        brunch = Event.objects.create(
+            title="Brunch d'au revoir de Sarah et Jean-Marc", event_type="private", status="active",
+            date=wedding.date + timedelta(days=1), time=time(11, 0),
+            venue="Hôtel Montana, Pétion-Ville", latitude=18.5139, longitude=-72.2851,
+            max_guests=60, created_by=admin,
+            description="Brunch en famille le lendemain du mariage.",
+        )
+        festival = EventGroup.objects.create(
+            title="Festival Kompa 2026",
+            description="Deux jours de kompa au bord de la mer : l'après-midi du festival, puis la soirée de clôture.",
+        )
+        Event.objects.filter(pk__in=[concert.pk, closing.pk]).update(group=festival)
+        wedding_group = EventGroup.objects.create(
+            title="Mariage de Sarah et Jean-Marc",
+            description="La cérémonie, la réception et le brunch du lendemain.",
+        )
+        Event.objects.filter(pk__in=[wedding.pk, brunch.pk]).update(group=wedding_group)
 
         # ------------------------------------------------------------------ Invités du mariage
         wedding_guests = [
