@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+{% block title %}Billetterie{% endblock %}
+{% block content %}
+<section class="photo-bg text-white py-5" style="background-image:url('https://images.unsplash.com/photo-1492684223066-81342ee5ff30?w=1600&q=55&auto=format&fit=crop')">
+  <div class="container py-4">
+    <span class="eyebrow">Billetterie</span>
+    <h1 class="display-6 fw-bold mt-2">Réservez vos billets</h1>
+    <p class="opacity-75 mb-0">Payez en gourdes avec MonCash ou NatCash, ou en dollars par carte et PayPal.</p>
+  </div>
+</section>
+<section class="section pt-5">
+  <div class="container">
+    <div class="row g-4">
+      {% for event in events %}
+      <div class="col-md-6 col-lg-4 reveal">
+        <div class="event-card">
+          <div class="cover"><img src="{{ event.cover_url }}" alt="" loading="lazy" onerror="this.style.visibility='hidden'"><span class="badge-el"><i class="bi bi-ticket-perforated"></i>Billet</span>
+            <div class="date-chip"><div class="d">{{ event.date|date:"d" }}</div><div class="m">{{ event.date|date:"M" }}</div></div></div>
+          <div class="body">
+            <h3>{{ event.title }}</h3>
+            <div class="meta mb-3"><i class="bi bi-geo-alt"></i>{{ event.venue|truncatechars:40 }}</div>
+            <div class="d-flex justify-content-between align-items-end">
+              <div><div class="fw-bold fs-4 text-primary">{{ event.price_htg|floatformat:0 }} HTG</div><div class="small text-muted">&asymp; {{ event.price_usd }} USD</div></div>
+              <a href="{% url 'payments:checkout' event.pk %}" class="btn btn-primary">Acheter</a>
+            </div>
+          </div>
+        </div>
+      </div>
+      {% empty %}
+      <div class="col-12"><div class="el-card empty-state"><i class="bi bi-ticket-perforated"></i><p class="mt-2 mb-0">Aucun événement payant pour le moment.</p></div></div>
+      {% endfor %}
+    </div>
+    <p class="small text-muted text-center mt-4">Taux de conversion appliqué : 1 HTG = {{ rate }} USD.</p>
+  </div>
+</section>
+{% endblock %}

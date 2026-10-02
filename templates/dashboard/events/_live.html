@@ -1,0 +1,41 @@
+{% load el_tags %}
+<div class="row g-3 mb-4">
+  <div class="col-6 col-lg"><div class="el-card stat-card"><span class="icon-bubble"><i class="bi bi-people"></i></span><div><div class="value">{{ stats.total }}</div><div class="label">invités / {{ event.max_guests }}</div></div></div></div>
+  <div class="col-6 col-lg"><div class="el-card stat-card"><span class="icon-bubble success"><i class="bi bi-check2-circle"></i></span><div><div class="value">{{ stats.confirmed }}</div><div class="label">présents{% if stats.companions %} + {{ stats.companions }} acc.{% endif %}</div></div></div></div>
+  <div class="col-6 col-lg"><div class="el-card stat-card"><span class="icon-bubble warning"><i class="bi bi-question-circle"></i></span><div><div class="value">{{ stats.maybe }}</div><div class="label">peut-être</div></div></div></div>
+  <div class="col-6 col-lg"><div class="el-card stat-card"><span class="icon-bubble danger"><i class="bi bi-x-circle"></i></span><div><div class="value">{{ stats.declined }}</div><div class="label">absents</div></div></div></div>
+  <div class="col-6 col-lg"><div class="el-card stat-card"><span class="icon-bubble" style="background:#EEF0F3;color:#6B7280"><i class="bi bi-hourglass-split"></i></span><div><div class="value">{{ stats.pending }}</div><div class="label">en attente</div></div></div></div>
+</div>
+<div class="row g-4 mb-4">
+  <div class="col-xl-7">
+    <div class="el-card h-100">
+      <div class="el-card-header"><h2><i class="bi bi-gift me-2"></i>Cadeaux et donateurs</h2>
+        <div class="d-flex gap-2"><a href="{% url 'dashboard:gift_export_csv' %}?event={{ event.pk }}" class="btn btn-sm btn-light"><i class="bi bi-filetype-csv me-1"></i>CSV</a><a href="{% url 'dashboard:gift_create' %}?event={{ event.pk }}" class="btn btn-sm btn-soft"><i class="bi bi-plus-lg"></i></a></div>
+      </div>
+      {% if gifts %}
+      <div class="table-wrap"><table class="table table-el">
+        <thead><tr><th>Cadeau</th><th>Pris</th><th>Donateur(s)</th></tr></thead>
+        <tbody>{% for g in gifts %}
+          <tr><td><i class="bi {{ g.icon_name }} text-primary me-2"></i>{{ g.name }}</td>
+          <td style="min-width:120px"><div class="small mb-1">{{ g.num_claims }} / {{ g.quantity }}</div><div class="progress-el gold"><span style="width:{{ g.num_claims|percent:g.quantity }}%"></span></div></td>
+          <td class="small">{% for c in g.claims.all %}<span class="badge-el badge-success me-1 mb-1">{{ c.guest.name }}</span>{% empty %}<span class="text-muted">Disponible</span>{% endfor %}</td></tr>
+        {% endfor %}</tbody>
+      </table></div>
+      {% else %}<div class="empty-state small"><i class="bi bi-gift"></i><p class="mt-2">Aucun cadeau dans la liste.</p><a href="{% url 'dashboard:gift_create' %}?event={{ event.pk }}" class="btn btn-sm btn-primary">Ajouter un cadeau</a></div>{% endif %}
+    </div>
+  </div>
+  <div class="col-xl-5">
+    <div class="el-card h-100">
+      <div class="el-card-header"><h2><span class="live-dot me-2"></span>Dernières réponses</h2><span class="small text-muted">màj {{ now|time:"H:i:s" }}</span></div>
+      <div class="el-card-body pt-3">
+      {% for g in recent %}
+        <div class="d-flex align-items-center gap-2 mb-3">
+          <span class="avatar" style="width:30px;height:30px;font-size:.7rem">{{ g.name|slice:":1"|upper }}</span>
+          <div class="flex-grow-1 small"><strong>{{ g.name }}</strong>{% if g.companions %} <span class="text-muted">+{{ g.companions }}</span>{% endif %}<div class="text-muted">{{ g.replied_at|timesince }}</div></div>
+          <span class="badge-el badge-{{ g.status_badge }}">{{ g.get_status_display }}</span>
+        </div>
+      {% empty %}<p class="small text-muted mb-0">Aucune réponse pour l'instant.</p>{% endfor %}
+      </div>
+    </div>
+  </div>
+</div>

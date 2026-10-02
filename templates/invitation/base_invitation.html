@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% block title %}Invitation - {{ event.title }}{% endblock %}
+{% block body %}
+<div class="inv-shell">
+  <header class="inv-header photo-bg" style="background-image:url('{{ event.cover_url }}')">
+    <div class="inv-container">
+      <div class="d-flex align-items-center justify-content-between on-dark">
+        <a href="{% url 'core:landing' %}" class="d-flex align-items-center gap-2">{% include "partials/_logo.html" %}<span class="logo-word">EventLead</span></a>
+        <span class="small opacity-75">Bonjour {{ guest.name }}</span>
+      </div>
+      {% if step_total %}
+      <div class="stepper" aria-label="Étape {{ step_index }} sur {{ step_total }}">
+        {% for s in steps %}<span class="step {% if forloop.counter < step_index %}done{% elif forloop.counter == step_index %}current{% endif %}"></span>{% endfor %}
+      </div>
+      <div class="stepper-label"><span>Étape {{ step_index }}/{{ step_total }}</span><span>{% for s in steps %}{% if forloop.counter == step_index %}{{ s }}{% endif %}{% endfor %}</span></div>
+      {% endif %}
+    </div>
+  </header>
+  <div class="inv-container inv-body">
+    {% block inv_content %}{% endblock %}
+  </div>
+</div>
+{% endblock %}

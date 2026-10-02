@@ -1,0 +1,85 @@
+{% extends "dashboard/base_dashboard.html" %}
+{% load static %}
+{% block title %}{{ event.title }}{% endblock %}
+{% block extra_head %}<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.css">{% endblock %}
+{% block dash_content %}
+<div class="el-card overflow-hidden mb-4">
+  <div class="photo-bg text-white p-4 p-lg-5" style="background-image:url('{{ event.cover_url }}')">
+    <div class="d-flex flex-wrap justify-content-between gap-3 align-items-end">
+      <div>
+        <div class="d-flex gap-2 mb-2">
+          <span class="badge-el" style="background:rgba(255,255,255,.18);color:#fff">{{ event.get_event_type_display }}</span>
+          <span class="badge-el" style="background:rgba(255,255,255,.18);color:#fff">{{ event.get_status_display }}</span>
+          {% if event.price_htg %}<span class="badge-el badge-gold" style="background:rgba(212,175,55,.9);color:#2C033B">{{ event.price_htg|floatformat:0 }} HTG</span>{% endif %}
+        </div>
+        <h1 class="h2 fw-bold mb-2">{{ event.title }}</h1>
+        <div class="opacity-75"><i class="bi bi-calendar3 me-1"></i>{{ event.date|date:"l j F Y" }} à {{ event.time|time:"H\hi" }} &middot; <i class="bi bi-geo-alt me-1"></i>{{ event.venue }}</div>
+      </div>
+      <div class="d-flex flex-wrap gap-2">
+        <a href="{% url 'dashboard:guest_create' %}?event={{ event.pk }}" class="btn btn-gold"><i class="bi bi-person-plus me-2"></i>Ajouter un invité</a>
+        <a href="{% url 'dashboard:event_edit' event.pk %}" class="btn btn-light-ghost"><i class="bi bi-pencil me-2"></i>Modifier</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="live-panel" data-url="{% url 'dashboard:event_live' event.pk %}">{% include "dashboard/events/_live.html" %}</div>
+
+<div class="row g-4">
+  <div class="col-xl-8">
+    <div class="el-card">
+      <div class="el-card-header"><h2><i class="bi bi-people me-2"></i>Invités ({{ guests|length }})</h2>
+        <div class="d-flex gap-2">
+          <a href="{% url 'dashboard:guest_export_csv' %}?event={{ event.pk }}" class="btn btn-sm btn-light"><i class="bi bi-filetype-csv me-1"></i>CSV</a>
+          <a href="{% url 'dashboard:guest_export_pdf' %}?event={{ event.pk }}" class="btn btn-sm btn-light"><i class="bi bi-filetype-pdf me-1"></i>PDF</a>
+          <a href="{% url 'dashboard:guest_list' %}?event={{ event.pk }}" class="btn btn-sm btn-soft">Gérer et envoyer</a>
+        </div>
+      </div>
+      {% if guests %}
+      <div class="table-wrap"><table class="table table-el">
+        <thead><tr><th>Nom</th><th>Canal</th><th>Statut</th><th>Acc.</th><th>Envoyée</th></tr></thead>
+        <tbody>{% for g in guests %}
+          <tr><td class="fw-semibold">{{ g.name }}<div class="small text-muted fw-normal">{{ g.email|default:g.phone }}</div></td>
+          <td>{% if g.sent_via == 'whatsapp' %}<i class="bi bi-whatsapp text-success"></i>{% else %}<i class="bi bi-envelope text-primary"></i>{% endif %} {{ g.get_sent_via_display }}</td>
+          <td><span class="badge-el badge-{{ g.status_badge }}">{{ g.get_status_display }}</span></td>
+          <td>{{ g.companions }}</td>
+          <td class="small text-muted">{% if g.invitation_sent_at %}{{ g.invitation_sent_at|date:"j/m H:i" }}{% else %}Non{% endif %}</td></tr>
+        {% endfor %}</tbody>
+      </table></div>
+      {% else %}<div class="empty-state"><i class="bi bi-person-plus"></i><p class="mt-2">Aucun invité.</p><a href="{% url 'dashboard:guest_create' %}?event={{ event.pk }}" class="btn btn-sm btn-primary">Ajouter un invité</a></div>{% endif %}
+    </div>
+  </div>
+  <div class="col-xl-4">
+    <div class="el-card el-card-body mb-4">
+      <h2 class="h6 fw-bold text-primary mb-3">Paramètres</h2>
+      <div class="recap-row small"><span class="text-muted">Invités max.</span><strong>{{ event.max_guests }}</strong></div>
+      <div class="recap-row small"><span class="text-muted">Accompagnants</span><strong>{% if event.allow_companions %}Oui, {{ event.max_companions }} max.{% else %}Non{% endif %}</strong></div>
+      <div class="recap-row small"><span class="text-muted">Évaluation après</span><strong>{{ event.evaluation_delay_days }} jour{{ event.evaluation_delay_days|pluralize }}</strong></div>
+    </div>
+    {% if event.has_location %}<div class="map-box mb-4" data-map data-lat="{{ event.latitude|stringformat:'f' }}" data-lng="{{ event.longitude|stringformat:'f' }}" data-label="{{ event.venue }}"></div>{% endif %}
+    {% if evaluations %}
+    <div class="el-card el-card-body">
+      <h2 class="h6 fw-bold text-primary mb-3">Évaluations</h2>
+      {% for ev in evaluations %}<div class="mb-2 small"><span class="stars">{% for i in "12345" %}<i class="bi bi-star{% if forloop.counter <= ev.stars %}-fill{% endif %}"></i>{% endfor %}</span> <strong>{{ ev.user.display_name }}</strong><div class="text-muted">{{ ev.comment }}</div></div>{% endfor %}
+    </div>
+    {% endif %}
+  </div>
+</div>
+{% endblock %}
+{% block extra_js %}
+<script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.js"></script>
+<script src="{% static 'js/map.js' %}"></script>
+<script>
+  // Suivi en temps réel : rafraîchissement AJAX léger toutes les 5 secondes
+  (function () {
+    var panel = document.getElementById("live-panel");
+    setInterval(function () {
+      if (document.hidden) return;
+      fetch(panel.dataset.url, { headers: { "X-Requested-With": "fetch" }, cache: "no-store" })
+        .then(function (r) { return r.ok ? r.text() : null; })
+        .then(function (html) { if (html) panel.innerHTML = html; })
+        .catch(function () {});
+    }, 5000);
+  })();
+</script>
+{% endblock %}

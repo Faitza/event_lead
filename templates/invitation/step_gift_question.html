@@ -1,0 +1,28 @@
+{% extends "invitation/base_invitation.html" %}
+{% block inv_content %}
+<form method="post" class="el-card el-card-body text-center p-4 p-md-5" novalidate>
+  {% csrf_token %}
+  <span class="icon-bubble gold lg mb-3"><i class="bi bi-gift"></i></span>
+  <h1 class="h4 fw-bold text-primary">Souhaitez-vous envoyer un cadeau ?</h1>
+  <p class="text-muted mb-4">L'hôte a préparé une liste de cadeaux. Chaque cadeau choisi est réservé pour vous seul.</p>
+  <div class="choice-cards mb-4 text-start">
+    {% for radio in form.wants_gift %}
+      {{ radio.tag }}
+      <label for="{{ radio.id_for_label }}"><i class="bi {% if radio.data.value == 'yes' %}bi-gift-fill{% else %}bi-hand-thumbs-up{% endif %}"></i>{{ radio.choice_label }}</label>
+    {% endfor %}
+  </div>
+  {{ form.wants_gift.errors }}
+  <div class="d-flex gap-2">
+    <a href="{% url 'events:invitation' guest.magic_token %}" class="btn btn-light btn-lg"><i class="bi bi-arrow-left"></i></a>
+    <button class="btn btn-primary btn-lg flex-grow-1">Suivant<i class="bi bi-arrow-right ms-2"></i></button>
+  </div>
+</form>
+{% endblock %}
+{% block extra_js %}
+<script>
+  // Un clic sur une carte suffit : on passe à l'étape suivante
+  document.querySelectorAll("input[name=wants_gift]").forEach(function (r) {
+    r.addEventListener("change", function () { setTimeout(function () { r.form.submit(); }, 220); });
+  });
+</script>
+{% endblock %}

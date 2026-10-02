@@ -1,0 +1,49 @@
+{% extends "dashboard/base_dashboard.html" %}
+{% block title %}{% if is_new %}Ajouter un invité{% else %}Modifier l'invité{% endif %}{% endblock %}
+{% block dash_content %}
+<div class="page-head">
+  <div><h1>{% if is_new %}Ajouter un invité{% else %}{{ guest.name }}{% endif %}</h1><p>Le lien d'invitation unique est généré automatiquement.</p></div>
+  <a href="{% url 'dashboard:guest_list' %}" class="btn btn-light"><i class="bi bi-arrow-left me-2"></i>Retour</a>
+</div>
+<div class="row g-4">
+  <div class="col-xl-7">
+    <div class="el-card el-card-body">
+      <form method="post" novalidate>
+        {% csrf_token %}
+        {% if form.non_field_errors %}<div class="notice notice-danger mb-3"><i class="bi bi-exclamation-circle"></i><div>{{ form.non_field_errors|join:" " }}</div></div>{% endif %}
+        {% include "partials/_field.html" with field=form.event %}
+        {% include "partials/_field.html" with field=form.name %}
+        <div class="row">
+          <div class="col-md-6">{% include "partials/_field.html" with field=form.email %}</div>
+          <div class="col-md-6">{% include "partials/_field.html" with field=form.phone %}</div>
+        </div>
+        <div class="mb-3">
+          <span class="form-label d-block">Canal d'envoi</span>
+          <div class="choice-pills">
+            {% for radio in form.sent_via %}{{ radio.tag }}<label for="{{ radio.id_for_label }}">{% if radio.data.value == 'whatsapp' %}<i class="bi bi-whatsapp me-1 text-success"></i>{% else %}<i class="bi bi-envelope me-1"></i>{% endif %}{{ radio.choice_label }}</label>{% endfor %}
+          </div>
+          {{ form.sent_via.errors }}
+        </div>
+        <div class="d-flex flex-wrap gap-2">
+          <button class="btn btn-primary"><i class="bi bi-check2 me-2"></i>Enregistrer</button>
+          {% if is_new %}<button class="btn btn-soft" name="add_another" value="1"><i class="bi bi-plus-lg me-2"></i>Enregistrer et ajouter un autre</button>{% endif %}
+        </div>
+      </form>
+    </div>
+  </div>
+  {% if links %}
+  <div class="col-xl-5">
+    <div class="el-card el-card-body">
+      <h2 class="h6 fw-bold text-primary mb-3"><i class="bi bi-link-45deg me-2"></i>Lien d'invitation</h2>
+      <div class="copy-field mb-3"><input class="form-control" value="{{ links.url }}" readonly><button class="btn btn-soft" data-copy="{{ links.url }}"><i class="bi bi-clipboard"></i></button></div>
+      <div class="d-flex gap-2">
+        <a href="{{ links.whatsapp }}" target="_blank" rel="noopener" class="btn btn-whatsapp flex-fill"><i class="bi bi-whatsapp me-2"></i>WhatsApp</a>
+        {% if guest.email %}<a href="{{ links.mailto }}" class="btn btn-primary flex-fill"><i class="bi bi-envelope me-2"></i>E-mail</a>{% endif %}
+      </div>
+      <div class="recap-row small mt-3"><span class="text-muted">Statut</span><span class="badge-el badge-{{ guest.status_badge }}">{{ guest.get_status_display }}</span></div>
+      {% if guest.replied_at %}<div class="recap-row small"><span class="text-muted">Répondu le</span><strong>{{ guest.replied_at|date:"j F Y H:i" }}</strong></div>{% endif %}
+    </div>
+  </div>
+  {% endif %}
+</div>
+{% endblock %}

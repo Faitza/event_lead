@@ -1,0 +1,300 @@
+"""Tests de bout en bout des règles métier critiques d'EventLead."""
+from datetime import time, timedelta
+from decimal import Decimal
+
+from django.test import TestCase
+from django.urls import reverse
+from django.utils import timezone
+
+from accounts.models import CustomUser
+from ads.models import Ad
+from events.models import Event, Guest
+from gifts.models import Gift, GiftClaim
+from gifts.services import GiftUnavailableError, ResponseLockedError, confirm_response
+from payments.models import Payment
+
+PASSWORD = "MotDePasse-Solide-42"
+
+
+def make_user(email, role="guest", **extra):
+    u = CustomUser(username=email, email=email, role=role, **extra)
+    u.set_password(PASSWORD)
+    u.save()
+    return u
+
+
+def make_event(**kw):
+    defaults = dict(title="Mariage test", event_type="private", date=timezone.localdate() + timedelta(days=10),
+                    time=time(15, 0), venue="Pétion-Ville", latitude=18.51, longitude=-72.28, max_guests=50,
+                    allow_companions=True, max_companions=2)
+    defaults.update(kw)
+    return Event.objects.create(**defaults)
+
+
+class GiftRulesTests(TestCase):
+    def setUp(self):
+        self.event = make_event()
+        self.g1 = Guest.objects.create(event=self.event, name="Alice", email="a@x.ht")
+        self.g2 = Guest.objects.create(event=self.event, name="Bruno", email="b@x.ht")
+        self.unique = Gift.objects.create(event=self.event, name="Service à café", quantity=1)
+        self.double = Gift.objects.create(event=self.event, name="Verres", quantity=2)
+
+    def test_last_unit_cannot_be_taken_twice(self):
+        confirm_response(self.g1.pk, "confirmed", 0, True, [self.unique.pk])
+        with self.assertRaises(GiftUnavailableError):
+            confirm_response(self.g2.pk, "confirmed", 0, True, [self.unique.pk, self.double.pk])
+        # Transaction annulée : rien n'a été écrit pour Bruno
+        self.g2.refresh_from_db()
+        self.assertIsNone(self.g2.replied_at)
+        self.assertEqual(self.g2.status, "pending")
+        self.assertFalse(GiftClaim.objects.filter(guest=self.g2).exists())
+
+    def test_quantity_greater_than_one(self):
+        confirm_response(self.g1.pk, "confirmed", 0, True, [self.double.pk])
+        confirm_response(self.g2.pk, "confirmed", 0, True, [self.double.pk])
+        self.assertEqual(self.double.claims.count(), 2)
+        self.assertFalse(self.double.is_available)
+
+    def test_confirmed_response_is_final(self):
+        confirm_response(self.g1.pk, "confirmed", 1, True, [self.unique.pk])
+        with self.assertRaises(ResponseLockedError):
+            confirm_response(self.g1.pk, "declined", 0, None, [])
+        self.assertEqual(GiftClaim.objects.filter(guest=self.g1).count(), 1)
+
+    def test_no_gift_claim_when_declining(self):
+        confirm_response(self.g1.pk, "declined", 2, True, [self.unique.pk])
+        self.g1.refresh_from_db()
+        self.assertEqual(self.g1.companions, 0)
+        self.assertFalse(GiftClaim.objects.exists())
+
+    def test_admin_cannot_delete_claimed_gift(self):
+        confirm_response(self.g1.pk, "confirmed", 0, True, [self.unique.pk])
+        admin = make_user("admin@x.ht", role="admin")
+        self.client.force_login(admin)
+        self.client.post(reverse("dashboard:gift_delete", args=[self.unique.pk]))
+        self.assertTrue(Gift.objects.filter(pk=self.unique.pk).exists())
+        self.client.post(reverse("dashboard:gift_delete", args=[self.double.pk]))
+        self.assertFalse(Gift.objects.filter(pk=self.double.pk).exists())
+
+    def test_no_guest_side_route_to_remove_a_claim(self):
+        from django.urls import get_resolver
+
+        routes = [str(p.pattern) for p in get_resolver().url_patterns]
+        invitation_routes = [r for r in self._all_routes(get_resolver()) if r.startswith("invitation/")]
+        self.assertTrue(invitation_routes, routes)
+        for route in invitation_routes:
+            self.assertNotIn("supprimer", route)
+            self.assertNotIn("annuler", route)
+
+    def _all_routes(self, resolver, prefix=""):
+        out = []
+        for p in resolver.url_patterns:
+            if hasattr(p, "url_patterns"):
+                out += self._all_routes(p, prefix + str(p.pattern))
+            else:
+                out.append(prefix + str(p.pattern))
+        return out
+
+    def test_guest_never_sees_who_took_a_gift(self):
+        confirm_response(self.g1.pk, "confirmed", 0, True, [self.unique.pk])
+        url = reverse("events:invitation_gift_availability", args=[self.g2.magic_token])
+        body = self.client.get(url).content.decode()
+        self.assertNotIn("Alice", body)
+
+
+class InvitationFlowTests(TestCase):
+    def setUp(self):
+        self.event = make_event()
+        self.guest = Guest.objects.create(event=self.event, name="Carla", phone="+509 3712 3456")
+        self.gift = Gift.objects.create(event=self.event, name="Lampe", icon_name="bi-lamp")
+        self.ad = Ad.objects.create(title="Pub", message="m", sponsor_link="https://example.com")
+        self.token = self.guest.magic_token
+
+    def url(self, name, *extra):
+        return reverse(f"events:{name}", args=[self.token, *extra])
+
+    def test_full_flow_with_gift(self):
+        r = self.client.get(self.url("invitation"))
+        self.assertContains(r, "Serez-vous présent")
+        r = self.client.post(self.url("invitation"), {"status": "confirmed", "companions": 2})
+        self.assertRedirects(r, self.url("invitation_gift_question"))
+        r = self.client.post(self.url("invitation_gift_question"), {"wants_gift": "yes"})
+        self.assertRedirects(r, self.url("invitation_gift_list"))
+        self.assertContains(self.client.get(self.url("invitation_gift_list")), "définitive")
+        r = self.client.post(self.url("invitation_gift_list"), {"gifts": [self.gift.pk]})
+        self.assertRedirects(r, self.url("invitation_recap"))
+        self.assertContains(self.client.get(self.url("invitation_recap")), "Confirmer définitivement")
+        r = self.client.post(self.url("invitation_recap"))
+        self.assertRedirects(r, self.url("invitation_done"))
+        self.guest.refresh_from_db()
+        self.assertEqual(self.guest.status, "confirmed")
+        self.assertEqual(self.guest.companions, 2)
+        self.assertTrue(self.guest.wants_gift)
+        self.assertIsNotNone(self.guest.replied_at)
+        self.assertEqual(self.gift.claims.get().guest, self.guest)
+        # Confirmation -> publicité -> exploration
+        self.assertContains(self.client.get(self.url("invitation_done")), self.url("invitation_ad", self.ad.pk))
+        r = self.client.get(self.url("invitation_ad", self.ad.pk))
+        self.assertContains(r, reverse("events:explore"))
+        self.ad.refresh_from_db()
+        self.assertEqual(self.ad.views, 1)
+        self.client.get(reverse("ads:click", args=[self.ad.pk]))
+        self.ad.refresh_from_db()
+        self.assertEqual(self.ad.clicks, 1)
+        # Retour sur le lien : réponse figée, pas de formulaire
+        r = self.client.get(self.url("invitation"))
+        self.assertContains(r, "Votre réponse est enregistrée")
+        self.assertNotContains(r, 'name="status"')
+
+    def test_gift_steps_skipped_when_declining(self):
+        r = self.client.post(self.url("invitation"), {"status": "declined"})
+        self.assertRedirects(r, self.url("invitation_recap"))
+        self.client.post(self.url("invitation_recap"))
+        self.guest.refresh_from_db()
+        self.assertEqual(self.guest.status, "declined")
+        self.assertIsNone(self.guest.wants_gift)
+
+    def test_gift_taken_meanwhile_sends_back_to_list(self):
+        other = Guest.objects.create(event=self.event, name="Dan")
+        self.client.post(self.url("invitation"), {"status": "confirmed", "companions": 0})
+        self.client.post(self.url("invitation_gift_question"), {"wants_gift": "yes"})
+        self.client.post(self.url("invitation_gift_list"), {"gifts": [self.gift.pk]})
+        confirm_response(other.pk, "confirmed", 0, True, [self.gift.pk])
+        r = self.client.post(self.url("invitation_recap"))
+        self.assertRedirects(r, self.url("invitation_gift_list"))
+        self.guest.refresh_from_db()
+        self.assertIsNone(self.guest.replied_at)
+
+    def test_companions_limit(self):
+        r = self.client.post(self.url("invitation"), {"status": "confirmed", "companions": 5})
+        self.assertEqual(r.status_code, 200)
+        self.assertContains(r, "Maximum 2")
+
+
+class AccessRulesTests(TestCase):
+    def setUp(self):
+        self.public = make_event(title="Gala public", event_type="public")
+        self.private = make_event(title="Mariage privé")
+        self.other_private = make_event(title="Autre privé")
+        self.vip = make_user("vip@x.ht", role="organizer", is_vip=True)
+        Guest.objects.create(event=self.private, name="VIP", user=self.vip)
+
+    def test_landing_lists_public_events_only(self):
+        r = self.client.get(reverse("core:landing"))
+        self.assertContains(r, "Gala public")
+        self.assertNotContains(r, "Mariage privé")
+
+    def test_anonymous_cannot_see_private_event(self):
+        self.assertEqual(self.client.get(reverse("events:public_detail", args=[self.private.pk])).status_code, 404)
+
+    def test_unpaid_organizer_is_blocked(self):
+        make_user("org@x.ht", role="organizer")
+        self.client.login(email="org@x.ht", password=PASSWORD)
+        self.assertRedirects(self.client.get(reverse("events:organizer_portal")), reverse("payments:vip"))
+
+    def test_vip_sees_public_and_invited_private_only(self):
+        self.client.force_login(self.vip)
+        r = self.client.get(reverse("events:organizer_portal"))
+        self.assertContains(r, "Gala public")
+        self.assertContains(r, "Mariage privé")
+        self.assertNotContains(r, "Autre privé")
+        self.assertNotContains(r, reverse("dashboard:event_create"))
+
+    def test_organizer_cannot_reach_admin_dashboard(self):
+        self.client.force_login(self.vip)
+        self.assertEqual(self.client.get(reverse("dashboard:event_create")).status_code, 403)
+
+    def test_login_redirects_by_role(self):
+        make_user("adm@x.ht", role="admin")
+        r = self.client.post(reverse("accounts:login"), {"email": "adm@x.ht", "password": PASSWORD})
+        self.assertRedirects(r, reverse("dashboard:home"))
+
+
+class PaymentTests(TestCase):
+    def setUp(self):
+        self.user = make_user("new@x.ht", role="organizer")
+        self.client.force_login(self.user)
+
+    def test_vip_payment_with_moncash(self):
+        r = self.client.post(reverse("payments:vip"), {"method": "moncash", "phone": "3712 3456", "otp": "123456"})
+        payment = Payment.objects.get()
+        self.assertRedirects(r, reverse("payments:success", args=[payment.reference]))
+        self.assertTrue(payment.reference.startswith("MC-"))
+        self.assertEqual(payment.status, "success")
+        self.user.refresh_from_db()
+        self.assertTrue(self.user.is_vip)
+        self.assertEqual(self.client.get(reverse("events:organizer_portal")).status_code, 200)
+
+    def test_wrong_otp_records_failed_payment(self):
+        self.client.post(reverse("payments:vip"), {"method": "moncash", "phone": "3712 3456", "otp": "000000"})
+        self.assertEqual(Payment.objects.get().status, "failed")
+        self.user.refresh_from_db()
+        self.assertFalse(self.user.is_vip)
+
+    def test_ticket_with_card(self):
+        event = make_event(event_type="public", price_htg=Decimal("1000"))
+        exp = (timezone.localdate() + timedelta(days=400)).strftime("%m/%y")
+        r = self.client.post(reverse("payments:checkout", args=[event.pk]), {
+            "method": "stripe", "quantity": 3, "card_number": "4242 4242 4242 4242",
+            "card_expiry": exp, "card_cvc": "123", "card_name": "Test",
+        })
+        p = Payment.objects.get()
+        self.assertRedirects(r, reverse("payments:success", args=[p.reference]))
+        self.assertEqual(p.amount_htg, Decimal("3000"))
+        self.assertEqual(p.payer_detail, "Carte **** 4242")
+
+    def test_history_is_admin_only(self):
+        self.assertEqual(self.client.get(reverse("dashboard:payment_history")).status_code, 403)
+
+
+class SmokeTests(TestCase):
+    """Chaque page principale s'affiche pour le bon rôle."""
+
+    def setUp(self):
+        from django.core.management import call_command
+
+        call_command("seed_demo", stdout=open("/dev/null", "w"))
+
+    def test_public_pages(self):
+        event = Event.objects.public_active().first()
+        for url in [reverse("core:landing"), reverse("events:explore"), reverse("payments:ticketing"),
+                    reverse("accounts:login"), reverse("accounts:register"), reverse("accounts:register_organizer"),
+                    reverse("ads:list"), reverse("events:public_detail", args=[event.pk])]:
+            self.assertEqual(self.client.get(url).status_code, 200, url)
+
+    def test_admin_pages(self):
+        self.client.login(email="admin@eventlead.ht", password="EventLead2026!")
+        event = Event.objects.get(title__startswith="Mariage")
+        guest = event.guests.first()
+        gift = event.gifts.first()
+        ad = Ad.objects.first()
+        urls = [
+            reverse("dashboard:home"), reverse("dashboard:event_list"), reverse("dashboard:event_create"),
+            reverse("dashboard:event_detail", args=[event.pk]), reverse("dashboard:event_live", args=[event.pk]),
+            reverse("dashboard:event_edit", args=[event.pk]), reverse("dashboard:guest_list"),
+            reverse("dashboard:guest_list") + f"?event={event.pk}", reverse("dashboard:guest_create"),
+            reverse("dashboard:guest_edit", args=[guest.pk]), reverse("dashboard:gift_list"),
+            reverse("dashboard:gift_create"), reverse("dashboard:gift_edit", args=[gift.pk]),
+            reverse("dashboard:ad_list"), reverse("dashboard:ad_create"), reverse("dashboard:ad_edit", args=[ad.pk]),
+            reverse("dashboard:payment_history"), reverse("dashboard:inbox"),
+            reverse("dashboard:guest_export_csv"), reverse("dashboard:gift_export_csv"),
+            reverse("dashboard:guest_export_pdf") + f"?event={event.pk}", "/django-admin/",
+        ]
+        for url in urls:
+            self.assertEqual(self.client.get(url).status_code, 200, url)
+
+    def test_vip_pages(self):
+        self.client.login(email="organisateur@eventlead.ht", password="EventLead2026!")
+        r = self.client.get(reverse("events:organizer_portal"))
+        self.assertContains(r, "Évaluer")
+        past = Event.objects.get(title__startswith="Anniversaire")
+        self.assertEqual(self.client.get(reverse("events:evaluate", args=[past.pk])).status_code, 200)
+        self.client.post(reverse("events:evaluate", args=[past.pk]), {"stars": 5, "comment": "Superbe"})
+        self.assertEqual(past.evaluations.count(), 1)
+
+    def test_guest_pages(self):
+        self.client.login(email="invite@eventlead.ht", password="EventLead2026!")
+        self.assertContains(self.client.get(reverse("accounts:guest_space")), "Mariage")
+        event = Event.objects.filter(price_htg__gt=0).first()
+        self.assertEqual(self.client.get(reverse("payments:checkout", args=[event.pk])).status_code, 200)
+        self.assertEqual(self.client.get(reverse("payments:vip")).status_code, 200)

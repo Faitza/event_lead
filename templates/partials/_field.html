@@ -1,0 +1,14 @@
+{% load el_tags %}
+<div class="{{ wrapper|default:'mb-3' }}">
+  {% if field.field.widget.input_type == "checkbox" %}
+    <div class="form-check form-switch">
+      {{ field|add_class:"form-check-input" }}
+      <label class="form-check-label fw-semibold" for="{{ field.id_for_label }}">{{ field.label|capfirst }}</label>
+    </div>
+  {% else %}
+    <label class="form-label" for="{{ field.id_for_label }}">{{ field.label|capfirst }}{% if field.field.required %} <span class="text-danger">*</span>{% endif %}</label>
+    {% if field.field.widget.input_type == "file" %}{{ field|add_class:"form-control" }}{% else %}{{ field|add_class:"" }}{% endif %}
+  {% endif %}
+  {% if field.help_text %}<div class="form-text">{{ field.help_text }}</div>{% endif %}
+  {{ field.errors }}
+</div>

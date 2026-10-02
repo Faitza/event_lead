@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="fr"><head><meta charset="utf-8">
+<style>
+  @page { size: A4 landscape; margin: 1.5cm; }
+  body { font-family: Helvetica, Arial, sans-serif; color: #1F2937; font-size: 10pt; }
+  h1 { color: #45065C; font-size: 18pt; margin: 0 0 4px; }
+  .sub { color: #6B7280; margin-bottom: 14px; }
+  table { width: 100%; border-collapse: collapse; }
+  th { background: #45065C; color: #fff; text-align: left; padding: 6px; font-size: 9pt; }
+  td { padding: 6px; border-bottom: 1px solid #E3D9E6; font-size: 9pt; }
+  .gold { color: #B8962A; }
+</style></head>
+<body>
+  <h1>EventLead - Liste des invités</h1>
+  <div class="sub">{% if event %}{{ event.title }} - {{ event.date|date:"j F Y" }} - {{ event.venue }}{% else %}Tous les événements{% endif %} | Généré le {{ generated_at|date:"j F Y H:i" }}</div>
+  <table>
+    <thead><tr>{% if not event %}<th>Événement</th>{% endif %}<th>Nom</th><th>Contact</th><th>Canal</th><th>Statut</th><th>Acc.</th><th>Cadeaux</th></tr></thead>
+    <tbody>
+    {% for g in guests %}
+      <tr>{% if not event %}<td>{{ g.event.title }}</td>{% endif %}<td>{{ g.name }}</td><td>{{ g.email }} {{ g.phone }}</td><td>{{ g.get_sent_via_display }}</td><td>{{ g.get_status_display }}</td><td>{{ g.companions }}</td>
+      <td class="gold">{% for c in g.gift_claims.all %}{{ c.gift.name }}{% if not forloop.last %}, {% endif %}{% endfor %}</td></tr>
+    {% endfor %}
+    </tbody>
+  </table>
+</body></html>

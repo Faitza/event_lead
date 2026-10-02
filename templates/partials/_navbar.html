@@ -1,0 +1,41 @@
+{% load static %}
+<nav class="el-nav navbar navbar-expand-lg">
+  <div class="container">
+    <a class="navbar-brand d-flex align-items-center gap-2" href="{% url 'core:landing' %}">
+      {% include "partials/_logo.html" %}<span class="logo-word">EventLead</span>
+    </a>
+    <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav" aria-controls="mainNav" aria-expanded="false" aria-label="Menu">
+      <i class="bi bi-list fs-2 text-primary"></i>
+    </button>
+    <div class="collapse navbar-collapse" id="mainNav">
+      <ul class="navbar-nav mx-auto">
+        <li class="nav-item"><a class="nav-link" href="{% url 'core:landing' %}#accueil">Accueil</a></li>
+        <li class="nav-item"><a class="nav-link" href="{% url 'core:landing' %}#services">Services</a></li>
+        <li class="nav-item"><a class="nav-link" href="{% url 'core:landing' %}#a-propos">À propos</a></li>
+        <li class="nav-item"><a class="nav-link" href="{% url 'core:landing' %}#contact">Contact</a></li>
+        <li class="nav-item"><a class="nav-link" href="{% url 'payments:ticketing' %}">Billetterie</a></li>
+      </ul>
+      <div class="d-flex align-items-center gap-2 mt-3 mt-lg-0">
+        {% if user.is_authenticated %}
+          <a href="{% url 'accounts:dispatch' %}" class="btn btn-soft btn-sm"><i class="bi bi-grid-1x2 me-1"></i>Mon espace</a>
+          <div class="dropdown">
+            <button class="user-pill border-0" data-bs-toggle="dropdown" aria-expanded="false">
+              {% if user.avatar %}<img src="{{ user.avatar.url }}" class="avatar" alt="">{% else %}<span class="avatar">{{ user.initials }}</span>{% endif %}
+              <span class="d-none d-sm-inline">{{ user.display_name }}</span>
+              {% if user.is_vip_organizer %}<span class="badge-el badge-vip"><i class="bi bi-gem"></i>VIP</span>{% endif %}
+            </button>
+            <ul class="dropdown-menu dropdown-menu-end shadow border-0 rounded-4 p-2">
+              <li><a class="dropdown-item rounded-3" href="{% url 'accounts:profile' %}"><i class="bi bi-person me-2"></i>Mon profil</a></li>
+              <li><a class="dropdown-item rounded-3" href="{% url 'events:explore' %}"><i class="bi bi-calendar-event me-2"></i>Événements publics</a></li>
+              <li><hr class="dropdown-divider"></li>
+              <li><form method="post" action="{% url 'accounts:logout' %}">{% csrf_token %}<button class="dropdown-item rounded-3 text-danger"><i class="bi bi-box-arrow-right me-2"></i>Se déconnecter</button></form></li>
+            </ul>
+          </div>
+        {% else %}
+          <a href="{% url 'accounts:login' %}" class="btn btn-outline-primary btn-sm">Connexion</a>
+          <a href="{% url 'accounts:register' %}" class="btn btn-primary btn-sm">Créer un compte</a>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</nav>

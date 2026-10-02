@@ -1,0 +1,7 @@
+<div class="mb-3">
+  <span class="form-label d-block">{{ field.label }} <span class="text-danger">*</span></span>
+  <div class="icon-picker">
+    {% for radio in field %}{{ radio.tag }}<label for="{{ radio.id_for_label }}" title="{{ radio.choice_label }}"><i class="bi {{ radio.data.value }}"></i><small>{{ radio.choice_label }}</small></label>{% endfor %}
+  </div>
+  {{ field.errors }}
+</div>

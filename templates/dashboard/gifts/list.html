@@ -1,0 +1,59 @@
+{% extends "dashboard/base_dashboard.html" %}
+{% load el_tags %}
+{% block title %}Cadeaux{% endblock %}
+{% block dash_content %}
+<div class="page-head">
+  <div><h1>Liste de cadeaux</h1><p>Vous seul voyez qui a choisi chaque cadeau. Un cadeau déjà choisi ne peut plus être supprimé.</p></div>
+  {% if current %}
+  <div class="d-flex gap-2">
+    <a href="{% url 'dashboard:gift_export_csv' %}?event={{ current.pk }}" class="btn btn-light"><i class="bi bi-filetype-csv me-1"></i>Export CSV</a>
+    <a href="{% url 'dashboard:gift_create' %}?event={{ current.pk }}" class="btn btn-primary"><i class="bi bi-plus-lg me-2"></i>Ajouter un cadeau</a>
+  </div>
+  {% endif %}
+</div>
+<form class="filter-bar mb-3" method="get">
+  <select name="event" class="form-select" onchange="this.form.submit()">
+    {% if not current %}<option value="">Choisir un événement</option>{% endif %}
+    {% for e in events %}<option value="{{ e.pk }}" {% if current.pk == e.pk %}selected{% endif %}>{{ e.title }} ({{ e.num_gifts }} cadeau{{ e.num_gifts|pluralize:"x" }})</option>{% endfor %}
+  </select>
+</form>
+{% if current %}
+<div class="row g-3 mb-4">
+  <div class="col-md-4"><div class="el-card stat-card"><span class="icon-bubble"><i class="bi bi-list-check"></i></span><div><div class="value">{{ totals.count }}</div><div class="label">cadeaux dans la liste</div></div></div></div>
+  <div class="col-md-4"><div class="el-card stat-card"><span class="icon-bubble gold"><i class="bi bi-gift"></i></span><div><div class="value">{{ totals.taken }} / {{ totals.units }}</div><div class="label">unités choisies</div></div></div></div>
+  <div class="col-md-4"><div class="el-card stat-card"><span class="icon-bubble success"><i class="bi bi-bag-check"></i></span><div><div class="value">{{ totals.taken|percent:totals.units }} %</div><div class="label">de la liste réservée</div></div></div></div>
+</div>
+<div class="el-card">
+  {% if gifts %}
+  <div class="table-wrap"><table class="table table-el">
+    <thead><tr><th>Cadeau</th><th>Quantité</th><th>Progression</th><th>Choisi par</th><th class="text-end">Actions</th></tr></thead>
+    <tbody>
+    {% for g in gifts %}
+      <tr>
+        <td><div class="d-flex align-items-center gap-3"><span class="icon-bubble" style="width:40px;height:40px;font-size:1.1rem"><i class="bi {{ g.icon_name }}"></i></span><strong>{{ g.name }}</strong></div></td>
+        <td>{{ g.quantity }}</td>
+        <td style="min-width:140px">
+          <div class="d-flex justify-content-between small mb-1"><span>{{ g.num_claims }} pris</span>{% if g.num_claims >= g.quantity %}<span class="badge-el badge-success">Complet</span>{% else %}<span class="text-muted">{{ g.remaining }} restant{{ g.remaining|pluralize }}</span>{% endif %}</div>
+          <div class="progress-el gold"><span style="width:{{ g.num_claims|percent:g.quantity }}%"></span></div>
+        </td>
+        <td class="small">{% for c in g.claims.all %}<div><i class="bi bi-person-check text-success me-1"></i>{{ c.guest.name }} <span class="text-muted">&middot; {{ c.claimed_at|date:"j/m H:i" }}</span></div>{% empty %}<span class="text-muted">Personne pour l'instant</span>{% endfor %}</td>
+        <td class="text-end text-nowrap">
+          <a href="{% url 'dashboard:gift_edit' g.pk %}" class="btn btn-sm btn-light" title="Modifier"><i class="bi bi-pencil"></i></a>
+          {% if g.num_claims %}
+            <button class="btn btn-sm btn-light" disabled title="Déjà choisi : suppression impossible"><i class="bi bi-lock"></i></button>
+          {% else %}
+            <a href="{% url 'dashboard:gift_delete' g.pk %}" class="btn btn-sm btn-light text-danger" title="Supprimer"><i class="bi bi-trash3"></i></a>
+          {% endif %}
+        </td>
+      </tr>
+    {% endfor %}
+    </tbody>
+  </table></div>
+  {% else %}
+  <div class="empty-state"><i class="bi bi-gift"></i><p class="mt-2">Aucun cadeau pour cet événement.</p><a href="{% url 'dashboard:gift_create' %}?event={{ current.pk }}" class="btn btn-primary btn-sm">Ajouter un cadeau</a></div>
+  {% endif %}
+</div>
+{% else %}
+<div class="el-card empty-state"><i class="bi bi-calendar-plus"></i><p class="mt-2">Créez d'abord un événement.</p><a href="{% url 'dashboard:event_create' %}" class="btn btn-primary btn-sm">Créer un événement</a></div>
+{% endif %}
+{% endblock %}

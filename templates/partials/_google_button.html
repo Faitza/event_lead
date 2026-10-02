@@ -1,0 +1,7 @@
+{% load socialaccount %}
+{% if GOOGLE_LOGIN_ENABLED %}
+<a href="{% provider_login_url 'google' process='login' next=next_url %}" class="btn btn-google"><i class="bi bi-google text-danger"></i>Continuer avec Google</a>
+{% else %}
+<button type="button" class="btn btn-google" disabled title="Renseignez GOOGLE_CLIENT_ID et GOOGLE_CLIENT_SECRET pour activer la connexion Google"><i class="bi bi-google text-danger"></i>Continuer avec Google</button>
+<div class="form-text text-center">Connexion Google non configurée sur ce serveur.</div>
+{% endif %}

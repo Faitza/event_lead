@@ -1,0 +1,46 @@
+{% extends "dashboard/base_dashboard.html" %}
+{% block title %}Événements{% endblock %}
+{% block dash_content %}
+<div class="page-head">
+  <div><h1>Événements</h1><p>Créez, modifiez et suivez tous vos événements publics et privés.</p></div>
+  <a href="{% url 'dashboard:event_create' %}" class="btn btn-primary"><i class="bi bi-plus-lg me-2"></i>Nouvel événement</a>
+</div>
+<form class="filter-bar mb-3" method="get">
+  <input type="search" name="q" value="{{ q }}" class="form-control" placeholder="Rechercher un titre ou un lieu">
+  <select name="type" class="form-select" onchange="this.form.submit()">
+    <option value="">Tous les types</option>
+    <option value="public" {% if etype == 'public' %}selected{% endif %}>Public</option>
+    <option value="private" {% if etype == 'private' %}selected{% endif %}>Privé</option>
+  </select>
+  <button class="btn btn-soft"><i class="bi bi-search"></i></button>
+</form>
+<div class="el-card">
+  {% if events %}
+  <div class="table-wrap"><table class="table table-el">
+    <thead><tr><th>Événement</th><th>Date</th><th>Type</th><th>Statut</th><th>Présents</th><th>Cadeaux</th><th class="text-end">Actions</th></tr></thead>
+    <tbody>
+    {% for e in events %}
+      <tr>
+        <td><div class="d-flex align-items-center gap-3">
+          <img src="{{ e.cover_url }}" alt="" width="56" height="40" style="object-fit:cover;border-radius:10px;background:var(--el-tint)" loading="lazy" onerror="this.style.visibility='hidden'">
+          <div><a href="{% url 'dashboard:event_detail' e.pk %}" class="fw-semibold text-body">{{ e.title }}</a><div class="small text-muted">{{ e.venue|truncatechars:40 }}</div></div>
+        </div></td>
+        <td class="text-nowrap">{{ e.date|date:"j M Y" }}<div class="small text-muted">{{ e.time|time:"H\hi" }}</div></td>
+        <td><span class="badge-el {% if e.is_public %}badge-primary{% else %}badge-gold{% endif %}">{{ e.get_event_type_display }}</span></td>
+        <td><span class="badge-el {% if e.status == 'active' %}badge-success{% elif e.status == 'draft' %}badge-muted{% else %}badge-danger{% endif %}">{{ e.get_status_display }}</span></td>
+        <td>{{ e.num_confirmed }} / {{ e.num_guests }}</td>
+        <td>{{ e.num_gifts }}</td>
+        <td class="text-end text-nowrap">
+          <a href="{% url 'dashboard:event_detail' e.pk %}" class="btn btn-sm btn-soft" title="Suivi"><i class="bi bi-activity"></i></a>
+          <a href="{% url 'dashboard:event_edit' e.pk %}" class="btn btn-sm btn-light" title="Modifier"><i class="bi bi-pencil"></i></a>
+          <a href="{% url 'dashboard:event_delete' e.pk %}" class="btn btn-sm btn-light text-danger" title="Supprimer"><i class="bi bi-trash3"></i></a>
+        </td>
+      </tr>
+    {% endfor %}
+    </tbody>
+  </table></div>
+  {% else %}
+  <div class="empty-state"><i class="bi bi-calendar-plus"></i><p class="mt-2">Aucun événement trouvé.</p><a href="{% url 'dashboard:event_create' %}" class="btn btn-primary btn-sm">Créer un événement</a></div>
+  {% endif %}
+</div>
+{% endblock %}

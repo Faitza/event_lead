@@ -1,0 +1,59 @@
+{% extends "dashboard/base_dashboard.html" %}
+{% block title %}Invités{% endblock %}
+{% block dash_content %}
+<div class="page-head">
+  <div><h1>Invités{% if current_event %} &middot; {{ current_event.title }}{% endif %}</h1><p>Chaque invité dispose d'un lien magique personnel, à envoyer par WhatsApp ou par e-mail.</p></div>
+  <div class="d-flex flex-wrap gap-2">
+    <a href="{% url 'dashboard:guest_export_csv' %}?{{ export_qs }}" class="btn btn-light"><i class="bi bi-filetype-csv me-1"></i>CSV</a>
+    <a href="{% url 'dashboard:guest_export_pdf' %}?{{ export_qs }}" class="btn btn-light"><i class="bi bi-filetype-pdf me-1"></i>PDF</a>
+    <a href="{% url 'dashboard:guest_create' %}{% if current_event %}?event={{ current_event.pk }}{% endif %}" class="btn btn-primary"><i class="bi bi-person-plus me-2"></i>Ajouter un invité</a>
+  </div>
+</div>
+<form class="filter-bar mb-3" method="get">
+  <select name="event" class="form-select" onchange="this.form.submit()">
+    <option value="">Tous les événements</option>
+    {% for e in events %}<option value="{{ e.pk }}" {% if current_event.pk == e.pk %}selected{% endif %}>{{ e.title }}</option>{% endfor %}
+  </select>
+  <select name="status" class="form-select" onchange="this.form.submit()">
+    <option value="">Tous les statuts</option>
+    {% for value, label in statuses %}<option value="{{ value }}" {% if status == value %}selected{% endif %}>{{ label }}</option>{% endfor %}
+  </select>
+  <input type="search" name="q" value="{{ q }}" class="form-control" placeholder="Nom, e-mail, téléphone">
+  <button class="btn btn-soft"><i class="bi bi-search"></i></button>
+</form>
+<div class="el-card">
+  {% if guests %}
+  <div class="table-wrap"><table class="table table-el">
+    <thead><tr><th>Invité</th>{% if not current_event %}<th>Événement</th>{% endif %}<th>Statut</th><th>Acc.</th><th>Cadeaux</th><th>Envoyer l'invitation</th><th class="text-end">Actions</th></tr></thead>
+    <tbody>
+    {% for g in guests %}
+      <tr>
+        <td><div class="fw-semibold">{{ g.name }}</div><div class="small text-muted">{% if g.email %}{{ g.email }}{% endif %}{% if g.email and g.phone %} &middot; {% endif %}{{ g.phone }}</div></td>
+        {% if not current_event %}<td class="small">{{ g.event.title|truncatechars:30 }}</td>{% endif %}
+        <td><span class="badge-el badge-{{ g.status_badge }}">{{ g.get_status_display }}</span></td>
+        <td>{{ g.companions }}</td>
+        <td>{% if g.num_gifts %}<span class="badge-el badge-gold"><i class="bi bi-gift"></i>{{ g.num_gifts }}</span>{% else %}<span class="text-muted">-</span>{% endif %}</td>
+        <td class="text-nowrap">
+          {% if g.sent_via == 'whatsapp' %}
+            <a href="{{ g.links.whatsapp }}" target="_blank" rel="noopener" class="btn btn-sm btn-whatsapp" title="Envoyer par WhatsApp"><i class="bi bi-whatsapp"></i></a>
+          {% else %}
+            <a href="{{ g.links.mailto }}" class="btn btn-sm btn-primary" title="Envoyer par e-mail"><i class="bi bi-envelope"></i></a>
+          {% endif %}
+          <button class="btn btn-sm btn-light" data-copy="{{ g.links.url }}" title="Copier le lien magique"><i class="bi bi-link-45deg"></i></button>
+          <form method="post" action="{% url 'dashboard:guest_mark_sent' g.pk %}" class="d-inline">{% csrf_token %}<input type="hidden" name="next" value="{{ request.get_full_path }}">
+            <button class="btn btn-sm {% if g.invitation_sent_at %}btn-light text-success{% else %}btn-soft{% endif %}" title="{% if g.invitation_sent_at %}Envoyée le {{ g.invitation_sent_at|date:'j/m H:i' }}{% else %}Marquer comme envoyée{% endif %}"><i class="bi bi-{% if g.invitation_sent_at %}check2-all{% else %}send{% endif %}"></i></button>
+          </form>
+        </td>
+        <td class="text-end text-nowrap">
+          <a href="{% url 'dashboard:guest_edit' g.pk %}" class="btn btn-sm btn-light" title="Modifier"><i class="bi bi-pencil"></i></a>
+          <a href="{% url 'dashboard:guest_delete' g.pk %}" class="btn btn-sm btn-light text-danger" title="Supprimer"><i class="bi bi-trash3"></i></a>
+        </td>
+      </tr>
+    {% endfor %}
+    </tbody>
+  </table></div>
+  {% else %}
+  <div class="empty-state"><i class="bi bi-people"></i><p class="mt-2">Aucun invité trouvé.</p></div>
+  {% endif %}
+</div>
+{% endblock %}

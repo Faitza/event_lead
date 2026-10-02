@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}{{ event.title }}{% endblock %}
+{% block extra_head %}<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.css">{% endblock %}
+{% block content %}
+<section class="photo-bg text-white" style="background-image:url('{{ event.cover_url }}')">
+  <div class="container py-5">
+    <div class="py-lg-5">
+      <span class="badge-el mb-3" style="background:rgba(255,255,255,.18);color:#fff">{% if event.is_public %}<i class="bi bi-globe2"></i>Public{% else %}<i class="bi bi-lock"></i>Privé{% endif %}</span>
+      <h1 class="display-5 fw-bold">{{ event.title }}</h1>
+      <p class="lead opacity-75 mb-0"><i class="bi bi-calendar3 me-2"></i>{{ event.date|date:"l j F Y"|capfirst }} à {{ event.time|time:"H\hi" }}</p>
+    </div>
+  </div>
+</section>
+<section class="section pt-5">
+  <div class="container">
+    <div class="row g-4">
+      <div class="col-lg-8">
+        <div class="el-card el-card-body mb-4">
+          <h2 class="h5 fw-bold text-primary mb-3">À propos de l'événement</h2>
+          <p class="mb-0">{{ event.description|default:"Plus d'informations bientôt."|linebreaksbr }}</p>
+        </div>
+        {% if event.cover_video %}
+        <div class="el-card overflow-hidden mb-4"><video src="{{ event.cover_video.url }}" controls preload="none" class="w-100" style="display:block"></video></div>
+        {% endif %}
+        {% if event.has_location %}
+        <div class="el-card el-card-body">
+          <h2 class="h5 fw-bold text-primary mb-3">Lieu</h2>
+          <div class="map-box lg" data-map data-lat="{{ event.latitude|stringformat:'f' }}" data-lng="{{ event.longitude|stringformat:'f' }}" data-label="{{ event.venue }}"></div>
+        </div>
+        {% endif %}
+      </div>
+      <div class="col-lg-4">
+        <div class="el-card el-card-body" style="position:sticky;top:96px">
+          <div class="meta-row"><i class="bi bi-calendar3"></i>{{ event.date|date:"j F Y" }}</div>
+          <div class="meta-row"><i class="bi bi-clock"></i>{{ event.time|time:"H\hi" }}</div>
+          <div class="meta-row"><i class="bi bi-geo-alt"></i>{{ event.venue }}</div>
+          {% if event.price_htg %}
+            <hr>
+            <div class="price-tag">{{ event.price_htg|floatformat:0 }} HTG</div>
+            <div class="text-muted small mb-3">&asymp; {{ event.price_usd }} USD</div>
+            <a href="{% url 'payments:checkout' event.pk %}" class="btn btn-primary w-100 btn-lg"><i class="bi bi-ticket-perforated me-2"></i>Acheter un billet</a>
+          {% endif %}
+          {% if invitation %}
+            <hr><a href="{{ invitation.get_invitation_url }}" class="btn btn-soft w-100">Voir mon invitation</a>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock %}
+{% block extra_js %}
+<script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.js"></script>
+<script src="{% static 'js/map.js' %}"></script>
+{% endblock %}

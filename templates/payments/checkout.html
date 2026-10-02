@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}Paiement - {{ event.title }}{% endblock %}
+{% block content %}
+<section class="section">
+  <div class="container" style="max-width:960px">
+    <div class="row g-4">
+      <div class="col-lg-7">
+        <div class="event-card">
+          <div class="cover"><img src="{{ event.cover_url }}" alt="" onerror="this.style.visibility='hidden'"><span class="badge-el"><i class="bi bi-ticket-perforated"></i>Billet</span></div>
+          <div class="body">
+            <h1 class="h4 fw-bold">{{ event.title }}</h1>
+            <div class="meta mb-1"><i class="bi bi-calendar3"></i>{{ event.date|date:"l j F Y" }} à {{ event.time|time:"H\hi" }}</div>
+            <div class="meta"><i class="bi bi-geo-alt"></i>{{ event.venue }}</div>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-5">
+        <div class="el-card el-card-body">
+          <h2 class="h5 fw-bold text-primary mb-3">Votre commande</h2>
+          <div class="recap-row"><span class="text-muted">Prix unitaire</span><strong>{{ event.price_htg|floatformat:2 }} HTG</strong></div>
+          <div class="recap-row"><span class="text-muted">Nombre de billets</span>
+            <div class="counter"><button type="button" data-step="-1" aria-label="Moins"><i class="bi bi-dash"></i></button><input type="number" id="id_quantity_visible" value="{{ form.quantity.value|default:1 }}" min="1" max="20"><button type="button" data-step="1" aria-label="Plus"><i class="bi bi-plus"></i></button></div>
+          </div>
+          <div class="recap-row"><span class="fw-semibold">Total</span><span class="text-end"><span class="price-tag" data-amount-htg>{{ amount_htg }} HTG</span><br><span class="small text-muted" data-amount-usd>{{ amount_usd }} USD</span></span></div>
+          <button class="btn btn-primary btn-lg w-100 mt-3" data-bs-toggle="modal" data-bs-target="#paymentModal"><i class="bi bi-lock me-2"></i>Payer maintenant</button>
+          <div class="d-flex justify-content-center gap-3 mt-3 small text-muted"><span>MonCash</span><span>NatCash</span><span>Carte</span><span>PayPal</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+{% include "payments/_payment_modal.html" %}
+{% endblock %}
+{% block extra_js %}<script src="{% static 'js/payment.js' %}"></script>{% endblock %}

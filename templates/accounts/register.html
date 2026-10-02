@@ -1,0 +1,30 @@
+{% extends "accounts/auth_base.html" %}
+{% block title %}{% if organizer %}Inscription Organisateur{% else %}Créer un compte{% endif %}{% endblock %}
+{% block visual_title %}{% if organizer %}Rejoignez le cercle des Organisateurs VIP{% else %}Bienvenue sur EventLead{% endif %}{% endblock %}
+{% block visual_text %}{% if organizer %}Après votre inscription, un paiement unique active votre badge VIP et votre portail Organisateur.{% else %}Répondez à vos invitations, choisissez vos cadeaux et découvrez les événements publics.{% endif %}{% endblock %}
+{% block panel %}
+{% if organizer %}
+  <span class="badge-el badge-vip mb-2"><i class="bi bi-gem"></i>VIP</span>
+  <h1 class="h3 fw-bold text-primary mb-1">Inscription Organisateur</h1>
+  <p class="text-muted mb-4">Étape 1 sur 2 : votre compte. Étape 2 : le paiement VIP.</p>
+{% else %}
+  <h1 class="h3 fw-bold text-primary mb-1">Créer un compte</h1>
+  <p class="text-muted mb-4">Gratuit, en moins d'une minute.</p>
+{% endif %}
+{% include "partials/_google_button.html" %}
+<div class="divider">ou avec votre e-mail</div>
+<form method="post" novalidate>
+  {% csrf_token %}
+  {% if form.non_field_errors %}<div class="notice notice-danger mb-3"><i class="bi bi-exclamation-circle"></i><div>{{ form.non_field_errors|join:" " }}</div></div>{% endif %}
+  <div class="row g-0 gap-0">
+    <div class="col-6 pe-2">{% include "partials/_field.html" with field=form.first_name %}</div>
+    <div class="col-6 ps-2">{% include "partials/_field.html" with field=form.last_name %}</div>
+  </div>
+  {% include "partials/_field.html" with field=form.email %}
+  {% include "partials/_field.html" with field=form.phone %}
+  {% include "partials/_field.html" with field=form.password1 %}
+  {% include "partials/_field.html" with field=form.password2 %}
+  <button class="btn btn-primary w-100 btn-lg mt-2">{% if organizer %}Continuer vers le paiement VIP<i class="bi bi-arrow-right ms-2"></i>{% else %}Créer mon compte{% endif %}</button>
+</form>
+<p class="text-center text-muted small mt-4 mb-0">Déjà inscrit ? <a href="{% url 'accounts:login' %}" class="fw-semibold">Se connecter</a></p>
+{% endblock %}

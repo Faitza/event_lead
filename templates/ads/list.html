@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% block title %}Nos partenaires{% endblock %}
+{% block content %}
+<section class="section">
+  <div class="container">
+    <div class="text-center mb-5"><span class="eyebrow">Offres partenaires</span><h1 class="section-title mt-2">Nos partenaires</h1><p class="text-muted">Des prestataires de confiance pour réussir vos événements.</p></div>
+    <div class="row g-4">
+      {% for ad in ads %}
+      <div class="col-md-6 col-lg-4 reveal">
+        <div class="el-card h-100 overflow-hidden">
+          <div class="ad-media" style="position:relative;aspect-ratio:16/9;background:var(--el-gradient);display:flex;align-items:center;justify-content:center;color:#fff;font-size:3rem">
+            {% if ad.image %}<img src="{{ ad.image.url }}" alt="" loading="lazy" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover">{% else %}<i class="bi {{ ad.icon_name }}"></i>{% endif %}
+          </div>
+          <div class="el-card-body">
+            <h2 class="h5 fw-bold text-primary">{{ ad.title }}</h2>
+            <p class="text-muted small">{{ ad.message|truncatechars:140 }}</p>
+            <a href="{% url 'ads:click' ad.pk %}" target="_blank" rel="noopener sponsored" class="btn btn-soft btn-sm">Visiter le site<i class="bi bi-box-arrow-up-right ms-2"></i></a>
+          </div>
+        </div>
+      </div>
+      {% empty %}<div class="col-12 empty-state">Aucune offre pour le moment.</div>{% endfor %}
+    </div>
+  </div>
+</section>
+{% endblock %}

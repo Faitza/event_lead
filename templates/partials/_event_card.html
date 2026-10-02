@@ -1,0 +1,13 @@
+<a href="{{ href|default:event.get_absolute_url }}" class="event-card">
+  <div class="cover">
+    <img src="{{ event.cover_url }}" alt="{{ event.title }}" loading="lazy" onerror="this.style.visibility='hidden'">
+    <span class="badge-el">{% if event.is_public %}<i class="bi bi-globe2"></i>Public{% else %}<i class="bi bi-lock"></i>Privé{% endif %}</span>
+    <div class="date-chip"><div class="d">{{ event.date|date:"d" }}</div><div class="m">{{ event.date|date:"M" }}</div></div>
+  </div>
+  <div class="body">
+    <h3>{{ event.title }}</h3>
+    <div class="meta mb-1"><i class="bi bi-calendar3"></i>{{ event.date|date:"l j F Y" }} à {{ event.time|time:"H\hi" }}</div>
+    <div class="meta"><i class="bi bi-geo-alt"></i>{{ event.venue|truncatechars:48 }}</div>
+    {% if event.price_htg %}<div class="mt-2"><span class="badge-el badge-gold"><i class="bi bi-ticket-perforated"></i>{{ event.price_htg|floatformat:0 }} HTG</span></div>{% endif %}
+  </div>
+</a>

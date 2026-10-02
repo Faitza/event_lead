@@ -1,0 +1,32 @@
+{% extends "dashboard/base_dashboard.html" %}
+{% block title %}{% if is_new %}Nouvelle publicité{% else %}Modifier la publicité{% endif %}{% endblock %}
+{% block dash_content %}
+<div class="page-head">
+  <div><h1>{% if is_new %}Nouvelle publicité{% else %}{{ ad.title }}{% endif %}</h1><p>Affichée avec un compte à rebours avant que l'invité puisse passer.</p></div>
+  <a href="{% url 'dashboard:ad_list' %}" class="btn btn-light"><i class="bi bi-arrow-left me-2"></i>Retour</a>
+</div>
+<form method="post" enctype="multipart/form-data" novalidate>
+  {% csrf_token %}
+  <div class="row g-4">
+    <div class="col-xl-7">
+      <div class="el-card el-card-body">
+        {% include "partials/_field.html" with field=form.title %}
+        {% include "partials/_field.html" with field=form.message %}
+        {% include "partials/_field.html" with field=form.sponsor_link %}
+        {% include "partials/_icon_picker.html" with field=form.icon_name %}
+      </div>
+    </div>
+    <div class="col-xl-5">
+      <div class="el-card el-card-body mb-4">
+        {% if ad.image %}<img src="{{ ad.image.url }}" alt="" class="w-100 mb-3" style="border-radius:12px;max-height:180px;object-fit:cover">{% endif %}
+        {% include "partials/_field.html" with field=form.image %}
+        {% include "partials/_field.html" with field=form.skip_after_seconds %}
+        {% include "partials/_field.html" with field=form.order %}
+        {% include "partials/_field.html" with field=form.is_active %}
+        {% include "partials/_field.html" with field=form.show_after_reply %}
+      </div>
+      <button class="btn btn-primary btn-lg w-100"><i class="bi bi-check2 me-2"></i>Enregistrer</button>
+    </div>
+  </div>
+</form>
+{% endblock %}

@@ -1,0 +1,179 @@
+"""Données de démonstration EventLead.
+
+Usage : python manage.py seed_demo [--reset]
+"""
+from datetime import time, timedelta
+from decimal import Decimal
+
+from django.core.management.base import BaseCommand
+from django.db import transaction
+from django.utils import timezone
+
+from accounts.models import CustomUser
+from ads.models import Ad
+from core.models import ContactMessage, Review
+from events.models import Event, EventEvaluation, Guest
+from gifts.models import Gift, GiftClaim
+from payments.models import Payment
+
+DEMO_PASSWORD = "EventLead2026!"
+
+
+class Command(BaseCommand):
+    help = "Crée des données de démonstration (événements, invités, cadeaux, publicités, avis, paiements)."
+
+    def add_arguments(self, parser):
+        parser.add_argument("--reset", action="store_true", help="Supprime d'abord les données existantes.")
+
+    @transaction.atomic
+    def handle(self, *args, **options):
+        if options["reset"]:
+            GiftClaim.objects.all().delete()
+            Payment.objects.all().delete()
+            Event.objects.all().delete()
+            Ad.objects.all().delete()
+            Review.objects.all().delete()
+            ContactMessage.objects.all().delete()
+            CustomUser.objects.filter(email__endswith="@eventlead.ht").delete()
+
+        if Event.objects.exists():
+            self.stdout.write(self.style.WARNING("Des événements existent déjà. Relancez avec --reset pour repartir de zéro."))
+            return
+
+        today = timezone.localdate()
+
+        def user(email, first, last, role, **extra):
+            u = CustomUser(username=email, email=email, first_name=first, last_name=last, role=role, **extra)
+            u.set_password(DEMO_PASSWORD)
+            u.save()
+            return u
+
+        admin = user("admin@eventlead.ht", "Faitza", "Admin", "admin", is_staff=True, is_superuser=True)
+        vip = user("organisateur@eventlead.ht", "Jonathan", "Pierre", "organizer", is_vip=True,
+                   vip_since=timezone.now() - timedelta(days=20), phone="+509 3712 4455")
+        user("nouveau.organisateur@eventlead.ht", "Mika", "Joseph", "organizer")
+        guest_user = user("invite@eventlead.ht", "Nadège", "Louis", "guest", phone="+509 4011 2233")
+
+        # ------------------------------------------------------------------ Événements
+        gala = Event.objects.create(
+            title="Gala de la Saint-Valentin", event_type="public", status="active",
+            date=today + timedelta(days=18), time=time(19, 30),
+            venue="Hôtel Montana, Rue F. Cardozo, Pétion-Ville", latitude=18.5126, longitude=-72.2885,
+            max_guests=300, evaluation_delay_days=2, price_htg=Decimal("3500"), created_by=admin,
+            description="Dîner de gala, orchestre live et piste de danse sous les étoiles de Pétion-Ville. Tenue de soirée exigée.",
+        )
+        concert = Event.objects.create(
+            title="Festival Kompa sur la plage", event_type="public", status="active",
+            date=today + timedelta(days=32), time=time(16, 0),
+            venue="Wahoo Bay Beach, Route Nationale 1, Arcahaie", latitude=18.8133, longitude=-72.5272,
+            max_guests=1500, price_htg=Decimal("1500"), created_by=admin,
+            description="Les meilleurs groupes de kompa réunis pour une après-midi et une soirée au bord de la mer.",
+        )
+        Event.objects.create(
+            title="Conférence Entreprendre en Haïti", event_type="public", status="active",
+            date=today + timedelta(days=45), time=time(9, 0),
+            venue="Marriott Port-au-Prince, Avenue Jean-Paul II, Turgeau", latitude=18.5333, longitude=-72.3243,
+            max_guests=250, created_by=admin,
+            description="Une journée de rencontres et d'ateliers avec des entrepreneurs haïtiens et de la diaspora.",
+        )
+        wedding = Event.objects.create(
+            title="Mariage de Sarah et Jean-Marc", event_type="private", status="active",
+            date=today + timedelta(days=60), time=time(15, 0),
+            venue="Église Saint-Pierre, Place Saint-Pierre, Pétion-Ville", latitude=18.5118, longitude=-72.2856,
+            max_guests=180, allow_companions=True, max_companions=2, evaluation_delay_days=3, created_by=admin,
+            description="Cérémonie religieuse à 15h, suivie de la réception au jardin de l'Hôtel Montana. Merci de confirmer votre présence avant le 15 du mois.",
+        )
+        anniversary = Event.objects.create(
+            title="Anniversaire de Mme Duval - 60 ans", event_type="private", status="active",
+            date=today - timedelta(days=7), time=time(18, 0),
+            venue="Restaurant Quartier Latin, Pétion-Ville", latitude=18.5108, longitude=-72.2870,
+            max_guests=60, evaluation_delay_days=3, created_by=admin,
+            description="Dîner surprise pour les 60 ans de Mme Duval.",
+        )
+
+        # ------------------------------------------------------------------ Invités du mariage
+        wedding_guests = [
+            ("Nadège Louis", "invite@eventlead.ht", "+509 4011 2233", "email", "confirmed", 1, guest_user),
+            ("Jonathan Pierre", "organisateur@eventlead.ht", "+509 3712 4455", "whatsapp", "confirmed", 0, vip),
+            ("Roseline Augustin", "roseline@example.com", "+509 3455 6677", "whatsapp", "confirmed", 2, None),
+            ("Patrick Étienne", "patrick@example.com", "+509 3888 1212", "whatsapp", "maybe", 0, None),
+            ("Claudine Joseph", "claudine@example.com", "", "email", "declined", 0, None),
+            ("Wilson Charles", "", "+509 3123 9090", "whatsapp", "pending", 0, None),
+            ("Marie-Ange Dorvil", "marieange@example.com", "+509 3600 4545", "email", "pending", 0, None),
+            ("Junior Baptiste", "", "+509 4789 0011", "whatsapp", "pending", 0, None),
+        ]
+        guests = {}
+        for name, email, phone, via, status, comp, linked in wedding_guests:
+            g = Guest.objects.create(
+                event=wedding, name=name, email=email, phone=phone, sent_via=via, status=status,
+                companions=comp, user=linked,
+                invitation_sent_at=timezone.now() - timedelta(days=5),
+                replied_at=timezone.now() - timedelta(hours=len(guests) * 7 + 2) if status != "pending" else None,
+                wants_gift=True if status == "confirmed" else None,
+            )
+            guests[name] = g
+
+        # Liste de 8 cadeaux
+        gift_specs = [
+            ("Service à café en porcelaine", "bi-cup-hot", 1),
+            ("Batterie de cuisine", "bi-egg-fried", 1),
+            ("Lot de verres en cristal", "bi-cup-straw", 2),
+            ("Lampe de salon", "bi-lamp", 1),
+            ("Enceinte Bluetooth", "bi-speaker", 1),
+            ("Week-end à Labadee", "bi-airplane", 1),
+            ("Appareil photo instantané", "bi-camera", 1),
+            ("Bouquet de fleurs du jardin", "bi-flower1", 3),
+        ]
+        gifts = {name: Gift.objects.create(event=wedding, name=name, icon_name=icon, quantity=qty)
+                 for name, icon, qty in gift_specs}
+        GiftClaim.objects.create(gift=gifts["Service à café en porcelaine"], guest=guests["Roseline Augustin"])
+        GiftClaim.objects.create(gift=gifts["Lot de verres en cristal"], guest=guests["Roseline Augustin"])
+        GiftClaim.objects.create(gift=gifts["Enceinte Bluetooth"], guest=guests["Nadège Louis"])
+        GiftClaim.objects.create(gift=gifts["Bouquet de fleurs du jardin"], guest=guests["Jonathan Pierre"])
+
+        # Événement passé : l'organisateur VIP peut l'évaluer (délai écoulé)
+        Guest.objects.create(event=anniversary, name="Jonathan Pierre", email="organisateur@eventlead.ht",
+                             user=vip, sent_via="email", status="confirmed", replied_at=timezone.now() - timedelta(days=12))
+        Guest.objects.create(event=anniversary, name="Nadège Louis", email="invite@eventlead.ht",
+                             user=guest_user, sent_via="email", status="confirmed", replied_at=timezone.now() - timedelta(days=11))
+        Guest.objects.create(event=gala, name="Nadège Louis", email="invite@eventlead.ht", user=guest_user,
+                             sent_via="email", status="pending")
+
+        # ------------------------------------------------------------------ Publicités
+        Ad.objects.create(
+            title="Fleurs de la Caraïbe", icon_name="bi-flower1", order=1, skip_after_seconds=5,
+            message="Compositions florales pour mariages et galas, livrées partout à Port-au-Prince. -15 % avec le code EVENTLEAD.",
+            sponsor_link="https://example.com/fleurs-caraibe", views=842, clicks=67,
+        )
+        Ad.objects.create(
+            title="Studio Lumière Photo", icon_name="bi-camera", order=2, skip_after_seconds=5,
+            message="Photographes et vidéastes professionnels : immortalisez chaque instant de votre événement.",
+            sponsor_link="https://example.com/studio-lumiere", views=615, clicks=41,
+        )
+
+        # ------------------------------------------------------------------ Avis
+        Review.objects.create(name="Roseline A.", stars=5, text="Nos invités ont répondu en quelques minutes depuis WhatsApp. La liste de cadeaux sans doublon, c'est génial !")
+        Review.objects.create(name="Patrick É.", stars=5, text="Tableau de bord clair, suivi en direct des présences : l'organisation de notre gala a été un jeu d'enfant.")
+        Review.objects.create(name="Claudine J.", stars=4, text="Très pratique de pouvoir payer avec MonCash. Interface élégante et simple.")
+
+        # ------------------------------------------------------------------ Paiements
+        Payment.objects.create(kind="organizer_access", user=vip, method="moncash", amount_htg=Decimal("5000"),
+                               reference="MC-5A1B2C", status="success", payer_detail="+509 **** 4455")
+        Payment.objects.create(kind="ticket", event=gala, user=guest_user, method="natcash", amount_htg=Decimal("7000"),
+                               quantity=2, reference="NAT-3F9D10", status="success", payer_detail="+509 **** 2233")
+        Payment.objects.create(kind="ticket", event=concert, user=guest_user, method="stripe", amount_htg=Decimal("1500"),
+                               reference="ST-8E7A21", status="failed", payer_detail="Carte **** 0002")
+        Payment.objects.create(kind="ticket", event=concert, user=vip, method="paypal", amount_htg=Decimal("3000"),
+                               quantity=2, reference="PP-C4D2E8", status="success", payer_detail="jonathan@example.com")
+
+        ContactMessage.objects.create(name="Stéphanie Noël", email="stephanie@example.com", phone="+509 3333 4444",
+                                      message="Bonjour, je prépare un baptême pour 80 personnes en mars. Pouvez-vous m'envoyer une démonstration ?")
+
+        wedding_guest = guests["Wilson Charles"]
+        self.stdout.write(self.style.SUCCESS("Données de démonstration créées."))
+        self.stdout.write(f"  Mot de passe de tous les comptes : {DEMO_PASSWORD}")
+        self.stdout.write("  Admin             : admin@eventlead.ht")
+        self.stdout.write("  Organisateur VIP  : organisateur@eventlead.ht")
+        self.stdout.write("  Organisateur non payé : nouveau.organisateur@eventlead.ht")
+        self.stdout.write("  Invité            : invite@eventlead.ht")
+        self.stdout.write(f"  Lien magique (invité en attente, mariage) : /invitation/{wedding_guest.magic_token}/")

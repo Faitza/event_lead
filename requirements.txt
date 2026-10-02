@@ -1,0 +1,9 @@
+Django>=5.1,<5.2
+django-allauth[socialaccount]>=65.0
+django-environ>=0.11
+psycopg[binary]>=3.1
+Pillow>=10.0
+geopy>=2.4
+xhtml2pdf>=0.2.15
+argon2-cffi>=23.1
+# V2 (paiement réel) : stripe>=10.0

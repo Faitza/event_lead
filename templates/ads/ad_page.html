@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}{{ ad.title }}{% endblock %}
+{% block body %}
+<div class="ad-page photo-bg" style="background-image:url('https://images.unsplash.com/photo-1492684223066-81342ee5ff30?w=1600&q=55&auto=format&fit=crop')">
+  <div class="w-100" style="max-width:560px">
+    <div class="d-flex justify-content-between align-items-center mb-3 on-dark">
+      <span class="d-flex align-items-center gap-2">{% include "partials/_logo.html" %}<span class="logo-word">EventLead</span></span>
+      {% if total > 1 %}<span class="small opacity-75">Partenaire {{ position }} / {{ total }}</span>{% endif %}
+    </div>
+    <article class="ad-card">
+      <div class="ad-media">
+        {% if ad.image %}<img src="{{ ad.image.url }}" alt="{{ ad.title }}" loading="lazy">{% endif %}
+        {% if not ad.image %}<i class="bi {{ ad.icon_name }}" style="position:relative;z-index:1"></i>{% endif %}
+      </div>
+      <div class="p-4">
+        <div class="d-flex align-items-center gap-3 mb-3">
+          <span class="icon-bubble"><i class="bi {{ ad.icon_name }}"></i></span>
+          <div><div class="ad-label">Partenaire EventLead</div><h1 class="h4 fw-bold mb-0 text-primary">{{ ad.title }}</h1></div>
+        </div>
+        <p class="mb-4">{{ ad.message|linebreaksbr }}</p>
+        <div class="countdown-bar mb-3"><span id="countdown-fill"></span></div>
+        <div class="d-flex gap-2">
+          <a href="{% url 'ads:click' ad.pk %}" target="_blank" rel="noopener sponsored" class="btn btn-primary btn-lg flex-grow-1"><i class="bi bi-box-arrow-up-right me-2"></i>Visiter le site</a>
+          <a href="{{ next_url }}" id="skip-btn" class="btn btn-light btn-lg disabled" aria-disabled="true" tabindex="-1" data-seconds="{{ ad.skip_after_seconds }}"><span id="skip-label">Passer dans {{ ad.skip_after_seconds }} s</span></a>
+        </div>
+      </div>
+    </article>
+  </div>
+</div>
+{% endblock %}
+{% block extra_js %}<script src="{% static 'js/ad.js' %}"></script>{% endblock %}

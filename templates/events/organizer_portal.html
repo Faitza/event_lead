@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+{% block title %}Portail Organisateur{% endblock %}
+{% block content %}
+<section class="photo-bg text-white" style="background-image:url('https://images.unsplash.com/photo-1505236858219-8359eb29e329?w=1600&q=55&auto=format&fit=crop')">
+  <div class="container py-5">
+    <div class="d-flex flex-wrap justify-content-between align-items-end gap-3">
+      <div>
+        <span class="badge-el badge-vip mb-3"><i class="bi bi-gem"></i>Organisateur VIP</span>
+        <h1 class="display-6 fw-bold mb-1">Bonjour {{ user.display_name }}</h1>
+        <p class="opacity-75 mb-0">Tous les événements publics, et les événements privés auxquels vous êtes invité.</p>
+      </div>
+      {% if user.vip_since %}<span class="small opacity-75">Membre VIP depuis le {{ user.vip_since|date:"j F Y" }}</span>{% endif %}
+    </div>
+  </div>
+</section>
+<section class="section pt-5">
+  <div class="container">
+    <div class="notice notice-info mb-4"><i class="bi bi-eye"></i><div>Votre accès est en lecture seule : la création et la gestion des événements restent réservées à l'équipe EventLead.</div></div>
+    <h2 class="h5 fw-bold text-primary mb-3">Événements à venir</h2>
+    <div class="row g-4 mb-5">
+      {% for event in upcoming %}
+        <div class="col-sm-6 col-lg-4 reveal">
+          {% url 'events:organizer_event_detail' event.pk as href %}
+          {% include "partials/_event_card.html" with href=href %}
+          {% if event.my_invitation %}<div class="small mt-2"><span class="badge-el badge-gold"><i class="bi bi-envelope-heart"></i>Vous êtes invité</span></div>{% endif %}
+        </div>
+      {% empty %}
+        <div class="col-12"><div class="el-card empty-state"><i class="bi bi-calendar2"></i><p class="mt-2 mb-0">Aucun événement à venir.</p></div></div>
+      {% endfor %}
+    </div>
+    {% if past %}
+    <h2 class="h5 fw-bold text-primary mb-3">Événements passés</h2>
+    <div class="el-card mb-5">
+      <div class="table-wrap"><table class="table table-el">
+        <thead><tr><th>Événement</th><th>Date</th><th>Type</th><th class="text-end">Évaluation</th></tr></thead>
+        <tbody>{% for event in past %}
+          <tr><td class="fw-semibold">{{ event.title }}</td><td>{{ event.date|date:"j F Y" }}</td><td>{{ event.get_event_type_display }}</td>
+          <td class="text-end">{% if event.already_evaluated %}<span class="badge-el badge-success"><i class="bi bi-check2"></i>Évalué</span>{% elif event.can_evaluate %}<a href="{% url 'events:evaluate' event.pk %}" class="btn btn-sm btn-gold"><i class="bi bi-star me-1"></i>Évaluer</a>{% elif event.my_invitation and not event.is_public %}<span class="small text-muted">Ouverture le {{ event.evaluation_opens_on|date:"j F" }}</span>{% else %}<span class="text-muted">-</span>{% endif %}</td></tr>
+        {% endfor %}</tbody>
+      </table></div>
+    </div>
+    {% endif %}
+    {% if ads %}
+    <h2 class="h5 fw-bold text-primary mb-3">Offres partenaires</h2>
+    <div class="row g-3">
+      {% for ad in ads %}
+      <div class="col-md-6 col-lg-4"><a href="{% url 'ads:click' ad.pk %}" target="_blank" rel="noopener sponsored" class="el-card el-card-body d-flex gap-3 align-items-center text-body h-100"><span class="icon-bubble gold"><i class="bi {{ ad.icon_name }}"></i></span><div><strong>{{ ad.title }}</strong><div class="small text-muted">{{ ad.message|truncatechars:80 }}</div></div></a></div>
+      {% endfor %}
+    </div>
+    {% endif %}
+  </div>
+</section>
+{% endblock %}

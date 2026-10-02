@@ -1,0 +1,76 @@
+{% extends "dashboard/base_dashboard.html" %}
+{% load static %}
+{% block title %}{% if is_new %}Nouvel événement{% else %}Modifier l'événement{% endif %}{% endblock %}
+{% block extra_head %}<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.css">{% endblock %}
+{% block dash_content %}
+<div class="page-head">
+  <div><h1>{% if is_new %}Nouvel événement{% else %}{{ event.title }}{% endif %}</h1><p>{% if is_new %}Renseignez les informations, localisez le lieu et configurez les invitations.{% else %}Modifier les informations de l'événement.{% endif %}</p></div>
+  <a href="{% if event %}{% url 'dashboard:event_detail' event.pk %}{% else %}{% url 'dashboard:event_list' %}{% endif %}" class="btn btn-light"><i class="bi bi-arrow-left me-2"></i>Retour</a>
+</div>
+<form method="post" enctype="multipart/form-data" novalidate>
+  {% csrf_token %}
+  {% if form.non_field_errors %}<div class="notice notice-danger mb-3"><i class="bi bi-exclamation-circle"></i><div>{{ form.non_field_errors|join:" " }}</div></div>{% endif %}
+  <div class="row g-4">
+    <div class="col-xl-7">
+      <div class="el-card el-card-body mb-4">
+        <h2 class="h6 fw-bold text-primary mb-3"><i class="bi bi-info-circle me-2"></i>Informations générales</h2>
+        {% include "partials/_field.html" with field=form.title %}
+        <div class="row">
+          <div class="col-md-6">{% include "partials/_field.html" with field=form.event_type %}</div>
+          <div class="col-md-6">{% include "partials/_field.html" with field=form.status %}</div>
+          <div class="col-md-6">{% include "partials/_field.html" with field=form.date %}</div>
+          <div class="col-md-6">{% include "partials/_field.html" with field=form.time %}</div>
+        </div>
+        {% include "partials/_field.html" with field=form.description %}
+      </div>
+      <div class="el-card el-card-body mb-4">
+        <h2 class="h6 fw-bold text-primary mb-3"><i class="bi bi-geo-alt me-2"></i>Lieu</h2>
+        <label class="form-label" for="{{ form.venue.id_for_label }}">Adresse <span class="text-danger">*</span></label>
+        <div class="d-flex gap-2 mb-1">
+          {{ form.venue.as_widget }}
+          <button type="button" id="geocode-btn" class="btn btn-soft text-nowrap"><i class="bi bi-crosshair me-1"></i>Localiser</button>
+        </div>
+        {{ form.venue.errors }}
+        <div id="geocode-status" class="form-text mb-2">L'adresse est localisée automatiquement à l'enregistrement. Vous pouvez aussi cliquer sur la carte.</div>
+        <div class="map-box lg" data-map-editor data-lat-input="{{ form.latitude.id_for_label }}" data-lng-input="{{ form.longitude.id_for_label }}" data-venue-input="{{ form.venue.id_for_label }}" data-geocode-url="{% url 'dashboard:geocode' %}"></div>
+        <div class="row mt-3">
+          <div class="col-6">{% include "partials/_field.html" with field=form.latitude %}</div>
+          <div class="col-6">{% include "partials/_field.html" with field=form.longitude %}</div>
+        </div>
+      </div>
+    </div>
+    <div class="col-xl-5">
+      <div class="el-card el-card-body mb-4">
+        <h2 class="h6 fw-bold text-primary mb-3"><i class="bi bi-people me-2"></i>Invitations</h2>
+        {% include "partials/_field.html" with field=form.max_guests %}
+        {% include "partials/_field.html" with field=form.allow_companions %}
+        <div id="companions-wrap">{% include "partials/_field.html" with field=form.max_companions %}</div>
+        {% include "partials/_field.html" with field=form.evaluation_delay_days %}
+      </div>
+      <div class="el-card el-card-body mb-4">
+        <h2 class="h6 fw-bold text-primary mb-3"><i class="bi bi-image me-2"></i>Médias</h2>
+        {% if event.cover_image %}<img src="{{ event.cover_image.url }}" alt="" class="w-100 mb-3" style="border-radius:12px;max-height:180px;object-fit:cover">{% endif %}
+        {% include "partials/_field.html" with field=form.cover_image %}
+        {% include "partials/_field.html" with field=form.cover_video %}
+      </div>
+      <div class="el-card el-card-body mb-4">
+        <h2 class="h6 fw-bold text-primary mb-3"><i class="bi bi-ticket-perforated me-2"></i>Billetterie</h2>
+        {% include "partials/_field.html" with field=form.price_htg %}
+      </div>
+      <button class="btn btn-primary btn-lg w-100"><i class="bi bi-check2 me-2"></i>{% if is_new %}Créer l'événement{% else %}Enregistrer les modifications{% endif %}</button>
+    </div>
+  </div>
+</form>
+{% endblock %}
+{% block extra_js %}
+<script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.js"></script>
+<script src="{% static 'js/map.js' %}"></script>
+<script>
+  (function () {
+    var toggle = document.getElementById("{{ form.allow_companions.id_for_label }}");
+    var wrap = document.getElementById("companions-wrap");
+    function sync() { wrap.style.display = toggle.checked ? "" : "none"; }
+    toggle.addEventListener("change", sync); sync();
+  })();
+</script>
+{% endblock %}

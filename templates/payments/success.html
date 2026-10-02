@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% load humanize %}
+{% block title %}Paiement confirmé{% endblock %}
+{% block content %}
+<section class="section">
+  <div class="container" style="max-width:600px">
+    <div class="el-card el-card-body text-center p-4 p-md-5">
+      <div class="success-check mb-3"><i class="bi bi-check-lg"></i></div>
+      <h1 class="h4 fw-bold text-primary">Paiement confirmé</h1>
+      <p class="text-muted">Merci ! Conservez votre référence de transaction.</p>
+      <div class="bg-soft rounded-4 p-3 my-4">
+        <div class="small text-muted">Référence</div>
+        <div class="fs-3 fw-bold text-primary" style="letter-spacing:.06em">{{ payment.reference }}</div>
+      </div>
+      <div class="text-start">
+        <div class="recap-row"><span class="text-muted">Objet</span><strong>{% if payment.event %}{{ payment.event.title }}{% if payment.quantity > 1 %} x{{ payment.quantity }}{% endif %}{% else %}{{ payment.get_kind_display }}{% endif %}</strong></div>
+        <div class="recap-row"><span class="text-muted">Mode</span><strong>{{ payment.get_method_display }}</strong></div>
+        <div class="recap-row"><span class="text-muted">Montant</span><strong>{{ payment.amount_htg|floatformat:2|intcomma }} HTG <span class="text-muted fw-normal">({{ payment.amount_usd }} USD)</span></strong></div>
+        <div class="recap-row"><span class="text-muted">Date</span><strong>{{ payment.created_at|date:"j F Y H:i" }}</strong></div>
+      </div>
+      {% if payment.kind == 'organizer_access' %}
+        <div class="mt-4"><span class="badge-el badge-vip mb-3"><i class="bi bi-gem"></i>VIP activé</span><br><a href="{% url 'events:organizer_portal' %}" class="btn btn-primary btn-lg mt-2">Accéder au portail Organisateur</a></div>
+      {% else %}
+        <a href="{% url 'events:explore' %}" class="btn btn-primary btn-lg mt-4">Découvrir d'autres événements</a>
+      {% endif %}
+    </div>
+  </div>
+</section>
+{% endblock %}
