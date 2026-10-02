@@ -1,1 +1,1 @@
-{% load static %}<span class="logo-chip"><img src="{% static 'img/logo.png' %}" alt="EventLead" width="76" height="82"></span>
+{% load static %}<span class="brand-lockup{% if dark %} on-dark{% endif %}{% if stacked %} stacked{% endif %}">{% if dark %}<img class="brand-mark" src="{% static 'img/eventlead-mark-light.png' %}" alt="" width="58" height="64">{% else %}<img class="brand-mark" src="{% static 'img/eventlead-mark.png' %}" alt="" width="58" height="64">{% endif %}<span class="brand-name">EventLead</span></span>

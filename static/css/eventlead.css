@@ -66,9 +66,6 @@ h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6, .disp {
 }
 h1 em, h2 em, h3 em, .disp em { color: var(--el-gold); font-style: italic; }
 .section-title { color: var(--el-primary-dark); font-size: clamp(2rem, 4.2vw, 3.25rem); line-height: 1.05; text-wrap: balance; }
-.brand-script, .logo-word { font-family: "Pinyon Script", "Snell Roundhand", cursive; font-weight: 400; line-height: 1; }
-.logo-word { font-size: 1.9rem; color: var(--el-primary); }
-.on-dark .logo-word { color: #fff; }
 
 /* Ornements : filet doré + losange */
 .diamond { width: 7px; height: 7px; background: var(--el-gold); transform: rotate(45deg); flex: none; display: inline-block; }
@@ -166,15 +163,21 @@ h1 em, h2 em, h3 em, .disp em { color: var(--el-gold); font-style: italic; }
 /* --------------------------------------------------------------------------
    Logo : toujours sur fond blanc (barres blanches) pour rester lisible
    -------------------------------------------------------------------------- */
-.logo-chip { display: inline-flex; align-items: center; justify-content: center; background: #fff; border-radius: 12px; padding: 3px; box-shadow: 0 2px 8px rgba(0, 0, 0, .12); }
-.logo-chip img { height: 38px; width: auto; display: block; }
-.el-nav .logo-chip, .dash-sidebar .logo-chip, .inv-topbar .logo-chip, .ad-topbar .logo-chip, .el-footer-top .logo-chip, .auth-panel .logo-chip { box-shadow: none; padding: 0; border-radius: 0; }
-.el-nav .logo-chip img { height: 82px; transition: height var(--el-ease); }
-.el-nav.scrolled .logo-chip img { height: 58px; }
-.dash-sidebar .logo-chip img { height: 96px; }
-.inv-topbar .logo-chip img, .ad-topbar .logo-chip img { height: 48px; }
-.el-footer-top .logo-chip img { height: 72px; }
-.auth-panel .logo-chip img { height: 120px; }
+.brand-lockup { display: inline-flex; align-items: center; gap: 12px; line-height: 1; }
+.brand-mark { height: 64px; width: auto; display: block; transition: height var(--el-ease); }
+.brand-name { font-family: var(--font-display); font-weight: 600; letter-spacing: .02em; font-size: 1.75rem; color: var(--el-primary); transition: font-size var(--el-ease); }
+.brand-lockup.on-dark .brand-name { color: #fff; }
+.brand-lockup.stacked { flex-direction: column; gap: 8px; }
+.el-nav.scrolled .brand-mark { height: 50px; }
+.el-nav.scrolled .brand-name { font-size: 1.5rem; }
+.dash-sidebar .brand-mark { height: 52px; }
+.dash-sidebar .brand-name { font-size: 1.5rem; }
+.inv-topbar .brand-mark, .ad-topbar .brand-mark { height: 42px; }
+.inv-topbar .brand-name, .ad-topbar .brand-name { font-size: 1.35rem; }
+.el-footer-top .brand-mark { height: 56px; }
+.el-footer-top .brand-name { font-size: 1.6rem; }
+.auth-panel .brand-mark { height: 84px; }
+.auth-panel .brand-name { font-size: 2.1rem; }
 
 /* --------------------------------------------------------------------------
    Barre d'annonce + navigation (barre blanche porteuse du logo)
@@ -196,7 +199,8 @@ h1 em, h2 em, h3 em, .disp em { color: var(--el-gold); font-style: italic; }
 .avatar { width: 34px; height: 34px; border-radius: 50%; background: var(--el-gradient); color: #fff; display: inline-flex; align-items: center; justify-content: center; font-weight: 600; font-size: .8rem; object-fit: cover; }
 @media (max-width: 991px) {
   .el-nav .container { min-height: 78px; }
-  .el-nav .logo-chip img, .el-nav.scrolled .logo-chip img { height: 56px; }
+  .el-nav .brand-mark, .el-nav.scrolled .brand-mark { height: 46px; }
+  .el-nav .brand-name, .el-nav.scrolled .brand-name { font-size: 1.35rem; }
   .el-nav .navbar-nav { gap: 6px; padding: .75rem 0; }
 }
 
@@ -383,11 +387,11 @@ h1 em, h2 em, h3 em, .disp em { color: var(--el-gold); font-style: italic; }
 .contact-item i { color: var(--el-gold-text); font-size: 1.25rem; }
 .cta-band { border-radius: var(--el-radius-lg); padding: 3rem; color: #fff; overflow: hidden; }
 
-/* Pied de page : bande blanche (logo) + bande violette (signature script) */
+/* Pied de page : bande blanche (logo) + bande violette (nom en texte) */
 .el-footer-top { background: #fff; border-top: 1px solid var(--el-gold); padding: 28px 0; }
 .el-footer-top .links { display: flex; gap: 28px; flex-wrap: wrap; }
 .el-footer-bottom { background: var(--el-primary-dark); color: var(--el-tint-strong); padding: 22px 0; font-size: .8125rem; }
-.el-footer-bottom .script { font-family: "Pinyon Script", "Snell Roundhand", cursive; font-size: 1.9rem; color: var(--el-gold); line-height: 1; }
+.el-footer-bottom .sign { font-family: var(--font-display); font-weight: 600; letter-spacing: .02em; font-size: 1.35rem; color: var(--el-gold); line-height: 1; }
 .el-footer-bottom a { color: var(--el-tint-strong); }
 .el-footer-bottom a:hover { color: var(--el-gold); }
 

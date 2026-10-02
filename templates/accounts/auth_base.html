@@ -14,7 +14,7 @@
     </div>
   </aside>
   <div class="auth-panel">
-    <a href="{% url 'core:landing' %}" aria-label="EventLead, retour à l'accueil">{% include "partials/_logo.html" %}</a>
+    <a href="{% url 'core:landing' %}" aria-label="EventLead, retour à l'accueil">{% include "partials/_logo.html" with stacked=True %}</a>
     <div class="auth-card">
       {% block panel %}{% endblock %}
     </div>
