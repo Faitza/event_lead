@@ -35,30 +35,6 @@ class EventQuerySet(models.QuerySet):
         ).exclude(status=Event.Status.DRAFT).distinct()
 
 
-class EventGroup(models.Model):
-    """Regroupe plusieurs événements liés (ex. cérémonie, réception et brunch d'un mariage)."""
-
-    title = models.CharField("titre", max_length=200)
-    description = models.TextField("description", blank=True)
-    cover_image = models.ImageField("photo de couverture", upload_to="events/groups/", null=True, blank=True)
-    created_at = models.DateTimeField("créé le", auto_now_add=True)
-
-    class Meta:
-        ordering = ["title"]
-        verbose_name = "groupe d'événements"
-        verbose_name_plural = "groupes d'événements"
-
-    def __str__(self):
-        return self.title
-
-    @property
-    def cover_url(self):
-        if self.cover_image:
-            return self.cover_image.url
-        first = self.events.all().first()
-        return first.cover_url if first else static(PLACEHOLDER_COVERS[0])
-
-
 class Event(models.Model):
     class EventType(models.TextChoices):
         PUBLIC = "public", "Public"
@@ -87,11 +63,6 @@ class Event(models.Model):
     price_htg = models.DecimalField(
         "prix du billet (HTG)", max_digits=10, decimal_places=2, null=True, blank=True,
         help_text="Laisser vide si l'événement est gratuit.",
-    )
-    group = models.ForeignKey(
-        EventGroup, on_delete=models.SET_NULL, null=True, blank=True, related_name="events",
-        verbose_name="groupe d'événements",
-        help_text="Facultatif : regroupe cet événement avec d'autres (cérémonie, réception, brunch...).",
     )
     created_by = models.ForeignKey(
         settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, null=True, related_name="events_created",

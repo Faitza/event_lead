@@ -8,14 +8,14 @@ from accounts.decorators import vip_organizer_required
 from ads.models import Ad
 
 from .forms import EvaluationForm
-from .listing import public_cards
 from .models import Event, EventEvaluation, Guest
 
 
 def explore(request):
     """Exploration des événements publics (fin du parcours invité)."""
+    events = Event.objects.public_active().upcoming()
     ads = Ad.objects.filter(is_active=True)[:3]
-    return render(request, "events/explore.html", {"cards": public_cards(), "ads": ads})
+    return render(request, "events/explore.html", {"events": events, "ads": ads})
 
 
 def public_detail(request, pk):
@@ -26,10 +26,7 @@ def public_detail(request, pk):
     invitation = None
     if request.user.is_authenticated:
         invitation = event.guests.filter(user=request.user).first()
-    siblings = []
-    if event.group_id:
-        siblings = event.group.events.public_active().upcoming().exclude(pk=event.pk)
-    return render(request, "events/public_detail.html", {"event": event, "invitation": invitation, "siblings": siblings})
+    return render(request, "events/public_detail.html", {"event": event, "invitation": invitation})
 
 
 def _can_evaluate(event, user):

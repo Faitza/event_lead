@@ -3,7 +3,7 @@ import csv
 from urllib.parse import quote
 
 from django.contrib import messages
-from django.db.models import Count, Max, Min, Q
+from django.db.models import Count, Q
 from django.http import HttpResponse, JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.template.loader import render_to_string
@@ -14,9 +14,9 @@ from django.views.decorators.http import require_GET, require_POST
 from accounts.decorators import admin_required
 from gifts.models import GiftClaim
 
-from .forms import EventForm, EventGroupForm, GuestForm
+from .forms import EventForm, GuestForm
 from .geocoding import geocode_address
-from .models import Event, EventGroup, Guest
+from .models import Event, Guest
 
 # ---------------------------------------------------------------------------
 # Événements
@@ -25,7 +25,7 @@ from .models import Event, EventGroup, Guest
 
 @admin_required
 def event_list(request):
-    events = Event.objects.select_related("group").annotate(
+    events = Event.objects.annotate(
         num_guests=Count("guests", distinct=True),
         num_confirmed=Count("guests", filter=Q(guests__status=Guest.Status.CONFIRMED), distinct=True),
         num_gifts=Count("gifts", distinct=True),
@@ -37,57 +37,6 @@ def event_list(request):
     if etype in dict(Event.EventType.choices):
         events = events.filter(event_type=etype)
     return render(request, "dashboard/events/list.html", {"events": events, "q": q, "etype": etype})
-
-
-# ---------------------------------------------------------------------------
-# Groupes d'événements
-# ---------------------------------------------------------------------------
-
-
-@admin_required
-def group_list(request):
-    groups = EventGroup.objects.annotate(
-        num_events=Count("events", distinct=True),
-        num_public=Count("events", filter=Q(events__event_type=Event.EventType.PUBLIC), distinct=True),
-        first_date=Min("events__date"),
-        last_date=Max("events__date"),
-    )
-    return render(request, "dashboard/groups/list.html", {"groups": groups})
-
-
-def _group_form_page(request, group=None):
-    form = EventGroupForm(request.POST or None, request.FILES or None, instance=group)
-    if request.method == "POST" and form.is_valid():
-        form.save()
-        messages.success(request, "Groupe créé." if group is None else "Groupe mis à jour.")
-        return redirect("dashboard:group_list")
-    return render(request, "dashboard/groups/form.html", {"form": form, "group": group, "is_new": group is None})
-
-
-@admin_required
-def group_create(request):
-    return _group_form_page(request)
-
-
-@admin_required
-def group_edit(request, pk):
-    return _group_form_page(request, get_object_or_404(EventGroup, pk=pk))
-
-
-@admin_required
-def group_delete(request, pk):
-    group = get_object_or_404(EventGroup, pk=pk)
-    if request.method == "POST":
-        group.delete()
-        messages.success(request, "Groupe supprimé. Ses événements sont conservés.")
-        return redirect("dashboard:group_list")
-    count = group.events.count()
-    return render(request, "dashboard/confirm_delete.html", {
-        "object": group, "kind": "le groupe", "blocked": False,
-        "note": f"Les {count} événement{'s' if count > 1 else ''} du groupe ne sont pas supprimés : "
-                "ils redeviennent des événements indépendants." if count else "",
-        "cancel_url": reverse("dashboard:group_list"),
-    })
 
 
 def _save_event(request, form):

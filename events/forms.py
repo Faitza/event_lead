@@ -1,14 +1,14 @@
 from django import forms
 from django.contrib.auth import get_user_model
 
-from .models import Event, EventEvaluation, EventGroup, Guest
+from .models import Event, EventEvaluation, Guest
 
 
 class EventForm(forms.ModelForm):
     class Meta:
         model = Event
         fields = [
-            "title", "group", "event_type", "status", "date", "time", "venue", "latitude", "longitude",
+            "title", "event_type", "status", "date", "time", "venue", "latitude", "longitude",
             "max_guests", "allow_companions", "max_companions", "evaluation_delay_days",
             "price_htg", "description", "cover_image", "cover_video",
         ]
@@ -23,10 +23,6 @@ class EventForm(forms.ModelForm):
             "cover_video": forms.ClearableFileInput(attrs={"accept": "video/*"}),
         }
 
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.fields["group"].empty_label = "Aucun groupe"
-
     def clean(self):
         cleaned = super().clean()
         if not cleaned.get("allow_companions"):
@@ -39,49 +35,6 @@ class EventForm(forms.ModelForm):
         if lng is not None and not -180 <= lng <= 180:
             self.add_error("longitude", "Longitude invalide.")
         return cleaned
-
-
-class EventGroupForm(forms.ModelForm):
-    """Groupe d'événements : on coche les événements qui en font partie (rattacher ou détacher)."""
-
-    events = forms.ModelMultipleChoiceField(
-        label="Événements du groupe", queryset=Event.objects.none(), required=False,
-        widget=forms.CheckboxSelectMultiple(attrs={"class": "form-check-input"}),
-    )
-
-    class Meta:
-        model = EventGroup
-        fields = ["title", "description", "cover_image"]
-        widgets = {
-            "description": forms.Textarea(attrs={"rows": 3}),
-            "cover_image": forms.ClearableFileInput(attrs={"accept": "image/*"}),
-        }
-        help_texts = {"cover_image": "Facultatif : à défaut, la photo du premier événement est utilisée."}
-
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        field = self.fields["events"]
-        field.queryset = Event.objects.select_related("group").order_by("-date", "title")
-        field.label_from_instance = self._label
-        if self.instance.pk:
-            self.initial["events"] = list(self.instance.events.values_list("pk", flat=True))
-
-    def _label(self, event):
-        label = f"{event.title} · {event.date:%d/%m/%Y} · {event.get_event_type_display()}"
-        if event.group_id and event.group_id != self.instance.pk:
-            label += f" (déjà dans « {event.group.title} », sera déplacé)"
-        return label
-
-    def save(self, commit=True):
-        group = super().save(commit=commit)
-        if commit:
-            self.save_events()
-        return group
-
-    def save_events(self):
-        chosen = list(self.cleaned_data["events"].values_list("pk", flat=True))
-        Event.objects.filter(group=self.instance).exclude(pk__in=chosen).update(group=None)
-        Event.objects.filter(pk__in=chosen).update(group=self.instance)
 
 
 class GuestForm(forms.ModelForm):

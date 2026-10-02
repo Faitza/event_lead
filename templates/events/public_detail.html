@@ -21,17 +21,6 @@
           <h2 class="h4 mb-3">À propos de l'événement</h2>
           <p class="mb-0">{{ event.description|default:"Plus d'informations bientôt."|linebreaksbr }}</p>
         </div>
-        {% if siblings %}
-        <div class="el-card el-card-body mb-4">
-          <h2 class="h4 mb-1">Dans le même groupe</h2>
-          <p class="text-muted small mb-2">{{ event.group.title }}</p>
-          <ul class="group-events">
-            {% for e in siblings %}
-            <li><a href="{{ e.get_absolute_url }}"><span class="gd"><b>{{ e.date|date:"d" }}</b>{{ e.date|date:"M" }}</span><span class="gt">{{ e.title }}<small>{{ e.time|time:"H\hi" }} &middot; {{ e.venue|truncatechars:40 }}</small></span><span class="gp">{% if e.price_htg %}{{ e.price_htg|floatformat:0|intcomma }} HTG{% else %}Gratuit{% endif %}</span></a></li>
-            {% endfor %}
-          </ul>
-        </div>
-        {% endif %}
         {% if event.cover_video %}
         <div class="el-card overflow-hidden mb-4"><video src="{{ event.cover_video.url }}" controls preload="none" class="w-100" style="display:block"></video></div>
         {% endif %}

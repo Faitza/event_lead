@@ -34,7 +34,7 @@ Mot de passe commun : `EventLead2026!`
 
 La commande affiche aussi un lien magique `/invitation/<uuid>/` d'un invité en attente pour tester le parcours complet sans connexion. `python manage.py seed_demo --reset` repart de zéro.
 
-Le jeu de démonstration contient 7 événements (4 publics, un mariage et son brunch privés, un anniversaire passé pour tester l'évaluation) et 2 groupes : « Festival Kompa 2026 » (deux événements publics, une seule carte sur l'accueil) et « Mariage de Sarah et Jean-Marc » (événements privés, invisibles au public), 11 invités à différents statuts, 8 cadeaux sur le mariage (dont 4 déjà choisis), 3 publicités actives (une seule, « Pâtisserie Kay Dous », est dans la séquence après réponse), 3 avis et 4 paiements.
+Le jeu de démonstration contient 5 événements (3 publics, un mariage privé, un anniversaire passé pour tester l'évaluation), 11 invités à différents statuts, 8 cadeaux sur le mariage (dont 4 déjà choisis), 3 publicités actives (une seule, « Pâtisserie Kay Dous », est dans la séquence après réponse), 3 avis et 4 paiements.
 
 ## Paiements en mode démo
 
@@ -61,7 +61,7 @@ Sans ces valeurs, le bouton « Continuer avec Google » est affiché désactivé
 |---|---|
 | `accounts` | `CustomUser` (rôle, téléphone, avatar, `is_vip`), connexion e-mail, inscription invité / organisateur, décorateurs `@role_required` et `@vip_organizer_required` |
 | `core` | Landing page (Accueil, événements publics, Services, À propos, Contact), `Review`, `ContactMessage`, tableau de bord admin, commande `seed_demo`, tests |
-| `events` | `Event`, `EventGroup`, `Guest`, `EventEvaluation`, CRUD admin, exports CSV/PDF, géocodage, portail Organisateur, flux invité multi-étapes |
+| `events` | `Event`, `Guest`, `EventEvaluation`, CRUD admin, exports CSV/PDF, géocodage, portail Organisateur, flux invité multi-étapes |
 | `gifts` | `Gift`, `GiftClaim`, `services.py` (écriture atomique), gestion admin et export CSV |
 | `ads` | `Ad`, page publicité avec compte à rebours, suivi des vues et clics |
 | `payments` | `Payment`, billetterie, accès VIP, historique admin |
@@ -72,7 +72,7 @@ Sans ces valeurs, le bouton « Continuer avec Google » est affiché désactivé
 |---|---|
 | `/` | Accueil : défilé des publications, événements publics et billets, puis services, avis et contact |
 | `/connexion/`, `/inscription/`, `/inscription/organisateur/` | Authentification |
-| `/admin-dashboard/` (+ `evenements/`, `groupes/`, `invites/`, `cadeaux/`, `publicites/`, `paiements/`, `messages/`) | Administrateur |
+| `/admin-dashboard/` (+ `evenements/`, `invites/`, `cadeaux/`, `publicites/`, `paiements/`, `messages/`) | Administrateur |
 | `/organisateur/` | Portail Organisateur VIP |
 | `/organisateur/devenir-vip/` | Paiement de l'accès VIP |
 | `/invitation/<uuid:token>/` | Flux invité (présence, cadeaux, récapitulatif, confirmation), sans compte ni connexion : le lien personnel suffit |
@@ -92,14 +92,6 @@ Sans ces valeurs, le bouton « Continuer avec Google » est affiché désactivé
 Pour un visiteur non connecté, l'accueil s'ouvre sur un titre d'accroche, puis une bande « Comment ça marche » en trois étapes (inviter, répondre en un lien, cadeaux sans doublon). Les textes de la page publique sont réunis dans `marketing/landing.md` (projet partagé) ; aucun chiffre promotionnel n'est affiché sans source dans les données. Le pied de page est celui de la première version (quatre colonnes), avec le logo clair et le nom écrit en texte.
 
 La page d'accueil affiche un défilé qui alterne publications actives, événements publics à venir et billets (événements publics payants, avec prix en HTG et en USD). Il se met en pause au survol, au focus clavier ou avec le bouton « Mettre en pause », et devient une bande défilable à la main si l'utilisateur préfère les animations réduites. Après connexion, un invité ou un organisateur VIP arrive sur cet accueil, avec un bandeau de bienvenue à la place du grand héros ; l'administrateur arrive sur son tableau de bord.
-
-## Groupes d'événements
-
-Un `EventGroup` (titre, description, photo de couverture facultative) réunit des événements liés, par exemple la cérémonie, la réception et le brunch d'un mariage, ou les deux soirées d'un festival. `Event.group` est une clé étrangère facultative : supprimer un groupe ne supprime jamais ses événements (`SET_NULL`).
-
-- Administrateur : `/admin-dashboard/groupes/` pour créer, modifier ou supprimer un groupe et cocher les événements à rattacher ou détacher (un événement déjà dans un autre groupe est déplacé) ; le groupe peut aussi être choisi dans le formulaire d'un événement.
-- Public et accueil connecté : un groupe s'affiche comme une seule carte contenant ses événements publics à venir (accueil, `/evenements/`, défilé) ; les événements privés d'un groupe restent invisibles, et un groupe sans événement public n'apparaît pas. La page d'un événement liste les autres événements de son groupe. Les billets restent achetables événement par événement.
-- Le parcours d'invitation ne change pas : un lien par invité et par événement.
 
 ## Règles métier du module cadeaux
 
@@ -122,7 +114,7 @@ Chaque invité possède un `magic_token`. Dans `/admin-dashboard/invites/`, l'ad
 python manage.py test
 ```
 
-45 tests couvrent la règle « dernière unité », la transaction annulée en cas de conflit, le caractère définitif des réponses, le parcours invité complet jusqu'à la publicité puis l'accueil, le défilé de l'accueil, les redirections après connexion, les règles d'accès par rôle, le paiement VIP et l'affichage de chaque page principale, l'absence de connexion forcée sur le parcours invité et la page d'accueil publique.
+35 tests couvrent la règle « dernière unité », la transaction annulée en cas de conflit, le caractère définitif des réponses, le parcours invité complet jusqu'à la publicité puis l'accueil, le défilé de l'accueil, les redirections après connexion, les règles d'accès par rôle, le paiement VIP et l'affichage de chaque page principale, l'absence de connexion forcée sur le parcours invité et la page d'accueil publique.
 
 ## Production
 
