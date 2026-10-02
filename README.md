@@ -108,3 +108,4 @@ python manage.py test
 - `python manage.py collectstatic`, servir `staticfiles/` (WhiteNoise ou serveur web).
 - Médias : définir `DEFAULT_FILE_STORAGE_BACKEND` (S3 via `django-storages`, ou Cloudinary) et installer le paquet correspondant.
 - Les photos d'ambiance sont des placeholders Unsplash ; remplacez-les par les photos du client (couvertures d'événements via l'admin, images de la landing dans `templates/core/landing.html`).
+# event_lead
