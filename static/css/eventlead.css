@@ -161,22 +161,21 @@ h1 em, h2 em, h3 em, .disp em { color: var(--el-gold); font-style: italic; }
 .icon-bubble.lg { width: 84px; height: 84px; font-size: 2.2rem; }
 
 /* --------------------------------------------------------------------------
-   Logo : toujours sur fond blanc (barres blanches) pour rester lisible
+   Logo d'origine, sans retouche : toujours sur fond blanc (barres blanches, badge blanc du pied de page)
    -------------------------------------------------------------------------- */
 .brand-lockup { display: inline-flex; align-items: center; gap: 12px; line-height: 1; }
-.brand-mark { height: 64px; width: auto; display: block; transition: height var(--el-ease); }
+.brand-mark { height: 104px; width: auto; display: block; transition: height var(--el-ease); }
 .brand-name { font-family: var(--font-display); font-weight: 600; letter-spacing: .02em; font-size: 1.2rem; color: var(--el-primary); transition: font-size var(--el-ease); }
-.brand-lockup.on-dark .brand-name { color: #fff; }
 .brand-lockup.stacked { flex-direction: column; gap: 8px; }
-.el-nav.scrolled .brand-mark { height: 50px; }
+.el-nav.scrolled .brand-mark { height: 88px; }
 .el-nav.scrolled .brand-name { font-size: 1.05rem; }
-.dash-sidebar .brand-mark { height: 52px; }
+.dash-sidebar .brand-mark { height: 96px; }
 .dash-sidebar .brand-name { font-size: 1.05rem; }
-.inv-topbar .brand-mark, .ad-topbar .brand-mark { height: 42px; }
+.inv-topbar .brand-mark, .ad-topbar .brand-mark { height: 72px; }
 .inv-topbar .brand-name, .ad-topbar .brand-name { font-size: 1rem; }
-.el-footer .brand-mark { height: 72px; }
+.el-footer .brand-mark { height: 104px; }
 .el-footer .brand-name { font-size: 1.1rem; }
-.auth-panel .brand-mark { height: 84px; }
+.auth-panel .brand-mark { height: 130px; }
 .auth-panel .brand-name { font-size: 1.45rem; }
 
 /* --------------------------------------------------------------------------
@@ -190,16 +189,16 @@ h1 em, h2 em, h3 em, .disp em { color: var(--el-gold); font-style: italic; }
 
 .el-nav { position: sticky; top: 0; z-index: 1030; background: #fff; box-shadow: 0 1px 0 var(--el-line); padding: 0; transition: box-shadow var(--el-ease); }
 .el-nav.scrolled { box-shadow: 0 6px 20px rgba(44, 3, 59, .08); }
-.el-nav .container { min-height: 100px; transition: min-height var(--el-ease); }
-.el-nav.scrolled .container { min-height: 76px; }
+.el-nav .container { min-height: 124px; transition: min-height var(--el-ease); }
+.el-nav.scrolled .container { min-height: 104px; }
 .el-nav .navbar-nav { gap: 30px; }
 .el-nav .nav-link, .navl { font-size: .8125rem; font-weight: 500; letter-spacing: .14em; text-transform: uppercase; color: var(--el-primary-dark); padding: 8px 0 !important; border-bottom: 2px solid transparent; border-radius: 0; transition: border-color var(--el-ease), color var(--el-ease); background: transparent; }
 .el-nav .nav-link:hover, .el-nav .nav-link.active, .navl:hover, .navl.active { color: var(--el-primary-dark); border-color: var(--el-gold); background: transparent; }
 .user-pill { display: inline-flex; align-items: center; gap: .5rem; padding: .25rem .7rem .25rem .25rem; border-radius: 999px; background: var(--el-tint); color: var(--el-text); font-weight: 500; font-size: .9rem; }
 .avatar { width: 34px; height: 34px; border-radius: 50%; background: var(--el-gradient); color: #fff; display: inline-flex; align-items: center; justify-content: center; font-weight: 600; font-size: .8rem; object-fit: cover; }
 @media (max-width: 991px) {
-  .el-nav .container { min-height: 78px; }
-  .el-nav .brand-mark, .el-nav.scrolled .brand-mark { height: 46px; }
+  .el-nav .container, .el-nav.scrolled .container { min-height: 96px; }
+  .el-nav .brand-mark, .el-nav.scrolled .brand-mark { height: 80px; }
   .el-nav .brand-name, .el-nav.scrolled .brand-name { font-size: 1.05rem; }
   .el-nav .navbar-nav { gap: 6px; padding: .75rem 0; }
 }

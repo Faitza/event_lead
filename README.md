@@ -4,7 +4,7 @@ Plateforme web de gestion d'événements pour Haïti et la Caraïbe : invitation
 
 Stack : Python 3.11+, Django 5.1, PostgreSQL (SQLite en développement), django-allauth (Google), Leaflet + OpenStreetMap, geopy/Nominatim, xhtml2pdf, Bootstrap 5 + Bootstrap Icons. Interface 100 % en français, sans emoji.
 
-Direction visuelle « carton d'invitation de gala » : Bodoni Moda + Jost, filets et losanges dorés, photos en arche, billets perforés, logo à fond transparent, dessin d'origine intact avec le petit « EventLead » en script au centre (`static/img/eventlead-mark*.png`), avec le nom « EventLead » écrit en texte à côté (Bodoni Moda 600), sur des barres blanches et un badge blanc dans le pied de page. Les jetons de design sont dans `static/css/eventlead.css`.
+Direction visuelle « carton d'invitation de gala » : Bodoni Moda + Jost, filets et losanges dorés, photos en arche, billets perforés, logo d'origine (`EventLead.png`) sans aucune retouche du dessin, simplement rogné aux bords blancs (`static/img/eventlead-mark.png`, avec le petit « EventLead » en script au centre et le L coupé comme l'original), toujours sur fond blanc (barres blanches, badge blanc du pied de page), avec le nom « EventLead » écrit en texte à côté (Bodoni Moda 600). Les jetons de design sont dans `static/css/eventlead.css`.
 
 ## Démarrage rapide
 
