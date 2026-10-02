@@ -1,6 +1,7 @@
 {% extends "base.html" %}
 {% load static humanize %}
-{% block title %}Gérez vos événements avec élégance{% endblock %}
+{% block title %}Invitations, cadeaux et billets pour vos événements{% endblock %}
+{% block meta_description %}Invitations élégantes par WhatsApp ou e-mail, réponses en direct, liste de cadeaux sans doublon et billets payables par MonCash, NatCash, carte ou PayPal. Pour Haïti, la Caraïbe et la diaspora.{% endblock %}
 {% block extra_head %}<link rel="preload" as="image" href="{% static 'img/photos/hero-bg.jpg' %}">{% endblock %}
 {% block content %}
 
@@ -26,29 +27,55 @@
   <div class="hero-veil"></div>
   <div class="sunburst" aria-hidden="true"></div>
   <div class="container hero-inner">
-    <div class="row align-items-center g-4 g-lg-5">
-      <div class="col-lg-7 d-flex flex-column gap-4">
+    <div class="row">
+      <div class="col-lg-8 d-flex flex-column gap-4">
         <div class="eyebrow-row light"><span class="diamond"></span><span class="eyebrow">Haïti &middot; Caraïbe &middot; Diaspora</span></div>
-        <h1 class="disp">Gérez vos événements avec <em>élégance</em></h1>
-        <p class="lead mb-0">Invitations par WhatsApp ou e-mail, réponses suivies en temps réel, liste de cadeaux partagée et paiement MonCash, NatCash, carte ou PayPal.</p>
+        <h1 class="disp">Votre invitation, en <em>beauté</em>. Vos invités, sans stress.</h1>
+        <p class="lead mb-0">Mariage, gala, baptême ou anniversaire&nbsp;: envoyez une invitation élégante par WhatsApp ou par e-mail. Vos invités répondent en un clic, sans compte ni application, et vous voyez qui vient en direct.</p>
         <div class="d-flex flex-wrap gap-3">
-          <a href="{% url 'accounts:register' %}" class="btn btn-gold btn-lg">Commencer maintenant</a>
-          <a href="#affiche" class="btn btn-light-ghost btn-lg">Découvrir</a>
+          <a href="#contact" class="btn btn-gold btn-lg">Organiser mon événement</a>
+          <a href="#comment-ca-marche" class="btn btn-light-ghost btn-lg">Voir comment ça marche</a>
         </div>
-      </div>
-      <div class="col-lg-5">
-        <div class="hero-stage">
-          <div class="arch-frame"><div class="arch-img"><img src="{% static 'img/photos/hero-arch.jpg' %}" alt="Lumières de réception"></div></div>
-          <div class="hero-invite">
-            <span class="eyebrow">Exemple d'invitation privée</span>
-            <span class="names">Nadège &amp; Ricardo</span>
-            <span class="small text-muted">Samedi 14 novembre 2026 &middot; Pétion-Ville</span>
-            <div class="rsvp-bar"><div style="width:57%;background:#10B981"></div><div style="width:26%;background:#F59E0B"></div><div style="width:17%;background:#EF4444"></div></div>
-            <div class="d-flex justify-content-between small" style="color:#4B5563"><span><strong>142</strong> confirmés</span><span>248 invités</span></div>
-          </div>
-        </div>
+        <ul class="hero-points" aria-label="Les points forts d'EventLead">
+          <li><span class="diamond"></span>Sans compte pour l'invité</li>
+          <li><span class="diamond"></span>Cadeaux sans doublon</li>
+          <li><span class="diamond"></span>MonCash, NatCash, carte, PayPal</li>
+        </ul>
       </div>
     </div>
+  </div>
+</section>
+
+{# ========================= COMMENT ÇA MARCHE ========================= #}
+<section id="comment-ca-marche" class="section section-white" aria-labelledby="how-titre">
+  <div class="container">
+    <div class="d-flex flex-column align-items-center text-center gap-3 mb-5 reveal">
+      <div class="eyebrow-row center"><span class="diamond"></span></div>
+      <span class="eyebrow">Comment ça marche</span>
+      <h2 id="how-titre" class="section-title mb-0" style="max-width:14em">Simple comme un message WhatsApp</h2>
+      <p class="how-sub">De l'invitation au jour J, vous gardez la main et vos invités n'ont rien à apprendre.</p>
+    </div>
+    <ol class="how-steps reveal">
+      <li class="how-step">
+        <span class="num" aria-hidden="true">1</span>
+        <span class="icon-bubble"><i class="bi bi-whatsapp"></i></span>
+        <h3>Vous invitez</h3>
+        <p>Chaque invité reçoit un lien personnel par WhatsApp ou par e-mail, avec une invitation soignée à l'image de votre fête.</p>
+      </li>
+      <li class="how-step">
+        <span class="num" aria-hidden="true">2</span>
+        <span class="icon-bubble"><i class="bi bi-check2-circle"></i></span>
+        <h3>Ils répondent en un lien</h3>
+        <p>Pas de compte, pas de mot de passe, pas d'application&nbsp;: l'invité confirme sa présence et ses accompagnants en quelques secondes.</p>
+      </li>
+      <li class="how-step">
+        <span class="num" aria-hidden="true">3</span>
+        <span class="icon-bubble"><i class="bi bi-gift"></i></span>
+        <h3>Un cadeau, une seule fois</h3>
+        <p>Chaque cadeau choisi est aussitôt réservé&nbsp;: personne n'offre deux fois la même chose, et vous suivez les réponses en direct.</p>
+      </li>
+    </ol>
+    <div class="text-center mt-5 reveal"><a href="#contact" class="btn btn-outline-primary">Parler de mon événement<i class="bi bi-arrow-right ms-2"></i></a></div>
   </div>
 </section>
 {% endif %}
@@ -61,7 +88,7 @@
     <div class="parade-legend">
       <div class="d-flex flex-column gap-3">
         <div class="eyebrow-row light"><span class="diamond"></span><span class="eyebrow">À l'affiche</span></div>
-        <h2 id="affiche-titre" class="disp mb-0">Publications, événements et billets</h2>
+        <h2 id="affiche-titre" class="disp mb-0">Événements, billets et bonnes adresses</h2>
       </div>
       <div class="d-flex flex-wrap align-items-center gap-3">
         <div class="chips"><span class="chip">Publication</span><span class="chip">Événement public</span><span class="chip">Billet</span></div>
@@ -78,24 +105,14 @@
 </section>
 {% endif %}
 
-{# ============================ CHIFFRES ============================ #}
-<section class="stat-strip" aria-label="Chiffres clés">
-  <div class="container">
-    <div class="row">
-      <div class="col-md-4 stat"><div class="value">{{ stats.events|intcomma }}</div><div class="label">événements organisés</div></div>
-      <div class="col-md-4 stat"><div class="value">{{ stats.invitations|intcomma }}</div><div class="label">invitations envoyées</div></div>
-      <div class="col-md-4 stat"><div class="value">{{ stats.satisfaction }}&nbsp;%</div><div class="label">de satisfaction</div></div>
-    </div>
-  </div>
-</section>
-
 {# ===================== ÉVÉNEMENTS PUBLICS À VENIR ===================== #}
 <section id="evenements" class="section">
   <div class="container">
     <div class="d-flex flex-wrap justify-content-between align-items-end gap-3 mb-5 reveal">
       <div class="d-flex flex-column gap-3">
         <div class="eyebrow-row"><span class="diamond"></span><span class="eyebrow">Ouverts à tous</span></div>
-        <h2 class="section-title mb-0">Événements publics à venir</h2>
+        <h2 class="section-title mb-0" style="max-width:15em">Les prochains rendez-vous à ne pas manquer</h2>
+        <p class="mb-0" style="color:#4B5563;max-width:36em">Des événements ouverts à tous. Réservez votre billet en gourdes avec MonCash ou NatCash, ou par carte et PayPal.</p>
       </div>
       <a href="{% url 'payments:ticketing' %}" class="btn btn-outline-primary">Voir la billetterie</a>
     </div>
@@ -116,7 +133,7 @@
     <div class="d-flex flex-column align-items-center text-center gap-3 mb-5 reveal">
       <div class="eyebrow-row center"><span class="diamond"></span></div>
       <span class="eyebrow">Services</span>
-      <h2 class="section-title mb-0" style="max-width:14em">Tout le cycle de l'événement, au même endroit</h2>
+      <h2 class="section-title mb-0" style="max-width:15em">Tout ce qu'il faut pour une fête réussie, au même endroit</h2>
     </div>
     <div class="service-grid reveal">
       {% for icon, title, text in services %}
@@ -136,8 +153,8 @@
   <div class="container position-relative d-flex flex-wrap align-items-center gap-4" style="max-width:1100px">
     <div class="vip-seal"><span>VIP</span></div>
     <div class="flex-grow-1" style="flex-basis:380px">
-      <h2 class="disp mb-2">Devenez Organisateur VIP</h2>
-      <p class="mb-0" style="color:var(--el-tint-strong);max-width:38em">Accédez au détail de tous les événements publics, aux événements privés où vous êtes invité et à l'évaluation après la fête.</p>
+      <h2 class="disp mb-2">Rejoignez les Organisateurs VIP</h2>
+      <p class="mb-0" style="color:var(--el-tint-strong);max-width:38em">Un accès privilégié&nbsp;: le détail de tous les événements publics, les soirées privées où l'on vous invite et l'évaluation de chaque fête une fois terminée.</p>
     </div>
     <a href="{% if user.is_authenticated %}{% url 'accounts:become_organizer' %}{% else %}{% url 'accounts:register_organizer' %}{% endif %}" class="btn btn-gold btn-lg">Devenir Organisateur VIP</a>
   </div>
@@ -153,10 +170,10 @@
       <div class="col-lg-6 reveal d-flex flex-column gap-3">
         <div class="eyebrow-row"><span class="diamond"></span><span class="eyebrow">À propos</span></div>
         <h2 class="section-title mb-0">Fini les listes sur WhatsApp et les cadeaux en double</h2>
-        <p class="mb-0" style="font-size:1.0625rem;line-height:1.7;color:#4B5563;max-width:34em">EventLead réunit les invités, les réponses, les cadeaux et les paiements dans une seule plateforme, pensée pour une connexion mobile et pour les familles dispersées entre Port-au-Prince, Miami et Montréal.</p>
+        <p class="mb-0" style="font-size:1.0625rem;line-height:1.7;color:#4B5563;max-width:34em">EventLead réunit invités, réponses, cadeaux et paiements au même endroit. Pensé pour le mobile et pour les familles dispersées entre Port-au-Prince, Miami et Montréal&nbsp;: un seul lien, et chacun répond d'où il est.</p>
         <div class="d-flex flex-wrap pt-2">
           <div class="key-figure pe-4"><div class="value">4</div><div class="label">modes de paiement</div></div>
-          <div class="key-figure px-4" style="border-left:1px solid var(--el-border)"><div class="value">70&nbsp;%</div><div class="label">de réponses visées</div></div>
+          <div class="key-figure px-4" style="border-left:1px solid var(--el-border)"><div class="value">1</div><div class="label">lien par invité</div></div>
           <div class="key-figure ps-4" style="border-left:1px solid var(--el-border)"><div class="value">0</div><div class="label">cadeau en double</div></div>
         </div>
       </div>
@@ -213,7 +230,8 @@
     <div class="row g-4 g-lg-5 align-items-center">
       <div class="col-lg-5 reveal d-flex flex-column gap-3">
         <div class="eyebrow-row"><span class="diamond"></span><span class="eyebrow">Contact</span></div>
-        <h2 class="section-title mb-2">Parlons de votre prochain événement</h2>
+        <h2 class="section-title mb-0">Votre mariage, votre gala, votre anniversaire&nbsp;: parlons-en</h2>
+        <p class="mb-2" style="color:#4B5563">Racontez-nous votre projet. Nous vous répondons par WhatsApp ou par e-mail.</p>
         <div class="contact-item"><i class="bi bi-geo-alt"></i>{{ CONTACT_ADDRESS }}</div>
         <div class="contact-item"><i class="bi bi-envelope"></i><a href="mailto:{{ CONTACT_EMAIL }}" style="color:inherit">{{ CONTACT_EMAIL }}</a></div>
         <div class="contact-item"><i class="bi bi-telephone"></i>{{ CONTACT_PHONE }}</div>

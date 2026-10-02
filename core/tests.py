@@ -113,6 +113,16 @@ class InvitationFlowTests(TestCase):
     def url(self, name, *extra):
         return reverse(f"events:{name}", args=[self.token, *extra])
 
+    def test_guest_never_asked_to_log_in(self):
+        """Le lien personnel suffit : aucune étape du parcours ne renvoie vers la connexion."""
+        login = reverse("accounts:login")
+        for name in ("invitation", "invitation_gift_question", "invitation_gift_list", "invitation_recap"):
+            r = self.client.get(self.url(name))
+            self.assertNotIn(login, r.get("Location", ""), name)
+            self.assertIn(r.status_code, (200, 302), name)
+        self.assertEqual(self.client.get(self.url("invitation")).status_code, 200)
+        self.assertEqual(self.client.get(self.url("invitation_ad", self.ad.pk)).status_code, 200)
+
     def test_full_flow_with_gift(self):
         r = self.client.get(self.url("invitation"))
         self.assertContains(r, "Serez-vous")
@@ -210,6 +220,20 @@ class HomeParadeTests(TestCase):
         self.assertNotContains(r, "Pub inactive")
         kinds = [k for k, _ in r.context["parade"]]
         self.assertTrue({"ad", "event", "ticket"} <= set(kinds))
+
+    def test_public_landing_explains_how_it_works_without_invented_figures(self):
+        r = self.client.get(reverse("core:landing"))
+        self.assertContains(r, 'id="comment-ca-marche"')
+        self.assertContains(r, "sans compte ni application")
+        self.assertNotContains(r, "de satisfaction")
+        self.assertNotContains(r, "de réponses visées")
+        self.assertNotContains(r, "hero-invite")
+
+    def test_footer_is_the_original_four_column_one(self):
+        r = self.client.get(reverse("core:landing"))
+        self.assertContains(r, "Espace pro")
+        self.assertContains(r, "La plateforme élégante pour organiser vos mariages")
+        self.assertNotContains(r, 'class="sign"')
 
     def test_parade_hidden_when_nothing_to_show(self):
         Event.objects.all().delete()
