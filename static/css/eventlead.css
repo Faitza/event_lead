@@ -65,7 +65,7 @@ h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6, .disp {
   font-family: var(--font-display); font-weight: 400 !important; letter-spacing: 0; color: var(--el-primary-dark);
 }
 h1 em, h2 em, h3 em, .disp em { color: var(--el-gold); font-style: italic; }
-.section-title { color: var(--el-primary-dark); font-size: clamp(2rem, 4.2vw, 3.25rem); line-height: 1.05; text-wrap: balance; }
+.section-title { color: var(--el-primary-dark); font-size: clamp(1.75rem, 3.5vw, 2.7rem); line-height: 1.05; text-wrap: balance; }
 
 /* Ornements : filet doré + losange */
 .diamond { width: 7px; height: 7px; background: var(--el-gold); transform: rotate(45deg); flex: none; display: inline-block; }
@@ -165,19 +165,19 @@ h1 em, h2 em, h3 em, .disp em { color: var(--el-gold); font-style: italic; }
    -------------------------------------------------------------------------- */
 .brand-lockup { display: inline-flex; align-items: center; gap: 12px; line-height: 1; }
 .brand-mark { height: 64px; width: auto; display: block; transition: height var(--el-ease); }
-.brand-name { font-family: var(--font-display); font-weight: 600; letter-spacing: .02em; font-size: 1.75rem; color: var(--el-primary); transition: font-size var(--el-ease); }
+.brand-name { font-family: var(--font-display); font-weight: 600; letter-spacing: .02em; font-size: 1.2rem; color: var(--el-primary); transition: font-size var(--el-ease); }
 .brand-lockup.on-dark .brand-name { color: #fff; }
 .brand-lockup.stacked { flex-direction: column; gap: 8px; }
 .el-nav.scrolled .brand-mark { height: 50px; }
-.el-nav.scrolled .brand-name { font-size: 1.5rem; }
+.el-nav.scrolled .brand-name { font-size: 1.05rem; }
 .dash-sidebar .brand-mark { height: 52px; }
-.dash-sidebar .brand-name { font-size: 1.5rem; }
+.dash-sidebar .brand-name { font-size: 1.05rem; }
 .inv-topbar .brand-mark, .ad-topbar .brand-mark { height: 42px; }
-.inv-topbar .brand-name, .ad-topbar .brand-name { font-size: 1.35rem; }
+.inv-topbar .brand-name, .ad-topbar .brand-name { font-size: 1rem; }
 .el-footer .brand-mark { height: 56px; }
-.el-footer .brand-name { font-size: 1.6rem; }
+.el-footer .brand-name { font-size: 1.1rem; }
 .auth-panel .brand-mark { height: 84px; }
-.auth-panel .brand-name { font-size: 2.1rem; }
+.auth-panel .brand-name { font-size: 1.45rem; }
 
 /* --------------------------------------------------------------------------
    Barre d'annonce + navigation (barre blanche porteuse du logo)
@@ -200,7 +200,7 @@ h1 em, h2 em, h3 em, .disp em { color: var(--el-gold); font-style: italic; }
 @media (max-width: 991px) {
   .el-nav .container { min-height: 78px; }
   .el-nav .brand-mark, .el-nav.scrolled .brand-mark { height: 46px; }
-  .el-nav .brand-name, .el-nav.scrolled .brand-name { font-size: 1.35rem; }
+  .el-nav .brand-name, .el-nav.scrolled .brand-name { font-size: 1.05rem; }
   .el-nav .navbar-nav { gap: 6px; padding: .75rem 0; }
 }
 
@@ -215,7 +215,7 @@ h1 em, h2 em, h3 em, .disp em { color: var(--el-gold); font-style: italic; }
 .hero .hero-veil { position: absolute; inset: 0; background: linear-gradient(100deg, rgba(44, 3, 59, .95) 0%, rgba(44, 3, 59, .84) 48%, rgba(69, 6, 92, .5) 100%); }
 .hero .sunburst { right: -140px; top: -80px; width: 1000px; height: 1000px; }
 .hero-inner { position: relative; padding-top: 96px; padding-bottom: 108px; }
-.hero h1 { color: #fff; font-size: clamp(2.6rem, 6vw, 4.5rem); line-height: 1.02; text-wrap: balance; }
+.hero h1 { color: #fff; font-size: clamp(2.2rem, 4.8vw, 3.6rem); line-height: 1.02; text-wrap: balance; }
 .hero .lead { font-size: 1.1875rem; line-height: 1.65; color: var(--el-tint-strong); max-width: 34em; }
 .hero-points { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 10px 28px; font-size: .8125rem; letter-spacing: .14em; text-transform: uppercase; color: var(--el-tint-strong); }
 .hero-points li { display: inline-flex; align-items: center; gap: 12px; }
@@ -225,6 +225,7 @@ h1 em, h2 em, h3 em, .disp em { color: var(--el-gold); font-style: italic; }
 .arch-img { overflow: hidden; border-radius: 180px 180px 16px 16px; height: 540px; background: var(--el-gradient); }
 .arch-img img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform .3s ease; }
 .arch-frame:hover .arch-img img { transform: scale(1.03); }
+.hero-photo { width: 100%; max-width: 420px; margin: 0 auto; }
 @media (max-width: 575px) {
   .hero-inner { padding-top: 64px; padding-bottom: 72px; }
   .arch-img { height: 400px; }
@@ -233,7 +234,7 @@ h1 em, h2 em, h3 em, .disp em { color: var(--el-gold); font-style: italic; }
 /* Bandeau d'accueil pour un visiteur connecté */
 .hero-welcome { position: relative; overflow: hidden; background: linear-gradient(110deg, #2C033B, #45065C); color: #fff; }
 .hero-welcome .inner { position: relative; padding-top: 48px; padding-bottom: 44px; }
-.hero-welcome h1 { color: #fff; font-size: clamp(2.2rem, 4.6vw, 3.4rem); line-height: 1.05; }
+.hero-welcome h1 { color: #fff; font-size: clamp(2rem, 3.8vw, 2.8rem); line-height: 1.05; }
 
 .key-figure .value { font-family: var(--font-display); font-size: clamp(2.4rem, 4.6vw, 3.4rem); line-height: 1.1; color: var(--el-primary); }
 .key-figure .label { font-size: .6875rem; text-transform: uppercase; letter-spacing: .2em; color: var(--el-muted); }

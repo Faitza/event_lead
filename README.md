@@ -121,4 +121,4 @@ python manage.py test
 - `DEBUG=False`, `SECRET_KEY`, `ALLOWED_HOSTS` et `DATABASE_URL` (PostgreSQL) dans l'environnement.
 - `python manage.py collectstatic`, servir `staticfiles/` (WhiteNoise ou serveur web).
 - Médias : définir `DEFAULT_FILE_STORAGE_BACKEND` (S3 via `django-storages`, ou Cloudinary) et installer le paquet correspondant.
-- Les photos d'ambiance (`static/img/photos/`) sont des visuels de remplacement : remplacez-les par les photos du client (couvertures d'événements via l'admin, images de l'accueil dans `templates/core/landing.html`). Les polices sont chargées depuis Google Fonts.
+- La photo en arche du haut de page est `static/img/photos/hero-arch.jpg` (portrait, environ 4/5, sans texte par-dessus) : remplacez ce fichier par la photo du client. Les photos d'ambiance (`static/img/photos/`) sont des visuels de remplacement : remplacez-les par les photos du client (couvertures d'événements via l'admin, images de l'accueil dans `templates/core/landing.html`). Les polices sont chargées depuis Google Fonts.

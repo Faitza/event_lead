@@ -27,8 +27,8 @@
   <div class="hero-veil"></div>
   <div class="sunburst" aria-hidden="true"></div>
   <div class="container hero-inner">
-    <div class="row">
-      <div class="col-lg-8 d-flex flex-column gap-4">
+    <div class="row align-items-center g-4 g-lg-5">
+      <div class="col-lg-7 d-flex flex-column gap-4">
         <div class="eyebrow-row light"><span class="diamond"></span><span class="eyebrow">Haïti &middot; Caraïbe &middot; Diaspora</span></div>
         <h1 class="disp">Votre invitation, en <em>beauté</em>. Vos invités, sans stress.</h1>
         <p class="lead mb-0">Mariage, gala, baptême ou anniversaire&nbsp;: envoyez une invitation élégante par WhatsApp ou par e-mail. Vos invités répondent en un clic, sans compte ni application, et vous voyez qui vient en direct.</p>
@@ -41,6 +41,10 @@
           <li><span class="diamond"></span>Cadeaux sans doublon</li>
           <li><span class="diamond"></span>MonCash, NatCash, carte, PayPal</li>
         </ul>
+      </div>
+      <div class="col-lg-5">
+        {# Photo d'accueil : remplacer static/img/photos/hero-arch.jpg (portrait, environ 4/5) par la photo du client, sans texte par-dessus #}
+        <div class="hero-photo"><div class="arch-frame"><div class="arch-img"><img src="{% static 'img/photos/hero-arch.jpg' %}" alt="Lumières de réception"></div></div></div>
       </div>
     </div>
   </div>
