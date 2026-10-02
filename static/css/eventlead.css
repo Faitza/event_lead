@@ -174,7 +174,7 @@ h1 em, h2 em, h3 em, .disp em { color: var(--el-gold); font-style: italic; }
 .dash-sidebar .brand-name { font-size: 1.05rem; }
 .inv-topbar .brand-mark, .ad-topbar .brand-mark { height: 42px; }
 .inv-topbar .brand-name, .ad-topbar .brand-name { font-size: 1rem; }
-.el-footer .brand-mark { height: 56px; }
+.el-footer .brand-mark { height: 72px; }
 .el-footer .brand-name { font-size: 1.1rem; }
 .auth-panel .brand-mark { height: 84px; }
 .auth-panel .brand-name { font-size: 1.45rem; }
@@ -399,7 +399,8 @@ h1 em, h2 em, h3 em, .disp em { color: var(--el-gold); font-style: italic; }
 .el-footer { background: var(--el-primary-dark); color: rgba(255, 255, 255, .72); padding: 3.5rem 0 2rem; }
 .el-footer a { color: rgba(255, 255, 255, .8); }
 .el-footer a:hover { color: var(--el-gold); }
-.el-footer .brand-lockup { color: #fff; }
+.el-footer .footer-badge { display: inline-flex; background: #fff; border: 1px solid var(--el-gold); border-radius: 14px; padding: 12px 20px; }
+.el-footer .footer-badge:hover { background: #fff; }
 .el-footer h4 { font-family: var(--font-body); color: #fff; font-size: .95rem; font-weight: 700 !important; margin-bottom: 1rem; }
 
 /* Apparition progressive au défilement (IntersectionObserver) */
