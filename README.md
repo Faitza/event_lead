@@ -34,7 +34,7 @@ Mot de passe commun : `EventLead2026!`
 
 La commande affiche aussi un lien magique `/invitation/<uuid>/` d'un invité en attente pour tester le parcours complet sans connexion. `python manage.py seed_demo --reset` repart de zéro.
 
-Le jeu de démonstration contient 5 événements (3 publics, un mariage privé, un anniversaire passé pour tester l'évaluation), 11 invités à différents statuts, 8 cadeaux sur le mariage (dont 4 déjà choisis), 3 publicités actives (une seule, « Pâtisserie Kay Dous », est dans la séquence après réponse), 3 avis et 4 paiements.
+Le jeu de démonstration contient 6 catégories (Mariage, Gala, Anniversaire, Baptême, Conférence, Concert), 6 événements rangés dans ces catégories (4 publics, un mariage privé, un anniversaire passé pour tester l'évaluation), 11 invités à différents statuts, 8 cadeaux sur le mariage (dont 4 déjà choisis), 3 publicités actives (une seule, « Pâtisserie Kay Dous », est dans la séquence après réponse), 3 avis et 4 paiements.
 
 ## Paiements en mode démo
 
@@ -61,7 +61,7 @@ Sans ces valeurs, le bouton « Continuer avec Google » est affiché désactivé
 |---|---|
 | `accounts` | `CustomUser` (rôle, téléphone, avatar, `is_vip`), connexion e-mail, inscription invité / organisateur, décorateurs `@role_required` et `@vip_organizer_required` |
 | `core` | Landing page (Accueil, événements publics, Services, À propos, Contact), `Review`, `ContactMessage`, tableau de bord admin, commande `seed_demo`, tests |
-| `events` | `Event`, `Guest`, `EventEvaluation`, CRUD admin, exports CSV/PDF, géocodage, portail Organisateur, flux invité multi-étapes |
+| `events` | `Event`, `EventCategory`, `Guest`, `EventEvaluation`, CRUD admin (événements, catégories, invités), exports CSV/PDF, géocodage, portail Organisateur, flux invité multi-étapes |
 | `gifts` | `Gift`, `GiftClaim`, `services.py` (écriture atomique), gestion admin et export CSV |
 | `ads` | `Ad`, page publicité avec compte à rebours, suivi des vues et clics |
 | `payments` | `Payment`, billetterie, accès VIP, historique admin |
@@ -72,12 +72,12 @@ Sans ces valeurs, le bouton « Continuer avec Google » est affiché désactivé
 |---|---|
 | `/` | Accueil : défilé des publications, événements publics et billets, puis services, avis et contact |
 | `/connexion/`, `/inscription/`, `/inscription/organisateur/` | Authentification |
-| `/admin-dashboard/` (+ `evenements/`, `invites/`, `cadeaux/`, `publicites/`, `paiements/`, `messages/`) | Administrateur |
+| `/admin-dashboard/` (+ `evenements/`, `categories/`, `invites/`, `cadeaux/`, `publicites/`, `paiements/`, `messages/`) | Administrateur |
 | `/organisateur/` | Portail Organisateur VIP |
 | `/organisateur/devenir-vip/` | Paiement de l'accès VIP |
 | `/invitation/<uuid:token>/` | Flux invité (présence, cadeaux, récapitulatif, confirmation), sans compte ni connexion : le lien personnel suffit |
 | `/invitation/<uuid:token>/publicite/<int:ad_id>/` | Page publicité |
-| `/evenements/` | Exploration des événements publics |
+| `/evenements/` (+ `?categorie=<identifiant>`) | Exploration des événements publics, filtrable par catégorie |
 | `/billetterie/` | Billetterie |
 | `/django-admin/` | Back-office Django natif |
 
@@ -92,6 +92,10 @@ Sans ces valeurs, le bouton « Continuer avec Google » est affiché désactivé
 Pour un visiteur non connecté, l'accueil s'ouvre sur un titre d'accroche, puis une bande « Comment ça marche » en trois étapes (inviter, répondre en un lien, cadeaux sans doublon). Les textes de la page publique sont réunis dans `marketing/landing.md` (projet partagé) ; aucun chiffre promotionnel n'est affiché sans source dans les données. Le pied de page est celui de la première version (quatre colonnes), avec le logo clair et le nom écrit en texte.
 
 La page d'accueil affiche un défilé qui alterne publications actives, événements publics à venir et billets (événements publics payants, avec prix en HTG et en USD). Il se met en pause au survol, au focus clavier ou avec le bouton « Mettre en pause », et devient une bande défilable à la main si l'utilisateur préfère les animations réduites. Après connexion, un invité ou un organisateur VIP arrive sur cet accueil, avec un bandeau de bienvenue à la place du grand héros ; l'administrateur arrive sur son tableau de bord.
+
+## Catégories d'événements
+
+Un événement peut avoir une catégorie (`Event.category`, facultative). L'administrateur gère les catégories dans `/admin-dashboard/categories/` (nom, icône Bootstrap Icons, ordre d'affichage) et choisit la catégorie dans le formulaire d'événement. Supprimer une catégorie ne supprime pas ses événements : ils n'ont simplement plus de catégorie. Sur l'accueil et sur `/evenements/`, une rangée de filtres au-dessus des événements publics (`?categorie=<identifiant>`, filtre côté serveur) ne propose que les catégories qui ont au moins un événement public à venir ; chaque carte d'événement porte un badge de catégorie. Un identifiant inconnu est ignoré. Le défilé « À l'affiche » n'est pas filtré. Après un `git pull`, lancez `python manage.py migrate` ; `python manage.py seed_demo --reset` recrée les catégories de démonstration.
 
 ## Règles métier du module cadeaux
 
@@ -114,7 +118,7 @@ Chaque invité possède un `magic_token`. Dans `/admin-dashboard/invites/`, l'ad
 python manage.py test
 ```
 
-35 tests couvrent la règle « dernière unité », la transaction annulée en cas de conflit, le caractère définitif des réponses, le parcours invité complet jusqu'à la publicité puis l'accueil, le défilé de l'accueil, les redirections après connexion, les règles d'accès par rôle, le paiement VIP et l'affichage de chaque page principale, l'absence de connexion forcée sur le parcours invité et la page d'accueil publique.
+50 tests couvrent la règle « dernière unité », la transaction annulée en cas de conflit, le caractère définitif des réponses, le parcours invité complet jusqu'à la publicité puis l'accueil, le défilé de l'accueil, les redirections après connexion, les règles d'accès par rôle, le paiement VIP et l'affichage de chaque page principale, l'absence de connexion forcée sur le parcours invité et la page d'accueil publique, et les catégories d'événements (gestion réservée à l'administrateur, filtre, badge, événements privés jamais exposés).
 
 ## Production
 

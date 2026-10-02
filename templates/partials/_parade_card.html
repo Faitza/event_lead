@@ -14,7 +14,7 @@
     <div class="arch-img">
       <img src="{{ obj.cover_url }}" alt="" loading="lazy" onerror="this.style.visibility='hidden'">
       <div class="date"><span class="d">{{ obj.date|date:"d" }}</span><span class="m">{{ obj.date|date:"M Y" }}</span></div>
-      <span class="tag">Public</span>
+      <span class="tag">{% if obj.category %}{{ obj.category.name }}{% else %}Public{% endif %}</span>
     </div>
   </div>
   <div class="meta">

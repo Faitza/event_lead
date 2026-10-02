@@ -23,6 +23,11 @@ urlpatterns = [
     path("evenements/<int:pk>/modifier/", events_admin.event_edit, name="event_edit"),
     path("evenements/<int:pk>/supprimer/", events_admin.event_delete, name="event_delete"),
     path("geocoder/", events_admin.geocode, name="geocode"),
+    # Catégories d'événements
+    path("categories/", events_admin.category_list, name="category_list"),
+    path("categories/nouvelle/", events_admin.category_create, name="category_create"),
+    path("categories/<int:pk>/modifier/", events_admin.category_edit, name="category_edit"),
+    path("categories/<int:pk>/supprimer/", events_admin.category_delete, name="category_delete"),
     # Invités
     path("invites/", events_admin.guest_list, name="guest_list"),
     path("invites/nouveau/", events_admin.guest_create, name="guest_create"),

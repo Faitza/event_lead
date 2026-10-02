@@ -2,7 +2,7 @@ from django.contrib import admin
 
 from gifts.models import Gift
 
-from .models import Event, EventEvaluation, Guest
+from .models import Event, EventCategory, EventEvaluation, Guest
 
 
 class GuestInline(admin.TabularInline):
@@ -18,10 +18,17 @@ class GiftInline(admin.TabularInline):
     fields = ("name", "icon_name", "quantity")
 
 
+@admin.register(EventCategory)
+class EventCategoryAdmin(admin.ModelAdmin):
+    list_display = ("name", "icon_name", "order")
+    list_editable = ("order",)
+    search_fields = ("name",)
+
+
 @admin.register(Event)
 class EventAdmin(admin.ModelAdmin):
-    list_display = ("title", "event_type", "status", "date", "time", "venue", "max_guests", "price_htg")
-    list_filter = ("event_type", "status", "allow_companions", "date")
+    list_display = ("title", "category", "event_type", "status", "date", "time", "venue", "max_guests", "price_htg")
+    list_filter = ("event_type", "status", "category", "allow_companions", "date")
     search_fields = ("title", "venue", "description")
     date_hierarchy = "date"
     inlines = [GuestInline, GiftInline]

@@ -8,7 +8,7 @@
   <div class="hero-veil"></div>
   <div class="sunburst" aria-hidden="true"></div>
   <div class="container inner py-lg-4">
-    <div class="eyebrow-row light mb-3"><span class="diamond"></span><span class="eyebrow">{% if event.is_public %}Événement public{% else %}Événement privé{% endif %}</span></div>
+    <div class="eyebrow-row light mb-3"><span class="diamond"></span><span class="eyebrow">{% if event.is_public %}Événement public{% else %}Événement privé{% endif %}{% if event.category %} &middot; {{ event.category.name }}{% endif %}</span></div>
     <h1 class="disp">{{ event.title }}</h1>
     <p class="mb-0 mt-3"><i class="bi bi-calendar3 me-2" style="color:var(--el-gold)"></i>{{ event.date|date:"l j F Y"|capfirst }} à {{ event.time|time:"H\hi" }}</p>
   </div>

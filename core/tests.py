@@ -8,7 +8,7 @@ from django.utils import timezone
 
 from accounts.models import CustomUser
 from ads.models import Ad
-from events.models import Event, Guest
+from events.models import Event, EventCategory, Guest
 from gifts.models import Gift, GiftClaim
 from gifts.services import GiftUnavailableError, ResponseLockedError, confirm_response
 from payments.models import Payment
@@ -302,6 +302,126 @@ class AccessRulesTests(TestCase):
         self.assertRedirects(r, reverse("dashboard:home"))
 
 
+class EventCategoryTests(TestCase):
+    def setUp(self):
+        self.gala_cat = EventCategory.objects.create(name="Gala", icon_name="bi-stars", order=1)
+        self.concert_cat = EventCategory.objects.create(name="Concert", icon_name="bi-music-note-beamed", order=2)
+        self.empty_cat = EventCategory.objects.create(name="Baptême", icon_name="bi-droplet", order=3)
+        self.gala = make_event(title="Grand gala", event_type="public", category=self.gala_cat)
+        self.concert = make_event(title="Concert kompa", event_type="public", category=self.concert_cat)
+        self.plain = make_event(title="Sans catégorie", event_type="public")
+        self.private = make_event(title="Mariage privé", category=self.empty_cat)
+        self.admin = make_user("adm@x.ht", role="admin")
+
+    def test_slug_is_generated_and_unique(self):
+        self.assertEqual(self.empty_cat.slug, "bapteme")
+        twin = EventCategory(name="Gala!")
+        twin.save()
+        self.assertEqual(twin.slug, "gala-2")
+
+    def test_landing_filters_by_category(self):
+        r = self.client.get(reverse("core:landing"), {"categorie": "concert"})
+        # Le filtre porte sur la section « événements publics » (le défilé « À l'affiche » reste complet).
+        section = r.content.decode().split('id="evenements"')[1].split('id="services"')[0]
+        self.assertIn("Concert kompa", section)
+        self.assertNotIn("Grand gala", section)
+        self.assertNotIn("Sans catégorie", section)
+        self.assertIn('class="cat-chip active"', section)
+
+    def test_explore_filters_by_category(self):
+        r = self.client.get(reverse("events:explore"), {"categorie": "gala"})
+        self.assertContains(r, "Grand gala")
+        self.assertNotContains(r, "Concert kompa")
+
+    def test_unknown_category_shows_everything(self):
+        r = self.client.get(reverse("events:explore"), {"categorie": "n-importe-quoi"})
+        for title in ("Grand gala", "Concert kompa", "Sans catégorie"):
+            self.assertContains(r, title)
+
+    def test_filter_row_lists_only_categories_with_public_events(self):
+        r = self.client.get(reverse("events:explore"))
+        self.assertContains(r, "?categorie=gala#evenements")
+        self.assertContains(r, "?categorie=concert#evenements")
+        self.assertNotContains(r, "?categorie=bapteme")
+
+    def test_private_event_category_is_not_exposed(self):
+        r = self.client.get(reverse("events:explore"), {"categorie": "bapteme"})
+        self.assertNotContains(r, "Mariage privé")
+        self.assertNotContains(r, "Baptême")
+
+    def test_cards_show_category_badge(self):
+        r = self.client.get(reverse("events:explore"))
+        self.assertContains(r, 'class="cat-badge"', count=2)
+
+    def test_detail_shows_category(self):
+        r = self.client.get(reverse("events:public_detail", args=[self.gala.pk]))
+        self.assertContains(r, "Événement public &middot; Gala")
+
+    def test_dashboard_category_pages_are_admin_only(self):
+        urls = [reverse("dashboard:category_list"), reverse("dashboard:category_create"),
+                reverse("dashboard:category_edit", args=[self.gala_cat.pk]),
+                reverse("dashboard:category_delete", args=[self.gala_cat.pk])]
+        for url in urls:
+            self.assertEqual(self.client.get(url).status_code, 302, url)
+        self.client.force_login(make_user("vip2@x.ht", role="organizer", is_vip=True))
+        for url in urls:
+            self.assertEqual(self.client.get(url).status_code, 403, url)
+        self.client.force_login(self.admin)
+        for url in urls:
+            self.assertEqual(self.client.get(url).status_code, 200, url)
+
+    def test_dashboard_lists_categories_in_display_order(self):
+        self.client.force_login(self.admin)
+        names = [c.name for c in self.client.get(reverse("dashboard:category_list")).context["categories"]]
+        self.assertEqual(names, ["Gala", "Concert", "Baptême"])
+
+    def test_admin_can_create_edit_and_delete_a_category(self):
+        self.client.force_login(self.admin)
+        r = self.client.post(reverse("dashboard:category_create"),
+                             {"name": "Fête de quartier", "icon_name": "bi-balloon", "order": 9})
+        self.assertRedirects(r, reverse("dashboard:category_list"))
+        cat = EventCategory.objects.get(name="Fête de quartier")
+        self.assertEqual(cat.slug, "fete-de-quartier")
+        self.client.post(reverse("dashboard:category_edit", args=[cat.pk]),
+                         {"name": "Fête de rue", "icon_name": "bi-cup-straw", "order": 4})
+        cat.refresh_from_db()
+        self.assertEqual((cat.name, cat.icon_name, cat.order, cat.slug), ("Fête de rue", "bi-cup-straw", 4, "fete-de-quartier"))
+        self.client.post(reverse("dashboard:category_delete", args=[cat.pk]))
+        self.assertFalse(EventCategory.objects.filter(pk=cat.pk).exists())
+
+    def test_category_name_must_be_unique_ignoring_case(self):
+        self.client.force_login(self.admin)
+        r = self.client.post(reverse("dashboard:category_create"),
+                             {"name": "gala", "icon_name": "bi-stars", "order": 1})
+        self.assertContains(r, "Une catégorie porte déjà ce nom.")
+        self.assertEqual(EventCategory.objects.filter(name__iexact="gala").count(), 1)
+
+    def test_deleting_a_category_keeps_its_events(self):
+        self.client.force_login(self.admin)
+        self.client.post(reverse("dashboard:category_delete", args=[self.gala_cat.pk]))
+        self.gala.refresh_from_db()
+        self.assertIsNone(self.gala.category)
+        self.assertTrue(Event.objects.filter(pk=self.gala.pk).exists())
+
+    def test_event_form_sets_the_category(self):
+        self.client.force_login(self.admin)
+        r = self.client.post(reverse("dashboard:event_edit", args=[self.plain.pk]), {
+            "title": "Sans catégorie", "event_type": "public", "status": "active",
+            "date": self.plain.date.isoformat(), "time": "15:00", "venue": "Pétion-Ville",
+            "max_guests": 50, "max_companions": 0, "evaluation_delay_days": 3,
+            "price_htg": 0, "category": self.concert_cat.pk,
+        })
+        self.assertRedirects(r, reverse("dashboard:event_detail", args=[self.plain.pk]))
+        self.plain.refresh_from_db()
+        self.assertEqual(self.plain.category, self.concert_cat)
+
+    def test_dashboard_event_list_filters_by_category(self):
+        self.client.force_login(self.admin)
+        r = self.client.get(reverse("dashboard:event_list"), {"categorie": "gala"})
+        self.assertContains(r, "Grand gala")
+        self.assertNotContains(r, "Concert kompa")
+
+
 class PaymentTests(TestCase):
     def setUp(self):
         self.user = make_user("new@x.ht", role="organizer")
@@ -360,6 +480,7 @@ class SmokeTests(TestCase):
         guest = event.guests.first()
         gift = event.gifts.first()
         ad = Ad.objects.first()
+        category = EventCategory.objects.first()
         urls = [
             reverse("dashboard:home"), reverse("dashboard:event_list"), reverse("dashboard:event_create"),
             reverse("dashboard:event_detail", args=[event.pk]), reverse("dashboard:event_live", args=[event.pk]),
@@ -368,6 +489,8 @@ class SmokeTests(TestCase):
             reverse("dashboard:guest_edit", args=[guest.pk]), reverse("dashboard:gift_list"),
             reverse("dashboard:gift_create"), reverse("dashboard:gift_edit", args=[gift.pk]),
             reverse("dashboard:ad_list"), reverse("dashboard:ad_create"), reverse("dashboard:ad_edit", args=[ad.pk]),
+            reverse("dashboard:category_list"), reverse("dashboard:category_create"),
+            reverse("dashboard:category_edit", args=[category.pk]),
             reverse("dashboard:payment_history"), reverse("dashboard:inbox"),
             reverse("dashboard:guest_export_csv"), reverse("dashboard:gift_export_csv"),
             reverse("dashboard:guest_export_pdf") + f"?event={event.pk}", "/django-admin/",

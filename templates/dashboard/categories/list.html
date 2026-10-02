@@ -1,0 +1,28 @@
+{% extends "dashboard/base_dashboard.html" %}
+{% block title %}Catégories{% endblock %}
+{% block dash_content %}
+<div class="page-head">
+  <div><h1>Catégories d'événements</h1><p>Mariage, gala, concert : les visiteurs filtrent les événements publics par catégorie.</p></div>
+  <a href="{% url 'dashboard:category_create' %}" class="btn btn-primary"><i class="bi bi-plus-lg me-2"></i>Nouvelle catégorie</a>
+</div>
+<div class="el-card">
+  {% if categories %}
+  <div class="table-wrap"><table class="table table-el">
+    <thead><tr><th>Catégorie</th><th>Ordre</th><th>Événements</th><th class="text-end">Actions</th></tr></thead>
+    <tbody>
+    {% for c in categories %}
+      <tr>
+        <td><div class="d-flex align-items-center gap-3"><span class="icon-bubble" style="width:40px;height:40px;font-size:1.1rem"><i class="bi {{ c.icon_name }}"></i></span><strong>{{ c.name }}</strong></div></td>
+        <td>{{ c.order }}</td>
+        <td>{% if c.num_events %}<a href="{% url 'dashboard:event_list' %}?categorie={{ c.slug }}">{{ c.num_events }}</a>{% else %}0{% endif %}</td>
+        <td class="text-end text-nowrap">
+          <a href="{% url 'dashboard:category_edit' c.pk %}" class="btn btn-sm btn-light" title="Modifier"><i class="bi bi-pencil"></i></a>
+          <a href="{% url 'dashboard:category_delete' c.pk %}" class="btn btn-sm btn-light text-danger" title="Supprimer"><i class="bi bi-trash3"></i></a>
+        </td>
+      </tr>
+    {% endfor %}
+    </tbody>
+  </table></div>
+  {% else %}<div class="empty-state"><i class="bi bi-tags"></i><p class="mt-2">Aucune catégorie.</p><a href="{% url 'dashboard:category_create' %}" class="btn btn-primary btn-sm">Créer une catégorie</a></div>{% endif %}
+</div>
+{% endblock %}

@@ -9,6 +9,7 @@
     <div class="nav-section">Pilotage</div>
     <a class="side-link {% if request.resolver_match.url_name == 'home' %}active{% endif %}" href="{% url 'dashboard:home' %}"><i class="bi bi-speedometer2"></i>Tableau de bord</a>
     <a class="side-link {% active '/admin-dashboard/evenements/' %}" href="{% url 'dashboard:event_list' %}"><i class="bi bi-calendar2-event"></i>Événements</a>
+    <a class="side-link {% active '/admin-dashboard/categories/' %}" href="{% url 'dashboard:category_list' %}"><i class="bi bi-tags"></i>Catégories</a>
     <a class="side-link {% active '/admin-dashboard/invites/' %}" href="{% url 'dashboard:guest_list' %}"><i class="bi bi-people"></i>Invités</a>
     <a class="side-link {% active '/admin-dashboard/cadeaux/' %}" href="{% url 'dashboard:gift_list' %}"><i class="bi bi-gift"></i>Cadeaux</a>
     <div class="nav-section">Revenus</div>

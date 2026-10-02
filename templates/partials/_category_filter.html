@@ -1,0 +1,6 @@
+{% if categories %}
+<nav class="cat-filter" aria-label="Filtrer les événements par catégorie">
+  <a href="{{ base_url }}{{ anchor }}" class="cat-chip{% if not selected_category %} active{% endif %}"{% if not selected_category %} aria-current="true"{% endif %}>Tous</a>
+  {% for c in categories %}<a href="{{ base_url }}?categorie={{ c.slug }}{{ anchor }}" class="cat-chip{% if selected_category == c %} active{% endif %}"{% if selected_category == c %} aria-current="true"{% endif %}><i class="bi {{ c.icon_name }}"></i>{{ c.name }}</a>{% endfor %}
+</nav>
+{% endif %}

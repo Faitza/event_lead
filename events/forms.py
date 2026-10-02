@@ -1,7 +1,15 @@
 from django import forms
 from django.contrib.auth import get_user_model
 
-from .models import Event, EventEvaluation, Guest
+from .models import Event, EventCategory, EventEvaluation, Guest
+
+CATEGORY_ICONS = [
+    ("bi-heart", "Mariage"), ("bi-stars", "Gala"), ("bi-balloon", "Fête"), ("bi-droplet", "Baptême"),
+    ("bi-mic", "Conférence"), ("bi-music-note-beamed", "Musique"), ("bi-cup-straw", "Soirée"),
+    ("bi-trophy", "Sport"), ("bi-mortarboard", "Diplômes"), ("bi-briefcase", "Affaires"),
+    ("bi-palette", "Art"), ("bi-film", "Cinéma"), ("bi-flower1", "Cérémonie"), ("bi-gift", "Cadeaux"),
+    ("bi-people", "Rencontre"), ("bi-calendar2-event", "Autre"),
+]
 
 
 class EventForm(forms.ModelForm):
@@ -10,7 +18,7 @@ class EventForm(forms.ModelForm):
         fields = [
             "title", "event_type", "status", "date", "time", "venue", "latitude", "longitude",
             "max_guests", "allow_companions", "max_companions", "evaluation_delay_days",
-            "price_htg", "description", "cover_image", "cover_video",
+            "price_htg", "description", "cover_image", "cover_video", "category",
         ]
         widgets = {
             "date": forms.DateInput(attrs={"type": "date"}, format="%Y-%m-%d"),
@@ -22,6 +30,10 @@ class EventForm(forms.ModelForm):
             "cover_image": forms.ClearableFileInput(attrs={"accept": "image/*"}),
             "cover_video": forms.ClearableFileInput(attrs={"accept": "video/*"}),
         }
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields["category"].empty_label = "Aucune catégorie"
 
     def clean(self):
         cleaned = super().clean()
@@ -35,6 +47,23 @@ class EventForm(forms.ModelForm):
         if lng is not None and not -180 <= lng <= 180:
             self.add_error("longitude", "Longitude invalide.")
         return cleaned
+
+
+class EventCategoryForm(forms.ModelForm):
+    icon_name = forms.ChoiceField(label="Icône", choices=CATEGORY_ICONS, widget=forms.RadioSelect)
+
+    class Meta:
+        model = EventCategory
+        fields = ["name", "icon_name", "order"]
+        widgets = {"name": forms.TextInput(attrs={"placeholder": "Ex : Mariage"})}
+        help_texts = {"order": "Les petits numéros s'affichent en premier."}
+
+    def clean_name(self):
+        name = " ".join(self.cleaned_data["name"].split())
+        clash = EventCategory.objects.filter(name__iexact=name).exclude(pk=self.instance.pk)
+        if clash.exists():
+            raise forms.ValidationError("Une catégorie porte déjà ce nom.")
+        return name
 
 
 class GuestForm(forms.ModelForm):

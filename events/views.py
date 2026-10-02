@@ -8,19 +8,22 @@ from accounts.decorators import vip_organizer_required
 from ads.models import Ad
 
 from .forms import EvaluationForm
+from .listing import public_events_by_category
 from .models import Event, EventEvaluation, Guest
 
 
 def explore(request):
     """Exploration des événements publics (fin du parcours invité)."""
-    events = Event.objects.public_active().upcoming()
+    events, categories, selected = public_events_by_category(request.GET.get("categorie", ""))
     ads = Ad.objects.filter(is_active=True)[:3]
-    return render(request, "events/explore.html", {"events": events, "ads": ads})
+    return render(request, "events/explore.html", {
+        "events": events, "categories": categories, "selected_category": selected, "ads": ads,
+    })
 
 
 def public_detail(request, pk):
     """Détail en lecture seule, sans informations sensibles (liste des invités, etc.)."""
-    event = Event.objects.visible_to(request.user).filter(pk=pk).first()
+    event = Event.objects.visible_to(request.user).select_related("category").filter(pk=pk).first()
     if event is None:
         raise Http404("Événement introuvable.")
     invitation = None
@@ -40,7 +43,7 @@ def _can_evaluate(event, user):
 @vip_organizer_required
 def organizer_portal(request):
     user = request.user
-    events = Event.objects.visible_to(user).order_by("date")
+    events = Event.objects.visible_to(user).select_related("category").order_by("date")
     today = timezone.localdate()
     upcoming, past = [], []
     evaluated = set(EventEvaluation.objects.filter(user=user).values_list("event_id", flat=True))

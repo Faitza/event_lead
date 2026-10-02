@@ -14,7 +14,7 @@ from django.utils import timezone
 from accounts.models import CustomUser
 from ads.models import Ad
 from core.models import ContactMessage, Review
-from events.models import Event, EventEvaluation, Guest
+from events.models import Event, EventCategory, EventEvaluation, Guest
 from gifts.models import Gift, GiftClaim
 from payments.models import Payment
 
@@ -33,6 +33,7 @@ class Command(BaseCommand):
             GiftClaim.objects.all().delete()
             Payment.objects.all().delete()
             Event.objects.all().delete()
+            EventCategory.objects.all().delete()
             Ad.objects.all().delete()
             Review.objects.all().delete()
             ContactMessage.objects.all().delete()
@@ -56,40 +57,58 @@ class Command(BaseCommand):
         user("nouveau.organisateur@eventlead.ht", "Mika", "Joseph", "organizer")
         guest_user = user("invite@eventlead.ht", "Nadège", "Louis", "guest", phone="+509 4011 2233")
 
+        # ------------------------------------------------------------------ Catégories
+        category_specs = [
+            ("Mariage", "bi-heart"), ("Gala", "bi-stars"), ("Anniversaire", "bi-balloon"),
+            ("Baptême", "bi-droplet"), ("Conférence", "bi-mic"), ("Concert", "bi-music-note-beamed"),
+        ]
+        cat = {
+            name: EventCategory.objects.update_or_create(name=name, defaults={"icon_name": icon, "order": i})[0]
+            for i, (name, icon) in enumerate(category_specs, start=1)
+        }
+
         # ------------------------------------------------------------------ Événements
         gala = Event.objects.create(
             title="Gala de la Saint-Valentin", event_type="public", status="active",
             date=today + timedelta(days=18), time=time(19, 30),
             venue="Hôtel Montana, Rue F. Cardozo, Pétion-Ville", latitude=18.5126, longitude=-72.2885,
-            max_guests=300, evaluation_delay_days=2, price_htg=Decimal("3500"), created_by=admin,
+            max_guests=300, evaluation_delay_days=2, price_htg=Decimal("3500"), created_by=admin, category=cat["Gala"],
             description="Dîner de gala, orchestre live et piste de danse sous les étoiles de Pétion-Ville. Tenue de soirée exigée.",
         )
         concert = Event.objects.create(
             title="Festival Kompa sur la plage", event_type="public", status="active",
             date=today + timedelta(days=32), time=time(16, 0),
             venue="Wahoo Bay Beach, Route Nationale 1, Arcahaie", latitude=18.8133, longitude=-72.5272,
-            max_guests=1500, price_htg=Decimal("1500"), created_by=admin,
+            max_guests=1500, price_htg=Decimal("1500"), created_by=admin, category=cat["Concert"],
             description="Les meilleurs groupes de kompa réunis pour une après-midi et une soirée au bord de la mer.",
         )
         Event.objects.create(
             title="Conférence Entreprendre en Haïti", event_type="public", status="active",
             date=today + timedelta(days=45), time=time(9, 0),
             venue="Marriott Port-au-Prince, Avenue Jean-Paul II, Turgeau", latitude=18.5333, longitude=-72.3243,
-            max_guests=250, created_by=admin,
+            max_guests=250, created_by=admin, category=cat["Conférence"],
             description="Une journée de rencontres et d'ateliers avec des entrepreneurs haïtiens et de la diaspora.",
+        )
+        Event.objects.create(
+            title="Concert de la chorale Voix d'Espérance", event_type="public", status="active",
+            date=today + timedelta(days=25), time=time(18, 0),
+            venue="Église du Sacré-Cœur, Turgeau, Port-au-Prince", latitude=18.5372, longitude=-72.3167,
+            max_guests=400, created_by=admin, category=cat["Concert"],
+            description="Une soirée de chants et de louanges, entrée libre. Venez en famille.",
         )
         wedding = Event.objects.create(
             title="Mariage de Sarah et Jean-Marc", event_type="private", status="active",
             date=today + timedelta(days=60), time=time(15, 0),
             venue="Église Saint-Pierre, Place Saint-Pierre, Pétion-Ville", latitude=18.5118, longitude=-72.2856,
             max_guests=180, allow_companions=True, max_companions=2, evaluation_delay_days=3, created_by=admin,
+            category=cat["Mariage"],
             description="Cérémonie religieuse à 15h, suivie de la réception au jardin de l'Hôtel Montana. Merci de confirmer votre présence avant le 15 du mois.",
         )
         anniversary = Event.objects.create(
             title="Anniversaire de Mme Duval - 60 ans", event_type="private", status="active",
             date=today - timedelta(days=7), time=time(18, 0),
             venue="Restaurant Quartier Latin, Pétion-Ville", latitude=18.5108, longitude=-72.2870,
-            max_guests=60, evaluation_delay_days=3, created_by=admin,
+            max_guests=60, evaluation_delay_days=3, created_by=admin, category=cat["Anniversaire"],
             description="Dîner surprise pour les 60 ans de Mme Duval.",
         )
 

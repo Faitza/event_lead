@@ -7,6 +7,7 @@ from django.urls import reverse
 from django.views.decorators.http import require_POST
 
 from ads.models import Ad
+from events.listing import public_events_by_category
 from events.models import Event
 
 from .forms import ContactForm, ReviewForm
@@ -25,7 +26,7 @@ SERVICES = [
 def build_parade(minimum=6):
     """Défilé de la page d'accueil : publications, événements publics et billets, en alternance."""
     ads = list(Ad.objects.filter(is_active=True)[:6])
-    events = list(Event.objects.public_active().upcoming()[:6])
+    events = list(Event.objects.public_active().upcoming().select_related("category")[:6])
     tickets = [e for e in events if e.is_paid]
     rows = zip_longest(
         [("ad", a) for a in ads],
@@ -40,9 +41,11 @@ def build_parade(minimum=6):
 
 def landing(request):
     reviews = Review.objects.filter(is_published=True)[:6]
-    public_events = Event.objects.public_active().upcoming()[:6]
+    public_events, categories, selected = public_events_by_category(request.GET.get("categorie", ""))
     context = {
-        "public_events": public_events,
+        "public_events": public_events[:6],
+        "categories": categories,
+        "selected_category": selected,
         "parade": build_parade(),
         "usd_rate": settings.HTG_TO_USD_RATE,
         "services": SERVICES,

@@ -8,6 +8,7 @@ from django.db.models import Q
 from django.templatetags.static import static
 from django.urls import reverse
 from django.utils import timezone
+from django.utils.text import slugify
 
 PLACEHOLDER_COVERS = [
     "img/photos/event-gala.jpg",
@@ -33,6 +34,32 @@ class EventQuerySet(models.QuerySet):
         return self.filter(
             Q(event_type=Event.EventType.PUBLIC, status=Event.Status.ACTIVE) | Q(guests__user=user)
         ).exclude(status=Event.Status.DRAFT).distinct()
+
+
+class EventCategory(models.Model):
+    """Catégorie d'événement (mariage, gala, concert...), utilisée pour filtrer les listes publiques."""
+
+    name = models.CharField("nom", max_length=60, unique=True)
+    slug = models.SlugField("identifiant dans l'adresse", max_length=70, unique=True, blank=True)
+    icon_name = models.CharField("icône", max_length=50, default="bi-calendar2-event")
+    order = models.PositiveSmallIntegerField("ordre d'affichage", default=0)
+
+    class Meta:
+        ordering = ["order", "name"]
+        verbose_name = "catégorie d'événements"
+        verbose_name_plural = "catégories d'événements"
+
+    def __str__(self):
+        return self.name
+
+    def save(self, *args, **kwargs):
+        if not self.slug:
+            base = slugify(self.name) or "categorie"
+            slug, n = base, 2
+            while EventCategory.objects.filter(slug=slug).exclude(pk=self.pk).exists():
+                slug, n = f"{base}-{n}", n + 1
+            self.slug = slug
+        super().save(*args, **kwargs)
 
 
 class Event(models.Model):
@@ -63,6 +90,10 @@ class Event(models.Model):
     price_htg = models.DecimalField(
         "prix du billet (HTG)", max_digits=10, decimal_places=2, null=True, blank=True,
         help_text="Laisser vide si l'événement est gratuit.",
+    )
+    category = models.ForeignKey(
+        EventCategory, on_delete=models.SET_NULL, null=True, blank=True, related_name="events",
+        verbose_name="catégorie",
     )
     created_by = models.ForeignKey(
         settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, null=True, related_name="events_created",

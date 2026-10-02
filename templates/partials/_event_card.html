@@ -4,6 +4,7 @@
     <div class="arch-img">
       <img src="{{ event.cover_url }}" alt="{{ event.title }}" loading="lazy" onerror="this.style.visibility='hidden'">
       <div class="date"><span class="d">{{ event.date|date:"d" }}</span><span class="m">{{ event.date|date:"M Y" }}</span></div>
+      {% if event.category %}<span class="cat-badge"><i class="bi {{ event.category.icon_name }}"></i>{{ event.category.name }}</span>{% endif %}
       <span class="badge-el">{% if event.is_public %}Public{% else %}Privé{% endif %}</span>
     </div>
   </div>

@@ -120,6 +120,8 @@
       </div>
       <a href="{% url 'payments:ticketing' %}" class="btn btn-outline-primary">Voir la billetterie</a>
     </div>
+    {% url 'core:landing' as landing_url %}
+    {% include "partials/_category_filter.html" with base_url=landing_url anchor="#evenements" %}
     <div class="row g-4 g-lg-5">
       {% for event in public_events %}
         <div class="col-md-6 col-lg-4 reveal">{% include "partials/_event_card.html" %}</div>
@@ -127,7 +129,7 @@
         <div class="col-12"><div class="el-card empty-state"><i class="bi bi-calendar2-heart"></i><p class="mt-2 mb-0">Aucun événement public pour le moment. Revenez bientôt.</p></div></div>
       {% endfor %}
     </div>
-    {% if public_events %}<div class="text-center mt-5"><a href="{% url 'events:explore' %}" class="btn btn-outline-primary">Voir tous les événements publics<i class="bi bi-arrow-right ms-2"></i></a></div>{% endif %}
+    {% if public_events %}<div class="text-center mt-5"><a href="{% url 'events:explore' %}{% if selected_category %}?categorie={{ selected_category.slug }}{% endif %}" class="btn btn-outline-primary">Voir tous les événements publics{% if selected_category %} : {{ selected_category.name }}{% endif %}<i class="bi bi-arrow-right ms-2"></i></a></div>{% endif %}
   </div>
 </section>
 

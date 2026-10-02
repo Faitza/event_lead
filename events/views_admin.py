@@ -14,9 +14,60 @@ from django.views.decorators.http import require_GET, require_POST
 from accounts.decorators import admin_required
 from gifts.models import GiftClaim
 
-from .forms import EventForm, GuestForm
+from .forms import EventCategoryForm, EventForm, GuestForm
 from .geocoding import geocode_address
-from .models import Event, Guest
+from .models import Event, EventCategory, Guest
+
+# ---------------------------------------------------------------------------
+# Catégories d'événements
+# ---------------------------------------------------------------------------
+
+
+@admin_required
+def category_list(request):
+    categories = EventCategory.objects.annotate(num_events=Count("events")).order_by("order", "name")
+    return render(request, "dashboard/categories/list.html", {"categories": categories})
+
+
+@admin_required
+def category_create(request):
+    last = EventCategory.objects.order_by("-order").first()
+    initial = {"icon_name": "bi-calendar2-event", "order": (last.order + 1) if last else 1}
+    form = EventCategoryForm(request.POST or None, initial=initial)
+    if request.method == "POST" and form.is_valid():
+        form.save()
+        messages.success(request, "Catégorie créée.")
+        return redirect("dashboard:category_list")
+    return render(request, "dashboard/categories/form.html", {"form": form, "is_new": True})
+
+
+@admin_required
+def category_edit(request, pk):
+    category = get_object_or_404(EventCategory, pk=pk)
+    form = EventCategoryForm(request.POST or None, instance=category)
+    if request.method == "POST" and form.is_valid():
+        form.save()
+        messages.success(request, "Catégorie mise à jour.")
+        return redirect("dashboard:category_list")
+    return render(request, "dashboard/categories/form.html", {"form": form, "category": category, "is_new": False})
+
+
+@admin_required
+def category_delete(request, pk):
+    category = get_object_or_404(EventCategory, pk=pk)
+    if request.method == "POST":
+        category.delete()
+        messages.success(request, "Catégorie supprimée. Ses événements sont conservés.")
+        return redirect("dashboard:category_list")
+    count = category.events.count()
+    note = ""
+    if count:
+        note = f"Les {count} événement{'s' if count > 1 else ''} de cette catégorie ne sont pas supprimés : ils n'auront simplement plus de catégorie."
+    return render(request, "dashboard/confirm_delete.html", {
+        "object": category, "kind": "la catégorie", "blocked": False, "note": note,
+        "cancel_url": reverse("dashboard:category_list"),
+    })
+
 
 # ---------------------------------------------------------------------------
 # Événements
@@ -29,14 +80,20 @@ def event_list(request):
         num_guests=Count("guests", distinct=True),
         num_confirmed=Count("guests", filter=Q(guests__status=Guest.Status.CONFIRMED), distinct=True),
         num_gifts=Count("gifts", distinct=True),
-    ).order_by("-date")
+    ).select_related("category").order_by("-date")
     q = request.GET.get("q", "").strip()
     etype = request.GET.get("type", "")
+    categories = EventCategory.objects.all()
+    category = next((c for c in categories if c.slug == request.GET.get("categorie", "")), None)
     if q:
         events = events.filter(Q(title__icontains=q) | Q(venue__icontains=q))
     if etype in dict(Event.EventType.choices):
         events = events.filter(event_type=etype)
-    return render(request, "dashboard/events/list.html", {"events": events, "q": q, "etype": etype})
+    if category:
+        events = events.filter(category=category)
+    return render(request, "dashboard/events/list.html", {
+        "events": events, "q": q, "etype": etype, "categories": categories, "category": category,
+    })
 
 
 def _save_event(request, form):
