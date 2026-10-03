@@ -1,11 +1,11 @@
-{% load humanize %}{% if kind == "ad" %}
+{% load humanize %}{% load i18n %}{% if kind == "ad" %}
 <a class="p-card p-ad" href="{% url 'ads:click' obj.pk %}" target="_blank" rel="noopener sponsored"{% if dup %} tabindex="-1"{% endif %}>
   <div class="in">
-    <span class="eyebrow">Publication partenaire</span>
+    <span class="eyebrow">{% trans "Publication partenaire" %}</span>
     <div class="pic">{% if obj.image %}<img src="{{ obj.image.url }}" alt="" loading="lazy">{% else %}<i class="bi {{ obj.icon_name }}"></i>{% endif %}</div>
     <h3>{{ obj.title }}</h3>
     <p>{{ obj.message|truncatechars:96 }}</p>
-    <span class="go">Visiter le site</span>
+    <span class="go">{% trans "Visiter le site" %}</span>
   </div>
 </a>
 {% elif kind == "event" %}
@@ -14,24 +14,24 @@
     <div class="arch-img">
       <img src="{{ obj.cover_url }}" alt="" loading="lazy" onerror="this.style.visibility='hidden'">
       <div class="date"><span class="d">{{ obj.date|date:"d" }}</span><span class="m">{{ obj.date|date:"M Y" }}</span></div>
-      <span class="tag">{% if obj.category %}{{ obj.category.name }}{% else %}Public{% endif %}</span>
+      <span class="tag">{% if obj.category %}{{ obj.category.label }}{% else %}{% trans "Public" %}{% endif %}</span>
     </div>
   </div>
   <div class="meta">
     <h3>{{ obj.title }}</h3>
-    <div class="where">{{ obj.venue|truncatechars:32 }} &middot; {% if obj.is_paid %}{{ obj.price_htg|floatformat:0|intcomma }} HTG{% else %}Gratuit{% endif %}</div>
+    <div class="where">{{ obj.venue|truncatechars:32 }} &middot; {% if obj.is_paid %}{{ obj.price_htg|floatformat:0|intcomma }} HTG{% else %}{% trans "Gratuit" %}{% endif %}</div>
   </div>
 </a>
 {% else %}
 <div class="p-card ticket">
   <div class="top">
-    <span class="eyebrow">Billet &middot; {{ obj.date|date:"j M Y" }}</span>
+    <span class="eyebrow">{% trans "Billet" %} &middot; {{ obj.date|date:_("j M Y") }}</span>
     <h3>{{ obj.title }}</h3>
     <span class="when">{{ obj.venue|truncatechars:34 }}</span>
   </div>
   <div class="bottom">
     <div class="price"><span class="htg">{{ obj.price_htg|floatformat:0|intcomma }} HTG</span><span class="usd">&asymp; {{ obj.price_usd }} USD</span></div>
-    <a class="btn btn-primary btn-sm align-self-start" href="{% url 'payments:checkout' obj.pk %}"{% if dup %} tabindex="-1"{% endif %}>Acheter un billet</a>
+    <a class="btn btn-primary btn-sm align-self-start" href="{% url 'payments:checkout' obj.pk %}"{% if dup %} tabindex="-1"{% endif %}>{% trans "Acheter un billet" %}</a>
   </div>
 </div>
 {% endif %}

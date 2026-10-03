@@ -1,27 +1,28 @@
 {% extends "dashboard/base_dashboard.html" %}
 {% load humanize %}
-{% block title %}Publicités{% endblock %}
+{% load i18n %}
+{% block title %}{% trans "Publicités" %}{% endblock %}
 {% block dash_content %}
 <div class="page-head">
-  <div><h1>Publicités partenaires</h1><p>Choisissez les publicités affichées après la réponse des invités et suivez leurs performances.</p></div>
-  <a href="{% url 'dashboard:ad_create' %}" class="btn btn-primary"><i class="bi bi-plus-lg me-2"></i>Nouvelle publicité</a>
+  <div><h1>{% trans "Publicités partenaires" %}</h1><p>{% trans "Choisissez les publicités affichées après la réponse des invités et suivez leurs performances." %}</p></div>
+  <a href="{% url 'dashboard:ad_create' %}" class="btn btn-primary"><i class="bi bi-plus-lg me-2"></i>{% trans "Nouvelle publicité" %}</a>
 </div>
 <div class="row g-3 mb-4">
-  <div class="col-md-4"><div class="el-card stat-card"><span class="icon-bubble"><i class="bi bi-eye"></i></span><div><div class="value">{{ totals.views|intcomma }}</div><div class="label">vues</div></div></div></div>
-  <div class="col-md-4"><div class="el-card stat-card"><span class="icon-bubble gold"><i class="bi bi-cursor"></i></span><div><div class="value">{{ totals.clicks|intcomma }}</div><div class="label">clics</div></div></div></div>
-  <div class="col-md-4"><div class="el-card stat-card"><span class="icon-bubble success"><i class="bi bi-graph-up-arrow"></i></span><div><div class="value">{{ totals.ctr }} %</div><div class="label">taux de clic (CTR)</div></div></div></div>
+  <div class="col-md-4"><div class="el-card stat-card"><span class="icon-bubble"><i class="bi bi-eye"></i></span><div><div class="value">{{ totals.views|intcomma }}</div><div class="label">{% trans "vues" %}</div></div></div></div>
+  <div class="col-md-4"><div class="el-card stat-card"><span class="icon-bubble gold"><i class="bi bi-cursor"></i></span><div><div class="value">{{ totals.clicks|intcomma }}</div><div class="label">{% trans "clics" %}</div></div></div></div>
+  <div class="col-md-4"><div class="el-card stat-card"><span class="icon-bubble success"><i class="bi bi-graph-up-arrow"></i></span><div><div class="value">{{ totals.ctr }} %</div><div class="label">{% trans "taux de clic (CTR)" %}</div></div></div></div>
 </div>
 <div class="el-card">
   {% if ads %}
   <div class="table-wrap"><table class="table table-el">
-    <thead><tr><th>Publicité</th><th>Vues</th><th>Clics</th><th>CTR</th><th>Après réponse</th><th>Active</th><th class="text-end">Actions</th></tr></thead>
+    <thead><tr><th>{% trans "Publicité" %}</th><th>{% trans "Vues" %}</th><th>{% trans "Clics" %}</th><th>CTR</th><th>{% trans "Après réponse" %}</th><th>{% trans "Active" %}</th><th class="text-end">{% trans "Actions" %}</th></tr></thead>
     <tbody>
     {% for ad in ads %}
       <tr>
         <td><div class="d-flex align-items-center gap-3"><span class="icon-bubble" style="width:40px;height:40px;font-size:1.1rem"><i class="bi {{ ad.icon_name }}"></i></span><div><strong>{{ ad.title }}</strong><div class="small text-muted">{{ ad.sponsor_link|truncatechars:40 }}</div></div></div></td>
         <td>{{ ad.views|intcomma }}</td><td>{{ ad.clicks|intcomma }}</td><td><strong>{{ ad.ctr }} %</strong></td>
-        <td><form method="post" action="{% url 'dashboard:ad_toggle' ad.pk %}">{% csrf_token %}<input type="hidden" name="field" value="show_after_reply"><button class="btn btn-sm {% if ad.show_after_reply %}btn-soft{% else %}btn-light{% endif %}">{% if ad.show_after_reply %}<i class="bi bi-check2 me-1"></i>Oui{% else %}Non{% endif %}</button></form></td>
-        <td><form method="post" action="{% url 'dashboard:ad_toggle' ad.pk %}">{% csrf_token %}<input type="hidden" name="field" value="is_active"><button class="btn btn-sm {% if ad.is_active %}btn-soft text-success{% else %}btn-light{% endif %}">{% if ad.is_active %}Active{% else %}Inactive{% endif %}</button></form></td>
+        <td><form method="post" action="{% url 'dashboard:ad_toggle' ad.pk %}">{% csrf_token %}<input type="hidden" name="field" value="show_after_reply"><button class="btn btn-sm {% if ad.show_after_reply %}btn-soft{% else %}btn-light{% endif %}">{% if ad.show_after_reply %}<i class="bi bi-check2 me-1"></i>{% trans "Oui" %}{% else %}{% trans "Non" %}{% endif %}</button></form></td>
+        <td><form method="post" action="{% url 'dashboard:ad_toggle' ad.pk %}">{% csrf_token %}<input type="hidden" name="field" value="is_active"><button class="btn btn-sm {% if ad.is_active %}btn-soft text-success{% else %}btn-light{% endif %}">{% if ad.is_active %}{% trans "Active" %}{% else %}{% trans "Inactive" %}{% endif %}</button></form></td>
         <td class="text-end text-nowrap">
           <a href="{% url 'dashboard:ad_edit' ad.pk %}" class="btn btn-sm btn-light"><i class="bi bi-pencil"></i></a>
           <a href="{% url 'dashboard:ad_delete' ad.pk %}" class="btn btn-sm btn-light text-danger"><i class="bi bi-trash3"></i></a>
@@ -30,6 +31,6 @@
     {% endfor %}
     </tbody>
   </table></div>
-  {% else %}<div class="empty-state"><i class="bi bi-megaphone"></i><p class="mt-2">Aucune publicité.</p></div>{% endif %}
+  {% else %}<div class="empty-state"><i class="bi bi-megaphone"></i><p class="mt-2">{% trans "Aucune publicité." %}</p></div>{% endif %}
 </div>
 {% endblock %}

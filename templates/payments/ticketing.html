@@ -1,30 +1,31 @@
 {% extends "base.html" %}
 {% load humanize %}
-{% block title %}Billetterie{% endblock %}
+{% load i18n %}
+{% block title %}{% trans "Billetterie" %}{% endblock %}
 {% block content %}
 <section class="section pt-5">
   <div class="container">
     <div class="page-title">
-      <div class="eyebrow-row"><span class="diamond"></span><span class="eyebrow">Événements payants</span></div>
-      <h1 class="disp">Billetterie</h1>
-      <p class="text-muted mb-0">Prix en gourdes, avec l'équivalent en dollars au taux de 1 HTG = {{ rate }} USD. Paiement par MonCash, NatCash, carte ou PayPal.</p>
+      <div class="eyebrow-row"><span class="diamond"></span><span class="eyebrow">{% trans "Événements payants" %}</span></div>
+      <h1 class="disp">{% trans "Billetterie" %}</h1>
+      <p class="text-muted mb-0">{% blocktranslate trimmed with rate=rate %}Prix en gourdes, avec l'équivalent en dollars au taux de 1 HTG = {{ rate }} USD. Paiement par MonCash, NatCash, carte ou PayPal.{% endblocktranslate %}</p>
     </div>
     <div class="d-flex flex-column gap-4">
       {% for event in events %}
       <article class="ticket-row reveal">
         <div class="t-img"><img src="{{ event.cover_url }}" alt="" loading="lazy" onerror="this.style.visibility='hidden'"></div>
         <div class="t-main">
-          <span class="eyebrow" style="font-size:.6875rem">{{ event.date|date:"l j F Y"|capfirst }}</span>
+          <span class="eyebrow" style="font-size:.6875rem">{{ event.date|date:_("l j F Y")|capfirst }}</span>
           <h2 class="disp"><a href="{{ event.get_absolute_url }}" style="color:inherit">{{ event.title }}</a></h2>
           <span class="small text-muted"><i class="bi bi-geo-alt me-1" style="color:var(--el-gold-text)"></i>{{ event.venue|truncatechars:56 }}</span>
         </div>
         <div class="t-buy">
           <span class="d-flex align-items-baseline gap-2 flex-wrap"><span class="htg">{{ event.price_htg|floatformat:0|intcomma }} HTG</span><span class="small text-muted">&asymp; {{ event.price_usd }} USD</span></span>
-          <a href="{% url 'payments:checkout' event.pk %}" class="btn btn-primary">Acheter un billet</a>
+          <a href="{% url 'payments:checkout' event.pk %}" class="btn btn-primary">{% trans "Acheter un billet" %}</a>
         </div>
       </article>
       {% empty %}
-      <div class="el-card empty-state"><i class="bi bi-ticket-perforated"></i><p class="mt-2 mb-0">Aucun événement payant pour le moment.</p></div>
+      <div class="el-card empty-state"><i class="bi bi-ticket-perforated"></i><p class="mt-2 mb-0">{% trans "Aucun événement payant pour le moment." %}</p></div>
       {% endfor %}
     </div>
   </div>

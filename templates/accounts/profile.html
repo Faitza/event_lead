@@ -1,9 +1,10 @@
 {% extends "base.html" %}
-{% block title %}Mon profil{% endblock %}
+{% load i18n %}
+{% block title %}{% trans "Mon profil" %}{% endblock %}
 {% block content %}
 <section class="section">
   <div class="container" style="max-width:720px">
-    <div class="page-head"><div><h1>Mon profil</h1><p>{{ user.email }} &middot; {{ user.get_role_display }}{% if user.is_vip_organizer %} <span class="badge-el badge-vip ms-1"><i class="bi bi-gem"></i>VIP</span>{% endif %}</p></div></div>
+    <div class="page-head"><div><h1>{% trans "Mon profil" %}</h1><p>{{ user.email }} &middot; {{ user.get_role_display }}{% if user.is_vip_organizer %} <span class="badge-el badge-vip ms-1"><i class="bi bi-gem"></i>VIP</span>{% endif %}</p></div></div>
     <div class="el-card el-card-body">
       <form method="post" enctype="multipart/form-data">
         {% csrf_token %}
@@ -12,8 +13,9 @@
           <div class="col-md-6">{% include "partials/_field.html" with field=form.last_name %}</div>
         </div>
         {% include "partials/_field.html" with field=form.phone %}
+        {% include "partials/_field.html" with field=form.language %}
         {% include "partials/_field.html" with field=form.avatar %}
-        <button class="btn btn-primary">Enregistrer</button>
+        <button class="btn btn-primary">{% trans "Enregistrer" %}</button>
       </form>
     </div>
   </div>

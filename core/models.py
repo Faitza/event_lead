@@ -2,36 +2,37 @@ import re
 
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
+from django.utils.translation import gettext_lazy as _
 
 
 class Review(models.Model):
-    name = models.CharField("nom", max_length=100)
-    stars = models.PositiveIntegerField("note", validators=[MinValueValidator(1), MaxValueValidator(5)])
-    text = models.TextField("avis")
-    is_published = models.BooleanField("publié", default=True)
+    name = models.CharField(_("nom"), max_length=100)
+    stars = models.PositiveIntegerField(_("note"), validators=[MinValueValidator(1), MaxValueValidator(5)])
+    text = models.TextField(_("avis"))
+    is_published = models.BooleanField(_("publié"), default=True)
     created_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:
         ordering = ["-created_at"]
-        verbose_name = "avis"
-        verbose_name_plural = "avis"
+        verbose_name = _("avis")
+        verbose_name_plural = _("avis")
 
     def __str__(self):
         return f"{self.name} ({self.stars}/5)"
 
 
 class ContactMessage(models.Model):
-    name = models.CharField("nom", max_length=100)
-    email = models.EmailField("email")
-    phone = models.CharField("téléphone", max_length=30, blank=True)
-    message = models.TextField("message")
-    is_read = models.BooleanField("lu", default=False)
+    name = models.CharField(_("nom"), max_length=100)
+    email = models.EmailField(_("email"))
+    phone = models.CharField(_("téléphone"), max_length=30, blank=True)
+    message = models.TextField(_("message"))
+    is_read = models.BooleanField(_("lu"), default=False)
     created_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:
         ordering = ["-created_at"]
-        verbose_name = "message de contact"
-        verbose_name_plural = "messages de contact"
+        verbose_name = _("message de contact")
+        verbose_name_plural = _("messages de contact")
 
     def __str__(self):
         return f"{self.name} - {self.email}"
@@ -41,29 +42,29 @@ class HelpRequest(models.Model):
     """Demande envoyée par le formulaire « J'ai besoin d'aide » et suivie par l'équipe."""
 
     class Topic(models.TextChoices):
-        INVITATION = "invitation", "Mon invitation ou ma réponse"
-        GIFT = "gift", "Les cadeaux"
-        PAYMENT = "payment", "Un paiement ou un billet"
-        VIP = "vip", "L'accès Organisateur VIP"
-        ORGANIZE = "organize", "Organiser mon événement"
-        OTHER = "other", "Autre question"
+        INVITATION = "invitation", _("Mon invitation ou ma réponse")
+        GIFT = "gift", _("Les cadeaux")
+        PAYMENT = "payment", _("Un paiement ou un billet")
+        VIP = "vip", _("L'accès Organisateur VIP")
+        ORGANIZE = "organize", _("Organiser mon événement")
+        OTHER = "other", _("Autre question")
 
     class Status(models.TextChoices):
-        NEW = "new", "Nouvelle"
-        IN_PROGRESS = "in_progress", "En cours"
-        RESOLVED = "resolved", "Résolue"
+        NEW = "new", _("Nouvelle")
+        IN_PROGRESS = "in_progress", _("En cours")
+        RESOLVED = "resolved", _("Résolue")
 
-    name = models.CharField("nom", max_length=100)
-    contact = models.CharField("e-mail ou téléphone", max_length=120)
-    topic = models.CharField("sujet", max_length=20, choices=Topic.choices, default=Topic.OTHER)
-    message = models.TextField("message", max_length=2000)
-    status = models.CharField("statut", max_length=20, choices=Status.choices, default=Status.NEW)
-    created_at = models.DateTimeField("reçue le", auto_now_add=True)
+    name = models.CharField(_("nom"), max_length=100)
+    contact = models.CharField(_("e-mail ou téléphone"), max_length=120)
+    topic = models.CharField(_("sujet"), max_length=20, choices=Topic.choices, default=Topic.OTHER)
+    message = models.TextField(_("message"), max_length=2000)
+    status = models.CharField(_("statut"), max_length=20, choices=Status.choices, default=Status.NEW)
+    created_at = models.DateTimeField(_("reçue le"), auto_now_add=True)
 
     class Meta:
         ordering = ["-created_at"]
-        verbose_name = "demande d'aide"
-        verbose_name_plural = "demandes d'aide"
+        verbose_name = _("demande d'aide")
+        verbose_name_plural = _("demandes d'aide")
 
     def __str__(self):
         return f"{self.name} - {self.get_topic_display()}"

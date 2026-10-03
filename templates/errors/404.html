@@ -1,10 +1,11 @@
 {% extends "base.html" %}
-{% block title %}Page introuvable{% endblock %}
+{% load i18n %}
+{% block title %}{% trans "Page introuvable" %}{% endblock %}
 {% block content %}
 <section class="section"><div class="container text-center" style="max-width:560px">
   <span class="icon-bubble lg mb-3"><i class="bi bi-compass"></i></span>
-  <h1 class="mb-3">Page introuvable</h1>
-  <p class="text-muted">Le lien est peut-être incorrect ou l'événement n'est plus disponible.</p>
-  <a href="{% url 'core:landing' %}" class="btn btn-primary">Retour à l'accueil</a>
+  <h1 class="mb-3">{% trans "Page introuvable" %}</h1>
+  <p class="text-muted">{% trans "Le lien est peut-être incorrect ou l'événement n'est plus disponible." %}</p>
+  <a href="{% url 'core:landing' %}" class="btn btn-primary">{% trans "Retour à l'accueil" %}</a>
 </div></section>
 {% endblock %}

@@ -117,9 +117,20 @@ Un événement peut avoir une catégorie (`Event.category`, facultative). L'admi
 - La liste se met à jour toutes les 5 secondes côté invité (polling `fetch()`), comme le suivi en direct côté admin.
 - Un invité qui a répondu « Non » ou « Peut-être » peut revenir sur son lien et changer d'avis.
 
+## Trois langues : français, anglais, créole haïtien
+
+Le site existe en français (langue par défaut), en anglais et en créole haïtien (code `ht`, affiché « KR » dans le sélecteur **FR | EN | KR**).
+
+- **Sélecteur** dans la barre du haut du site, du parcours d'invitation, des pages de connexion et du tableau de bord. Il marche sans compte : le choix est gardé dans un cookie, et sur le profil (`CustomUser.language`, aussi modifiable dans « Mon profil ») pour une personne connectée. Ordre de priorité : `?lang=xx` dans l'adresse, cookie, langue du profil, langue du navigateur, français.
+- **Invitations** : chaque invité a sa langue (`Guest.language`, choisie dans le formulaire invité). Le message WhatsApp ou e-mail est écrit dans cette langue et le lien se termine par `?lang=xx`, si bien que la page s'ouvre dans la même langue, sans compte (`events/messaging.py`).
+- **Ce qui est traduit** : tous les gabarits, formulaires, messages, textes d'aide, noms de catégories par défaut, en-têtes d'exports, dates (mois et jours en créole compris). Ce que les personnes saisissent (titres d'événements, noms de cadeaux, descriptions, avis, catégories créées par l'équipe) n'est jamais traduit.
+- **Catalogues** : `locale/en` et `locale/ht` (fichiers `.po` à corriger, `.mo` compilés **versionnés** : Windows n'a pas besoin de gettext). Le texte d'origine dans le code est le français. Pas d'outil gettext requis : `python tools/i18n.py sync` relève les textes du code, met à jour les `.po` et recompile les `.mo` ; `python tools/i18n.py report` liste ce qui manque ; `python tools/i18n.py check` vérifie les variables. Après avoir corrigé un `.po` à la main : `python tools/i18n.py compile`.
+- **Ajouter un texte** : écrire le texte français dans le code avec `{% trans "..." %}` (gabarits), `_("...")` (Python), puis lancer `python tools/i18n.py sync` et remplir les traductions vides des deux `.po` (un test échoue tant qu'il en manque).
+- **Le créole est un brouillon** écrit par Claude : il doit être relu par une personne dont c'est la langue avant publication (les vocabulaires techniques comme « estati », « sote », « evalye », « dosye spam » en particulier).
+
 ## Envoi des invitations (V1)
 
-Chaque invité possède un `magic_token`. Dans `/admin-dashboard/invites/`, l'admin ouvre WhatsApp (`wa.me`) ou son client e-mail (`mailto:`) avec un message prérempli contenant le lien, ou copie le lien, puis marque l'invitation comme envoyée.
+Chaque invité possède un `magic_token`. Dans `/admin-dashboard/invites/`, l'admin ouvre WhatsApp (`wa.me`) ou son client e-mail (`mailto:`) avec un message prérempli, dans la langue de l'invité, contenant le lien, ou copie le lien, puis marque l'invitation comme envoyée.
 
 ## Tests
 
@@ -127,7 +138,7 @@ Chaque invité possède un `magic_token`. Dans `/admin-dashboard/invites/`, l'ad
 python manage.py test
 ```
 
-69 tests couvrent la règle « dernière unité », la transaction annulée en cas de conflit, le caractère définitif des réponses, le parcours invité complet jusqu'à la publicité puis l'accueil, le défilé de l'accueil, les redirections après connexion, les règles d'accès par rôle, le paiement VIP et l'affichage de chaque page principale, l'absence de connexion forcée sur le parcours invité et la page d'accueil publique, les catégories d'événements (gestion réservée à l'administrateur, filtre, badge, événements privés jamais exposés) et l'espace d'aide (page, bouton WhatsApp, formulaire, statuts, export CSV, aides du parcours).
+97 tests couvrent la règle « dernière unité », la transaction annulée en cas de conflit, le caractère définitif des réponses, le parcours invité complet jusqu'à la publicité puis l'accueil, le défilé de l'accueil, les redirections après connexion, les règles d'accès par rôle, le paiement VIP et l'affichage de chaque page principale, l'absence de connexion forcée sur le parcours invité et la page d'accueil publique, les catégories d'événements (gestion réservée à l'administrateur, filtre, badge, événements privés jamais exposés) l'espace d'aide (page, bouton WhatsApp, formulaire, statuts, export CSV, aides du parcours) et les trois langues (sélecteur, cookie, profil, `?lang=`, pages principales en anglais et en créole sans reste de français, message d'invitation par langue, catalogues complets).
 
 ## Production
 

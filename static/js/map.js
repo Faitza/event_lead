@@ -53,14 +53,14 @@
     if (btn) btn.addEventListener("click", function () {
       var q = venueInput.value.trim();
       if (!q) { venueInput.focus(); return; }
-      status.textContent = "Recherche de l'adresse...";
+      status.textContent = editor.dataset.msgSearching || "Recherche de l'adresse...";
       fetch(editor.dataset.geocodeUrl + "?q=" + encodeURIComponent(q), { headers: { "X-Requested-With": "fetch" } })
         .then(function (r) { return r.json(); })
         .then(function (d) {
-          if (d.found) { place(d.lat, d.lng, true); status.textContent = "Adresse localisée. Ajustez le repère si nécessaire."; }
-          else { status.textContent = "Adresse introuvable. Cliquez sur la carte pour placer le repère."; }
+          if (d.found) { place(d.lat, d.lng, true); status.textContent = editor.dataset.msgFound || "Adresse localisée. Ajustez le repère si nécessaire."; }
+          else { status.textContent = editor.dataset.msgNotfound || "Adresse introuvable. Cliquez sur la carte pour placer le repère."; }
         })
-        .catch(function () { status.textContent = "Service de géocodage indisponible. Cliquez sur la carte pour placer le repère."; });
+        .catch(function () { status.textContent = editor.dataset.msgUnavailable || "Service de géocodage indisponible. Cliquez sur la carte pour placer le repère."; });
     });
   }
 })();

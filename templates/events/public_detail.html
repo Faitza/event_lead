@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 {% load static humanize %}
+{% load i18n %}
 {% block title %}{{ event.title }}{% endblock %}
 {% block extra_head %}<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.css">{% endblock %}
 {% block content %}
@@ -8,9 +9,9 @@
   <div class="hero-veil"></div>
   <div class="sunburst" aria-hidden="true"></div>
   <div class="container inner py-lg-4">
-    <div class="eyebrow-row light mb-3"><span class="diamond"></span><span class="eyebrow">{% if event.is_public %}Événement public{% else %}Événement privé{% endif %}{% if event.category %} &middot; {{ event.category.name }}{% endif %}</span></div>
+    <div class="eyebrow-row light mb-3"><span class="diamond"></span><span class="eyebrow">{% if event.is_public %}{% trans "Événement public" %}{% else %}{% trans "Événement privé" %}{% endif %}{% if event.category %} &middot; {{ event.category.label }}{% endif %}</span></div>
     <h1 class="disp">{{ event.title }}</h1>
-    <p class="mb-0 mt-3"><i class="bi bi-calendar3 me-2" style="color:var(--el-gold)"></i>{{ event.date|date:"l j F Y"|capfirst }} à {{ event.time|time:"H\hi" }}</p>
+    <p class="mb-0 mt-3"><i class="bi bi-calendar3 me-2" style="color:var(--el-gold)"></i>{% with d=event.date|date:_("l j F Y")|capfirst t=event.time|time:_("H\\hi") %}{% blocktranslate trimmed %}{{ d }} à {{ t }}{% endblocktranslate %}{% endwith %}</p>
   </div>
 </section>
 <section class="section pt-5">
@@ -18,15 +19,15 @@
     <div class="row g-4">
       <div class="col-lg-8">
         <div class="el-card el-card-body mb-4">
-          <h2 class="h4 mb-3">À propos de l'événement</h2>
-          <p class="mb-0">{{ event.description|default:"Plus d'informations bientôt."|linebreaksbr }}</p>
+          <h2 class="h4 mb-3">{% trans "À propos de l'événement" %}</h2>
+          <p class="mb-0">{{ event.description|default:_("Plus d'informations bientôt.")|linebreaksbr }}</p>
         </div>
         {% if event.cover_video %}
         <div class="el-card overflow-hidden mb-4"><video src="{{ event.cover_video.url }}" controls preload="none" class="w-100" style="display:block"></video></div>
         {% endif %}
         {% if event.has_location %}
         <div class="el-card el-card-body">
-          <h2 class="h4 mb-3">Lieu</h2>
+          <h2 class="h4 mb-3">{% trans "Lieu" %}</h2>
           <div class="map-box lg" data-map data-lat="{{ event.latitude|stringformat:'f' }}" data-lng="{{ event.longitude|stringformat:'f' }}" data-label="{{ event.venue }}"></div>
         </div>
         {% endif %}
@@ -34,19 +35,19 @@
       <div class="col-lg-4">
         <div class="ticket" style="--y:auto;position:sticky;top:110px;-webkit-mask:none;mask:none;border:1px solid var(--el-line);box-shadow:var(--el-shadow)">
           <div class="p-4">
-            <div class="meta-row"><i class="bi bi-calendar3"></i>{{ event.date|date:"j F Y" }}</div>
-            <div class="meta-row"><i class="bi bi-clock"></i>{{ event.time|time:"H\hi" }}</div>
+            <div class="meta-row"><i class="bi bi-calendar3"></i>{{ event.date|date:_("j F Y") }}</div>
+            <div class="meta-row"><i class="bi bi-clock"></i>{{ event.time|time:_("H\\hi") }}</div>
             <div class="meta-row mb-0"><i class="bi bi-geo-alt"></i>{{ event.venue }}</div>
           </div>
           {% if event.price_htg %}
           <div class="p-4" style="border-top:2px dashed var(--el-tint-strong)">
             <div class="price-tag">{{ event.price_htg|floatformat:0|intcomma }} HTG</div>
             <div class="text-muted small mb-3">&asymp; {{ event.price_usd }} USD</div>
-            <a href="{% url 'payments:checkout' event.pk %}" class="btn btn-primary w-100 btn-lg"><i class="bi bi-ticket-perforated me-2"></i>Acheter un billet</a>
+            <a href="{% url 'payments:checkout' event.pk %}" class="btn btn-primary w-100 btn-lg"><i class="bi bi-ticket-perforated me-2"></i>{% trans "Acheter un billet" %}</a>
           </div>
           {% endif %}
           {% if invitation %}
-          <div class="p-4" style="border-top:2px dashed var(--el-tint-strong)"><a href="{{ invitation.get_invitation_url }}" class="btn btn-soft w-100">Voir mon invitation</a></div>
+          <div class="p-4" style="border-top:2px dashed var(--el-tint-strong)"><a href="{{ invitation.get_invitation_url }}" class="btn btn-soft w-100">{% trans "Voir mon invitation" %}</a></div>
           {% endif %}
         </div>
       </div>

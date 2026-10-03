@@ -1,27 +1,28 @@
 {% extends "base.html" %}
 {% load humanize %}
-{% block title %}Paiement confirmé{% endblock %}
+{% load i18n %}
+{% block title %}{% trans "Paiement confirmé" %}{% endblock %}
 {% block content %}
 <section class="section">
   <div class="container" style="max-width:600px">
     <div class="frame"><div class="frame-in text-center p-4 p-md-5">
       <div class="success-check mb-3"><i class="bi bi-check-lg"></i></div>
-      <h1 class="mt-3">Paiement <em>confirmé</em></h1>
-      <p class="text-muted">Merci ! Conservez votre référence de transaction.</p>
+      <h1 class="mt-3">{% blocktranslate trimmed %}Paiement <em>confirmé</em>{% endblocktranslate %}</h1>
+      <p class="text-muted">{% trans "Merci ! Conservez votre référence de transaction." %}</p>
       <div class="inv-pane my-4">
-        <div class="small text-muted">Référence</div>
+        <div class="small text-muted">{% trans "Référence" %}</div>
         <div class="disp fs-2" style="letter-spacing:.06em;color:var(--el-primary-dark)">{{ payment.reference }}</div>
       </div>
       <div class="text-start">
-        <div class="recap-row"><span class="text-muted">Objet</span><strong>{% if payment.event %}{{ payment.event.title }}{% if payment.quantity > 1 %} x{{ payment.quantity }}{% endif %}{% else %}{{ payment.get_kind_display }}{% endif %}</strong></div>
-        <div class="recap-row"><span class="text-muted">Mode</span><strong>{{ payment.get_method_display }}</strong></div>
-        <div class="recap-row"><span class="text-muted">Montant</span><strong>{{ payment.amount_htg|floatformat:2|intcomma }} HTG <span class="text-muted fw-normal">({{ payment.amount_usd }} USD)</span></strong></div>
-        <div class="recap-row"><span class="text-muted">Date</span><strong>{{ payment.created_at|date:"j F Y H:i" }}</strong></div>
+        <div class="recap-row"><span class="text-muted">{% trans "Objet" %}</span><strong>{% if payment.event %}{{ payment.event.title }}{% if payment.quantity > 1 %} x{{ payment.quantity }}{% endif %}{% else %}{{ payment.get_kind_display }}{% endif %}</strong></div>
+        <div class="recap-row"><span class="text-muted">{% trans "Mode" %}</span><strong>{{ payment.get_method_display }}</strong></div>
+        <div class="recap-row"><span class="text-muted">{% trans "Montant" %}</span><strong>{{ payment.amount_htg|floatformat:2|intcomma }} HTG <span class="text-muted fw-normal">({{ payment.amount_usd }} USD)</span></strong></div>
+        <div class="recap-row"><span class="text-muted">{% trans "Date" %}</span><strong>{{ payment.created_at|date:_("j F Y H:i") }}</strong></div>
       </div>
       {% if payment.kind == 'organizer_access' %}
-        <div class="mt-4"><span class="badge-el badge-vip mb-3"><i class="bi bi-gem"></i>VIP activé</span><br><a href="{% url 'events:organizer_portal' %}" class="btn btn-primary btn-lg mt-2">Accéder au portail Organisateur</a></div>
+        <div class="mt-4"><span class="badge-el badge-vip mb-3"><i class="bi bi-gem"></i>{% trans "VIP activé" %}</span><br><a href="{% url 'events:organizer_portal' %}" class="btn btn-primary btn-lg mt-2">{% trans "Accéder au portail Organisateur" %}</a></div>
       {% else %}
-        <a href="{% url 'core:landing' %}#affiche" class="btn btn-primary btn-lg mt-4">Retour à l'accueil</a>
+        <a href="{% url 'core:landing' %}#affiche" class="btn btn-primary btn-lg mt-4">{% trans "Retour à l'accueil" %}</a>
       {% endif %}
     </div></div>
   </div>

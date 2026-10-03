@@ -1,12 +1,13 @@
 {% extends "base.html" %}
 {% load static %}
+{% load i18n %}
 {% block title %}{{ ad.title }}{% endblock %}
 {% block body %}
 <div class="ad-shell">
   <div class="ad-topbar">
     <div class="container d-flex align-items-center justify-content-between" style="max-width:560px">
-      <a href="{% url 'core:landing' %}" aria-label="EventLead, accueil">{% include "partials/_logo.html" %}</a>
-      <span class="eyebrow">Publicité partenaire{% if total > 1 %} &middot; {{ position }} sur {{ total }}{% endif %}</span>
+      <a href="{% url 'core:landing' %}" aria-label="{% trans 'EventLead, accueil' %}">{% include "partials/_logo.html" %}</a>
+      <span class="eyebrow">{% trans "Publicité partenaire" %}{% if total > 1 %} &middot; {% blocktranslate trimmed with pos=position tot=total %}{{ pos }} sur {{ tot }}{% endblocktranslate %}{% endif %}</span>
     </div>
   </div>
   <div class="sunburst" aria-hidden="true" style="left:50%;top:60px;margin-left:-360px;width:720px;height:720px"></div>
@@ -14,22 +15,23 @@
     {% if guest and guest.replied_at %}
     <div class="ad-thanks">
       <span class="tick"><i class="bi bi-check-lg"></i></span>
-      <span>Merci {{ guest.name }}, votre réponse est enregistrée. {{ guest.event.title }} : l'hôte est prévenu.</span>
+      <span>{% blocktranslate trimmed with name=guest.name title=guest.event.title %}Merci {{ name }}, votre réponse est enregistrée. {{ title }} : l'hôte est prévenu.{% endblocktranslate %}</span>
     </div>
     {% endif %}
     <article class="ad-card">
       <div class="in">
         <div class="ad-media">{% if ad.image %}<img src="{{ ad.image.url }}" alt="{{ ad.title }}">{% else %}<i class="bi {{ ad.icon_name }}"></i>{% endif %}</div>
-        <span class="eyebrow">Offre pour les invités</span>
+        <span class="eyebrow">{% trans "Offre pour les invités" %}</span>
         <h1 class="disp">{{ ad.title }}</h1>
         <p>{{ ad.message|linebreaksbr }}</p>
-        <a href="{% url 'ads:click' ad.pk %}" target="_blank" rel="noopener sponsored" class="btn btn-gold btn-lg" style="color:var(--el-primary-dark)">Visiter le site</a>
+        <a href="{% url 'ads:click' ad.pk %}" target="_blank" rel="noopener sponsored" class="btn btn-gold btn-lg" style="color:var(--el-primary-dark)">{% trans "Visiter le site" %}</a>
       </div>
     </article>
     <div class="d-flex flex-column gap-2">
-      <div class="countdown-bar" role="progressbar" aria-label="Temps avant de pouvoir passer"><span id="countdown-fill"></span></div>
-      <a href="{{ next_url }}" id="skip-btn" class="btn-skip disabled" aria-disabled="true" tabindex="-1" data-seconds="{{ ad.skip_after_seconds }}"><span id="skip-label">Passer dans {{ ad.skip_after_seconds }} s</span></a>
-      <p class="text-center small mb-0" style="color:var(--el-tint-strong)">Ensuite : l'accueil, avec les événements publics à venir.</p>
+      <div class="countdown-bar" role="progressbar" aria-label="{% trans 'Temps avant de pouvoir passer' %}"><span id="countdown-fill"></span></div>
+      {% trans "Passer dans {n} s" as wait_label %}{% trans "Passer" as skip_label %}
+      <a href="{{ next_url }}" id="skip-btn" class="btn-skip disabled" aria-disabled="true" tabindex="-1" data-seconds="{{ ad.skip_after_seconds }}" data-label-wait="{{ wait_label }}" data-label-skip="{{ skip_label }}"><span id="skip-label">{% blocktranslate trimmed with n=ad.skip_after_seconds %}Passer dans {{ n }} s{% endblocktranslate %}</span></a>
+      <p class="text-center small mb-0" style="color:var(--el-tint-strong)">{% trans "Ensuite : l'accueil, avec les événements publics à venir." %}</p>
     </div>
   </div>
 </div>

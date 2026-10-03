@@ -1,20 +1,21 @@
 {% extends "dashboard/base_dashboard.html" %}
-{% block title %}Confirmer la suppression{% endblock %}
+{% load i18n %}
+{% block title %}{% trans "Confirmer la suppression" %}{% endblock %}
 {% block dash_content %}
 <div class="el-card el-card-body mx-auto text-center p-5" style="max-width:560px">
   {% if blocked %}
     <span class="icon-bubble warning lg mb-3"><i class="bi bi-lock"></i></span>
-    <h1 class="h4 fw-bold">Suppression impossible</h1>
-    <p class="text-muted">« {{ object }} » est lié à des choix de cadeaux déjà confirmés par des invités. Ces choix sont définitifs.</p>
-    <a href="{{ cancel_url }}" class="btn btn-primary">Retour</a>
+    <h1 class="h4 fw-bold">{% trans "Suppression impossible" %}</h1>
+    <p class="text-muted">{% blocktranslate trimmed with obj=object %}« {{ obj }} » est lié à des choix de cadeaux déjà confirmés par des invités. Ces choix sont définitifs.{% endblocktranslate %}</p>
+    <a href="{{ cancel_url }}" class="btn btn-primary">{% trans "Retour" %}</a>
   {% else %}
     <span class="icon-bubble danger lg mb-3"><i class="bi bi-trash3"></i></span>
-    <h1 class="h4 fw-bold">Supprimer {{ kind }} ?</h1>
-    <p class="text-muted">« {{ object }} » sera définitivement supprimé. Cette action est irréversible.</p>
+    <h1 class="h4 fw-bold">{% blocktranslate trimmed with what=kind %}Supprimer {{ what }} ?{% endblocktranslate %}</h1>
+    <p class="text-muted">{% blocktranslate trimmed with obj=object %}« {{ obj }} » sera définitivement supprimé. Cette action est irréversible.{% endblocktranslate %}</p>
     {% if note %}<p class="small text-muted">{{ note }}</p>{% endif %}
     <form method="post" class="d-flex justify-content-center gap-2">{% csrf_token %}
-      <a href="{{ cancel_url }}" class="btn btn-light">Annuler</a>
-      <button class="btn btn-danger"><i class="bi bi-trash3 me-2"></i>Supprimer</button>
+      <a href="{{ cancel_url }}" class="btn btn-light">{% trans "Annuler" %}</a>
+      <button class="btn btn-danger"><i class="bi bi-trash3 me-2"></i>{% trans "Supprimer" %}</button>
     </form>
   {% endif %}
 </div>

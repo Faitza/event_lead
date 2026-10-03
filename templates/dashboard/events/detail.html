@@ -1,5 +1,6 @@
 {% extends "dashboard/base_dashboard.html" %}
 {% load static %}
+{% load i18n %}
 {% block title %}{{ event.title }}{% endblock %}
 {% block extra_head %}<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.css">{% endblock %}
 {% block dash_content %}
@@ -13,11 +14,11 @@
           {% if event.price_htg %}<span class="badge-el badge-gold" style="background:rgba(212,175,55,.9);color:#2C033B">{{ event.price_htg|floatformat:0 }} HTG</span>{% endif %}
         </div>
         <h1 class="h2 fw-bold mb-2">{{ event.title }}</h1>
-        <div class="opacity-75"><i class="bi bi-calendar3 me-1"></i>{{ event.date|date:"l j F Y" }} à {{ event.time|time:"H\hi" }} &middot; <i class="bi bi-geo-alt me-1"></i>{{ event.venue }}</div>
+        <div class="opacity-75"><i class="bi bi-calendar3 me-1"></i>{% with dt=event.date|date:_("l j F Y") tm=event.time|time:_("H\\hi") %}{% blocktranslate trimmed with d=dt t=tm %}{{ d }} à {{ t }}{% endblocktranslate %}{% endwith %} &middot; <i class="bi bi-geo-alt me-1"></i>{{ event.venue }}</div>
       </div>
       <div class="d-flex flex-wrap gap-2">
-        <a href="{% url 'dashboard:guest_create' %}?event={{ event.pk }}" class="btn btn-gold"><i class="bi bi-person-plus me-2"></i>Ajouter un invité</a>
-        <a href="{% url 'dashboard:event_edit' event.pk %}" class="btn btn-light-ghost"><i class="bi bi-pencil me-2"></i>Modifier</a>
+        <a href="{% url 'dashboard:guest_create' %}?event={{ event.pk }}" class="btn btn-gold"><i class="bi bi-person-plus me-2"></i>{% trans "Ajouter un invité" %}</a>
+        <a href="{% url 'dashboard:event_edit' event.pk %}" class="btn btn-light-ghost"><i class="bi bi-pencil me-2"></i>{% trans "Modifier" %}</a>
       </div>
     </div>
   </div>
@@ -28,38 +29,38 @@
 <div class="row g-4">
   <div class="col-xl-8">
     <div class="el-card">
-      <div class="el-card-header"><h2><i class="bi bi-people me-2"></i>Invités ({{ guests|length }})</h2>
+      <div class="el-card-header"><h2><i class="bi bi-people me-2"></i>{% trans "Invités" %} ({{ guests|length }})</h2>
         <div class="d-flex gap-2">
           <a href="{% url 'dashboard:guest_export_csv' %}?event={{ event.pk }}" class="btn btn-sm btn-light"><i class="bi bi-filetype-csv me-1"></i>CSV</a>
           <a href="{% url 'dashboard:guest_export_pdf' %}?event={{ event.pk }}" class="btn btn-sm btn-light"><i class="bi bi-filetype-pdf me-1"></i>PDF</a>
-          <a href="{% url 'dashboard:guest_list' %}?event={{ event.pk }}" class="btn btn-sm btn-soft">Gérer et envoyer</a>
+          <a href="{% url 'dashboard:guest_list' %}?event={{ event.pk }}" class="btn btn-sm btn-soft">{% trans "Gérer et envoyer" %}</a>
         </div>
       </div>
       {% if guests %}
       <div class="table-wrap"><table class="table table-el">
-        <thead><tr><th>Nom</th><th>Canal</th><th>Statut</th><th>Acc.</th><th>Envoyée</th></tr></thead>
+        <thead><tr><th>{% trans "Nom" %}</th><th>{% trans "Canal" %}</th><th>{% trans "Statut" %}</th><th>{% trans "Acc." %}</th><th>{% trans "Envoyée" %}</th></tr></thead>
         <tbody>{% for g in guests %}
           <tr><td class="fw-semibold">{{ g.name }}<div class="small text-muted fw-normal">{{ g.email|default:g.phone }}</div></td>
           <td>{% if g.sent_via == 'whatsapp' %}<i class="bi bi-whatsapp text-success"></i>{% else %}<i class="bi bi-envelope text-primary"></i>{% endif %} {{ g.get_sent_via_display }}</td>
           <td><span class="badge-el badge-{{ g.status_badge }}">{{ g.get_status_display }}</span></td>
           <td>{{ g.companions }}</td>
-          <td class="small text-muted">{% if g.invitation_sent_at %}{{ g.invitation_sent_at|date:"j/m H:i" }}{% else %}Non{% endif %}</td></tr>
+          <td class="small text-muted">{% if g.invitation_sent_at %}{{ g.invitation_sent_at|date:"j/m H:i" }}{% else %}{% trans "Non" %}{% endif %}</td></tr>
         {% endfor %}</tbody>
       </table></div>
-      {% else %}<div class="empty-state"><i class="bi bi-person-plus"></i><p class="mt-2">Aucun invité.</p><a href="{% url 'dashboard:guest_create' %}?event={{ event.pk }}" class="btn btn-sm btn-primary">Ajouter un invité</a></div>{% endif %}
+      {% else %}<div class="empty-state"><i class="bi bi-person-plus"></i><p class="mt-2">{% trans "Aucun invité." %}</p><a href="{% url 'dashboard:guest_create' %}?event={{ event.pk }}" class="btn btn-sm btn-primary">{% trans "Ajouter un invité" %}</a></div>{% endif %}
     </div>
   </div>
   <div class="col-xl-4">
     <div class="el-card el-card-body mb-4">
-      <h2 class="h6 fw-bold text-primary mb-3">Paramètres</h2>
-      <div class="recap-row small"><span class="text-muted">Invités max.</span><strong>{{ event.max_guests }}</strong></div>
-      <div class="recap-row small"><span class="text-muted">Accompagnants</span><strong>{% if event.allow_companions %}Oui, {{ event.max_companions }} max.{% else %}Non{% endif %}</strong></div>
-      <div class="recap-row small"><span class="text-muted">Évaluation après</span><strong>{{ event.evaluation_delay_days }} jour{{ event.evaluation_delay_days|pluralize }}</strong></div>
+      <h2 class="h6 fw-bold text-primary mb-3">{% trans "Paramètres" %}</h2>
+      <div class="recap-row small"><span class="text-muted">{% trans "Invités max." %}</span><strong>{{ event.max_guests }}</strong></div>
+      <div class="recap-row small"><span class="text-muted">{% trans "Accompagnants" %}</span><strong>{% if event.allow_companions %}{% blocktranslate trimmed with n=event.max_companions %}Oui, {{ n }} max.{% endblocktranslate %}{% else %}{% trans "Non" %}{% endif %}</strong></div>
+      <div class="recap-row small"><span class="text-muted">{% trans "Évaluation après" %}</span><strong>{% blocktranslate trimmed count counter=event.evaluation_delay_days %}{{ counter }} jour{% plural %}{{ counter }} jours{% endblocktranslate %}</strong></div>
     </div>
     {% if event.has_location %}<div class="map-box mb-4" data-map data-lat="{{ event.latitude|stringformat:'f' }}" data-lng="{{ event.longitude|stringformat:'f' }}" data-label="{{ event.venue }}"></div>{% endif %}
     {% if evaluations %}
     <div class="el-card el-card-body">
-      <h2 class="h6 fw-bold text-primary mb-3">Évaluations</h2>
+      <h2 class="h6 fw-bold text-primary mb-3">{% trans "Évaluations" %}</h2>
       {% for ev in evaluations %}<div class="mb-2 small"><span class="stars">{% for i in "12345" %}<i class="bi bi-star{% if forloop.counter <= ev.stars %}-fill{% endif %}"></i>{% endfor %}</span> <strong>{{ ev.user.display_name }}</strong><div class="text-muted">{{ ev.comment }}</div></div>{% endfor %}
     </div>
     {% endif %}

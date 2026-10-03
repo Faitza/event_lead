@@ -1,4 +1,5 @@
 """Tests de bout en bout des règles métier critiques d'EventLead."""
+import os
 from datetime import time, timedelta
 from decimal import Decimal
 
@@ -638,7 +639,7 @@ class SmokeTests(TestCase):
     def setUp(self):
         from django.core.management import call_command
 
-        call_command("seed_demo", stdout=open("/dev/null", "w"))
+        call_command("seed_demo", stdout=open(os.devnull, "w"))
 
     def test_public_pages(self):
         event = Event.objects.public_active().first()

@@ -1,16 +1,17 @@
 {% extends "accounts/auth_base.html" %}
-{% block title %}{% if organizer %}Inscription Organisateur{% else %}Créer un compte{% endif %}{% endblock %}
-{% block visual_eyebrow %}{% if organizer %}Organisateur VIP{% else %}Nouveau compte{% endif %}{% endblock %}
-{% block visual_title %}{% if organizer %}Rejoignez le cercle des <em>Organisateurs VIP</em>{% else %}Bienvenue sur <em>EventLead</em>{% endif %}{% endblock %}
-{% block visual_text %}{% if organizer %}Après votre inscription, un paiement unique active votre badge VIP et votre portail Organisateur.{% else %}Répondez à vos invitations, choisissez vos cadeaux et découvrez les événements publics.{% endif %}{% endblock %}
+{% load i18n %}
+{% block title %}{% if organizer %}{% trans "Inscription Organisateur" %}{% else %}{% trans "Créer un compte" %}{% endif %}{% endblock %}
+{% block visual_eyebrow %}{% if organizer %}{% trans "Organisateur VIP" %}{% else %}{% trans "Nouveau compte" %}{% endif %}{% endblock %}
+{% block visual_title %}{% if organizer %}{% trans "Rejoignez le cercle des <em>Organisateurs VIP</em>" %}{% else %}{% trans "Bienvenue sur <em>EventLead</em>" %}{% endif %}{% endblock %}
+{% block visual_text %}{% if organizer %}{% trans "Après votre inscription, un paiement unique active votre badge VIP et votre portail Organisateur." %}{% else %}{% trans "Répondez à vos invitations, choisissez vos cadeaux et découvrez les événements publics." %}{% endif %}{% endblock %}
 {% block panel %}
 {% if organizer %}
   <div class="text-center"><span class="badge-el badge-vip mb-2"><i class="bi bi-gem"></i>VIP</span></div>
-  <h1>Inscription Organisateur</h1>
-  <p class="text-muted text-center mb-4">Étape 1 sur 2 : votre compte. Étape 2 : le paiement VIP.</p>
+  <h1>{% trans "Inscription Organisateur" %}</h1>
+  <p class="text-muted text-center mb-4">{% trans "Étape 1 sur 2 : votre compte. Étape 2 : le paiement VIP." %}</p>
 {% else %}
-  <h1>Créer un compte</h1>
-  <p class="text-muted text-center mb-4">Gratuit, en moins d'une minute.</p>
+  <h1>{% trans "Créer un compte" %}</h1>
+  <p class="text-muted text-center mb-4">{% trans "Gratuit, en moins d'une minute." %}</p>
 {% endif %}
 {% include "partials/_google_button.html" %}
 <div class="divider"><span class="diamond"></span></div>
@@ -25,7 +26,7 @@
   {% include "partials/_field.html" with field=form.phone %}
   {% include "partials/_field.html" with field=form.password1 %}
   {% include "partials/_field.html" with field=form.password2 %}
-  <button class="btn btn-primary w-100 btn-lg mt-2">{% if organizer %}Continuer vers le paiement VIP<i class="bi bi-arrow-right ms-2"></i>{% else %}Créer mon compte{% endif %}</button>
+  <button class="btn btn-primary w-100 btn-lg mt-2">{% if organizer %}{% trans "Continuer vers le paiement VIP" %}<i class="bi bi-arrow-right ms-2"></i>{% else %}{% trans "Créer mon compte" %}{% endif %}</button>
 </form>
-<p class="text-center text-muted small mt-4 mb-0">Déjà inscrit ? <a href="{% url 'accounts:login' %}" class="fw-semibold">Se connecter</a></p>
+<p class="text-center text-muted small mt-4 mb-0">{% trans "Déjà inscrit ?" %} <a href="{% url 'accounts:login' %}" class="fw-semibold">{% trans "Se connecter" %}</a></p>
 {% endblock %}

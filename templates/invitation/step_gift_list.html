@@ -1,32 +1,35 @@
 {% extends "invitation/base_invitation.html" %}
 {% load static %}
+{% load i18n %}
 {% block inv_content %}
+{% trans "Déjà pris" as t_taken %}
+{% trans "Un cadeau de votre sélection vient d'être choisi par un autre invité." as t_lost %}
 <form method="post" class="d-flex flex-column gap-3" novalidate>
   {% csrf_token %}
-  <h1>Choisissez vos <em style="color:inherit">cadeaux</em></h1>
-  <p class="text-muted small mb-0">La liste se met à jour automatiquement si un autre invité réserve un cadeau.</p>
-  <div class="notice notice-warning"><i class="bi bi-exclamation-triangle-fill"></i><div>Votre sélection est définitive et ne peut pas être annulée avant l'événement.</div></div>
+  <h1>{% blocktranslate trimmed %}Choisissez vos <em style="color:inherit">cadeaux</em>{% endblocktranslate %}</h1>
+  <p class="text-muted small mb-0">{% trans "La liste se met à jour automatiquement si un autre invité réserve un cadeau." %}</p>
+  <div class="notice notice-warning"><i class="bi bi-exclamation-triangle-fill"></i><div>{% trans "Votre sélection est définitive et ne peut pas être annulée avant l'événement." %}</div></div>
   <div class="notice notice-danger d-none" aria-live="polite"><i class="bi bi-lock-fill"></i><div id="live-note"></div></div>
   {{ form.gifts.errors }}
-  <div id="gift-selection" class="gift-list" data-poll-url="{% url 'events:invitation_gift_availability' guest.magic_token %}" data-poll-interval="5000">
+  <div id="gift-selection" class="gift-list" data-poll-url="{% url 'events:invitation_gift_availability' guest.magic_token %}" data-poll-interval="5000" data-taken-label="{{ t_taken }}" data-lost-note="{{ t_lost }}">
     {% for gift in gifts %}
       <label class="gift-item {% if gift.state == 'selected' %}is-checked{% elif gift.state == 'mine' %}is-mine{% elif gift.state == 'taken' %}is-taken{% endif %}" data-id="{{ gift.pk }}">
         <input type="checkbox" name="gifts" value="{{ gift.pk }}" {% if gift.state == 'selected' %}checked{% endif %} {% if gift.state == 'taken' or gift.state == 'mine' %}disabled{% endif %}>
         <span class="gift-icon"><i class="bi {{ gift.icon_name }}"></i></span>
         <span>
           <span class="gift-name d-block">{{ gift.name }}</span>
-          <span class="gift-qty">{% if gift.state == 'mine' %}Déjà offert par vous{% elif gift.state == 'taken' %}Déjà pris{% else %}{{ gift.remaining }} disponible{{ gift.remaining|pluralize }}{% endif %}</span>
+          <span class="gift-qty">{% if gift.state == 'mine' %}{% trans "Déjà offert par vous" %}{% elif gift.state == 'taken' %}{{ t_taken }}{% else %}{% blocktranslate trimmed count counter=gift.remaining %}{{ counter }} disponible{% plural %}{{ counter }} disponibles{% endblocktranslate %}{% endif %}</span>
         </span>
         <span class="check">{% if gift.state == 'taken' %}<i class="bi bi-lock-fill" style="color:#9CA3AF;transform:scale(1)"></i>{% else %}<i class="bi bi-check-lg"></i>{% endif %}</span>
       </label>
     {% empty %}
-      <div class="empty-state small">La liste de cadeaux est vide.</div>
+      <div class="empty-state small">{% trans "La liste de cadeaux est vide." %}</div>
     {% endfor %}
   </div>
-  {% include "partials/_help_hint.html" with summary="Un cadeau a disparu de la liste ?" text="Un autre invité l'a choisi avant vous et il n'en reste plus. La liste se met à jour toute seule : choisissez-en un autre." faq="invite-cadeau-disparu" %}
+  {% include "partials/_help_hint.html" with summary=_("Un cadeau a disparu de la liste ?") text=_("Un autre invité l'a choisi avant vous et il n'en reste plus. La liste se met à jour toute seule : choisissez-en un autre.") faq="invite-cadeau-disparu" %}
   <div class="sticky-action d-flex gap-2">
     <a href="{% url 'events:invitation_gift_question' guest.magic_token %}" class="btn btn-light btn-lg"><i class="bi bi-arrow-left"></i></a>
-    <button id="confirm-gifts" class="btn btn-primary flex-grow-1" disabled>Confirmer (<span id="selected-count">0</span> cadeau(x) sélectionné(s))</button>
+    <button id="confirm-gifts" class="btn btn-primary flex-grow-1" disabled>{% blocktranslate trimmed %}Confirmer (<span id="selected-count">0</span> cadeau(x) sélectionné(s)){% endblocktranslate %}</button>
   </div>
 </form>
 {% endblock %}

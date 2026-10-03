@@ -1,12 +1,13 @@
 {% extends "invitation/base_invitation.html" %}
 {% load static %}
+{% load i18n %}
 {% block extra_head %}<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.css">{% endblock %}
 {% block inv_content %}
 {% include "invitation/_event_summary.html" %}
 <form method="post" class="d-flex flex-column gap-3" novalidate>
   {% csrf_token %}
   <fieldset class="border-0 p-0 m-0 d-flex flex-column gap-3">
-    <legend class="disp float-none w-auto p-0 mb-0" style="font-size:1.75rem;color:var(--el-primary-dark)">Serez-vous <em style="color:inherit">présent(e)</em> ?</legend>
+    <legend class="disp float-none w-auto p-0 mb-0" style="font-size:1.75rem;color:var(--el-primary-dark)">{% blocktranslate trimmed %}Serez-vous <em style="color:inherit">présent(e)</em> ?{% endblocktranslate %}</legend>
     <div class="rsvp-options">
       {% for radio in form.status %}
         {{ radio.tag }}
@@ -19,20 +20,20 @@
   </fieldset>
   {% if event.allow_companions %}
   <div id="companions-block" class="inv-pane companions-pane" style="display:none">
-    <div><div style="font-weight:500">Accompagnants</div><div class="small text-muted">{{ event.max_companions }} au maximum</div></div>
-    <div class="counter"><button type="button" data-step="-1" aria-label="Retirer un accompagnant"><i class="bi bi-dash-lg"></i></button>{{ form.companions }}<button type="button" data-step="1" aria-label="Ajouter un accompagnant"><i class="bi bi-plus-lg"></i></button></div>
+    <div><div style="font-weight:500">{% trans "Accompagnants" %}</div><div class="small text-muted">{% blocktranslate trimmed with max=event.max_companions %}{{ max }} au maximum{% endblocktranslate %}</div></div>
+    <div class="counter"><button type="button" data-step="-1" aria-label="{% trans 'Retirer un accompagnant' %}"><i class="bi bi-dash-lg"></i></button>{{ form.companions }}<button type="button" data-step="1" aria-label="{% trans 'Ajouter un accompagnant' %}"><i class="bi bi-plus-lg"></i></button></div>
   </div>
   {{ form.companions.errors }}
   {% endif %}
   {% if event.has_location %}
   <div class="d-flex flex-column gap-2">
-    <div class="map-box" data-map data-lat="{{ event.latitude|stringformat:'f' }}" data-lng="{{ event.longitude|stringformat:'f' }}" data-label="{{ event.venue }}" role="img" aria-label="Carte du lieu de la réception"></div>
+    <div class="map-box" data-map data-lat="{{ event.latitude|stringformat:'f' }}" data-lng="{{ event.longitude|stringformat:'f' }}" data-label="{{ event.venue }}" role="img" aria-label="{% trans 'Carte du lieu de la réception' %}"></div>
     <div class="d-flex justify-content-between align-items-center small gap-2"><span class="text-muted">{{ event.venue|truncatechars:48 }}</span>
-      <a class="fw-semibold" target="_blank" rel="noopener" href="https://www.openstreetmap.org/?mlat={{ event.latitude|stringformat:'f' }}&mlon={{ event.longitude|stringformat:'f' }}#map=17/{{ event.latitude|stringformat:'f' }}/{{ event.longitude|stringformat:'f' }}">Ouvrir l'itinéraire</a></div>
+      <a class="fw-semibold" target="_blank" rel="noopener" href="https://www.openstreetmap.org/?mlat={{ event.latitude|stringformat:'f' }}&mlon={{ event.longitude|stringformat:'f' }}#map=17/{{ event.latitude|stringformat:'f' }}/{{ event.longitude|stringformat:'f' }}">{% trans "Ouvrir l'itinéraire" %}</a></div>
   </div>
   {% endif %}
-  <button class="btn btn-primary btn-lg w-100 mt-2" style="height:54px">Suivant<i class="bi bi-arrow-right ms-2"></i></button>
-  {% include "partials/_help_hint.html" with summary="Pas de compte à créer ?" text="Ce lien est personnel : il suffit pour répondre, sans compte ni mot de passe. Gardez-le pour revenir sur votre réponse tant qu'elle n'est pas confirmée." faq="invite-sans-compte" topic="invitation" %}
+  <button class="btn btn-primary btn-lg w-100 mt-2" style="height:54px">{% trans "Suivant" %}<i class="bi bi-arrow-right ms-2"></i></button>
+  {% include "partials/_help_hint.html" with summary=_("Pas de compte à créer ?") text=_("Ce lien est personnel : il suffit pour répondre, sans compte ni mot de passe. Gardez-le pour revenir sur votre réponse tant qu'elle n'est pas confirmée.") faq="invite-sans-compte" topic="invitation" %}
 </form>
 {% endblock %}
 {% block extra_js %}

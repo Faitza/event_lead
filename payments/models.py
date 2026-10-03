@@ -2,6 +2,7 @@ import secrets
 
 from django.conf import settings
 from django.db import models
+from django.utils.translation import gettext_lazy as _
 
 from events.models import Event, Guest
 
@@ -12,44 +13,44 @@ class Payment(models.Model):
     class Method(models.TextChoices):
         MONCASH = "moncash", "MonCash"
         NATCASH = "natcash", "NatCash"
-        STRIPE = "stripe", "Carte bancaire (Stripe)"
+        STRIPE = "stripe", _("Carte bancaire (Stripe)")
         PAYPAL = "paypal", "PayPal"
 
     class Status(models.TextChoices):
-        PENDING = "pending", "En attente"
-        SUCCESS = "success", "Réussi"
-        FAILED = "failed", "Échoué"
+        PENDING = "pending", _("En attente")
+        SUCCESS = "success", _("Réussi")
+        FAILED = "failed", _("Échoué")
 
     class Kind(models.TextChoices):
-        TICKET = "ticket", "Billet"
-        ORGANIZER_ACCESS = "organizer_access", "Accès Organisateur VIP"
+        TICKET = "ticket", _("Billet")
+        ORGANIZER_ACCESS = "organizer_access", _("Accès Organisateur VIP")
 
-    kind = models.CharField("type", max_length=20, choices=Kind.choices, default=Kind.TICKET)
+    kind = models.CharField(_("type"), max_length=20, choices=Kind.choices, default=Kind.TICKET)
     event = models.ForeignKey(
-        Event, on_delete=models.SET_NULL, null=True, blank=True, related_name="payments", verbose_name="événement"
+        Event, on_delete=models.SET_NULL, null=True, blank=True, related_name="payments", verbose_name=_("événement")
     )
     guest = models.ForeignKey(
-        Guest, on_delete=models.SET_NULL, null=True, blank=True, related_name="payments", verbose_name="invité"
+        Guest, on_delete=models.SET_NULL, null=True, blank=True, related_name="payments", verbose_name=_("invité")
     )
     user = models.ForeignKey(
         settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, null=True, blank=True, related_name="payments",
-        verbose_name="utilisateur",
+        verbose_name=_("utilisateur"),
     )
-    method = models.CharField("mode de paiement", max_length=10, choices=Method.choices)
-    amount_htg = models.DecimalField("montant (HTG)", max_digits=12, decimal_places=2)
-    quantity = models.PositiveIntegerField("nombre de billets", default=1)
-    reference = models.CharField("référence", max_length=30, unique=True)
-    status = models.CharField("statut", max_length=10, choices=Status.choices, default=Status.PENDING)
+    method = models.CharField(_("mode de paiement"), max_length=10, choices=Method.choices)
+    amount_htg = models.DecimalField(_("montant (HTG)"), max_digits=12, decimal_places=2)
+    quantity = models.PositiveIntegerField(_("nombre de billets"), default=1)
+    reference = models.CharField(_("référence"), max_length=30, unique=True)
+    status = models.CharField(_("statut"), max_length=10, choices=Status.choices, default=Status.PENDING)
     payer_detail = models.CharField(
-        "détail payeur", max_length=120, blank=True,
-        help_text="Numéro masqué ou e-mail du payeur (jamais de données de carte complètes).",
+        _("détail payeur"), max_length=120, blank=True,
+        help_text=_("Numéro masqué ou e-mail du payeur (jamais de données de carte complètes)."),
     )
-    created_at = models.DateTimeField("créé le", auto_now_add=True)
+    created_at = models.DateTimeField(_("créé le"), auto_now_add=True)
 
     class Meta:
         ordering = ["-created_at"]
-        verbose_name = "paiement"
-        verbose_name_plural = "paiements"
+        verbose_name = _("paiement")
+        verbose_name_plural = _("paiements")
 
     def __str__(self):
         return self.reference

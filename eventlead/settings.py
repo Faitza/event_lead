@@ -49,9 +49,11 @@ INSTALLED_APPS = [
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
+    "django.middleware.locale.LocaleMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
+    "core.middleware.LanguagePreferenceMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
     "allauth.account.middleware.AccountMiddleware",
@@ -68,6 +70,7 @@ TEMPLATES = [
             "context_processors": [
                 "django.template.context_processors.debug",
                 "django.template.context_processors.request",
+                "django.template.context_processors.i18n",
                 "django.contrib.auth.context_processors.auth",
                 "django.contrib.messages.context_processors.messages",
                 "core.context_processors.site_settings",
@@ -137,8 +140,13 @@ SOCIALACCOUNT_PROVIDERS = {
     }
 }
 
+# Trois langues : français (défaut), anglais et créole haïtien. Les textes du code sont écrits en
+# français ; les traductions vivent dans locale/<langue>/LC_MESSAGES/django.po (et .mo compilés).
 LANGUAGE_CODE = "fr"
-LANGUAGES = [("fr", "Français")]
+LANGUAGES = [("fr", "Français"), ("en", "English"), ("ht", "Kreyòl ayisyen")]
+LOCALE_PATHS = [BASE_DIR / "locale"]
+LANGUAGE_COOKIE_AGE = 60 * 60 * 24 * 365
+LANGUAGE_COOKIE_SAMESITE = "Lax"
 TIME_ZONE = "America/Port-au-Prince"
 USE_I18N = True
 USE_TZ = True

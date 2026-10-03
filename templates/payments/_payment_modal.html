@@ -1,4 +1,8 @@
 {# Modal de paiement commune (billetterie et accès VIP). #}
+{% load i18n %}
+{% trans "Choisissez votre mode de paiement" as t_choose %}
+{% trans "NOM DU TITULAIRE" as t_card_name %}
+{% trans "MM/AA" as t_card_exp %}
 <div class="modal fade" id="paymentModal" tabindex="-1" aria-labelledby="pay-title" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content">
@@ -7,9 +11,9 @@
         <input type="hidden" name="method" value="{{ form.method.value|default:'' }}">
         <input type="hidden" name="quantity" value="{{ form.quantity.value|default:1 }}">
         <div class="modal-header border-0 pb-0">
-          <button type="button" id="pay-back" class="btn btn-sm btn-light me-2 d-none" aria-label="Retour"><i class="bi bi-arrow-left"></i></button>
-          <h2 class="modal-title" id="pay-title">Choisissez votre mode de paiement</h2>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fermer"></button>
+          <button type="button" id="pay-back" class="btn btn-sm btn-light me-2 d-none" aria-label="{% trans 'Retour' %}"><i class="bi bi-arrow-left"></i></button>
+          <h2 class="modal-title" id="pay-title">{{ t_choose }}</h2>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="{% trans 'Fermer' %}"></button>
         </div>
         <div class="modal-body">
           <div class="d-flex justify-content-between align-items-center inv-pane mb-3">
@@ -18,69 +22,69 @@
           </div>
           {% if form.non_field_errors %}<div class="notice notice-danger mb-3"><i class="bi bi-exclamation-circle"></i><div>{{ form.non_field_errors|join:" " }}</div></div>{% endif %}
 
-          <div class="pay-step active" data-step="choose">
+          <div class="pay-step active" data-step="choose" data-title="{{ t_choose }}">
             <div class="pay-methods">
               <button type="button" class="pay-method" data-method="moncash"><span class="pm-logo pm-moncash">MC</span><span><strong class="d-block">MonCash</strong><span class="small text-muted">Digicel Haïti</span></span></button>
               <button type="button" class="pay-method" data-method="natcash"><span class="pm-logo pm-natcash">NAT</span><span><strong class="d-block">NatCash</strong><span class="small text-muted">Natcom Haïti</span></span></button>
-              <button type="button" class="pay-method" data-method="stripe"><span class="pm-logo pm-stripe"><i class="bi bi-credit-card-2-front fs-5"></i></span><span><strong class="d-block">Carte bancaire</strong><span class="small text-muted">Visa, Mastercard (USD)</span></span></button>
-              <button type="button" class="pay-method" data-method="paypal"><span class="pm-logo pm-paypal">PP</span><span><strong class="d-block">PayPal</strong><span class="small text-muted">Compte ou carte</span></span></button>
+              <button type="button" class="pay-method" data-method="stripe"><span class="pm-logo pm-stripe"><i class="bi bi-credit-card-2-front fs-5"></i></span><span><strong class="d-block">{% trans "Carte bancaire" %}</strong><span class="small text-muted">Visa, Mastercard (USD)</span></span></button>
+              <button type="button" class="pay-method" data-method="paypal"><span class="pm-logo pm-paypal">PP</span><span><strong class="d-block">PayPal</strong><span class="small text-muted">{% trans "Compte ou carte" %}</span></span></button>
             </div>
-            <p class="small text-muted text-center mt-3 mb-0">Un souci pour payer ? <a href="{% url 'core:help' %}?sujet=payment#demande" target="_blank" rel="noopener">Demander de l'aide</a></p>
-            {% if PAYMENT_DEMO_MODE %}<p class="small text-muted text-center mt-2 mb-0"><i class="bi bi-info-circle me-1"></i>Mode démonstration : aucun montant réel n'est débité.</p>{% endif %}
+            <p class="small text-muted text-center mt-3 mb-0">{% trans "Un souci pour payer ?" %} <a href="{% url 'core:help' %}?sujet=payment#demande" target="_blank" rel="noopener">{% trans "Demander de l'aide" %}</a></p>
+            {% if PAYMENT_DEMO_MODE %}<p class="small text-muted text-center mt-2 mb-0"><i class="bi bi-info-circle me-1"></i>{% trans "Mode démonstration : aucun montant réel n'est débité." %}</p>{% endif %}
           </div>
 
-          <div class="pay-step" data-step="moncash">
-            <label class="form-label" for="mc-phone">Numéro MonCash</label>
+          <div class="pay-step" data-step="moncash" data-title="{% trans 'Payer avec MonCash' %}">
+            <label class="form-label" for="mc-phone">{% trans "Numéro MonCash" %}</label>
             <div class="input-group mb-1"><span class="input-group-text">+509</span><input id="mc-phone" name="phone" class="form-control {% if form.phone.errors and form.method.value == 'moncash' %}is-invalid{% endif %}" placeholder="3712 3456" inputmode="tel" required pattern="(\+?509)?\s?[2-5]\d{3}\s?-?\d{4}" value="{% if form.method.value == 'moncash' %}{{ form.phone.value|default:'' }}{% endif %}"></div>
             {% if form.method.value == 'moncash' %}{{ form.phone.errors }}{% endif %}
-            <div class="form-text">Un code de confirmation à 6 chiffres vous est envoyé par SMS à ce numéro. Gardez votre téléphone à portée de main.</div>
-            <button type="button" id="moncash-send-otp" class="btn btn-soft w-100 mt-2 {% if form.method.value == 'moncash' %}d-none{% endif %}">Recevoir le code de confirmation</button>
+            <div class="form-text">{% trans "Un code de confirmation à 6 chiffres vous est envoyé par SMS à ce numéro. Gardez votre téléphone à portée de main." %}</div>
+            <button type="button" id="moncash-send-otp" class="btn btn-soft w-100 mt-2 {% if form.method.value == 'moncash' %}d-none{% endif %}" data-sending-label="{% trans 'Envoi du code...' %}">{% trans "Recevoir le code de confirmation" %}</button>
             <div id="moncash-otp-block" class="mt-3 {% if form.method.value != 'moncash' %}d-none{% endif %}">
-              <label class="form-label" for="mc-otp">Code OTP reçu par SMS</label>
+              <label class="form-label" for="mc-otp">{% trans "Code OTP reçu par SMS" %}</label>
               <input id="mc-otp" name="otp" class="form-control text-center fs-4 fw-bold" maxlength="6" inputmode="numeric" placeholder="------" required pattern="\d{6}" autocomplete="one-time-code">
               {% if form.method.value == 'moncash' %}{{ form.otp.errors }}{% endif %}
-              {% if PAYMENT_DEMO_MODE %}<div class="form-text">Démonstration : utilisez le code <strong>123456</strong>.</div>{% endif %}
-              <button class="btn btn-primary btn-lg w-100 mt-3">Confirmer le paiement</button>
+              {% if PAYMENT_DEMO_MODE %}<div class="form-text">{% blocktranslate trimmed %}Démonstration : utilisez le code <strong>123456</strong>.{% endblocktranslate %}</div>{% endif %}
+              <button class="btn btn-primary btn-lg w-100 mt-3">{% trans "Confirmer le paiement" %}</button>
             </div>
           </div>
 
-          <div class="pay-step" data-step="natcash">
-            <label class="form-label" for="nc-phone">Numéro NatCash</label>
+          <div class="pay-step" data-step="natcash" data-title="{% trans 'Payer avec NatCash' %}">
+            <label class="form-label" for="nc-phone">{% trans "Numéro NatCash" %}</label>
             <div class="input-group mb-3"><span class="input-group-text">+509</span><input id="nc-phone" name="phone" class="form-control" placeholder="4012 3456" inputmode="tel" required pattern="(\+?509)?\s?[2-5]\d{3}\s?-?\d{4}" value="{% if form.method.value == 'natcash' %}{{ form.phone.value|default:'' }}{% endif %}"></div>
             {% if form.method.value == 'natcash' %}{{ form.phone.errors }}{% endif %}
-            <label class="form-label" for="nc-pin">Code PIN (4 chiffres)</label>
+            <label class="form-label" for="nc-pin">{% trans "Code PIN (4 chiffres)" %}</label>
             <input id="nc-pin" name="pin" type="password" class="form-control text-center fs-4" maxlength="4" inputmode="numeric" required pattern="\d{4}" autocomplete="off">
             {% if form.method.value == 'natcash' %}{{ form.pin.errors }}{% endif %}
-            <button class="btn btn-primary btn-lg w-100 mt-3">Confirmer le paiement</button>
+            <button class="btn btn-primary btn-lg w-100 mt-3">{% trans "Confirmer le paiement" %}</button>
           </div>
 
-          <div class="pay-step" data-step="stripe">
+          <div class="pay-step" data-step="stripe" data-title="{% trans 'Payer par carte bancaire' %}">
             <div class="card-preview">
               <div class="d-flex justify-content-between align-items-start"><span class="chip"></span><i class="bi bi-credit-card-2-front fs-4 opacity-75"></i></div>
               <div class="num" id="pv-number">•••• •••• •••• ••••</div>
-              <div class="d-flex justify-content-between"><div><small>Titulaire</small><div id="pv-name">NOM DU TITULAIRE</div></div><div class="text-end"><small>Expire</small><div id="pv-expiry">MM/AA</div></div></div>
+              <div class="d-flex justify-content-between"><div><small>{% trans "Titulaire" %}</small><div id="pv-name" data-placeholder="{{ t_card_name }}">{{ t_card_name }}</div></div><div class="text-end"><small>{% trans "Expire" %}</small><div id="pv-expiry" data-placeholder="{{ t_card_exp }}">{{ t_card_exp }}</div></div></div>
             </div>
-            <div class="mb-2"><label class="form-label" for="card-number">Numéro de carte</label><input id="card-number" name="card_number" class="form-control" inputmode="numeric" autocomplete="cc-number" placeholder="4242 4242 4242 4242" required>{% if form.method.value == 'stripe' %}{{ form.card_number.errors }}{% endif %}</div>
+            <div class="mb-2"><label class="form-label" for="card-number">{% trans "Numéro de carte" %}</label><input id="card-number" name="card_number" class="form-control" inputmode="numeric" autocomplete="cc-number" placeholder="4242 4242 4242 4242" required>{% if form.method.value == 'stripe' %}{{ form.card_number.errors }}{% endif %}</div>
             <div class="row g-2 mb-2">
-              <div class="col-6"><label class="form-label" for="card-expiry">Expiration</label><input id="card-expiry" name="card_expiry" class="form-control" placeholder="MM/AA" autocomplete="cc-exp" required pattern="\d{2}/\d{2}">{% if form.method.value == 'stripe' %}{{ form.card_expiry.errors }}{% endif %}</div>
+              <div class="col-6"><label class="form-label" for="card-expiry">{% trans "Expiration" %}</label><input id="card-expiry" name="card_expiry" class="form-control" placeholder="{{ t_card_exp }}" autocomplete="cc-exp" required pattern="\d{2}/\d{2}">{% if form.method.value == 'stripe' %}{{ form.card_expiry.errors }}{% endif %}</div>
               <div class="col-6"><label class="form-label" for="card-cvc">CVC</label><input id="card-cvc" name="card_cvc" class="form-control" placeholder="123" inputmode="numeric" autocomplete="cc-csc" required pattern="\d{3,4}">{% if form.method.value == 'stripe' %}{{ form.card_cvc.errors }}{% endif %}</div>
             </div>
-            <div class="mb-2"><label class="form-label" for="card-name">Nom sur la carte</label><input id="card-name" name="card_name" class="form-control" autocomplete="cc-name" required></div>
-            <p class="small text-muted mb-0">Montant débité en dollars : <strong data-amount-usd>{{ amount_usd }} USD</strong>.{% if PAYMENT_DEMO_MODE %} Test : 4242 4242 4242 4242 (acceptée), 4000 0000 0000 0002 (refusée).{% endif %}</p>
-            <button class="btn btn-primary btn-lg w-100 mt-3"><i class="bi bi-lock me-2"></i>Payer <span data-amount-usd>{{ amount_usd }} USD</span></button>
+            <div class="mb-2"><label class="form-label" for="card-name">{% trans "Nom sur la carte" %}</label><input id="card-name" name="card_name" class="form-control" autocomplete="cc-name" required></div>
+            <p class="small text-muted mb-0">{% trans "Montant débité en dollars :" %} <strong data-amount-usd>{{ amount_usd }} USD</strong>.{% if PAYMENT_DEMO_MODE %} {% trans "Test : 4242 4242 4242 4242 (acceptée), 4000 0000 0000 0002 (refusée)." %}{% endif %}</p>
+            <button class="btn btn-primary btn-lg w-100 mt-3"><i class="bi bi-lock me-2"></i>{% trans "Payer" %} <span data-amount-usd>{{ amount_usd }} USD</span></button>
           </div>
 
-          <div class="pay-step" data-step="paypal">
+          <div class="pay-step" data-step="paypal" data-title="{% trans 'Payer avec PayPal' %}">
             <div class="text-center mb-3"><span class="pm-logo pm-paypal d-inline-flex" style="width:56px;height:56px">PP</span></div>
-            <div class="mb-2"><label class="form-label" for="pp-email">E-mail PayPal</label><input id="pp-email" type="email" name="paypal_email" class="form-control" required autocomplete="email">{% if form.method.value == 'paypal' %}{{ form.paypal_email.errors }}{% endif %}</div>
-            <div class="mb-2"><label class="form-label" for="pp-password">Mot de passe PayPal</label><input id="pp-password" type="password" name="paypal_password" class="form-control" required autocomplete="off"></div>
-            <button class="btn btn-primary btn-lg w-100 mt-3">Se connecter et payer</button>
+            <div class="mb-2"><label class="form-label" for="pp-email">{% trans "E-mail PayPal" %}</label><input id="pp-email" type="email" name="paypal_email" class="form-control" required autocomplete="email">{% if form.method.value == 'paypal' %}{{ form.paypal_email.errors }}{% endif %}</div>
+            <div class="mb-2"><label class="form-label" for="pp-password">{% trans "Mot de passe PayPal" %}</label><input id="pp-password" type="password" name="paypal_password" class="form-control" required autocomplete="off"></div>
+            <button class="btn btn-primary btn-lg w-100 mt-3">{% trans "Se connecter et payer" %}</button>
           </div>
 
-          <div class="pay-step text-center py-4" data-step="processing">
+          <div class="pay-step text-center py-4" data-step="processing" data-title="{% trans 'Traitement en cours' %}">
             <div class="spinner-el mb-3"></div>
-            <p class="fw-semibold mb-1">Validation du paiement...</p>
-            <p class="small text-muted mb-0">Ne fermez pas cette fenêtre.</p>
+            <p class="fw-semibold mb-1">{% trans "Validation du paiement..." %}</p>
+            <p class="small text-muted mb-0">{% trans "Ne fermez pas cette fenêtre." %}</p>
           </div>
         </div>
       </form>

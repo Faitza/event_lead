@@ -4,8 +4,10 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import redirect, render
 from django.urls import reverse
 from django.utils.http import url_has_allowed_host_and_scheme
+from django.utils.translation import gettext as _
 from django.views.decorators.http import require_POST
 
+from core.middleware import set_language_cookie
 from events.models import Guest
 
 from .forms import LoginForm, ProfileForm, RegisterForm
@@ -47,7 +49,7 @@ def login_view(request):
     form = LoginForm(request, data=request.POST or None)
     if request.method == "POST" and form.is_valid():
         login(request, form.user, backend="accounts.backends.EmailBackend")
-        messages.success(request, f"Bienvenue, {form.user.display_name}.")
+        messages.success(request, _("Bienvenue, %(nom)s.") % {"nom": form.user.display_name})
         return redirect(_safe_next(request) or post_login_url_for(form.user))
     return render(request, "accounts/login.html", {"form": form, "next": _safe_next(request) or ""})
 
@@ -61,9 +63,9 @@ def register_view(request, organizer=False):
         user = form.save(role=role)
         login(request, user, backend="accounts.backends.EmailBackend")
         if organizer:
-            messages.info(request, "Compte créé. Dernière étape : activez votre accès Organisateur VIP.")
+            messages.info(request, _("Compte créé. Dernière étape : activez votre accès Organisateur VIP."))
             return redirect("payments:vip")
-        messages.success(request, "Votre compte a été créé avec succès.")
+        messages.success(request, _("Votre compte a été créé avec succès."))
         return redirect(_safe_next(request) or post_login_url_for(user))
     return render(request, "accounts/register.html", {"form": form, "organizer": organizer})
 
@@ -71,7 +73,7 @@ def register_view(request, organizer=False):
 @require_POST
 def logout_view(request):
     logout(request)
-    messages.info(request, "Vous êtes déconnecté.")
+    messages.info(request, _("Vous êtes déconnecté."))
     return redirect("core:landing")
 
 
@@ -108,6 +110,9 @@ def profile_view(request):
     form = ProfileForm(request.POST or None, request.FILES or None, instance=request.user)
     if request.method == "POST" and form.is_valid():
         form.save()
-        messages.success(request, "Profil mis à jour.")
-        return redirect("accounts:profile")
+        messages.success(request, _("Profil mis à jour."))
+        response = redirect("accounts:profile")
+        if request.user.language:
+            set_language_cookie(response, request.user.language)
+        return response
     return render(request, "accounts/profile.html", {"form": form})

@@ -1,9 +1,10 @@
 {% extends "invitation/base_invitation.html" %}
+{% load i18n %}
 {% block inv_content %}
 <div class="text-center d-flex flex-column gap-3 align-items-center py-3">
   <span class="icon-bubble warning lg"><i class="bi bi-calendar-x"></i></span>
-  <h1>Les réponses sont <em style="color:inherit">closes</em></h1>
-  <p class="text-muted mb-0">{% if event.status == 'cancelled' %}Cet événement a été annulé.{% else %}Cet événement n'accepte plus de réponses.{% endif %}</p>
-  <a href="{% url 'core:landing' %}#affiche" class="btn btn-primary">Voir les événements publics</a>
+  <h1>{% blocktranslate trimmed %}Les réponses sont <em style="color:inherit">closes</em>{% endblocktranslate %}</h1>
+  <p class="text-muted mb-0">{% if event.status == 'cancelled' %}{% trans "Cet événement a été annulé." %}{% else %}{% trans "Cet événement n'accepte plus de réponses." %}{% endif %}</p>
+  <a href="{% url 'core:landing' %}#affiche" class="btn btn-primary">{% trans "Voir les événements publics" %}</a>
 </div>
 {% endblock %}

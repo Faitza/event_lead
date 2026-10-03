@@ -1,7 +1,8 @@
 {% extends "base.html" %}
 {% load static humanize %}
-{% block title %}Invitations, cadeaux et billets pour vos événements{% endblock %}
-{% block meta_description %}Invitations élégantes par WhatsApp ou e-mail, réponses en direct, liste de cadeaux sans doublon et billets payables par MonCash, NatCash, carte ou PayPal. Pour Haïti, la Caraïbe et la diaspora.{% endblock %}
+{% load i18n %}
+{% block title %}{% trans "Invitations, cadeaux et billets pour vos événements" %}{% endblock %}
+{% block meta_description %}{% trans "Invitations élégantes par WhatsApp ou e-mail, réponses en direct, liste de cadeaux sans doublon et billets payables par MonCash, NatCash, carte ou PayPal. Pour Haïti, la Caraïbe et la diaspora." %}{% endblock %}
 {% block extra_head %}<link rel="preload" as="image" href="{% static 'img/photos/hero-bg.jpg' %}">{% endblock %}
 {% block content %}
 
@@ -11,13 +12,13 @@
   <div class="sunburst" aria-hidden="true"></div>
   <div class="container inner d-flex flex-wrap align-items-end justify-content-between gap-4">
     <div>
-      <div class="eyebrow-row light mb-3"><span class="diamond"></span><span class="eyebrow">Accueil</span></div>
-      <h1 class="disp">Bonjour <em>{{ user.display_name }}</em></h1>
-      <p class="mb-0 mt-2" style="color:var(--el-tint-strong)">Publications, événements publics et billets du moment, rassemblés pour vous.</p>
+      <div class="eyebrow-row light mb-3"><span class="diamond"></span><span class="eyebrow">{% trans "Accueil" %}</span></div>
+      <h1 class="disp">{% blocktranslate trimmed with name=user.display_name %}Bonjour <em>{{ name }}</em>{% endblocktranslate %}</h1>
+      <p class="mb-0 mt-2" style="color:var(--el-tint-strong)">{% trans "Publications, événements publics et billets du moment, rassemblés pour vous." %}</p>
     </div>
     <div class="d-flex flex-wrap gap-2">
-      <a href="{% url 'accounts:dispatch' %}" class="btn btn-gold"><i class="bi bi-grid-1x2 me-2"></i>Mon espace</a>
-      <a href="{% url 'payments:ticketing' %}" class="btn btn-light-ghost"><i class="bi bi-ticket-perforated me-2"></i>Billetterie</a>
+      <a href="{% url 'accounts:dispatch' %}" class="btn btn-gold"><i class="bi bi-grid-1x2 me-2"></i>{% trans "Mon espace" %}</a>
+      <a href="{% url 'payments:ticketing' %}" class="btn btn-light-ghost"><i class="bi bi-ticket-perforated me-2"></i>{% trans "Billetterie" %}</a>
     </div>
   </div>
 </section>
@@ -29,22 +30,23 @@
   <div class="container hero-inner">
     <div class="row align-items-center g-4 g-lg-5">
       <div class="col-lg-7 d-flex flex-column gap-4">
-        <div class="eyebrow-row light"><span class="diamond"></span><span class="eyebrow">Haïti &middot; Caraïbe &middot; Diaspora</span></div>
-        <h1 class="disp">Votre invitation, en <em>beauté</em>. Vos invités, sans stress.</h1>
-        <p class="lead mb-0">Mariage, gala, baptême ou anniversaire&nbsp;: envoyez une invitation élégante par WhatsApp ou par e-mail. Vos invités répondent en un clic, sans compte ni application, et vous voyez qui vient en direct.</p>
+        <div class="eyebrow-row light"><span class="diamond"></span><span class="eyebrow">{% trans "Haïti" %} &middot; {% trans "Caraïbe" %} &middot; {% trans "Diaspora" %}</span></div>
+        <h1 class="disp">{% trans "Votre invitation, en <em>beauté</em>. Vos invités, sans stress." %}</h1>
+        <p class="lead mb-0">{% trans "Mariage, gala, baptême ou anniversaire&nbsp;: envoyez une invitation élégante par WhatsApp ou par e-mail. Vos invités répondent en un clic, sans compte ni application, et vous voyez qui vient en direct." %}</p>
         <div class="d-flex flex-wrap gap-3">
-          <a href="#contact" class="btn btn-gold btn-lg">Organiser mon événement</a>
-          <a href="#comment-ca-marche" class="btn btn-light-ghost btn-lg">Voir comment ça marche</a>
+          <a href="#contact" class="btn btn-gold btn-lg">{% trans "Organiser mon événement" %}</a>
+          <a href="#comment-ca-marche" class="btn btn-light-ghost btn-lg">{% trans "Voir comment ça marche" %}</a>
         </div>
-        <ul class="hero-points" aria-label="Les points forts d'EventLead">
-          <li><span class="diamond"></span>Sans compte pour l'invité</li>
-          <li><span class="diamond"></span>Cadeaux sans doublon</li>
-          <li><span class="diamond"></span>MonCash, NatCash, carte, PayPal</li>
+        {% trans "Les points forts d'EventLead" as points_label %}
+        <ul class="hero-points" aria-label="{{ points_label }}">
+          <li><span class="diamond"></span>{% trans "Sans compte pour l'invité" %}</li>
+          <li><span class="diamond"></span>{% trans "Cadeaux sans doublon" %}</li>
+          <li><span class="diamond"></span>{% trans "MonCash, NatCash, carte, PayPal" %}</li>
         </ul>
       </div>
       <div class="col-lg-5">
         {# Photo d'accueil (image générée par IA, fournie par le client) : remplacer static/img/photos/hero-arch.jpg, portrait, sans texte par-dessus #}
-        <div class="hero-photo"><div class="arch-frame"><div class="arch-img"><img src="{% static 'img/photos/hero-arch.jpg' %}" alt="Un homme et une femme préparent un événement, un carnet et un stylo à la main" width="825" height="1024" loading="lazy" decoding="async"></div></div></div>
+        <div class="hero-photo"><div class="arch-frame"><div class="arch-img"><img src="{% static 'img/photos/hero-arch.jpg' %}" alt="{% trans 'Un homme et une femme préparent un événement, un carnet et un stylo à la main' %}" width="825" height="1024" loading="lazy" decoding="async"></div></div></div>
       </div>
     </div>
   </div>
@@ -55,31 +57,31 @@
   <div class="container">
     <div class="d-flex flex-column align-items-center text-center gap-3 mb-5 reveal">
       <div class="eyebrow-row center"><span class="diamond"></span></div>
-      <span class="eyebrow">Comment ça marche</span>
-      <h2 id="how-titre" class="section-title mb-0" style="max-width:14em">Simple comme un message WhatsApp</h2>
-      <p class="how-sub">De l'invitation au jour J, vous gardez la main et vos invités n'ont rien à apprendre.</p>
+      <span class="eyebrow">{% trans "Comment ça marche" %}</span>
+      <h2 id="how-titre" class="section-title mb-0" style="max-width:14em">{% trans "Simple comme un message WhatsApp" %}</h2>
+      <p class="how-sub">{% trans "De l'invitation au jour J, vous gardez la main et vos invités n'ont rien à apprendre." %}</p>
     </div>
     <ol class="how-steps reveal">
       <li class="how-step">
         <span class="num" aria-hidden="true">1</span>
         <span class="icon-bubble"><i class="bi bi-whatsapp"></i></span>
-        <h3>Vous invitez</h3>
-        <p>Chaque invité reçoit un lien personnel par WhatsApp ou par e-mail, avec une invitation soignée à l'image de votre fête.</p>
+        <h3>{% trans "Vous invitez" %}</h3>
+        <p>{% trans "Chaque invité reçoit un lien personnel par WhatsApp ou par e-mail, avec une invitation soignée à l'image de votre fête." %}</p>
       </li>
       <li class="how-step">
         <span class="num" aria-hidden="true">2</span>
         <span class="icon-bubble"><i class="bi bi-check2-circle"></i></span>
-        <h3>Ils répondent en un lien</h3>
-        <p>Pas de compte, pas de mot de passe, pas d'application&nbsp;: l'invité confirme sa présence et ses accompagnants en quelques secondes.</p>
+        <h3>{% trans "Ils répondent en un lien" %}</h3>
+        <p>{% trans "Pas de compte, pas de mot de passe, pas d'application&nbsp;: l'invité confirme sa présence et ses accompagnants en quelques secondes." %}</p>
       </li>
       <li class="how-step">
         <span class="num" aria-hidden="true">3</span>
         <span class="icon-bubble"><i class="bi bi-gift"></i></span>
-        <h3>Un cadeau, une seule fois</h3>
-        <p>Chaque cadeau choisi est aussitôt réservé&nbsp;: personne n'offre deux fois la même chose, et vous suivez les réponses en direct.</p>
+        <h3>{% trans "Un cadeau, une seule fois" %}</h3>
+        <p>{% trans "Chaque cadeau choisi est aussitôt réservé&nbsp;: personne n'offre deux fois la même chose, et vous suivez les réponses en direct." %}</p>
       </li>
     </ol>
-    <div class="text-center mt-5 reveal"><a href="#contact" class="btn btn-outline-primary">Parler de mon événement<i class="bi bi-arrow-right ms-2"></i></a></div>
+    <div class="text-center mt-5 reveal"><a href="#contact" class="btn btn-outline-primary">{% trans "Parler de mon événement" %}<i class="bi bi-arrow-right ms-2"></i></a></div>
   </div>
 </section>
 {% endif %}
@@ -91,16 +93,18 @@
   <div class="container position-relative">
     <div class="parade-legend">
       <div class="d-flex flex-column gap-3">
-        <div class="eyebrow-row light"><span class="diamond"></span><span class="eyebrow">À l'affiche</span></div>
-        <h2 id="affiche-titre" class="disp mb-0">Événements, billets et bonnes adresses</h2>
+        <div class="eyebrow-row light"><span class="diamond"></span><span class="eyebrow">{% trans "À l'affiche" %}</span></div>
+        <h2 id="affiche-titre" class="disp mb-0">{% trans "Événements, billets et bonnes adresses" %}</h2>
       </div>
       <div class="d-flex flex-wrap align-items-center gap-3">
-        <div class="chips"><span class="chip">Publication</span><span class="chip">Événement public</span><span class="chip">Billet</span></div>
-        <button type="button" class="parade-toggle" id="parade-toggle" aria-pressed="false">Mettre en pause</button>
+        <div class="chips"><span class="chip">{% trans "Publication" %}</span><span class="chip">{% trans "Événement public" %}</span><span class="chip">{% trans "Billet" %}</span></div>
+        {% trans "Mettre en pause" as pause_label %}{% trans "Reprendre" as resume_label %}
+        <button type="button" class="parade-toggle" id="parade-toggle" aria-pressed="false" data-label-pause="{{ pause_label }}" data-label-resume="{{ resume_label }}">{{ pause_label }}</button>
       </div>
     </div>
   </div>
-  <div class="parade" id="parade" role="region" aria-label="Défilé des publications, événements publics et billets">
+  {% trans "Défilé des publications, événements publics et billets" as parade_label %}
+  <div class="parade" id="parade" role="region" aria-label="{{ parade_label }}">
     <div class="parade-track">
       {% for kind, obj in parade %}{% include "partials/_parade_card.html" %}{% endfor %}
       {% for kind, obj in parade %}<div class="d-flex" aria-hidden="true">{% include "partials/_parade_card.html" with dup=True %}</div>{% endfor %}
@@ -114,11 +118,11 @@
   <div class="container">
     <div class="d-flex flex-wrap justify-content-between align-items-end gap-3 mb-5 reveal">
       <div class="d-flex flex-column gap-3">
-        <div class="eyebrow-row"><span class="diamond"></span><span class="eyebrow">Ouverts à tous</span></div>
-        <h2 class="section-title mb-0" style="max-width:15em">Les prochains rendez-vous à ne pas manquer</h2>
-        <p class="mb-0" style="color:#4B5563;max-width:36em">Des événements ouverts à tous. Réservez votre billet en gourdes avec MonCash ou NatCash, ou par carte et PayPal.</p>
+        <div class="eyebrow-row"><span class="diamond"></span><span class="eyebrow">{% trans "Ouverts à tous" %}</span></div>
+        <h2 class="section-title mb-0" style="max-width:15em">{% trans "Les prochains rendez-vous à ne pas manquer" %}</h2>
+        <p class="mb-0" style="color:#4B5563;max-width:36em">{% trans "Des événements ouverts à tous. Réservez votre billet en gourdes avec MonCash ou NatCash, ou par carte et PayPal." %}</p>
       </div>
-      <a href="{% url 'payments:ticketing' %}" class="btn btn-outline-primary">Voir la billetterie</a>
+      <a href="{% url 'payments:ticketing' %}" class="btn btn-outline-primary">{% trans "Voir la billetterie" %}</a>
     </div>
     {% url 'core:landing' as landing_url %}
     {% include "partials/_category_filter.html" with base_url=landing_url anchor="#evenements" %}
@@ -126,10 +130,10 @@
       {% for event in public_events %}
         <div class="col-md-6 col-lg-4 reveal">{% include "partials/_event_card.html" %}</div>
       {% empty %}
-        <div class="col-12"><div class="el-card empty-state"><i class="bi bi-calendar2-heart"></i><p class="mt-2 mb-0">Aucun événement public pour le moment. Revenez bientôt.</p></div></div>
+        <div class="col-12"><div class="el-card empty-state"><i class="bi bi-calendar2-heart"></i><p class="mt-2 mb-0">{% trans "Aucun événement public pour le moment. Revenez bientôt." %}</p></div></div>
       {% endfor %}
     </div>
-    {% if public_events %}<div class="text-center mt-5"><a href="{% url 'events:explore' %}{% if selected_category %}?categorie={{ selected_category.slug }}{% endif %}" class="btn btn-outline-primary">Voir tous les événements publics{% if selected_category %} : {{ selected_category.name }}{% endif %}<i class="bi bi-arrow-right ms-2"></i></a></div>{% endif %}
+    {% if public_events %}<div class="text-center mt-5"><a href="{% url 'events:explore' %}{% if selected_category %}?categorie={{ selected_category.slug }}{% endif %}" class="btn btn-outline-primary">{% if selected_category %}{% blocktranslate trimmed with cat=selected_category.label %}Voir tous les événements publics : {{ cat }}{% endblocktranslate %}{% else %}{% trans "Voir tous les événements publics" %}{% endif %}<i class="bi bi-arrow-right ms-2"></i></a></div>{% endif %}
   </div>
 </section>
 
@@ -138,8 +142,8 @@
   <div class="container">
     <div class="d-flex flex-column align-items-center text-center gap-3 mb-5 reveal">
       <div class="eyebrow-row center"><span class="diamond"></span></div>
-      <span class="eyebrow">Services</span>
-      <h2 class="section-title mb-0" style="max-width:15em">Tout ce qu'il faut pour une fête réussie, au même endroit</h2>
+      <span class="eyebrow">{% trans "Services" %}</span>
+      <h2 class="section-title mb-0" style="max-width:15em">{% trans "Tout ce qu'il faut pour une fête réussie, au même endroit" %}</h2>
     </div>
     <div class="service-grid reveal">
       {% for icon, title, text in services %}
@@ -159,10 +163,10 @@
   <div class="container position-relative d-flex flex-wrap align-items-center gap-4" style="max-width:1100px">
     <div class="vip-seal"><span>VIP</span></div>
     <div class="flex-grow-1" style="flex-basis:380px">
-      <h2 class="disp mb-2">Rejoignez les Organisateurs VIP</h2>
-      <p class="mb-0" style="color:var(--el-tint-strong);max-width:38em">Un accès privilégié&nbsp;: le détail de tous les événements publics, les soirées privées où l'on vous invite et l'évaluation de chaque fête une fois terminée.</p>
+      <h2 class="disp mb-2">{% trans "Rejoignez les Organisateurs VIP" %}</h2>
+      <p class="mb-0" style="color:var(--el-tint-strong);max-width:38em">{% trans "Un accès privilégié&nbsp;: le détail de tous les événements publics, les soirées privées où l'on vous invite et l'évaluation de chaque fête une fois terminée." %}</p>
     </div>
-    <a href="{% if user.is_authenticated %}{% url 'accounts:become_organizer' %}{% else %}{% url 'accounts:register_organizer' %}{% endif %}" class="btn btn-gold btn-lg">Devenir Organisateur VIP</a>
+    <a href="{% if user.is_authenticated %}{% url 'accounts:become_organizer' %}{% else %}{% url 'accounts:register_organizer' %}{% endif %}" class="btn btn-gold btn-lg">{% trans "Devenir Organisateur VIP" %}</a>
   </div>
 </section>
 
@@ -171,16 +175,16 @@
   <div class="container d-flex flex-column gap-5">
     <div class="row g-4 g-lg-5 align-items-center">
       <div class="col-lg-6 reveal">
-        <div class="about-arch"><div class="pic"><img src="{% static 'img/photos/about.jpg' %}" alt="Décoration de réception" loading="lazy"></div></div>
+        <div class="about-arch"><div class="pic"><img src="{% static 'img/photos/about.jpg' %}" alt="{% trans 'Décoration de réception' %}" loading="lazy"></div></div>
       </div>
       <div class="col-lg-6 reveal d-flex flex-column gap-3">
-        <div class="eyebrow-row"><span class="diamond"></span><span class="eyebrow">À propos</span></div>
-        <h2 class="section-title mb-0">Fini les listes sur WhatsApp et les cadeaux en double</h2>
-        <p class="mb-0" style="font-size:1.0625rem;line-height:1.7;color:#4B5563;max-width:34em">EventLead réunit invités, réponses, cadeaux et paiements au même endroit. Pensé pour le mobile et pour les familles dispersées entre Port-au-Prince, Miami et Montréal&nbsp;: un seul lien, et chacun répond d'où il est.</p>
+        <div class="eyebrow-row"><span class="diamond"></span><span class="eyebrow">{% trans "À propos" %}</span></div>
+        <h2 class="section-title mb-0">{% trans "Fini les listes sur WhatsApp et les cadeaux en double" %}</h2>
+        <p class="mb-0" style="font-size:1.0625rem;line-height:1.7;color:#4B5563;max-width:34em">{% trans "EventLead réunit invités, réponses, cadeaux et paiements au même endroit. Pensé pour le mobile et pour les familles dispersées entre Port-au-Prince, Miami et Montréal&nbsp;: un seul lien, et chacun répond d'où il est." %}</p>
         <div class="d-flex flex-wrap pt-2">
-          <div class="key-figure pe-4"><div class="value">4</div><div class="label">modes de paiement</div></div>
-          <div class="key-figure px-4" style="border-left:1px solid var(--el-border)"><div class="value">1</div><div class="label">lien par invité</div></div>
-          <div class="key-figure ps-4" style="border-left:1px solid var(--el-border)"><div class="value">0</div><div class="label">cadeau en double</div></div>
+          <div class="key-figure pe-4"><div class="value">4</div><div class="label">{% trans "modes de paiement" %}</div></div>
+          <div class="key-figure px-4" style="border-left:1px solid var(--el-border)"><div class="value">1</div><div class="label">{% trans "lien par invité" %}</div></div>
+          <div class="key-figure ps-4" style="border-left:1px solid var(--el-border)"><div class="value">0</div><div class="label">{% trans "cadeau en double" %}</div></div>
         </div>
       </div>
     </div>
@@ -190,7 +194,8 @@
         {% with first=reviews.0 %}
         {% if first %}
         <figure class="testi-main">
-          <div class="stars fs-5" aria-label="{{ first.stars }} étoiles sur 5">{% for i in "12345" %}<i class="bi bi-star{% if forloop.counter <= first.stars %}-fill{% endif %}"></i>{% endfor %}</div>
+          {% blocktranslate trimmed count counter=first.stars asvar first_label %}{{ counter }} étoile sur 5{% plural %}{{ counter }} étoiles sur 5{% endblocktranslate %}
+          <div class="stars fs-5" aria-label="{{ first_label }}">{% for i in "12345" %}<i class="bi bi-star{% if forloop.counter <= first.stars %}-fill{% endif %}"></i>{% endfor %}</div>
           <blockquote>&laquo; {{ first.text|truncatechars:220 }} &raquo;</blockquote>
           <figcaption>{{ first.name }}</figcaption>
         </figure>
@@ -200,29 +205,30 @@
           {% for review in reviews|slice:"1:3" %}
           <div class="col-md-6">
             <figure class="testi">
-              <div class="stars" aria-label="{{ review.stars }} étoiles sur 5">{% for i in "12345" %}<i class="bi bi-star{% if forloop.counter <= review.stars %}-fill{% endif %}"></i>{% endfor %}</div>
+              {% blocktranslate trimmed count counter=review.stars asvar review_label %}{{ counter }} étoile sur 5{% plural %}{{ counter }} étoiles sur 5{% endblocktranslate %}
+              <div class="stars" aria-label="{{ review_label }}">{% for i in "12345" %}<i class="bi bi-star{% if forloop.counter <= review.stars %}-fill{% endif %}"></i>{% endfor %}</div>
               <blockquote>&laquo; {{ review.text|truncatechars:140 }} &raquo;</blockquote>
               <figcaption>{{ review.name }}</figcaption>
             </figure>
           </div>
           {% endfor %}
         </div>
-        {% if not reviews %}<p class="text-muted">Soyez le premier à laisser un avis.</p>{% endif %}
+        {% if not reviews %}<p class="text-muted">{% trans "Soyez le premier à laisser un avis." %}</p>{% endif %}
       </div>
       <div class="col-lg-4 reveal">
         <form method="post" action="{% url 'core:submit_review' %}" class="frame h-100">
           {% csrf_token %}
           <div class="frame-in d-flex flex-column gap-3">
-            <h3 class="mb-0" style="font-size:1.75rem">Laisser un avis</h3>
-            <div><label class="form-label" for="id_name">Nom</label><input type="text" name="name" id="id_name" class="form-control" required maxlength="100"></div>
+            <h3 class="mb-0" style="font-size:1.75rem">{% trans "Laisser un avis" %}</h3>
+            <div><label class="form-label" for="id_name">{% trans "Nom" %}</label><input type="text" name="name" id="id_name" class="form-control" required maxlength="100"></div>
             <div>
-              <span class="form-label d-block">Note</span>
+              <span class="form-label d-block">{% trans "Note" %}</span>
               <div class="star-input">
-                {% for i in "54321" %}<input type="radio" name="stars" id="star{{ i }}" value="{{ i }}" {% if i == "5" %}checked{% endif %}><label for="star{{ i }}" title="{{ i }} sur 5"><i class="bi bi-star-fill"></i></label>{% endfor %}
+                {% for i in "54321" %}<input type="radio" name="stars" id="star{{ i }}" value="{{ i }}" {% if i == "5" %}checked{% endif %}>{% blocktranslate trimmed with n=i asvar star_title %}{{ n }} sur 5{% endblocktranslate %}<label for="star{{ i }}" title="{{ star_title }}"><i class="bi bi-star-fill"></i></label>{% endfor %}
               </div>
             </div>
-            <div><label class="form-label" for="id_text">Votre avis</label><textarea name="text" id="id_text" rows="4" class="form-control" required placeholder="Partagez votre expérience avec EventLead"></textarea></div>
-            <button class="btn btn-primary align-self-start">Publier mon avis</button>
+            <div><label class="form-label" for="id_text">{% trans "Votre avis" %}</label><textarea name="text" id="id_text" rows="4" class="form-control" required placeholder="{% trans 'Partagez votre expérience avec EventLead' %}"></textarea></div>
+            <button class="btn btn-primary align-self-start">{% trans "Publier mon avis" %}</button>
           </div>
         </form>
       </div>
@@ -235,24 +241,24 @@
   <div class="container">
     <div class="row g-4 g-lg-5 align-items-center">
       <div class="col-lg-5 reveal d-flex flex-column gap-3">
-        <div class="eyebrow-row"><span class="diamond"></span><span class="eyebrow">Contact</span></div>
-        <h2 class="section-title mb-0">Votre mariage, votre gala, votre anniversaire&nbsp;: parlons-en</h2>
-        <p class="mb-2" style="color:#4B5563">Racontez-nous votre projet. Nous vous répondons par WhatsApp ou par e-mail.</p>
+        <div class="eyebrow-row"><span class="diamond"></span><span class="eyebrow">{% trans "Contact" %}</span></div>
+        <h2 class="section-title mb-0">{% trans "Votre mariage, votre gala, votre anniversaire&nbsp;: parlons-en" %}</h2>
+        <p class="mb-2" style="color:#4B5563">{% trans "Racontez-nous votre projet. Nous vous répondons par WhatsApp ou par e-mail." %}</p>
         <div class="contact-item"><i class="bi bi-geo-alt"></i>{{ CONTACT_ADDRESS }}</div>
         <div class="contact-item"><i class="bi bi-envelope"></i><a href="mailto:{{ CONTACT_EMAIL }}" style="color:inherit">{{ CONTACT_EMAIL }}</a></div>
         <div class="contact-item"><i class="bi bi-telephone"></i>{{ CONTACT_PHONE }}</div>
-        <a href="https://wa.me/{{ CONTACT_WHATSAPP }}?text={{ 'Bonjour EventLead, je souhaite organiser un événement.'|urlencode }}" target="_blank" rel="noopener" class="btn btn-whatsapp btn-lg align-self-start"><i class="bi bi-whatsapp me-2"></i>Écrire sur WhatsApp</a>
+        <a href="https://wa.me/{{ CONTACT_WHATSAPP }}?text={{ _("Bonjour EventLead, je souhaite organiser un événement.")|urlencode }}" target="_blank" rel="noopener" class="btn btn-whatsapp btn-lg align-self-start"><i class="bi bi-whatsapp me-2"></i>{% trans "Écrire sur WhatsApp" %}</a>
       </div>
       <div class="col-lg-7 reveal">
         <form method="post" action="{% url 'core:submit_contact' %}" class="frame" style="background:var(--el-bg)">
           {% csrf_token %}
           <div class="frame-in bg-white row g-3 mx-0" style="padding:2.25rem 1.5rem 2.25rem 1.5rem">
-            <h3 class="col-12 mb-1" style="font-size:1.9rem">Écrivez-nous</h3>
-            <div class="col-md-6"><label class="form-label" for="c_name">Nom complet</label><input id="c_name" name="name" class="form-control" required maxlength="100"></div>
-            <div class="col-md-6"><label class="form-label" for="c_phone">Téléphone</label><input id="c_phone" name="phone" class="form-control" maxlength="30" placeholder="+509 ..."></div>
-            <div class="col-12"><label class="form-label" for="c_email">Adresse e-mail</label><input id="c_email" type="email" name="email" class="form-control" required></div>
-            <div class="col-12"><label class="form-label" for="c_message">Message</label><textarea id="c_message" name="message" rows="4" class="form-control" required placeholder="Parlez-nous de votre événement"></textarea></div>
-            <div class="col-12"><button class="btn btn-primary btn-lg">Envoyer le message</button></div>
+            <h3 class="col-12 mb-1" style="font-size:1.9rem">{% trans "Écrivez-nous" %}</h3>
+            <div class="col-md-6"><label class="form-label" for="c_name">{% trans "Nom complet" %}</label><input id="c_name" name="name" class="form-control" required maxlength="100"></div>
+            <div class="col-md-6"><label class="form-label" for="c_phone">{% trans "Téléphone" %}</label><input id="c_phone" name="phone" class="form-control" maxlength="30" placeholder="+509 ..."></div>
+            <div class="col-12"><label class="form-label" for="c_email">{% trans "Adresse e-mail" %}</label><input id="c_email" type="email" name="email" class="form-control" required></div>
+            <div class="col-12"><label class="form-label" for="c_message">{% trans "Message" %}</label><textarea id="c_message" name="message" rows="4" class="form-control" required placeholder="{% trans 'Parlez-nous de votre événement' %}"></textarea></div>
+            <div class="col-12"><button class="btn btn-primary btn-lg">{% trans "Envoyer le message" %}</button></div>
           </div>
         </form>
       </div>
@@ -269,7 +275,7 @@
     btn.addEventListener("click", function () {
       var paused = box.classList.toggle("paused");
       btn.setAttribute("aria-pressed", paused ? "true" : "false");
-      btn.textContent = paused ? "Reprendre" : "Mettre en pause";
+      btn.textContent = paused ? (btn.dataset.labelResume || "Reprendre") : (btn.dataset.labelPause || "Mettre en pause");
     });
   })();
 </script>

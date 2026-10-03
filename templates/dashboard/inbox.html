@@ -1,35 +1,36 @@
 {% extends "dashboard/base_dashboard.html" %}
-{% block title %}Messages et avis{% endblock %}
+{% load i18n %}
+{% block title %}{% trans "Messages et avis" %}{% endblock %}
 {% block dash_content %}
-<div class="page-head"><div><h1>Messages et avis</h1><p>Formulaire de contact et avis publiés sur la page d'accueil.</p></div></div>
+<div class="page-head"><div><h1>{% trans "Messages et avis" %}</h1><p>{% trans "Formulaire de contact et avis publiés sur la page d'accueil." %}</p></div></div>
 <div class="row g-4">
   <div class="col-xl-7">
     <div class="el-card">
-      <div class="el-card-header"><h2>Messages de contact</h2></div>
+      <div class="el-card-header"><h2>{% trans "Messages de contact" %}</h2></div>
       {% for m in contact_messages %}
       <div class="p-3 border-bottom {% if not m.is_read %}bg-soft{% endif %}">
         <div class="d-flex justify-content-between gap-2">
           <div><strong>{{ m.name }}</strong> <span class="text-muted small">&middot; <a href="mailto:{{ m.email }}">{{ m.email }}</a>{% if m.phone %} &middot; {{ m.phone }}{% endif %}</span></div>
-          <form method="post" action="{% url 'dashboard:message_toggle_read' m.pk %}">{% csrf_token %}<button class="btn btn-sm {% if m.is_read %}btn-light{% else %}btn-soft{% endif %}">{% if m.is_read %}Marquer non lu{% else %}Marquer lu{% endif %}</button></form>
+          <form method="post" action="{% url 'dashboard:message_toggle_read' m.pk %}">{% csrf_token %}<button class="btn btn-sm {% if m.is_read %}btn-light{% else %}btn-soft{% endif %}">{% if m.is_read %}{% trans "Marquer non lu" %}{% else %}{% trans "Marquer lu" %}{% endif %}</button></form>
         </div>
         <p class="mb-1 mt-2 small">{{ m.message|linebreaksbr }}</p>
-        <div class="small text-muted">{{ m.created_at|date:"j F Y H:i" }}</div>
+        <div class="small text-muted">{{ m.created_at|date:_("j F Y H:i") }}</div>
       </div>
-      {% empty %}<div class="empty-state"><i class="bi bi-inbox"></i><p class="mt-2 mb-0">Aucun message.</p></div>{% endfor %}
+      {% empty %}<div class="empty-state"><i class="bi bi-inbox"></i><p class="mt-2 mb-0">{% trans "Aucun message." %}</p></div>{% endfor %}
     </div>
   </div>
   <div class="col-xl-5">
     <div class="el-card">
-      <div class="el-card-header"><h2>Avis</h2></div>
+      <div class="el-card-header"><h2>{% trans "Avis" %}</h2></div>
       {% for r in reviews %}
       <div class="p-3 border-bottom">
         <div class="d-flex justify-content-between align-items-center">
           <div><strong>{{ r.name }}</strong> <span class="stars small ms-1">{% for i in "12345" %}<i class="bi bi-star{% if forloop.counter <= r.stars %}-fill{% endif %}"></i>{% endfor %}</span></div>
-          <form method="post" action="{% url 'dashboard:review_toggle' r.pk %}">{% csrf_token %}<button class="btn btn-sm {% if r.is_published %}btn-light{% else %}btn-soft{% endif %}">{% if r.is_published %}Masquer{% else %}Publier{% endif %}</button></form>
+          <form method="post" action="{% url 'dashboard:review_toggle' r.pk %}">{% csrf_token %}<button class="btn btn-sm {% if r.is_published %}btn-light{% else %}btn-soft{% endif %}">{% if r.is_published %}{% trans "Masquer" %}{% else %}{% trans "Publier" %}{% endif %}</button></form>
         </div>
         <p class="small mb-0 mt-1">{{ r.text }}</p>
       </div>
-      {% empty %}<div class="empty-state small">Aucun avis.</div>{% endfor %}
+      {% empty %}<div class="empty-state small">{% trans "Aucun avis." %}</div>{% endfor %}
     </div>
   </div>
 </div>

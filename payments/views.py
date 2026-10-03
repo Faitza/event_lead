@@ -8,6 +8,7 @@ from django.db import transaction
 from django.db.models import Q, Sum
 from django.shortcuts import get_object_or_404, redirect, render
 from django.utils import timezone
+from django.utils.translation import gettext as _
 
 from accounts.decorators import admin_required
 from events.models import Event
@@ -45,7 +46,7 @@ def _process(request, form, *, kind, amount, event=None, quantity=1):
             user.save(update_fields=["role", "is_vip", "vip_since"])
     if status == Payment.Status.SUCCESS:
         return redirect("payments:success", reference=payment.reference)
-    messages.error(request, f"{message} Référence : {payment.reference}.")
+    messages.error(request, _("%(message)s Référence : %(reference)s.") % {"message": message, "reference": payment.reference})
     return None
 
 
@@ -63,7 +64,7 @@ def checkout(request, event_id):
             return response
     return render(request, "payments/checkout.html", {
         "event": event, "form": form, "amount_htg": event.price_htg, "amount_usd": event.price_usd,
-        "title": f"Billet - {event.title}", "allow_quantity": True,
+        "title": _("Billet - %(titre)s") % {"titre": event.title}, "allow_quantity": True,
     })
 
 
@@ -80,10 +81,10 @@ def vip(request):
     if request.method == "POST" and form.is_valid():
         response = _process(request, form, kind=Payment.Kind.ORGANIZER_ACCESS, amount=amount)
         if response:
-            messages.success(request, "Bienvenue parmi les Organisateurs VIP.")
+            messages.success(request, _("Bienvenue parmi les Organisateurs VIP."))
             return response
     return render(request, "payments/vip.html", {
-        "form": form, "amount_htg": amount, "amount_usd": _usd(amount), "title": "Accès Organisateur VIP",
+        "form": form, "amount_htg": amount, "amount_usd": _usd(amount), "title": _("Accès Organisateur VIP"),
         "allow_quantity": False,
     })
 

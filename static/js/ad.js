@@ -6,6 +6,9 @@
   var label = document.getElementById("skip-label");
   if (!bar || !skip) return;
   var total = parseInt(skip.dataset.seconds || "5", 10) * 1000;
+  // Textes fournis par le gabarit (traduits), le français sert de valeur de repli
+  var waitLabel = skip.dataset.labelWait || "Passer dans {n} s";
+  var skipLabel = skip.dataset.labelSkip || "Passer";
   var start = null;
 
   function frame(ts) {
@@ -15,16 +18,16 @@
     bar.style.width = (ratio * 100).toFixed(2) + "%";
     var remaining = Math.ceil((total - elapsed) / 1000);
     if (ratio < 1) {
-      label.textContent = "Passer dans " + remaining + " s";
+      label.textContent = waitLabel.replace("{n}", remaining);
       requestAnimationFrame(frame);
     } else {
       skip.classList.remove("disabled");
       skip.removeAttribute("aria-disabled");
       skip.removeAttribute("tabindex");
-      label.textContent = "Passer";
+      label.textContent = skipLabel;
     }
   }
-  if (total <= 0) { bar.style.width = "100%"; skip.classList.remove("disabled"); label.textContent = "Passer"; return; }
+  if (total <= 0) { bar.style.width = "100%"; skip.classList.remove("disabled"); label.textContent = skipLabel; return; }
   skip.addEventListener("click", function (e) { if (skip.classList.contains("disabled")) e.preventDefault(); });
   requestAnimationFrame(frame);
 })();

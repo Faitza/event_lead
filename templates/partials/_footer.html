@@ -1,28 +1,29 @@
+{% load i18n %}
 <footer class="el-footer">
   <div class="container">
     <div class="row g-4">
       <div class="col-lg-4">
-        <a href="{% url 'core:landing' %}" class="footer-badge mb-3" aria-label="EventLead, accueil">{% include "partials/_logo.html" %}</a>
-        <p class="small mb-0">La plateforme élégante pour organiser vos mariages, galas et conférences en Haïti et dans la Caraïbe.</p>
+        <a href="{% url 'core:landing' %}" class="footer-badge mb-3" aria-label="{% trans 'EventLead, accueil' %}">{% include "partials/_logo.html" %}</a>
+        <p class="small mb-0">{% trans "La plateforme élégante pour organiser vos mariages, galas et conférences en Haïti et dans la Caraïbe." %}</p>
       </div>
       <div class="col-6 col-lg-2">
-        <h4>Navigation</h4>
+        <h4>{% trans "Navigation" %}</h4>
         <ul class="list-unstyled small d-grid gap-2">
-          <li><a href="{% url 'core:landing' %}#services">Services</a></li>
-          <li><a href="{% url 'events:explore' %}">Événements publics</a></li>
-          <li><a href="{% url 'payments:ticketing' %}">Billetterie</a></li>
-          <li><a href="{% url 'core:help' %}">Aide</a></li>
+          <li><a href="{% url 'core:landing' %}#services">{% trans "Services" %}</a></li>
+          <li><a href="{% url 'events:explore' %}">{% trans "Événements publics" %}</a></li>
+          <li><a href="{% url 'payments:ticketing' %}">{% trans "Billetterie" %}</a></li>
+          <li><a href="{% url 'core:help' %}">{% trans "Aide" %}</a></li>
         </ul>
       </div>
       <div class="col-6 col-lg-3">
-        <h4>Espace pro</h4>
+        <h4>{% trans "Espace pro" %}</h4>
         <ul class="list-unstyled small d-grid gap-2">
-          <li><a href="{% url 'accounts:register_organizer' %}">Devenir Organisateur VIP</a></li>
-          <li><a href="{% url 'accounts:login' %}">Connexion</a></li>
+          <li><a href="{% url 'accounts:register_organizer' %}">{% trans "Devenir Organisateur VIP" %}</a></li>
+          <li><a href="{% url 'accounts:login' %}">{% trans "Connexion" %}</a></li>
         </ul>
       </div>
       <div class="col-lg-3">
-        <h4>Contact</h4>
+        <h4>{% trans "Contact" %}</h4>
         <ul class="list-unstyled small d-grid gap-2">
           <li><i class="bi bi-geo-alt me-2"></i>{{ CONTACT_ADDRESS }}</li>
           <li><i class="bi bi-envelope me-2"></i><a href="mailto:{{ CONTACT_EMAIL }}">{{ CONTACT_EMAIL }}</a></li>
@@ -31,6 +32,6 @@
       </div>
     </div>
     <hr class="border-secondary opacity-25 my-4">
-    <p class="small mb-0 text-center">&copy; {% now "Y" %} EventLead. Tous droits réservés.</p>
+    <p class="small mb-0 text-center">&copy; {% now "Y" %} EventLead. {% trans "Tous droits réservés." %}</p>
   </div>
 </footer>

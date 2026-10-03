@@ -6,6 +6,7 @@ from django.http import HttpResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
 from django.utils import timezone
+from django.utils.translation import gettext as _
 from django.views.decorators.http import require_POST
 
 from accounts.decorators import admin_required
@@ -78,7 +79,7 @@ def review_toggle(request, pk):
     review = get_object_or_404(Review, pk=pk)
     review.is_published = not review.is_published
     review.save(update_fields=["is_published"])
-    messages.success(request, "Avis publié." if review.is_published else "Avis masqué.")
+    messages.success(request, _("Avis publié.") if review.is_published else _("Avis masqué."))
     return redirect("dashboard:inbox")
 
 
@@ -124,7 +125,9 @@ def help_set_status(request, pk):
     if new_status in HelpRequest.Status.values:
         help_request.status = new_status
         help_request.save(update_fields=["status"])
-        messages.success(request, f"Demande de {help_request.name} : {help_request.get_status_display().lower()}.")
+        messages.success(request, _("Demande de %(name)s : %(status)s.") % {
+            "name": help_request.name, "status": help_request.get_status_display().lower(),
+        })
     back = request.POST.get("filter", "")
     url = reverse("dashboard:help_list")
     return redirect(f"{url}?statut={back}" if back in HelpRequest.Status.values else url)
@@ -137,10 +140,10 @@ def help_export_csv(request):
     if status:
         rows = rows.filter(status=status)
     response = HttpResponse(content_type="text/csv; charset=utf-8")
-    response["Content-Disposition"] = 'attachment; filename="demandes-aide-eventlead.csv"'
+    response["Content-Disposition"] = 'attachment; filename="%s.csv"' % _("demandes-aide-eventlead")
     response.write("\ufeff")
     writer = csv.writer(response, delimiter=";")
-    writer.writerow(["Reçue le", "Nom", "E-mail ou téléphone", "Sujet", "Message", "Statut"])
+    writer.writerow([_("Reçue le"), _("Nom"), _("E-mail ou téléphone"), _("Sujet"), _("Message"), _("Statut")])
     for r in rows:
         writer.writerow([
             timezone.localtime(r.created_at).strftime("%d/%m/%Y %H:%M"), _csv_safe(r.name), _csv_safe(r.contact),

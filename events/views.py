@@ -3,6 +3,7 @@ from django.contrib import messages
 from django.http import Http404
 from django.shortcuts import get_object_or_404, redirect, render
 from django.utils import timezone
+from django.utils.translation import gettext as _
 
 from accounts.decorators import vip_organizer_required
 from ads.models import Ad
@@ -25,7 +26,7 @@ def public_detail(request, pk):
     """Détail en lecture seule, sans informations sensibles (liste des invités, etc.)."""
     event = Event.objects.visible_to(request.user).select_related("category").filter(pk=pk).first()
     if event is None:
-        raise Http404("Événement introuvable.")
+        raise Http404(_("Événement introuvable."))
     invitation = None
     if request.user.is_authenticated:
         invitation = event.guests.filter(user=request.user).first()
@@ -70,11 +71,11 @@ def organizer_event_detail(request, pk):
 def evaluate_event(request, pk):
     event = get_object_or_404(Event.objects.visible_to(request.user), pk=pk)
     if not _can_evaluate(event, request.user):
-        messages.error(request, "L'évaluation de cet événement n'est pas encore ouverte.")
+        messages.error(request, _("L'évaluation de cet événement n'est pas encore ouverte."))
         return redirect("events:organizer_portal")
     instance = EventEvaluation.objects.filter(event=event, user=request.user).first()
     if instance:
-        messages.info(request, "Vous avez déjà évalué cet événement. Merci.")
+        messages.info(request, _("Vous avez déjà évalué cet événement. Merci."))
         return redirect("events:organizer_portal")
     form = EvaluationForm(request.POST or None)
     if request.method == "POST" and form.is_valid():
@@ -82,6 +83,6 @@ def evaluate_event(request, pk):
         evaluation.event = event
         evaluation.user = request.user
         evaluation.save()
-        messages.success(request, "Merci pour votre évaluation.")
+        messages.success(request, _("Merci pour votre évaluation."))
         return redirect("events:organizer_portal")
     return render(request, "events/evaluate.html", {"event": event, "form": form})

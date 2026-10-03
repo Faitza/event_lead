@@ -1,9 +1,13 @@
 from itertools import zip_longest
+from urllib.parse import parse_qsl, urlencode, urlsplit, urlunsplit
 
 from django.conf import settings
 from django.contrib import messages
 from django.shortcuts import redirect, render
 from django.urls import reverse
+from django.utils.http import url_has_allowed_host_and_scheme
+from django.utils.translation import gettext as _
+from django.utils.translation import gettext_lazy
 from django.views.decorators.http import require_POST
 
 from ads.models import Ad
@@ -12,15 +16,16 @@ from events.models import Event
 
 from .forms import ContactForm, HelpRequestForm, ReviewForm
 from .help import HELP_PROFILES
+from .middleware import set_language_cookie
 from .models import HelpRequest, Review
 
 SERVICES = [
-    ("bi-calendar2-heart", "Un tableau de bord pour tout piloter", "Mariage, gala, baptême ou conférence : créez l'événement, localisez le lieu sur une carte et gardez la main du début à la fin."),
-    ("bi-whatsapp", "Invitations WhatsApp et e-mail", "Chaque invité reçoit un lien personnel, sans mot de passe, sur le canal qu'il utilise vraiment."),
-    ("bi-activity", "Qui vient, avec qui", "Présences, accompagnants et cadeaux se mettent à jour à chaque réponse : sachez exactement combien de chaises préparer."),
-    ("bi-gift", "Cadeaux sans doublon", "Un cadeau choisi est aussitôt verrouillé pour les autres. La liste reste juste jusqu'au jour J."),
-    ("bi-ticket-perforated", "Billetterie et paiements locaux", "Vendez vos billets et encaissez avec MonCash, NatCash, carte ou PayPal, avec les prix en gourdes et en dollars."),
-    ("bi-megaphone", "Une vitrine pour vos partenaires", "Traiteurs, fleuristes, photographes : leur publicité s'affiche après chaque réponse, et vous suivez les vues et les clics."),
+    ("bi-calendar2-heart", gettext_lazy("Un tableau de bord pour tout piloter"), gettext_lazy("Mariage, gala, baptême ou conférence : créez l'événement, localisez le lieu sur une carte et gardez la main du début à la fin.")),
+    ("bi-whatsapp", gettext_lazy("Invitations WhatsApp et e-mail"), gettext_lazy("Chaque invité reçoit un lien personnel, sans mot de passe, sur le canal qu'il utilise vraiment.")),
+    ("bi-activity", gettext_lazy("Qui vient, avec qui"), gettext_lazy("Présences, accompagnants et cadeaux se mettent à jour à chaque réponse : sachez exactement combien de chaises préparer.")),
+    ("bi-gift", gettext_lazy("Cadeaux sans doublon"), gettext_lazy("Un cadeau choisi est aussitôt verrouillé pour les autres. La liste reste juste jusqu'au jour J.")),
+    ("bi-ticket-perforated", gettext_lazy("Billetterie et paiements locaux"), gettext_lazy("Vendez vos billets et encaissez avec MonCash, NatCash, carte ou PayPal, avec les prix en gourdes et en dollars.")),
+    ("bi-megaphone", gettext_lazy("Une vitrine pour vos partenaires"), gettext_lazy("Traiteurs, fleuristes, photographes : leur publicité s'affiche après chaque réponse, et vous suivez les vues et les clics.")),
 ]
 
 
@@ -62,9 +67,9 @@ def submit_review(request):
     form = ReviewForm(request.POST)
     if form.is_valid():
         form.save()
-        messages.success(request, "Merci pour votre avis.")
+        messages.success(request, _("Merci pour votre avis."))
     else:
-        messages.error(request, "Votre avis n'a pas pu être enregistré. Vérifiez les champs.")
+        messages.error(request, _("Votre avis n'a pas pu être enregistré. Vérifiez les champs."))
     return redirect(reverse("core:landing") + "#a-propos")
 
 
@@ -73,9 +78,9 @@ def submit_contact(request):
     form = ContactForm(request.POST)
     if form.is_valid():
         form.save()
-        messages.success(request, "Message envoyé. Notre équipe vous répondra rapidement.")
+        messages.success(request, _("Message envoyé. Notre équipe vous répondra rapidement."))
     else:
-        messages.error(request, "Le message n'a pas pu être envoyé. Vérifiez les champs.")
+        messages.error(request, _("Le message n'a pas pu être envoyé. Vérifiez les champs."))
     return redirect(reverse("core:landing") + "#contact")
 
 
@@ -98,3 +103,22 @@ def help_page(request):
     return render(request, "core/help.html", {
         "profiles": HELP_PROFILES, "form": form, "sent": request.GET.get("envoye") == "1" and request.method == "GET",
     })
+
+
+@require_POST
+def set_language(request):
+    """Sélecteur FR | EN | KR : mémorise la langue dans un cookie, et sur le profil si la personne est connectée."""
+    code = request.POST.get("language", "")
+    target = request.POST.get("next", "")
+    if not url_has_allowed_host_and_scheme(target, allowed_hosts={request.get_host()}, require_https=request.is_secure()):
+        target = reverse("core:landing")
+    # Un lien reçu avec ?lang=xx ne doit pas annuler le choix qui vient d'être fait
+    parts = urlsplit(target)
+    query = urlencode([(k, v) for k, v in parse_qsl(parts.query, keep_blank_values=True) if k != "lang"])
+    response = redirect(urlunsplit(parts._replace(query=query)))
+    if code in dict(settings.LANGUAGES):
+        set_language_cookie(response, code)
+        if request.user.is_authenticated and request.user.language != code:
+            request.user.language = code
+            request.user.save(update_fields=["language"])
+    return response

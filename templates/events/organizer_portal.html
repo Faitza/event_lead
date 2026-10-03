@@ -1,5 +1,6 @@
 {% extends "base.html" %}
-{% load static %}{% block title %}Portail Organisateur{% endblock %}
+{% load static %}
+{% load i18n %}{% block title %}{% trans "Portail Organisateur" %}{% endblock %}
 {% block content %}
 <section class="page-banner">
   <img class="hero-bg" src="{% static 'img/photos/event-gala.jpg' %}" alt="">
@@ -8,43 +9,43 @@
   <div class="container inner">
     <div class="d-flex flex-wrap justify-content-between align-items-end gap-3">
       <div>
-        <span class="badge-el badge-vip mb-3"><i class="bi bi-gem"></i>Organisateur VIP</span>
-        <h1 class="disp mb-1">Bonjour <em>{{ user.display_name }}</em></h1>
-        <p class="opacity-75 mb-0">Tous les événements publics, et les événements privés auxquels vous êtes invité.</p>
+        <span class="badge-el badge-vip mb-3"><i class="bi bi-gem"></i>{% trans "Organisateur VIP" %}</span>
+        <h1 class="disp mb-1">{% blocktranslate trimmed with name=user.display_name %}Bonjour <em>{{ name }}</em>{% endblocktranslate %}</h1>
+        <p class="opacity-75 mb-0">{% trans "Tous les événements publics, et les événements privés auxquels vous êtes invité." %}</p>
       </div>
-      {% if user.vip_since %}<span class="small opacity-75">Membre VIP depuis le {{ user.vip_since|date:"j F Y" }}</span>{% endif %}
+      {% if user.vip_since %}<span class="small opacity-75">{% with d=user.vip_since|date:_("j F Y") %}{% blocktranslate trimmed with date=d %}Membre VIP depuis le {{ date }}{% endblocktranslate %}{% endwith %}</span>{% endif %}
     </div>
   </div>
 </section>
 <section class="section pt-5">
   <div class="container">
-    <div class="notice notice-info mb-4"><i class="bi bi-eye"></i><div>Votre accès est en lecture seule : la création et la gestion des événements restent réservées à l'équipe EventLead.</div></div>
-    <div class="eyebrow-row mb-4"><span class="diamond"></span><span class="eyebrow">Événements à venir</span></div>
+    <div class="notice notice-info mb-4"><i class="bi bi-eye"></i><div>{% trans "Votre accès est en lecture seule : la création et la gestion des événements restent réservées à l'équipe EventLead." %}</div></div>
+    <div class="eyebrow-row mb-4"><span class="diamond"></span><span class="eyebrow">{% trans "Événements à venir" %}</span></div>
     <div class="row g-4 g-lg-5 mb-5">
       {% for event in upcoming %}
         <div class="col-md-6 col-lg-4 reveal">
           {% url 'events:organizer_event_detail' event.pk as href %}
           {% include "partials/_event_card.html" with href=href %}
-          {% if event.my_invitation %}<div class="small mt-2"><span class="badge-el badge-gold"><i class="bi bi-envelope-heart"></i>Vous êtes invité</span></div>{% endif %}
+          {% if event.my_invitation %}<div class="small mt-2"><span class="badge-el badge-gold"><i class="bi bi-envelope-heart"></i>{% trans "Vous êtes invité" %}</span></div>{% endif %}
         </div>
       {% empty %}
-        <div class="col-12"><div class="el-card empty-state"><i class="bi bi-calendar2"></i><p class="mt-2 mb-0">Aucun événement à venir.</p></div></div>
+        <div class="col-12"><div class="el-card empty-state"><i class="bi bi-calendar2"></i><p class="mt-2 mb-0">{% trans "Aucun événement à venir." %}</p></div></div>
       {% endfor %}
     </div>
     {% if past %}
-    <div class="eyebrow-row mb-3"><span class="diamond"></span><span class="eyebrow">Événements passés</span></div>
+    <div class="eyebrow-row mb-3"><span class="diamond"></span><span class="eyebrow">{% trans "Événements passés" %}</span></div>
     <div class="el-card mb-5">
       <div class="table-wrap"><table class="table table-el">
-        <thead><tr><th>Événement</th><th>Date</th><th>Type</th><th class="text-end">Évaluation</th></tr></thead>
+        <thead><tr><th>{% trans "Événement" %}</th><th>{% trans "Date" %}</th><th>{% trans "Type" %}</th><th class="text-end">{% trans "Évaluation" %}</th></tr></thead>
         <tbody>{% for event in past %}
-          <tr><td class="fw-semibold">{{ event.title }}</td><td>{{ event.date|date:"j F Y" }}</td><td>{{ event.get_event_type_display }}</td>
-          <td class="text-end">{% if event.already_evaluated %}<span class="badge-el badge-success"><i class="bi bi-check2"></i>Évalué</span>{% elif event.can_evaluate %}<a href="{% url 'events:evaluate' event.pk %}" class="btn btn-sm btn-gold"><i class="bi bi-star me-1"></i>Évaluer</a>{% elif event.my_invitation and not event.is_public %}<span class="small text-muted">Ouverture le {{ event.evaluation_opens_on|date:"j F" }}</span>{% else %}<span class="text-muted">-</span>{% endif %}</td></tr>
+          <tr><td class="fw-semibold">{{ event.title }}</td><td>{{ event.date|date:_("j F Y") }}</td><td>{{ event.get_event_type_display }}</td>
+          <td class="text-end">{% if event.already_evaluated %}<span class="badge-el badge-success"><i class="bi bi-check2"></i>{% trans "Évalué" %}</span>{% elif event.can_evaluate %}<a href="{% url 'events:evaluate' event.pk %}" class="btn btn-sm btn-gold"><i class="bi bi-star me-1"></i>{% trans "Évaluer" %}</a>{% elif event.my_invitation and not event.is_public %}<span class="small text-muted">{% with d=event.evaluation_opens_on|date:_("j F") %}{% blocktranslate trimmed with date=d %}Ouverture le {{ date }}{% endblocktranslate %}{% endwith %}</span>{% else %}<span class="text-muted">-</span>{% endif %}</td></tr>
         {% endfor %}</tbody>
       </table></div>
     </div>
     {% endif %}
     {% if ads %}
-    <div class="eyebrow-row mb-3"><span class="diamond"></span><span class="eyebrow">Offres partenaires</span></div>
+    <div class="eyebrow-row mb-3"><span class="diamond"></span><span class="eyebrow">{% trans "Offres partenaires" %}</span></div>
     <div class="row g-3">
       {% for ad in ads %}
       <div class="col-md-6 col-lg-4"><a href="{% url 'ads:click' ad.pk %}" target="_blank" rel="noopener sponsored" class="el-card el-card-body d-flex gap-3 align-items-center text-body h-100"><span class="icon-bubble gold"><i class="bi {{ ad.icon_name }}"></i></span><div><strong>{{ ad.title }}</strong><div class="small text-muted">{{ ad.message|truncatechars:80 }}</div></div></a></div>

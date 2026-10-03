@@ -1,9 +1,10 @@
 {% extends "dashboard/base_dashboard.html" %}
-{% block title %}{% if is_new %}Nouvelle catégorie{% else %}Modifier la catégorie{% endif %}{% endblock %}
+{% load i18n %}
+{% block title %}{% if is_new %}{% trans "Nouvelle catégorie" %}{% else %}{% trans "Modifier la catégorie" %}{% endif %}{% endblock %}
 {% block dash_content %}
 <div class="page-head">
-  <div><h1>{% if is_new %}Nouvelle catégorie{% else %}{{ category.name }}{% endif %}</h1><p>Le nom et l'icône s'affichent sur les cartes d'événements et dans les filtres du site.</p></div>
-  <a href="{% url 'dashboard:category_list' %}" class="btn btn-light"><i class="bi bi-arrow-left me-2"></i>Retour</a>
+  <div><h1>{% if is_new %}{% trans "Nouvelle catégorie" %}{% else %}{{ category.name }}{% endif %}</h1><p>{% trans "Le nom et l'icône s'affichent sur les cartes d'événements et dans les filtres du site." %}</p></div>
+  <a href="{% url 'dashboard:category_list' %}" class="btn btn-light"><i class="bi bi-arrow-left me-2"></i>{% trans "Retour" %}</a>
 </div>
 <form method="post" novalidate>
   {% csrf_token %}
@@ -13,7 +14,7 @@
         {% include "partials/_field.html" with field=form.name %}
         {% include "partials/_icon_picker.html" with field=form.icon_name %}
         {% include "partials/_field.html" with field=form.order %}
-        <button class="btn btn-primary btn-lg"><i class="bi bi-check2 me-2"></i>Enregistrer</button>
+        <button class="btn btn-primary btn-lg"><i class="bi bi-check2 me-2"></i>{% trans "Enregistrer" %}</button>
       </div>
     </div>
   </div>

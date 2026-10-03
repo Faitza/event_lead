@@ -1,4 +1,5 @@
 from django.conf import settings
+from django.utils import timezone
 
 from events.models import Event
 
@@ -24,4 +25,7 @@ def site_settings(request):
         # Appelable : la requête n'est exécutée que si le gabarit l'utilise.
         "next_public_event": _next_public_event,
         "new_help_requests": _new_help_requests,
+        "TODAY": timezone.localdate,
+        # (code, sigle affiché, nom dans sa propre langue) : jamais traduits
+        "LANGUAGE_OPTIONS": [("fr", "FR", "Français"), ("en", "EN", "English"), ("ht", "KR", "Kreyòl ayisyen")],
     }

@@ -1,22 +1,23 @@
 {% extends "dashboard/base_dashboard.html" %}
 {% load humanize %}
-{% block title %}Paiements{% endblock %}
+{% load i18n %}
+{% block title %}{% trans "Paiements" %}{% endblock %}
 {% block dash_content %}
 <div class="page-head">
-  <div><h1>Historique des transactions</h1><p>Billetterie et accès Organisateur VIP.</p></div>
-  <div class="el-card px-3 py-2"><span class="text-muted small">Total encaissé (filtre)</span><div class="fw-bold text-primary">{{ total_htg|floatformat:2|intcomma }} HTG <span class="text-muted fw-normal small">&asymp; {{ total_usd|floatformat:2 }} USD</span></div></div>
+  <div><h1>{% trans "Historique des transactions" %}</h1><p>{% trans "Billetterie et accès Organisateur VIP." %}</p></div>
+  <div class="el-card px-3 py-2"><span class="text-muted small">{% trans "Total encaissé (filtre)" %}</span><div class="fw-bold text-primary">{{ total_htg|floatformat:2|intcomma }} HTG <span class="text-muted fw-normal small">&asymp; {{ total_usd|floatformat:2 }} USD</span></div></div>
 </div>
 <form class="filter-bar mb-3" method="get">
-  <select name="status" class="form-select" onchange="this.form.submit()"><option value="">Tous les statuts</option>{% for v, l in statuses %}<option value="{{ v }}" {% if status == v %}selected{% endif %}>{{ l }}</option>{% endfor %}</select>
-  <select name="method" class="form-select" onchange="this.form.submit()"><option value="">Tous les modes</option>{% for v, l in methods %}<option value="{{ v }}" {% if method == v %}selected{% endif %}>{{ l }}</option>{% endfor %}</select>
-  <select name="kind" class="form-select" onchange="this.form.submit()"><option value="">Tous les types</option>{% for v, l in kinds %}<option value="{{ v }}" {% if kind == v %}selected{% endif %}>{{ l }}</option>{% endfor %}</select>
-  <input type="search" name="q" value="{{ q }}" class="form-control" placeholder="Référence, e-mail, événement">
+  <select name="status" class="form-select" onchange="this.form.submit()"><option value="">{% trans "Tous les statuts" %}</option>{% for v, l in statuses %}<option value="{{ v }}" {% if status == v %}selected{% endif %}>{{ l }}</option>{% endfor %}</select>
+  <select name="method" class="form-select" onchange="this.form.submit()"><option value="">{% trans "Tous les modes" %}</option>{% for v, l in methods %}<option value="{{ v }}" {% if method == v %}selected{% endif %}>{{ l }}</option>{% endfor %}</select>
+  <select name="kind" class="form-select" onchange="this.form.submit()"><option value="">{% trans "Tous les types" %}</option>{% for v, l in kinds %}<option value="{{ v }}" {% if kind == v %}selected{% endif %}>{{ l }}</option>{% endfor %}</select>
+  <input type="search" name="q" value="{{ q }}" class="form-control" placeholder="{% trans 'Référence, e-mail, événement' %}">
   <button class="btn btn-soft"><i class="bi bi-search"></i></button>
 </form>
 <div class="el-card">
   {% if payments %}
   <div class="table-wrap"><table class="table table-el">
-    <thead><tr><th>Référence</th><th>Date</th><th>Client</th><th>Type</th><th>Mode</th><th>Montant</th><th>Statut</th></tr></thead>
+    <thead><tr><th>{% trans "Référence" %}</th><th>{% trans "Date" %}</th><th>{% trans "Client" %}</th><th>{% trans "Type" %}</th><th>{% trans "Mode" %}</th><th>{% trans "Montant" %}</th><th>{% trans "Statut" %}</th></tr></thead>
     <tbody>{% for p in payments %}
       <tr>
         <td class="fw-semibold">{{ p.reference }}</td>
@@ -29,6 +30,6 @@
       </tr>
     {% endfor %}</tbody>
   </table></div>
-  {% else %}<div class="empty-state"><i class="bi bi-credit-card"></i><p class="mt-2 mb-0">Aucune transaction.</p></div>{% endif %}
+  {% else %}<div class="empty-state"><i class="bi bi-credit-card"></i><p class="mt-2 mb-0">{% trans "Aucune transaction." %}</p></div>{% endif %}
 </div>
 {% endblock %}

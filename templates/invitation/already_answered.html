@@ -1,16 +1,19 @@
 {% extends "invitation/base_invitation.html" %}
+{% load i18n %}
 {% block inv_content %}
 {% include "invitation/_event_summary.html" %}
 <div class="text-center d-flex flex-column gap-3 align-items-center">
   <span class="icon-bubble success lg"><i class="bi bi-patch-check"></i></span>
-  <h1>Votre réponse est <em style="color:inherit">enregistrée</em></h1>
-  <p class="text-muted mb-0">Vous avez confirmé votre présence le {{ guest.replied_at|date:"j F Y à H:i" }}{% if guest.companions %}, avec {{ guest.companions }} accompagnant{{ guest.companions|pluralize }}{% endif %}. Cette réponse est définitive.</p>
+  <h1>{% blocktranslate trimmed %}Votre réponse est <em style="color:inherit">enregistrée</em>{% endblocktranslate %}</h1>
+  {% with when=guest.replied_at|date:_("j F Y à H:i") %}
+  <p class="text-muted mb-0">{% if guest.companions %}{% blocktranslate trimmed with date=when count counter=guest.companions %}Vous avez confirmé votre présence le {{ date }}, avec {{ counter }} accompagnant.{% plural %}Vous avez confirmé votre présence le {{ date }}, avec {{ counter }} accompagnants.{% endblocktranslate %}{% else %}{% blocktranslate trimmed with date=when %}Vous avez confirmé votre présence le {{ date }}.{% endblocktranslate %}{% endif %} {% trans "Cette réponse est définitive." %}</p>
+  {% endwith %}
   {% if claims %}
   <div class="inv-pane w-100 text-start">
-    <div class="small text-muted mb-2">Vos cadeaux réservés</div>
+    <div class="small text-muted mb-2">{% trans "Vos cadeaux réservés" %}</div>
     {% for c in claims %}<div class="fw-semibold"><i class="bi {{ c.gift.icon_name }} text-primary me-2"></i>{{ c.gift.name }}</div>{% endfor %}
   </div>
   {% endif %}
-  <a href="{% url 'core:landing' %}#affiche" class="btn btn-primary">Découvrir les événements publics</a>
+  <a href="{% url 'core:landing' %}#affiche" class="btn btn-primary">{% trans "Découvrir les événements publics" %}</a>
 </div>
 {% endblock %}

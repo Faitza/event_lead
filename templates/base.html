@@ -1,10 +1,10 @@
-{% load static %}<!DOCTYPE html>
-<html lang="fr">
+{% load static %}{% load i18n %}<!DOCTYPE html>
+<html lang="{{ LANGUAGE_CODE|default:'fr' }}">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>{% block title %}EventLead{% endblock %} | EventLead</title>
-  <meta name="description" content="{% block meta_description %}EventLead, la plateforme de gestion d'événements pour Haïti et la Caraïbe : invitations WhatsApp et e-mail, liste de cadeaux, suivi en temps réel.{% endblock %}">
+  <meta name="description" content="{% block meta_description %}{% trans "EventLead, la plateforme de gestion d'événements pour Haïti et la Caraïbe : invitations WhatsApp et e-mail, liste de cadeaux, suivi en temps réel." %}{% endblock %}">
   <meta name="theme-color" content="#45065C">
   <link rel="icon" type="image/png" href="{% static 'img/favicon.png' %}">
   <link rel="preconnect" href="https://fonts.googleapis.com">

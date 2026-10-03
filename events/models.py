@@ -9,6 +9,8 @@ from django.templatetags.static import static
 from django.urls import reverse
 from django.utils import timezone
 from django.utils.text import slugify
+from django.utils.translation import gettext, gettext_noop
+from django.utils.translation import gettext_lazy as _
 
 PLACEHOLDER_COVERS = [
     "img/photos/event-gala.jpg",
@@ -36,21 +38,33 @@ class EventQuerySet(models.QuerySet):
         ).exclude(status=Event.Status.DRAFT).distinct()
 
 
+# Noms des catégories créées par défaut : listés ici pour être traduits (le site les affiche avec `label`).
+DEFAULT_CATEGORY_NAMES = [
+    gettext_noop("Mariage"), gettext_noop("Gala"), gettext_noop("Anniversaire"),
+    gettext_noop("Baptême"), gettext_noop("Conférence"), gettext_noop("Concert"),
+]
+
+
 class EventCategory(models.Model):
     """Catégorie d'événement (mariage, gala, concert...), utilisée pour filtrer les listes publiques."""
 
-    name = models.CharField("nom", max_length=60, unique=True)
-    slug = models.SlugField("identifiant dans l'adresse", max_length=70, unique=True, blank=True)
-    icon_name = models.CharField("icône", max_length=50, default="bi-calendar2-event")
-    order = models.PositiveSmallIntegerField("ordre d'affichage", default=0)
+    name = models.CharField(_("nom"), max_length=60, unique=True)
+    slug = models.SlugField(_("identifiant dans l'adresse"), max_length=70, unique=True, blank=True)
+    icon_name = models.CharField(_("icône"), max_length=50, default="bi-calendar2-event")
+    order = models.PositiveSmallIntegerField(_("ordre d'affichage"), default=0)
 
     class Meta:
         ordering = ["order", "name"]
-        verbose_name = "catégorie d'événements"
-        verbose_name_plural = "catégories d'événements"
+        verbose_name = _("catégorie d'événements")
+        verbose_name_plural = _("catégories d'événements")
 
     def __str__(self):
         return self.name
+
+    @property
+    def label(self):
+        """Nom affiché : traduit pour les catégories par défaut, tel quel pour celles créées par l'équipe."""
+        return gettext(self.name)
 
     def save(self, *args, **kwargs):
         if not self.slug:
@@ -64,49 +78,49 @@ class EventCategory(models.Model):
 
 class Event(models.Model):
     class EventType(models.TextChoices):
-        PUBLIC = "public", "Public"
-        PRIVATE = "private", "Privé"
+        PUBLIC = "public", _("Public")
+        PRIVATE = "private", _("Privé")
 
     class Status(models.TextChoices):
-        ACTIVE = "active", "Actif"
-        DRAFT = "draft", "Brouillon"
-        CANCELLED = "cancelled", "Annulé"
+        ACTIVE = "active", _("Actif")
+        DRAFT = "draft", _("Brouillon")
+        CANCELLED = "cancelled", _("Annulé")
 
-    title = models.CharField("titre", max_length=200)
-    event_type = models.CharField("type", max_length=10, choices=EventType.choices, default=EventType.PRIVATE)
-    status = models.CharField("statut", max_length=10, choices=Status.choices, default=Status.ACTIVE)
-    date = models.DateField("date")
-    time = models.TimeField("heure")
-    venue = models.CharField("lieu (adresse)", max_length=255)
-    latitude = models.FloatField("latitude", null=True, blank=True)
-    longitude = models.FloatField("longitude", null=True, blank=True)
-    max_guests = models.PositiveIntegerField("nombre maximum d'invités", default=100)
-    allow_companions = models.BooleanField("accompagnants autorisés", default=False)
-    max_companions = models.PositiveIntegerField("accompagnants maximum par invité", default=0)
-    evaluation_delay_days = models.PositiveIntegerField("délai d'évaluation (jours)", default=3)
-    description = models.TextField("description", blank=True)
-    cover_image = models.ImageField("photo de couverture", upload_to="events/covers/", null=True, blank=True)
-    cover_video = models.FileField("vidéo de couverture", upload_to="events/videos/", null=True, blank=True)
+    title = models.CharField(_("titre"), max_length=200)
+    event_type = models.CharField(_("type"), max_length=10, choices=EventType.choices, default=EventType.PRIVATE)
+    status = models.CharField(_("statut"), max_length=10, choices=Status.choices, default=Status.ACTIVE)
+    date = models.DateField(_("date"))
+    time = models.TimeField(_("heure"))
+    venue = models.CharField(_("lieu (adresse)"), max_length=255)
+    latitude = models.FloatField(_("latitude"), null=True, blank=True)
+    longitude = models.FloatField(_("longitude"), null=True, blank=True)
+    max_guests = models.PositiveIntegerField(_("nombre maximum d'invités"), default=100)
+    allow_companions = models.BooleanField(_("accompagnants autorisés"), default=False)
+    max_companions = models.PositiveIntegerField(_("accompagnants maximum par invité"), default=0)
+    evaluation_delay_days = models.PositiveIntegerField(_("délai d'évaluation (jours)"), default=3)
+    description = models.TextField(_("description"), blank=True)
+    cover_image = models.ImageField(_("photo de couverture"), upload_to="events/covers/", null=True, blank=True)
+    cover_video = models.FileField(_("vidéo de couverture"), upload_to="events/videos/", null=True, blank=True)
     price_htg = models.DecimalField(
-        "prix du billet (HTG)", max_digits=10, decimal_places=2, null=True, blank=True,
-        help_text="Laisser vide si l'événement est gratuit.",
+        _("prix du billet (HTG)"), max_digits=10, decimal_places=2, null=True, blank=True,
+        help_text=_("Laisser vide si l'événement est gratuit."),
     )
     category = models.ForeignKey(
         EventCategory, on_delete=models.SET_NULL, null=True, blank=True, related_name="events",
-        verbose_name="catégorie",
+        verbose_name=_("catégorie"),
     )
     created_by = models.ForeignKey(
         settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, null=True, related_name="events_created",
-        verbose_name="créé par",
+        verbose_name=_("créé par"),
     )
-    created_at = models.DateTimeField("créé le", auto_now_add=True)
+    created_at = models.DateTimeField(_("créé le"), auto_now_add=True)
 
     objects = EventQuerySet.as_manager()
 
     class Meta:
         ordering = ["date", "time"]
-        verbose_name = "événement"
-        verbose_name_plural = "événements"
+        verbose_name = _("événement")
+        verbose_name_plural = _("événements")
 
     def __str__(self):
         return self.title
@@ -161,36 +175,37 @@ class Event(models.Model):
 
 class Guest(models.Model):
     class Status(models.TextChoices):
-        PENDING = "pending", "En attente"
-        CONFIRMED = "confirmed", "Présent"
-        DECLINED = "declined", "Absent"
-        MAYBE = "maybe", "Peut-être"
+        PENDING = "pending", _("En attente")
+        CONFIRMED = "confirmed", _("Présent")
+        DECLINED = "declined", _("Absent")
+        MAYBE = "maybe", _("Peut-être")
 
     class Channel(models.TextChoices):
-        EMAIL = "email", "Email"
+        EMAIL = "email", _("Email")
         WHATSAPP = "whatsapp", "WhatsApp"
 
-    event = models.ForeignKey(Event, on_delete=models.CASCADE, related_name="guests", verbose_name="événement")
+    event = models.ForeignKey(Event, on_delete=models.CASCADE, related_name="guests", verbose_name=_("événement"))
     user = models.ForeignKey(
         settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, null=True, blank=True,
-        related_name="invitations", verbose_name="compte lié",
+        related_name="invitations", verbose_name=_("compte lié"),
     )
-    name = models.CharField("nom", max_length=150)
-    email = models.EmailField("email", blank=True)
-    phone = models.CharField("téléphone", max_length=30, blank=True)
-    status = models.CharField("statut", max_length=10, choices=Status.choices, default=Status.PENDING)
-    companions = models.PositiveIntegerField("accompagnants", default=0)
-    sent_via = models.CharField("canal d'envoi", max_length=10, choices=Channel.choices, default=Channel.WHATSAPP)
-    magic_token = models.UUIDField("lien magique", default=uuid.uuid4, unique=True, editable=False)
-    invitation_sent_at = models.DateTimeField("invitation envoyée le", null=True, blank=True)
-    replied_at = models.DateTimeField("répondu le", null=True, blank=True)
-    wants_gift = models.BooleanField("souhaite offrir un cadeau", null=True, blank=True)
+    name = models.CharField(_("nom"), max_length=150)
+    email = models.EmailField(_("email"), blank=True)
+    phone = models.CharField(_("téléphone"), max_length=30, blank=True)
+    status = models.CharField(_("statut"), max_length=10, choices=Status.choices, default=Status.PENDING)
+    companions = models.PositiveIntegerField(_("accompagnants"), default=0)
+    sent_via = models.CharField(_("canal d'envoi"), max_length=10, choices=Channel.choices, default=Channel.WHATSAPP)
+    language = models.CharField(_("langue de l'invitation"), max_length=5, choices=settings.LANGUAGES, default=settings.LANGUAGE_CODE)
+    magic_token = models.UUIDField(_("lien magique"), default=uuid.uuid4, unique=True, editable=False)
+    invitation_sent_at = models.DateTimeField(_("invitation envoyée le"), null=True, blank=True)
+    replied_at = models.DateTimeField(_("répondu le"), null=True, blank=True)
+    wants_gift = models.BooleanField(_("souhaite offrir un cadeau"), null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:
         ordering = ["name"]
-        verbose_name = "invité"
-        verbose_name_plural = "invités"
+        verbose_name = _("invité")
+        verbose_name_plural = _("invités")
 
     def __str__(self):
         return f"{self.name} ({self.event})"
@@ -218,14 +233,14 @@ class EventEvaluation(models.Model):
 
     event = models.ForeignKey(Event, on_delete=models.CASCADE, related_name="evaluations")
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="evaluations")
-    stars = models.PositiveIntegerField("note", validators=[MinValueValidator(1), MaxValueValidator(5)])
-    comment = models.TextField("commentaire", blank=True)
+    stars = models.PositiveIntegerField(_("note"), validators=[MinValueValidator(1), MaxValueValidator(5)])
+    comment = models.TextField(_("commentaire"), blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:
         unique_together = ("event", "user")
-        verbose_name = "évaluation"
-        verbose_name_plural = "évaluations"
+        verbose_name = _("évaluation")
+        verbose_name_plural = _("évaluations")
 
     def __str__(self):
         return f"{self.event} - {self.stars}/5"

@@ -1,32 +1,33 @@
 {% extends "invitation/base_invitation.html" %}
+{% load i18n %}
 {% block inv_content %}
 <div class="d-flex flex-column gap-2">
-  <h1 class="mb-2">Récapitulatif de votre <em style="color:inherit">réponse</em></h1>
-  <div class="recap-row"><span class="text-muted">Événement</span><strong class="text-end disp" style="font-size:1.15rem;font-weight:400">{{ event.title }}</strong></div>
-  <div class="recap-row"><span class="text-muted">Présence</span>
+  <h1 class="mb-2">{% blocktranslate trimmed %}Récapitulatif de votre <em style="color:inherit">réponse</em>{% endblocktranslate %}</h1>
+  <div class="recap-row"><span class="text-muted">{% trans "Événement" %}</span><strong class="text-end disp" style="font-size:1.15rem;font-weight:400">{{ event.title }}</strong></div>
+  <div class="recap-row"><span class="text-muted">{% trans "Présence" %}</span>
     <span class="badge-el {% if state.status == 'confirmed' %}badge-success{% elif state.status == 'declined' %}badge-danger{% else %}badge-warning{% endif %}">{{ status_label }}</span></div>
   {% if state.status == 'confirmed' and event.allow_companions %}
-  <div class="recap-row"><span class="text-muted">Accompagnants</span><strong>{{ state.companions|default:0 }}</strong></div>
+  <div class="recap-row"><span class="text-muted">{% trans "Accompagnants" %}</span><strong>{{ state.companions|default:0 }}</strong></div>
   {% endif %}
   {% if state.status == 'confirmed' and event.gifts.exists %}
-  <div class="recap-row align-items-start"><span class="text-muted">Cadeaux</span>
+  <div class="recap-row align-items-start"><span class="text-muted">{% trans "Cadeaux" %}</span>
     <div class="text-end">
-      {% for g in selected_gifts %}<div class="fw-semibold"><i class="bi {{ g.icon_name }} text-primary me-1"></i>{{ g.name }}</div>{% empty %}<span>Aucun cadeau</span>{% endfor %}
+      {% for g in selected_gifts %}<div class="fw-semibold"><i class="bi {{ g.icon_name }} text-primary me-1"></i>{{ g.name }}</div>{% empty %}<span>{% trans "Aucun cadeau" %}</span>{% endfor %}
     </div>
   </div>
   {% endif %}
 
   {% if state.status == 'confirmed' %}
-  <div class="notice notice-warning my-2"><i class="bi bi-shield-lock-fill"></i><div><strong>Attention :</strong> après confirmation, votre réponse{% if selected_gifts %} et vos cadeaux{% endif %} seront définitifs. Aucune modification ni annulation ne sera possible avant l'événement.</div></div>
+  <div class="notice notice-warning my-2"><i class="bi bi-shield-lock-fill"></i><div><strong>{% trans "Attention :" %}</strong> {% if selected_gifts %}{% trans "après confirmation, votre réponse et vos cadeaux seront définitifs." %}{% else %}{% trans "après confirmation, votre réponse sera définitive." %}{% endif %} {% trans "Aucune modification ni annulation ne sera possible avant l'événement." %}</div></div>
   {% else %}
-  <div class="notice notice-info my-2"><i class="bi bi-info-circle-fill"></i><div>Vous pourrez revenir sur ce lien pour mettre à jour votre réponse tant que vous n'avez pas confirmé votre présence.</div></div>
+  <div class="notice notice-info my-2"><i class="bi bi-info-circle-fill"></i><div>{% trans "Vous pourrez revenir sur ce lien pour mettre à jour votre réponse tant que vous n'avez pas confirmé votre présence." %}</div></div>
   {% endif %}
 
-  {% include "partials/_help_hint.html" with summary="Une erreur dans ma réponse ?" text="Avant de confirmer, la flèche de retour permet de corriger. Une fois la présence confirmée, la réponse est définitive : écrivez-nous en expliquant l'erreur." faq="invite-modifier" topic="invitation" %}
+  {% include "partials/_help_hint.html" with summary=_("Une erreur dans ma réponse ?") text=_("Avant de confirmer, la flèche de retour permet de corriger. Une fois la présence confirmée, la réponse est définitive : écrivez-nous en expliquant l'erreur.") faq="invite-modifier" topic="invitation" %}
   <form method="post" class="d-flex gap-2">
     {% csrf_token %}
     <a href="{% if selected_gifts %}{% url 'events:invitation_gift_list' guest.magic_token %}{% elif state.status == 'confirmed' and event.gifts.exists %}{% url 'events:invitation_gift_question' guest.magic_token %}{% else %}{% url 'events:invitation' guest.magic_token %}{% endif %}" class="btn btn-light btn-lg"><i class="bi bi-arrow-left"></i></a>
-    <button class="btn btn-primary btn-lg flex-grow-1"><i class="bi bi-check2-circle me-2"></i>Confirmer définitivement</button>
+    <button class="btn btn-primary btn-lg flex-grow-1"><i class="bi bi-check2-circle me-2"></i>{% trans "Confirmer définitivement" %}</button>
   </form>
 </div>
 {% endblock %}

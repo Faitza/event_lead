@@ -4,6 +4,8 @@ from django.db.models import F
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
+from django.utils.translation import gettext as _
+from django.utils.translation import gettext_lazy, ngettext
 from django.views.decorators.http import require_GET
 
 from ads.models import Ad
@@ -35,16 +37,27 @@ def _set_state(request, guest, **values):
     return state
 
 
+# Étapes du parcours : identifiant interne -> libellé affiché (traduit) dans la barre de progression.
+STEP_LABELS = {
+    "presence": gettext_lazy("Présence"),
+    "gifts": gettext_lazy("Cadeaux"),
+    "selection": gettext_lazy("Sélection"),
+    "recap": gettext_lazy("Récapitulatif"),
+    "confirmation": gettext_lazy("Confirmation"),
+}
+
+
 def _steps(event):
     if event.gifts.exists():
-        return ["Présence", "Cadeaux", "Sélection", "Récapitulatif", "Confirmation"]
-    return ["Présence", "Récapitulatif", "Confirmation"]
+        return ["presence", "gifts", "selection", "recap", "confirmation"]
+    return ["presence", "recap", "confirmation"]
 
 
 def _ctx(guest, step_name, **extra):
     steps = _steps(guest.event)
     index = steps.index(step_name) + 1 if step_name in steps else len(steps)
-    return {"guest": guest, "event": guest.event, "steps": steps, "step_index": index, "step_total": len(steps), **extra}
+    labels = [STEP_LABELS[s] for s in steps]
+    return {"guest": guest, "event": guest.event, "steps": labels, "step_index": index, "step_total": len(steps), **extra}
 
 
 def _load_guest(token):
@@ -56,9 +69,9 @@ def _guard(request, guest):
     event = guest.event
     if guest.is_locked:
         claims = GiftClaim.objects.filter(guest=guest).select_related("gift")
-        return render(request, "invitation/already_answered.html", _ctx(guest, "Confirmation", claims=claims))
+        return render(request, "invitation/already_answered.html", _ctx(guest, "confirmation", claims=claims))
     if event.status != Event.Status.ACTIVE or event.is_past:
-        return render(request, "invitation/closed.html", _ctx(guest, "Présence"))
+        return render(request, "invitation/closed.html", _ctx(guest, "presence"))
     return None
 
 
@@ -79,7 +92,7 @@ def invitation_presence(request, token):
             return redirect("events:invitation_gift_question", token=token)
         _set_state(request, guest, wants_gift=None, gift_ids=[])
         return redirect("events:invitation_recap", token=token)
-    return render(request, "invitation/step_presence.html", _ctx(guest, "Présence", form=form))
+    return render(request, "invitation/step_presence.html", _ctx(guest, "presence", form=form))
 
 
 def invitation_gift_question(request, token):
@@ -99,7 +112,7 @@ def invitation_gift_question(request, token):
             return redirect("events:invitation_gift_list", token=token)
         _set_state(request, guest, gift_ids=[])
         return redirect("events:invitation_recap", token=token)
-    return render(request, "invitation/step_gift_question.html", _ctx(guest, "Cadeaux", form=form, state=state))
+    return render(request, "invitation/step_gift_question.html", _ctx(guest, "gifts", form=form, state=state))
 
 
 def invitation_gift_list(request, token):
@@ -118,11 +131,11 @@ def invitation_gift_list(request, token):
         if form.is_valid():
             _set_state(request, guest, gift_ids=form.cleaned_data["gifts"])
             return redirect("events:invitation_recap", token=token)
-        messages.error(request, "Un cadeau sélectionné n'est plus disponible. La liste a été actualisée.")
+        messages.error(request, _("Un cadeau sélectionné n'est plus disponible. La liste a été actualisée."))
     selected = set(state.get("gift_ids", []))
     for gift in gifts:
         gift.state = gift_state(gift, selected)
-    return render(request, "invitation/step_gift_list.html", _ctx(guest, "Sélection", form=form, gifts=gifts))
+    return render(request, "invitation/step_gift_list.html", _ctx(guest, "selection", form=form, gifts=gifts))
 
 
 @require_GET
@@ -130,7 +143,11 @@ def invitation_gift_availability(request, token):
     """Rafraîchissement AJAX (polling toutes les 5 s) de la disponibilité des cadeaux."""
     guest = _load_guest(token)
     data = [
-        {"id": g.pk, "remaining": g.remaining, "available": g.is_available, "mine": bool(g.mine)}
+        {
+            "id": g.pk, "remaining": g.remaining, "available": g.is_available, "mine": bool(g.mine),
+            # Libellé déjà traduit et accordé : la page l'affiche tel quel
+            "label": ngettext("%(n)d disponible", "%(n)d disponibles", g.remaining) % {"n": g.remaining},
+        }
         for g in gifts_for_guest(guest.event, guest)
     ]
     return JsonResponse({"gifts": data})
@@ -162,8 +179,11 @@ def invitation_recap(request, token):
             _set_state(request, guest, gift_ids=remaining)
             messages.error(
                 request,
-                f"Désolé, ce cadeau vient d'être choisi par un autre invité : {', '.join(g.name for g in exc.gifts)}. "
-                "Merci de revoir votre sélection.",
+                ngettext(
+                    "Désolé, ce cadeau vient d'être choisi par un autre invité : %(cadeaux)s. Merci de revoir votre sélection.",
+                    "Désolé, ces cadeaux viennent d'être choisis par d'autres invités : %(cadeaux)s. Merci de revoir votre sélection.",
+                    len(exc.gifts),
+                ) % {"cadeaux": ", ".join(g.name for g in exc.gifts)},
             )
             return redirect("events:invitation_gift_list", token=token)
         except ResponseLockedError:
@@ -175,7 +195,7 @@ def invitation_recap(request, token):
     return render(
         request,
         "invitation/step_recap.html",
-        _ctx(guest, "Récapitulatif", state=state, selected_gifts=selected_gifts,
+        _ctx(guest, "recap", state=state, selected_gifts=selected_gifts,
              status_label=dict(Guest.Status.choices).get(state["status"])),
     )
 
@@ -198,7 +218,7 @@ def invitation_done(request, token):
     if ads:
         return redirect("events:invitation_ad", token=token, ad_id=ads[0])
     claims = GiftClaim.objects.filter(guest=guest).select_related("gift")
-    return render(request, "invitation/step_done.html", _ctx(guest, "Confirmation", next_url=_after_ads_url(), claims=claims))
+    return render(request, "invitation/step_done.html", _ctx(guest, "confirmation", next_url=_after_ads_url(), claims=claims))
 
 
 def invitation_ad(request, token, ad_id):

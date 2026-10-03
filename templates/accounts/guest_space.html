@@ -1,35 +1,36 @@
 {% extends "base.html" %}
-{% block title %}Mon espace{% endblock %}
+{% load i18n %}
+{% block title %}{% trans "Mon espace" %}{% endblock %}
 {% block content %}
 <section class="section">
   <div class="container">
     <div class="page-head">
-      <div><div class="eyebrow-row mb-3"><span class="diamond"></span><span class="eyebrow">Mon espace</span></div><h1>Bonjour <em>{{ user.display_name }}</em></h1><p>Vos invitations et les événements à découvrir.</p></div>
-      <a href="{% url 'core:landing' %}#affiche" class="btn btn-primary"><i class="bi bi-compass me-2"></i>Explorer les événements</a>
+      <div><div class="eyebrow-row mb-3"><span class="diamond"></span><span class="eyebrow">{% trans "Mon espace" %}</span></div><h1>{% blocktranslate trimmed with name=user.display_name %}Bonjour <em>{{ name }}</em>{% endblocktranslate %}</h1><p>{% trans "Vos invitations et les événements à découvrir." %}</p></div>
+      <a href="{% url 'core:landing' %}#affiche" class="btn btn-primary"><i class="bi bi-compass me-2"></i>{% trans "Explorer les événements" %}</a>
     </div>
     <div class="el-card mb-4">
-      <div class="el-card-header"><h2><i class="bi bi-envelope-heart me-2"></i>Mes invitations</h2></div>
+      <div class="el-card-header"><h2><i class="bi bi-envelope-heart me-2"></i>{% trans "Mes invitations" %}</h2></div>
       {% if invitations %}
       <div class="table-wrap"><table class="table table-el">
-        <thead><tr><th>Événement</th><th>Date</th><th>Ma réponse</th><th></th></tr></thead>
+        <thead><tr><th>{% trans "Événement" %}</th><th>{% trans "Date" %}</th><th>{% trans "Ma réponse" %}</th><th></th></tr></thead>
         <tbody>
         {% for inv in invitations %}
           <tr>
             <td class="fw-semibold">{{ inv.event.title }}</td>
-            <td>{{ inv.event.date|date:"j F Y" }}</td>
+            <td>{{ inv.event.date|date:_("j F Y") }}</td>
             <td><span class="badge-el badge-{{ inv.status_badge }}">{{ inv.get_status_display }}</span></td>
-            <td class="text-end"><a href="{{ inv.get_invitation_url }}" class="btn btn-sm btn-soft">{% if inv.is_locked %}Voir ma réponse{% else %}Répondre{% endif %}</a></td>
+            <td class="text-end"><a href="{{ inv.get_invitation_url }}" class="btn btn-sm btn-soft">{% if inv.is_locked %}{% trans "Voir ma réponse" %}{% else %}{% trans "Répondre" %}{% endif %}</a></td>
           </tr>
         {% endfor %}
         </tbody>
       </table></div>
       {% else %}
-      <div class="empty-state"><i class="bi bi-envelope-open"></i><p class="mt-2 mb-0">Aucune invitation liée à votre adresse e-mail pour le moment.</p></div>
+      <div class="empty-state"><i class="bi bi-envelope-open"></i><p class="mt-2 mb-0">{% trans "Aucune invitation liée à votre adresse e-mail pour le moment." %}</p></div>
       {% endif %}
     </div>
     <div class="el-card el-card-body d-flex flex-wrap align-items-center justify-content-between gap-3">
-      <div class="d-flex align-items-center gap-3"><span class="icon-bubble gold"><i class="bi bi-gem"></i></span><div><strong>Vous organisez des événements ?</strong><div class="text-muted small">Passez Organisateur VIP pour accéder à plus de détails.</div></div></div>
-      <a href="{% url 'accounts:become_organizer' %}" class="btn btn-gold">Devenir Organisateur VIP</a>
+      <div class="d-flex align-items-center gap-3"><span class="icon-bubble gold"><i class="bi bi-gem"></i></span><div><strong>{% trans "Vous organisez des événements ?" %}</strong><div class="text-muted small">{% trans "Passez Organisateur VIP pour accéder à plus de détails." %}</div></div></div>
+      <a href="{% url 'accounts:become_organizer' %}" class="btn btn-gold">{% trans "Devenir Organisateur VIP" %}</a>
     </div>
   </div>
 </section>

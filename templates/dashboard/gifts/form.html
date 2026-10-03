@@ -1,9 +1,10 @@
 {% extends "dashboard/base_dashboard.html" %}
-{% block title %}{% if is_new %}Ajouter un cadeau{% else %}Modifier le cadeau{% endif %}{% endblock %}
+{% load i18n %}
+{% block title %}{% if is_new %}{% trans "Ajouter un cadeau" %}{% else %}{% trans "Modifier le cadeau" %}{% endif %}{% endblock %}
 {% block dash_content %}
 <div class="page-head">
-  <div><h1>{% if is_new %}Ajouter un cadeau{% else %}{{ gift.name }}{% endif %}</h1><p>Uniquement le nom, l'icône et la quantité : les détails se règlent entre l'hôte et l'invité.</p></div>
-  <a href="{% url 'dashboard:gift_list' %}{% if gift %}?event={{ gift.event_id }}{% endif %}" class="btn btn-light"><i class="bi bi-arrow-left me-2"></i>Retour</a>
+  <div><h1>{% if is_new %}{% trans "Ajouter un cadeau" %}{% else %}{{ gift.name }}{% endif %}</h1><p>{% trans "Uniquement le nom, l'icône et la quantité : les détails se règlent entre l'hôte et l'invité." %}</p></div>
+  <a href="{% url 'dashboard:gift_list' %}{% if gift %}?event={{ gift.event_id }}{% endif %}" class="btn btn-light"><i class="bi bi-arrow-left me-2"></i>{% trans "Retour" %}</a>
 </div>
 <div class="el-card el-card-body" style="max-width:820px">
   <form method="post" novalidate>
@@ -15,8 +16,8 @@
     </div>
     {% include "partials/_icon_picker.html" with field=form.icon_name %}
     <div class="d-flex flex-wrap gap-2">
-      <button class="btn btn-primary"><i class="bi bi-check2 me-2"></i>Enregistrer</button>
-      {% if is_new %}<button class="btn btn-soft" name="add_another" value="1"><i class="bi bi-plus-lg me-2"></i>Enregistrer et ajouter un autre</button>{% endif %}
+      <button class="btn btn-primary"><i class="bi bi-check2 me-2"></i>{% trans "Enregistrer" %}</button>
+      {% if is_new %}<button class="btn btn-soft" name="add_another" value="1"><i class="bi bi-plus-lg me-2"></i>{% trans "Enregistrer et ajouter un autre" %}</button>{% endif %}
     </div>
   </form>
 </div>

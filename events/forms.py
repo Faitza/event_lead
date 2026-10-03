@@ -1,14 +1,16 @@
 from django import forms
+from django.conf import settings
 from django.contrib.auth import get_user_model
+from django.utils.translation import gettext_lazy as _
 
 from .models import Event, EventCategory, EventEvaluation, Guest
 
 CATEGORY_ICONS = [
-    ("bi-heart", "Mariage"), ("bi-stars", "Gala"), ("bi-balloon", "Fête"), ("bi-droplet", "Baptême"),
-    ("bi-mic", "Conférence"), ("bi-music-note-beamed", "Musique"), ("bi-cup-straw", "Soirée"),
-    ("bi-trophy", "Sport"), ("bi-mortarboard", "Diplômes"), ("bi-briefcase", "Affaires"),
-    ("bi-palette", "Art"), ("bi-film", "Cinéma"), ("bi-flower1", "Cérémonie"), ("bi-gift", "Cadeaux"),
-    ("bi-people", "Rencontre"), ("bi-calendar2-event", "Autre"),
+    ("bi-heart", _("Mariage")), ("bi-stars", _("Gala")), ("bi-balloon", _("Fête")), ("bi-droplet", _("Baptême")),
+    ("bi-mic", _("Conférence")), ("bi-music-note-beamed", _("Musique")), ("bi-cup-straw", _("Soirée")),
+    ("bi-trophy", _("Sport")), ("bi-mortarboard", _("Diplômes")), ("bi-briefcase", _("Affaires")),
+    ("bi-palette", _("Art")), ("bi-film", _("Cinéma")), ("bi-flower1", _("Cérémonie")), ("bi-gift", _("Cadeaux")),
+    ("bi-people", _("Rencontre")), ("bi-calendar2-event", _("Autre")),
 ]
 
 
@@ -26,68 +28,76 @@ class EventForm(forms.ModelForm):
             "description": forms.Textarea(attrs={"rows": 4}),
             "latitude": forms.NumberInput(attrs={"step": "any", "readonly": "readonly"}),
             "longitude": forms.NumberInput(attrs={"step": "any", "readonly": "readonly"}),
-            "venue": forms.TextInput(attrs={"placeholder": "Ex : Hôtel Montana, Pétion-Ville"}),
+            "venue": forms.TextInput(attrs={"placeholder": _("Ex : Hôtel Montana, Pétion-Ville")}),
             "cover_image": forms.ClearableFileInput(attrs={"accept": "image/*"}),
             "cover_video": forms.ClearableFileInput(attrs={"accept": "video/*"}),
         }
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.fields["category"].empty_label = "Aucune catégorie"
+        self.fields["category"].empty_label = _("Aucune catégorie")
+        self.fields["category"].label_from_instance = lambda c: c.label
 
     def clean(self):
         cleaned = super().clean()
         if not cleaned.get("allow_companions"):
             cleaned["max_companions"] = 0
         elif not cleaned.get("max_companions"):
-            self.add_error("max_companions", "Indiquez le nombre maximum d'accompagnants.")
+            self.add_error("max_companions", _("Indiquez le nombre maximum d'accompagnants."))
         lat, lng = cleaned.get("latitude"), cleaned.get("longitude")
         if lat is not None and not -90 <= lat <= 90:
-            self.add_error("latitude", "Latitude invalide.")
+            self.add_error("latitude", _("Latitude invalide."))
         if lng is not None and not -180 <= lng <= 180:
-            self.add_error("longitude", "Longitude invalide.")
+            self.add_error("longitude", _("Longitude invalide."))
         return cleaned
 
 
 class EventCategoryForm(forms.ModelForm):
-    icon_name = forms.ChoiceField(label="Icône", choices=CATEGORY_ICONS, widget=forms.RadioSelect)
+    icon_name = forms.ChoiceField(label=_("Icône"), choices=CATEGORY_ICONS, widget=forms.RadioSelect)
 
     class Meta:
         model = EventCategory
         fields = ["name", "icon_name", "order"]
-        widgets = {"name": forms.TextInput(attrs={"placeholder": "Ex : Mariage"})}
-        help_texts = {"order": "Les petits numéros s'affichent en premier."}
+        widgets = {"name": forms.TextInput(attrs={"placeholder": _("Ex : Mariage")})}
+        help_texts = {"order": _("Les petits numéros s'affichent en premier.")}
 
     def clean_name(self):
         name = " ".join(self.cleaned_data["name"].split())
         clash = EventCategory.objects.filter(name__iexact=name).exclude(pk=self.instance.pk)
         if clash.exists():
-            raise forms.ValidationError("Une catégorie porte déjà ce nom.")
+            raise forms.ValidationError(_("Une catégorie porte déjà ce nom."))
         return name
 
 
 class GuestForm(forms.ModelForm):
     class Meta:
         model = Guest
-        fields = ["event", "name", "email", "phone", "sent_via"]
+        fields = ["event", "name", "email", "phone", "language", "sent_via"]
         widgets = {
             "phone": forms.TextInput(attrs={"placeholder": "+509 ..."}),
             "sent_via": forms.RadioSelect,
         }
 
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields["language"].required = False
+
+    def clean_language(self):
+        return self.cleaned_data.get("language") or settings.LANGUAGE_CODE
+
     def clean(self):
         cleaned = super().clean()
         email, phone, via = cleaned.get("email"), cleaned.get("phone"), cleaned.get("sent_via")
         if not email and not phone:
-            raise forms.ValidationError("Renseignez au moins un e-mail ou un numéro de téléphone.")
+            raise forms.ValidationError(_("Renseignez au moins un e-mail ou un numéro de téléphone."))
         if via == Guest.Channel.EMAIL and not email:
-            self.add_error("email", "Un e-mail est nécessaire pour un envoi par e-mail.")
+            self.add_error("email", _("Un e-mail est nécessaire pour un envoi par e-mail."))
         if via == Guest.Channel.WHATSAPP and not phone:
-            self.add_error("phone", "Un numéro est nécessaire pour un envoi par WhatsApp.")
+            self.add_error("phone", _("Un numéro est nécessaire pour un envoi par WhatsApp."))
         event = cleaned.get("event")
         if event and not self.instance.pk and event.guests.count() >= event.max_guests:
             raise forms.ValidationError(
-                f"Cet événement a atteint son nombre maximum d'invités ({event.max_guests})."
+                _("Cet événement a atteint son nombre maximum d'invités (%(max)d).") % {"max": event.max_guests}
             )
         return cleaned
 
@@ -105,14 +115,14 @@ class PresenceForm(forms.Form):
 
     status = forms.ChoiceField(
         choices=[
-            (Guest.Status.CONFIRMED, "Oui"),
-            (Guest.Status.DECLINED, "Non"),
-            (Guest.Status.MAYBE, "Peut-être"),
+            (Guest.Status.CONFIRMED, _("Oui")),
+            (Guest.Status.DECLINED, _("Non")),
+            (Guest.Status.MAYBE, _("Peut-être")),
         ],
         widget=forms.RadioSelect,
-        error_messages={"required": "Indiquez si vous serez présent."},
+        error_messages={"required": _("Indiquez si vous serez présent.")},
     )
-    companions = forms.IntegerField(min_value=0, required=False, initial=0, label="Nombre d'accompagnants")
+    companions = forms.IntegerField(min_value=0, required=False, initial=0, label=_("Nombre d'accompagnants"))
 
     def __init__(self, *args, event=None, **kwargs):
         self.event = event
@@ -126,7 +136,7 @@ class PresenceForm(forms.Form):
         if not (self.event and self.event.allow_companions):
             return 0
         if value > self.event.max_companions:
-            raise forms.ValidationError(f"Maximum {self.event.max_companions} accompagnant(s).")
+            raise forms.ValidationError(_("Maximum %(max)d accompagnant(s).") % {"max": self.event.max_companions})
         return value
 
     def clean(self):
@@ -140,7 +150,7 @@ class GiftWishForm(forms.Form):
     """Étape 2 : souhaitez-vous envoyer un cadeau ?"""
 
     wants_gift = forms.TypedChoiceField(
-        choices=[("yes", "Oui, je veux"), ("no", "Non merci")],
+        choices=[("yes", _("Oui, je veux")), ("no", _("Non merci"))],
         coerce=lambda v: v == "yes",
         widget=forms.RadioSelect,
     )
@@ -150,7 +160,7 @@ class GiftSelectionForm(forms.Form):
     """Étape 3 : les cadeaux sont rendus manuellement ; on valide seulement les identifiants."""
 
     gifts = forms.TypedMultipleChoiceField(coerce=int, required=True, error_messages={
-        "required": "Sélectionnez au moins un cadeau, ou revenez en arrière pour choisir « Non merci ».",
+        "required": _("Sélectionnez au moins un cadeau, ou revenez en arrière pour choisir « Non merci »."),
     })
 
     def __init__(self, *args, available_ids=(), **kwargs):
@@ -160,11 +170,11 @@ class GiftSelectionForm(forms.Form):
 
 class EvaluationForm(forms.ModelForm):
     stars = forms.TypedChoiceField(
-        label="Votre note", choices=[(i, f"{i} / 5") for i in range(5, 0, -1)], coerce=int, widget=forms.RadioSelect
+        label=_("Votre note"), choices=[(i, f"{i} / 5") for i in range(5, 0, -1)], coerce=int, widget=forms.RadioSelect
     )
 
     class Meta:
         model = EventEvaluation
         fields = ["stars", "comment"]
-        labels = {"comment": "Commentaire"}
-        widgets = {"comment": forms.Textarea(attrs={"rows": 4, "placeholder": "Qu'avez-vous pensé de l'événement ?"})}
+        labels = {"comment": _("Commentaire")}
+        widgets = {"comment": forms.Textarea(attrs={"rows": 4, "placeholder": _("Qu'avez-vous pensé de l'événement ?")})}

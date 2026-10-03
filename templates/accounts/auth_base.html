@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 {% load static %}
+{% load i18n %}
 {% block body %}
 <div class="auth-wrap">
   <aside class="auth-visual">
@@ -7,14 +8,16 @@
     <div class="veil"></div>
     <div class="sunburst" aria-hidden="true"></div>
     <div class="inner">
-      <div class="eyebrow-row light"><span class="diamond"></span><span class="eyebrow">{% block visual_eyebrow %}Espace membre{% endblock %}</span></div>
-      <h2 class="disp">{% block visual_title %}Bon retour <em>parmi nous</em>{% endblock %}</h2>
-      <p class="mb-0">{% block visual_text %}Retrouvez vos événements, vos invités et leurs réponses là où vous les avez laissés.{% endblock %}</p>
-      <p class="note mb-0">Vous avez reçu une invitation ? Ouvrez simplement le lien reçu par WhatsApp ou par e-mail, aucun compte n'est nécessaire.</p>
+      <div class="eyebrow-row light"><span class="diamond"></span><span class="eyebrow">{% block visual_eyebrow %}{% trans "Espace membre" %}{% endblock %}</span></div>
+      <h2 class="disp">{% block visual_title %}{% trans "Bon retour <em>parmi nous</em>" %}{% endblock %}</h2>
+      <p class="mb-0">{% block visual_text %}{% trans "Retrouvez vos événements, vos invités et leurs réponses là où vous les avez laissés." %}{% endblock %}</p>
+      <p class="note mb-0">{% trans "Vous avez reçu une invitation ? Ouvrez simplement le lien reçu par WhatsApp ou par e-mail, aucun compte n'est nécessaire." %}</p>
     </div>
   </aside>
   <div class="auth-panel">
-    <a href="{% url 'core:landing' %}" aria-label="EventLead, retour à l'accueil">{% include "partials/_logo.html" with stacked=True %}</a>
+    <div class="auth-lang">{% include "partials/_language_switcher.html" %}</div>
+    {% trans "EventLead, retour à l'accueil" as home_label %}
+    <a href="{% url 'core:landing' %}" aria-label="{{ home_label }}">{% include "partials/_logo.html" with stacked=True %}</a>
     <div class="auth-card">
       {% block panel %}{% endblock %}
     </div>

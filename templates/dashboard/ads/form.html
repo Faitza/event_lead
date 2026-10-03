@@ -1,9 +1,10 @@
 {% extends "dashboard/base_dashboard.html" %}
-{% block title %}{% if is_new %}Nouvelle publicité{% else %}Modifier la publicité{% endif %}{% endblock %}
+{% load i18n %}
+{% block title %}{% if is_new %}{% trans "Nouvelle publicité" %}{% else %}{% trans "Modifier la publicité" %}{% endif %}{% endblock %}
 {% block dash_content %}
 <div class="page-head">
-  <div><h1>{% if is_new %}Nouvelle publicité{% else %}{{ ad.title }}{% endif %}</h1><p>Affichée avec un compte à rebours avant que l'invité puisse passer.</p></div>
-  <a href="{% url 'dashboard:ad_list' %}" class="btn btn-light"><i class="bi bi-arrow-left me-2"></i>Retour</a>
+  <div><h1>{% if is_new %}{% trans "Nouvelle publicité" %}{% else %}{{ ad.title }}{% endif %}</h1><p>{% trans "Affichée avec un compte à rebours avant que l'invité puisse passer." %}</p></div>
+  <a href="{% url 'dashboard:ad_list' %}" class="btn btn-light"><i class="bi bi-arrow-left me-2"></i>{% trans "Retour" %}</a>
 </div>
 <form method="post" enctype="multipart/form-data" novalidate>
   {% csrf_token %}
@@ -25,7 +26,7 @@
         {% include "partials/_field.html" with field=form.is_active %}
         {% include "partials/_field.html" with field=form.show_after_reply %}
       </div>
-      <button class="btn btn-primary btn-lg w-100"><i class="bi bi-check2 me-2"></i>Enregistrer</button>
+      <button class="btn btn-primary btn-lg w-100"><i class="bi bi-check2 me-2"></i>{% trans "Enregistrer" %}</button>
     </div>
   </div>
 </form>

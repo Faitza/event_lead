@@ -1,10 +1,11 @@
 {% extends "invitation/base_invitation.html" %}
+{% load i18n %}
 {% block inv_content %}
 <form method="post" class="text-center d-flex flex-column gap-3" novalidate>
   {% csrf_token %}
   <span class="icon-bubble gold lg mb-3"><i class="bi bi-gift"></i></span>
-  <h1>Souhaitez-vous envoyer un <em style="color:inherit">cadeau</em> ?</h1>
-  <p class="text-muted mb-1">L'hôte a préparé une liste de cadeaux. Chaque cadeau choisi est réservé pour vous seul.</p>
+  <h1>{% blocktranslate trimmed %}Souhaitez-vous envoyer un <em style="color:inherit">cadeau</em> ?{% endblocktranslate %}</h1>
+  <p class="text-muted mb-1">{% trans "L'hôte a préparé une liste de cadeaux. Chaque cadeau choisi est réservé pour vous seul." %}</p>
   <div class="choice-cards text-start">
     {% for radio in form.wants_gift %}
       {{ radio.tag }}
@@ -14,7 +15,7 @@
   {{ form.wants_gift.errors }}
   <div class="d-flex gap-2">
     <a href="{% url 'events:invitation' guest.magic_token %}" class="btn btn-light btn-lg"><i class="bi bi-arrow-left"></i></a>
-    <button class="btn btn-primary btn-lg flex-grow-1">Suivant<i class="bi bi-arrow-right ms-2"></i></button>
+    <button class="btn btn-primary btn-lg flex-grow-1">{% trans "Suivant" %}<i class="bi bi-arrow-right ms-2"></i></button>
   </div>
 </form>
 {% endblock %}

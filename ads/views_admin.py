@@ -2,6 +2,7 @@ from django.contrib import messages
 from django.db.models import Sum
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
+from django.utils.translation import gettext as _
 from django.views.decorators.http import require_POST
 
 from accounts.decorators import admin_required
@@ -25,7 +26,7 @@ def ad_create(request):
     form = AdForm(request.POST or None, request.FILES or None, initial={"icon_name": "bi-megaphone"})
     if request.method == "POST" and form.is_valid():
         form.save()
-        messages.success(request, "Publicité créée.")
+        messages.success(request, _("Publicité créée."))
         return redirect("dashboard:ad_list")
     return render(request, "dashboard/ads/form.html", {"form": form, "is_new": True})
 
@@ -36,7 +37,7 @@ def ad_edit(request, pk):
     form = AdForm(request.POST or None, request.FILES or None, instance=ad)
     if request.method == "POST" and form.is_valid():
         form.save()
-        messages.success(request, "Publicité mise à jour.")
+        messages.success(request, _("Publicité mise à jour."))
         return redirect("dashboard:ad_list")
     return render(request, "dashboard/ads/form.html", {"form": form, "ad": ad, "is_new": False})
 
@@ -46,10 +47,10 @@ def ad_delete(request, pk):
     ad = get_object_or_404(Ad, pk=pk)
     if request.method == "POST":
         ad.delete()
-        messages.success(request, "Publicité supprimée.")
+        messages.success(request, _("Publicité supprimée."))
         return redirect("dashboard:ad_list")
     return render(request, "dashboard/confirm_delete.html", {
-        "object": ad, "kind": "la publicité", "blocked": False, "cancel_url": reverse("dashboard:ad_list"),
+        "object": ad, "kind": _("la publicité"), "blocked": False, "cancel_url": reverse("dashboard:ad_list"),
     })
 
 

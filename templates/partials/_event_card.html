@@ -1,19 +1,20 @@
 {% load humanize %}
+{% load i18n %}
 <a href="{{ href|default:event.get_absolute_url }}" class="event-arch">
   <div class="arch-frame">
     <div class="arch-img">
       <img src="{{ event.cover_url }}" alt="{{ event.title }}" loading="lazy" onerror="this.style.visibility='hidden'">
       <div class="date"><span class="d">{{ event.date|date:"d" }}</span><span class="m">{{ event.date|date:"M Y" }}</span></div>
-      {% if event.category %}<span class="cat-badge"><i class="bi {{ event.category.icon_name }}"></i>{{ event.category.name }}</span>{% endif %}
-      <span class="badge-el">{% if event.is_public %}Public{% else %}Privé{% endif %}</span>
+      {% if event.category %}<span class="cat-badge"><i class="bi {{ event.category.icon_name }}"></i>{{ event.category.label }}</span>{% endif %}
+      <span class="badge-el">{% if event.is_public %}{% trans "Public" %}{% else %}{% trans "Privé" %}{% endif %}</span>
     </div>
   </div>
   <div class="body">
     <h3>{{ event.title }}</h3>
-    <span class="when">{{ event.date|date:"l j F Y"|capfirst }} &middot; {{ event.time|time:"H\hi" }}</span>
+    <span class="when">{{ event.date|date:_("l j F Y")|capfirst }} &middot; {{ event.time|time:_("H\\hi") }}</span>
     <div class="foot">
       <span><i class="bi bi-geo-alt"></i>{{ event.venue|truncatechars:34 }}</span>
-      <span class="price">{% if event.price_htg %}{{ event.price_htg|floatformat:0|intcomma }} HTG{% else %}Gratuit{% endif %}</span>
+      <span class="price">{% if event.price_htg %}{{ event.price_htg|floatformat:0|intcomma }} HTG{% else %}{% trans "Gratuit" %}{% endif %}</span>
     </div>
   </div>
 </a>

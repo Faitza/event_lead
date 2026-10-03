@@ -1,21 +1,22 @@
 {% extends "base.html" %}
-{% block title %}Évaluer {{ event.title }}{% endblock %}
+{% load i18n %}
+{% block title %}{% blocktranslate trimmed with titre=event.title %}Évaluer {{ titre }}{% endblocktranslate %}{% endblock %}
 {% block content %}
 <section class="section">
   <div class="container" style="max-width:640px">
     <div class="frame"><div class="frame-in p-md-4">
       <span class="icon-bubble gold lg mb-3"><i class="bi bi-star"></i></span>
-      <h1 class="h2">Comment s'est passé « {{ event.title }} » ?</h1>
-      <p class="text-muted">Votre évaluation est transmise à l'équipe EventLead.</p>
+      <h1 class="h2">{% blocktranslate trimmed with titre=event.title %}Comment s'est passé « {{ titre }} » ?{% endblocktranslate %}</h1>
+      <p class="text-muted">{% trans "Votre évaluation est transmise à l'équipe EventLead." %}</p>
       <form method="post">
         {% csrf_token %}
-        <span class="form-label d-block">Votre note</span>
+        <span class="form-label d-block">{% trans "Votre note" %}</span>
         <div class="star-input mb-3">
           {% for i in "54321" %}<input type="radio" name="stars" id="ev{{ i }}" value="{{ i }}" {% if i == "5" %}checked{% endif %}><label for="ev{{ i }}"><i class="bi bi-star-fill"></i></label>{% endfor %}
         </div>
         {{ form.stars.errors }}
         {% include "partials/_field.html" with field=form.comment %}
-        <button class="btn btn-primary btn-lg w-100">Envoyer mon évaluation</button>
+        <button class="btn btn-primary btn-lg w-100">{% trans "Envoyer mon évaluation" %}</button>
       </form>
     </div></div>
   </div>

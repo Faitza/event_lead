@@ -9,6 +9,7 @@
   var back = document.getElementById("pay-back");
   var modal = bootstrap.Modal.getOrCreateInstance(modalEl);
 
+  // Les titres traduits viennent de data-title sur chaque étape ; le français sert de repli.
   var TITLES = { choose: "Choisissez votre mode de paiement", moncash: "Payer avec MonCash",
     natcash: "Payer avec NatCash", stripe: "Payer par carte bancaire", paypal: "Payer avec PayPal",
     processing: "Traitement en cours" };
@@ -17,7 +18,8 @@
     modalEl.querySelectorAll(".pay-step").forEach(function (s) {
       s.classList.toggle("active", s.dataset.step === step);
     });
-    title.textContent = TITLES[step] || "";
+    var stepEl = modalEl.querySelector('.pay-step[data-step="' + step + '"]');
+    title.textContent = (stepEl && stepEl.dataset.title) || TITLES[step] || "";
     back.classList.toggle("d-none", step === "choose" || step === "processing");
     if (["moncash", "natcash", "stripe", "paypal"].indexOf(step) >= 0) methodInput.value = step;
   }
@@ -29,6 +31,8 @@
   back.addEventListener("click", function () { show("choose"); });
 
   // Quantité de billets -> montant affiché
+  // Séparateurs de milliers et de décimales selon la langue de la page (le créole garde le format français)
+  var numLocale = (document.documentElement.lang || "fr").slice(0, 2) === "en" ? "en-US" : "fr-FR";
   var qty = document.getElementById("id_quantity_visible");
   var hiddenQty = form.querySelector("input[name=quantity]");
   function syncAmount() {
@@ -37,10 +41,10 @@
     var htg = parseFloat(form.dataset.unitHtg) * n;
     var usd = parseFloat(form.dataset.unitUsd) * n;
     document.querySelectorAll("[data-amount-htg]").forEach(function (el) {
-      el.textContent = htg.toLocaleString("fr-FR", { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + " HTG";
+      el.textContent = htg.toLocaleString(numLocale, { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + " HTG";
     });
     document.querySelectorAll("[data-amount-usd]").forEach(function (el) {
-      el.textContent = usd.toLocaleString("fr-FR", { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + " USD";
+      el.textContent = usd.toLocaleString(numLocale, { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + " USD";
     });
   }
   if (qty) qty.addEventListener("input", syncAmount);
@@ -55,7 +59,8 @@
     }
     phone.classList.remove("is-invalid");
     sendOtp.disabled = true;
-    sendOtp.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>Envoi du code...';
+    sendOtp.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>';
+    sendOtp.appendChild(document.createTextNode(sendOtp.dataset.sendingLabel || "Envoi du code..."));
     setTimeout(function () {
       document.getElementById("moncash-otp-block").classList.remove("d-none");
       sendOtp.classList.add("d-none");
@@ -67,6 +72,9 @@
   function fmtCard(v) { return v.replace(/\D/g, "").slice(0, 19).replace(/(.{4})/g, "$1 ").trim(); }
   var cn = document.getElementById("card-number"), ce = document.getElementById("card-expiry"),
       cnm = document.getElementById("card-name");
+  var pvExpiry = document.getElementById("pv-expiry"), pvName = document.getElementById("pv-name");
+  var expiryHint = (pvExpiry && pvExpiry.dataset.placeholder) || "MM/AA";
+  var nameHint = (pvName && pvName.dataset.placeholder) || "NOM DU TITULAIRE";
   if (cn) {
     cn.addEventListener("input", function () {
       cn.value = fmtCard(cn.value);
@@ -75,10 +83,10 @@
     ce.addEventListener("input", function () {
       var v = ce.value.replace(/\D/g, "").slice(0, 4);
       ce.value = v.length > 2 ? v.slice(0, 2) + "/" + v.slice(2) : v;
-      document.getElementById("pv-expiry").textContent = ce.value || "MM/AA";
+      pvExpiry.textContent = ce.value || expiryHint;
     });
     cnm.addEventListener("input", function () {
-      document.getElementById("pv-name").textContent = cnm.value.toUpperCase() || "NOM DU TITULAIRE";
+      pvName.textContent = cnm.value.toUpperCase() || nameHint;
     });
   }
 

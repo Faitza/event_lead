@@ -1,11 +1,12 @@
 {% extends "dashboard/base_dashboard.html" %}
 {% load static %}
-{% block title %}{% if is_new %}Nouvel événement{% else %}Modifier l'événement{% endif %}{% endblock %}
+{% load i18n %}
+{% block title %}{% if is_new %}{% trans "Nouvel événement" %}{% else %}{% trans "Modifier l'événement" %}{% endif %}{% endblock %}
 {% block extra_head %}<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.css">{% endblock %}
 {% block dash_content %}
 <div class="page-head">
-  <div><h1>{% if is_new %}Nouvel événement{% else %}{{ event.title }}{% endif %}</h1><p>{% if is_new %}Renseignez les informations, localisez le lieu et configurez les invitations.{% else %}Modifier les informations de l'événement.{% endif %}</p></div>
-  <a href="{% if event %}{% url 'dashboard:event_detail' event.pk %}{% else %}{% url 'dashboard:event_list' %}{% endif %}" class="btn btn-light"><i class="bi bi-arrow-left me-2"></i>Retour</a>
+  <div><h1>{% if is_new %}{% trans "Nouvel événement" %}{% else %}{{ event.title }}{% endif %}</h1><p>{% if is_new %}{% trans "Renseignez les informations, localisez le lieu et configurez les invitations." %}{% else %}{% trans "Modifier les informations de l'événement." %}{% endif %}</p></div>
+  <a href="{% if event %}{% url 'dashboard:event_detail' event.pk %}{% else %}{% url 'dashboard:event_list' %}{% endif %}" class="btn btn-light"><i class="bi bi-arrow-left me-2"></i>{% trans "Retour" %}</a>
 </div>
 <form method="post" enctype="multipart/form-data" novalidate>
   {% csrf_token %}
@@ -13,14 +14,14 @@
   <div class="row g-4">
     <div class="col-xl-7">
       <div class="el-card el-card-body mb-4">
-        <h2 class="h6 fw-bold text-primary mb-3"><i class="bi bi-info-circle me-2"></i>Informations générales</h2>
+        <h2 class="h6 fw-bold text-primary mb-3"><i class="bi bi-info-circle me-2"></i>{% trans "Informations générales" %}</h2>
         {% include "partials/_field.html" with field=form.title %}
         <div class="row">
           <div class="col-md-6">{% include "partials/_field.html" with field=form.event_type %}</div>
           <div class="col-md-6">{% include "partials/_field.html" with field=form.status %}</div>
           <div class="col-12">
             {% include "partials/_field.html" with field=form.category wrapper="mb-1" %}
-            <div class="form-text mb-3"><a href="{% url 'dashboard:category_list' %}">Gérer les catégories</a></div>
+            <div class="form-text mb-3"><a href="{% url 'dashboard:category_list' %}">{% trans "Gérer les catégories" %}</a></div>
           </div>
           <div class="col-md-6">{% include "partials/_field.html" with field=form.date %}</div>
           <div class="col-md-6">{% include "partials/_field.html" with field=form.time %}</div>
@@ -28,15 +29,16 @@
         {% include "partials/_field.html" with field=form.description %}
       </div>
       <div class="el-card el-card-body mb-4">
-        <h2 class="h6 fw-bold text-primary mb-3"><i class="bi bi-geo-alt me-2"></i>Lieu</h2>
-        <label class="form-label" for="{{ form.venue.id_for_label }}">Adresse <span class="text-danger">*</span></label>
+        <h2 class="h6 fw-bold text-primary mb-3"><i class="bi bi-geo-alt me-2"></i>{% trans "Lieu" %}</h2>
+        <label class="form-label" for="{{ form.venue.id_for_label }}">{% trans "Adresse" %} <span class="text-danger">*</span></label>
         <div class="d-flex gap-2 mb-1">
           {{ form.venue.as_widget }}
-          <button type="button" id="geocode-btn" class="btn btn-soft text-nowrap"><i class="bi bi-crosshair me-1"></i>Localiser</button>
+          <button type="button" id="geocode-btn" class="btn btn-soft text-nowrap"><i class="bi bi-crosshair me-1"></i>{% trans "Localiser" %}</button>
         </div>
         {{ form.venue.errors }}
-        <div id="geocode-status" class="form-text mb-2">L'adresse est localisée automatiquement à l'enregistrement. Vous pouvez aussi cliquer sur la carte.</div>
-        <div class="map-box lg" data-map-editor data-lat-input="{{ form.latitude.id_for_label }}" data-lng-input="{{ form.longitude.id_for_label }}" data-venue-input="{{ form.venue.id_for_label }}" data-geocode-url="{% url 'dashboard:geocode' %}"></div>
+        <div id="geocode-status" class="form-text mb-2">{% trans "L'adresse est localisée automatiquement à l'enregistrement. Vous pouvez aussi cliquer sur la carte." %}</div>
+        {% trans "Recherche de l'adresse..." as msg_searching %}{% trans "Adresse localisée. Ajustez le repère si nécessaire." as msg_found %}{% trans "Adresse introuvable. Cliquez sur la carte pour placer le repère." as msg_notfound %}{% trans "Service de géocodage indisponible. Cliquez sur la carte pour placer le repère." as msg_unavailable %}
+        <div class="map-box lg" data-map-editor data-lat-input="{{ form.latitude.id_for_label }}" data-lng-input="{{ form.longitude.id_for_label }}" data-venue-input="{{ form.venue.id_for_label }}" data-geocode-url="{% url 'dashboard:geocode' %}" data-msg-searching="{{ msg_searching }}" data-msg-found="{{ msg_found }}" data-msg-notfound="{{ msg_notfound }}" data-msg-unavailable="{{ msg_unavailable }}"></div>
         <div class="row mt-3">
           <div class="col-6">{% include "partials/_field.html" with field=form.latitude %}</div>
           <div class="col-6">{% include "partials/_field.html" with field=form.longitude %}</div>
@@ -45,23 +47,23 @@
     </div>
     <div class="col-xl-5">
       <div class="el-card el-card-body mb-4">
-        <h2 class="h6 fw-bold text-primary mb-3"><i class="bi bi-people me-2"></i>Invitations</h2>
+        <h2 class="h6 fw-bold text-primary mb-3"><i class="bi bi-people me-2"></i>{% trans "Invitations" %}</h2>
         {% include "partials/_field.html" with field=form.max_guests %}
         {% include "partials/_field.html" with field=form.allow_companions %}
         <div id="companions-wrap">{% include "partials/_field.html" with field=form.max_companions %}</div>
         {% include "partials/_field.html" with field=form.evaluation_delay_days %}
       </div>
       <div class="el-card el-card-body mb-4">
-        <h2 class="h6 fw-bold text-primary mb-3"><i class="bi bi-image me-2"></i>Médias</h2>
+        <h2 class="h6 fw-bold text-primary mb-3"><i class="bi bi-image me-2"></i>{% trans "Médias" %}</h2>
         {% if event.cover_image %}<img src="{{ event.cover_image.url }}" alt="" class="w-100 mb-3" style="border-radius:12px;max-height:180px;object-fit:cover">{% endif %}
         {% include "partials/_field.html" with field=form.cover_image %}
         {% include "partials/_field.html" with field=form.cover_video %}
       </div>
       <div class="el-card el-card-body mb-4">
-        <h2 class="h6 fw-bold text-primary mb-3"><i class="bi bi-ticket-perforated me-2"></i>Billetterie</h2>
+        <h2 class="h6 fw-bold text-primary mb-3"><i class="bi bi-ticket-perforated me-2"></i>{% trans "Billetterie" %}</h2>
         {% include "partials/_field.html" with field=form.price_htg %}
       </div>
-      <button class="btn btn-primary btn-lg w-100"><i class="bi bi-check2 me-2"></i>{% if is_new %}Créer l'événement{% else %}Enregistrer les modifications{% endif %}</button>
+      <button class="btn btn-primary btn-lg w-100"><i class="bi bi-check2 me-2"></i>{% if is_new %}{% trans "Créer l'événement" %}{% else %}{% trans "Enregistrer les modifications" %}{% endif %}</button>
     </div>
   </div>
 </form>

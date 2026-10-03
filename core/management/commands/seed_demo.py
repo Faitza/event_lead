@@ -134,6 +134,9 @@ class Command(BaseCommand):
                 wants_gift=True if status == "confirmed" else None,
             )
             guests[name] = g
+        # Quelques invités reçoivent leur invitation en anglais ou en créole
+        Guest.objects.filter(event=wedding, name="Patrick Étienne").update(language="en")
+        Guest.objects.filter(event=wedding, name="Junior Baptiste").update(language="ht")
 
         # Liste de 8 cadeaux
         gift_specs = [

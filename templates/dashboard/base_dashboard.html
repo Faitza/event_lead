@@ -1,38 +1,40 @@
 {% extends "base.html" %}
 {% load el_tags %}
+{% load i18n %}
 {% block body_class %}bg-light{% endblock %}
 {% block help_fab %}{% endblock %}
 {% block body %}
 <div class="dash">
   <aside class="dash-sidebar">
-    <a href="{% url 'dashboard:home' %}" class="brand" aria-label="EventLead, tableau de bord">{% include "partials/_logo.html" %}</a>
+    <a href="{% url 'dashboard:home' %}" class="brand" aria-label="{% trans 'EventLead, tableau de bord' %}">{% include "partials/_logo.html" %}</a>
     <div class="ornament brand-rule" aria-hidden="true"><span class="diamond"></span></div>
-    <div class="nav-section">Pilotage</div>
-    <a class="side-link {% if request.resolver_match.url_name == 'home' %}active{% endif %}" href="{% url 'dashboard:home' %}"><i class="bi bi-speedometer2"></i>Tableau de bord</a>
-    <a class="side-link {% active '/admin-dashboard/evenements/' %}" href="{% url 'dashboard:event_list' %}"><i class="bi bi-calendar2-event"></i>Événements</a>
-    <a class="side-link {% active '/admin-dashboard/categories/' %}" href="{% url 'dashboard:category_list' %}"><i class="bi bi-tags"></i>Catégories</a>
-    <a class="side-link {% active '/admin-dashboard/invites/' %}" href="{% url 'dashboard:guest_list' %}"><i class="bi bi-people"></i>Invités</a>
-    <a class="side-link {% active '/admin-dashboard/cadeaux/' %}" href="{% url 'dashboard:gift_list' %}"><i class="bi bi-gift"></i>Cadeaux</a>
-    <div class="nav-section">Revenus</div>
-    <a class="side-link {% active '/admin-dashboard/publicites/' %}" href="{% url 'dashboard:ad_list' %}"><i class="bi bi-megaphone"></i>Publicités</a>
-    <a class="side-link {% active '/admin-dashboard/paiements/' %}" href="{% url 'dashboard:payment_history' %}"><i class="bi bi-credit-card"></i>Paiements</a>
-    <div class="nav-section">Communauté</div>
-    <a class="side-link {% active '/admin-dashboard/messages/' %}" href="{% url 'dashboard:inbox' %}"><i class="bi bi-chat-square-heart"></i>Messages et avis</a>
-    <a class="side-link {% active '/admin-dashboard/aide/' %}" href="{% url 'dashboard:help_list' %}"><i class="bi bi-life-preserver"></i>Demandes d'aide{% if new_help_requests %}<span class="side-count" title="Demandes nouvelles">{{ new_help_requests }}</span>{% endif %}</a>
-    <a class="side-link" href="{% url 'admin:index' %}"><i class="bi bi-database-gear"></i>Back-office Django</a>
-    <a class="side-link" href="{% url 'core:landing' %}" target="_blank"><i class="bi bi-box-arrow-up-right"></i>Voir le site</a>
+    <div class="nav-section">{% trans "Pilotage" %}</div>
+    <a class="side-link {% if request.resolver_match.url_name == 'home' %}active{% endif %}" href="{% url 'dashboard:home' %}"><i class="bi bi-speedometer2"></i>{% trans "Tableau de bord" %}</a>
+    <a class="side-link {% active '/admin-dashboard/evenements/' %}" href="{% url 'dashboard:event_list' %}"><i class="bi bi-calendar2-event"></i>{% trans "Événements" %}</a>
+    <a class="side-link {% active '/admin-dashboard/categories/' %}" href="{% url 'dashboard:category_list' %}"><i class="bi bi-tags"></i>{% trans "Catégories" %}</a>
+    <a class="side-link {% active '/admin-dashboard/invites/' %}" href="{% url 'dashboard:guest_list' %}"><i class="bi bi-people"></i>{% trans "Invités" %}</a>
+    <a class="side-link {% active '/admin-dashboard/cadeaux/' %}" href="{% url 'dashboard:gift_list' %}"><i class="bi bi-gift"></i>{% trans "Cadeaux" %}</a>
+    <div class="nav-section">{% trans "Revenus" %}</div>
+    <a class="side-link {% active '/admin-dashboard/publicites/' %}" href="{% url 'dashboard:ad_list' %}"><i class="bi bi-megaphone"></i>{% trans "Publicités" %}</a>
+    <a class="side-link {% active '/admin-dashboard/paiements/' %}" href="{% url 'dashboard:payment_history' %}"><i class="bi bi-credit-card"></i>{% trans "Paiements" %}</a>
+    <div class="nav-section">{% trans "Communauté" %}</div>
+    <a class="side-link {% active '/admin-dashboard/messages/' %}" href="{% url 'dashboard:inbox' %}"><i class="bi bi-chat-square-heart"></i>{% trans "Messages et avis" %}</a>
+    <a class="side-link {% active '/admin-dashboard/aide/' %}" href="{% url 'dashboard:help_list' %}"><i class="bi bi-life-preserver"></i>{% trans "Demandes d'aide" %}{% if new_help_requests %}<span class="side-count" title="{% trans 'Demandes nouvelles' %}">{{ new_help_requests }}</span>{% endif %}</a>
+    <a class="side-link" href="{% url 'admin:index' %}"><i class="bi bi-database-gear"></i>{% trans "Back-office Django" %}</a>
+    <a class="side-link" href="{% url 'core:landing' %}" target="_blank"><i class="bi bi-box-arrow-up-right"></i>{% trans "Voir le site" %}</a>
     <div class="mt-auto pt-4">
-      <form method="post" action="{% url 'accounts:logout' %}">{% csrf_token %}<button class="side-link w-100 border-0 bg-transparent text-start"><i class="bi bi-box-arrow-left"></i>Se déconnecter</button></form>
+      <form method="post" action="{% url 'accounts:logout' %}">{% csrf_token %}<button class="side-link w-100 border-0 bg-transparent text-start"><i class="bi bi-box-arrow-left"></i>{% trans "Se déconnecter" %}</button></form>
     </div>
   </aside>
   <div class="dash-main">
     <header class="dash-topbar">
       <div class="d-flex align-items-center gap-2">
-        <button class="btn btn-soft btn-sm dash-burger" aria-label="Menu"><i class="bi bi-list"></i></button>
-        <span class="text-muted small d-none d-md-inline">{% now "l j F Y" %}</span>
+        <button class="btn btn-soft btn-sm dash-burger" aria-label="{% trans 'Menu' %}"><i class="bi bi-list"></i></button>
+        <span class="text-muted small d-none d-md-inline">{{ TODAY|date:_("l j F Y") }}</span>
       </div>
       <div class="d-flex align-items-center gap-2">
-        <a href="{% url 'dashboard:event_create' %}" class="btn btn-primary btn-sm"><i class="bi bi-plus-lg me-1"></i>Nouvel événement</a>
+        {% include "partials/_language_switcher.html" %}
+        <a href="{% url 'dashboard:event_create' %}" class="btn btn-primary btn-sm"><i class="bi bi-plus-lg me-1"></i>{% trans "Nouvel événement" %}</a>
         <span class="user-pill"><span class="avatar">{{ user.initials }}</span><span class="d-none d-sm-inline">{{ user.display_name }}</span><span class="badge-el badge-primary">Admin</span></span>
       </div>
     </header>
