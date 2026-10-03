@@ -12,6 +12,7 @@ from django.views.decorators.http import require_GET
 
 from ads.models import Ad
 from gifts.models import GiftClaim
+from payments.models import Contribution
 from gifts.services import (
     GiftUnavailableError,
     ResponseLockedError,
@@ -55,6 +56,8 @@ STEP_LABELS = {
 def _steps(event):
     if event.gifts.exists():
         return ["presence", "gifts", "selection", "recap", "confirmation"]
+    if event.accept_contributions:
+        return ["presence", "gifts", "recap", "confirmation"]  # sans liste de cadeaux : seulement la contribution en argent
     return ["presence", "recap", "confirmation"]
 
 
@@ -74,7 +77,8 @@ def _guard(request, guest):
     event = guest.event
     if guest.is_locked:
         claims = GiftClaim.objects.filter(guest=guest).select_related("gift")
-        return render(request, "invitation/already_answered.html", _ctx(guest, "confirmation", claims=claims))
+        contribution = Contribution.objects.filter(guest=guest).first()
+        return render(request, "invitation/already_answered.html", _ctx(guest, "confirmation", claims=claims, contribution=contribution))
     if event.status != Event.Status.ACTIVE or event.is_past:
         return render(request, "invitation/closed.html", _ctx(guest, "presence"))
     return None
@@ -93,7 +97,7 @@ def invitation_presence(request, token):
     if request.method == "POST" and form.is_valid():
         status = form.cleaned_data["status"]
         _set_state(request, guest, status=status, companions=form.cleaned_data["companions"])
-        if status == Guest.Status.CONFIRMED and event.gifts.exists():
+        if status == Guest.Status.CONFIRMED and event.has_gift_step:
             return redirect("events:invitation_gift_question", token=token)
         _set_state(request, guest, wants_gift=None, gift_ids=[])
         return redirect("events:invitation_recap", token=token)
@@ -107,17 +111,20 @@ def invitation_gift_question(request, token):
     if blocked:
         return blocked
     state = _get_state(request, guest)
-    if state.get("status") != Guest.Status.CONFIRMED or not guest.event.gifts.exists():
+    if state.get("status") != Guest.Status.CONFIRMED or not guest.event.has_gift_step:
         return redirect("events:invitation", token=token)
+    has_gifts = guest.event.gifts.exists()
     form = GiftWishForm(request.POST or None)
     if request.method == "POST" and form.is_valid():
-        wants = form.cleaned_data["wants_gift"]
+        wants = form.cleaned_data["wants_gift"] and has_gifts
         _set_state(request, guest, wants_gift=wants)
         if wants:
             return redirect("events:invitation_gift_list", token=token)
         _set_state(request, guest, gift_ids=[])
         return redirect("events:invitation_recap", token=token)
-    return render(request, "invitation/step_gift_question.html", _ctx(guest, "gifts", form=form, state=state))
+    return render(request, "invitation/step_gift_question.html", _ctx(
+        guest, "gifts", form=form, state=state, has_gifts=has_gifts, can_contribute=guest.event.accept_contributions,
+    ))
 
 
 def invitation_gift_list(request, token):
@@ -222,10 +229,11 @@ def invitation_done(request, token):
     ads = _ad_sequence()
     next_url = reverse("events:invitation_ad", args=[token, ads[0]]) if ads else _after_ads_url()
     claims = GiftClaim.objects.filter(guest=guest).select_related("gift")
+    contribution = Contribution.objects.filter(guest=guest).first()
     # Un invité présent a le temps de toucher « Voir mon QR code d'entrée » avant la redirection
     delay = 8 if guest.status == Guest.Status.CONFIRMED else 3
     return render(request, "invitation/step_done.html", _ctx(
-        guest, "confirmation", next_url=next_url, claims=claims, delay=delay, ads_follow=bool(ads),
+        guest, "confirmation", next_url=next_url, claims=claims, delay=delay, ads_follow=bool(ads), contribution=contribution,
     ))
 
 

@@ -73,7 +73,7 @@ msgstr "e-mail address"
 msgid "rôle"
 msgstr "role"
 
-#: accounts/models.py:15 core/models.py:27 events/models.py:248
+#: accounts/models.py:15 core/models.py:27 events/models.py:257
 msgid "téléphone"
 msgstr "phone"
 
@@ -93,7 +93,7 @@ msgstr "VIP since"
 msgid "langue"
 msgstr "language"
 
-#: accounts/models.py:23 payments/models.py:37
+#: accounts/models.py:23 payments/models.py:38
 msgid "utilisateur"
 msgstr "user"
 
@@ -727,11 +727,11 @@ msgid_plural "This password is too short. It must contain at least %(min_length)
 msgstr[0] "This password is too short. It must contain at least %(min_length)d character."
 msgstr[1] "This password is too short. It must contain at least %(min_length)d characters."
 
-#: core/models.py:9 core/models.py:25 core/models.py:57 events/models.py:52 events/models.py:209 events/models.py:246
+#: core/models.py:9 core/models.py:25 core/models.py:57 events/models.py:52 events/models.py:218 events/models.py:255
 msgid "nom"
 msgstr "name"
 
-#: core/models.py:10 events/models.py:374
+#: core/models.py:10 events/models.py:383
 msgid "note"
 msgstr "rating"
 
@@ -743,7 +743,7 @@ msgstr "review"
 msgid "publié"
 msgstr "published"
 
-#: core/models.py:26 events/models.py:247
+#: core/models.py:26 events/models.py:256
 msgid "email"
 msgstr "email"
 
@@ -795,7 +795,7 @@ msgstr "e-mail or phone"
 msgid "sujet"
 msgstr "topic"
 
-#: core/models.py:61 events/models.py:92 events/models.py:249 payments/models.py:43
+#: core/models.py:61 events/models.py:92 events/models.py:258 payments/models.py:44
 msgid "statut"
 msgstr "status"
 
@@ -1017,7 +1017,7 @@ msgstr "A phone number is needed to send via WhatsApp."
 msgid "Cet événement a atteint son nombre maximum d'invités (%(max)d)."
 msgstr "This event has reached its maximum number of guests (%(max)d)."
 
-#: events/forms.py:120 events/models.py:235
+#: events/forms.py:120 events/models.py:244
 msgid "Peut-être"
 msgstr "Maybe"
 
@@ -1117,7 +1117,7 @@ msgstr "Draft"
 msgid "Annulé"
 msgstr "Cancelled"
 
-#: events/models.py:91 payments/models.py:28
+#: events/models.py:91 payments/models.py:29
 msgid "type"
 msgstr "type"
 
@@ -1177,191 +1177,199 @@ msgstr "reminder sending time"
 msgid "envoi automatique des relances par e-mail"
 msgstr "automatic reminders by e-mail"
 
-#: events/models.py:108
+#: events/models.py:109
+msgid "accepter les contributions en argent"
+msgstr "accept cash contributions"
+
+#: events/models.py:110
+msgid "Les invités peuvent contribuer en argent (MonCash ou NatCash) à la place d'un cadeau."
+msgstr "Guests can contribute money (MonCash or NatCash) instead of a gift."
+
+#: events/models.py:112
 msgid "description"
 msgstr "description"
 
-#: events/models.py:109
+#: events/models.py:113
 msgid "photo de couverture"
 msgstr "cover photo"
 
-#: events/models.py:110
+#: events/models.py:114
 msgid "vidéo de couverture"
 msgstr "cover video"
 
-#: events/models.py:112
+#: events/models.py:116
 msgid "prix du billet (HTG)"
 msgstr "ticket price (HTG)"
 
-#: events/models.py:113
+#: events/models.py:117
 msgid "Laisser vide si l'événement est gratuit."
 msgstr "Leave empty if the event is free."
 
-#: events/models.py:117
+#: events/models.py:121
 msgid "catégorie"
 msgstr "category"
 
-#: events/models.py:121
+#: events/models.py:125
 msgid "créé par"
 msgstr "created by"
 
-#: events/models.py:123 payments/models.py:48
+#: events/models.py:127 payments/models.py:49
 msgid "créé le"
 msgstr "created on"
 
-#: events/models.py:129 events/models.py:207 events/models.py:241 events/models.py:348 gifts/models.py:42 payments/models.py:30
+#: events/models.py:133 events/models.py:216 events/models.py:250 events/models.py:357 gifts/models.py:42 payments/models.py:31
 msgid "événement"
 msgstr "event"
 
-#: events/models.py:208
+#: events/models.py:217
 msgid "numéro"
 msgstr "number"
 
-#: events/models.py:217 events/models.py:261
+#: events/models.py:226 events/models.py:270
 msgid "table"
 msgstr "table"
 
-#: events/models.py:226
+#: events/models.py:235
 msgid "Table %(n)d"
 msgstr "Table %(n)d"
 
-#: events/models.py:232 payments/models.py:20
+#: events/models.py:241 payments/models.py:20
 msgid "En attente"
 msgstr "Pending"
 
-#: events/models.py:233
+#: events/models.py:242
 msgid "Présent"
 msgstr "Attending"
 
-#: events/models.py:234
+#: events/models.py:243
 msgid "Absent"
 msgstr "Not attending"
 
-#: events/models.py:238
+#: events/models.py:247
 msgid "Email"
 msgstr "Email"
 
-#: events/models.py:244
+#: events/models.py:253
 msgid "compte lié"
 msgstr "linked account"
 
-#: events/models.py:251
+#: events/models.py:260
 msgid "canal d'envoi"
 msgstr "sending channel"
 
-#: events/models.py:252
+#: events/models.py:261
 msgid "langue de l'invitation"
 msgstr "invitation language"
 
-#: events/models.py:253
+#: events/models.py:262
 msgid "lien magique"
 msgstr "magic link"
 
-#: events/models.py:254
+#: events/models.py:263
 msgid "invitation envoyée le"
 msgstr "invitation sent on"
 
-#: events/models.py:255
+#: events/models.py:264
 msgid "répondu le"
 msgstr "replied on"
 
-#: events/models.py:256
+#: events/models.py:265
 msgid "souhaite offrir un cadeau"
 msgstr "wants to give a gift"
 
-#: events/models.py:257
+#: events/models.py:266
 msgid "code d'entrée"
 msgstr "entry code"
 
-#: events/models.py:258
+#: events/models.py:267
 msgid "arrivé le"
 msgstr "arrived on"
 
-#: events/models.py:259
+#: events/models.py:268
 msgid "ajouté sur place"
 msgstr "added on site"
 
-#: events/models.py:267 events/models.py:315 events/models.py:349 gifts/models.py:79 payments/models.py:33
+#: events/models.py:276 events/models.py:324 events/models.py:358 gifts/models.py:79 payments/models.py:34 payments/models.py:78
 msgid "invité"
 msgstr "guest"
 
-#: events/models.py:316
+#: events/models.py:325
 msgid "canal"
 msgstr "channel"
 
-#: events/models.py:319
+#: events/models.py:328
 msgid "envoyée le"
 msgstr "sent on"
 
-#: events/models.py:323
+#: events/models.py:332
 msgid "relance"
 msgstr "reminder"
 
-#: events/models.py:324
+#: events/models.py:333
 msgid "relances"
 msgstr "reminders"
 
-#: events/models.py:334
+#: events/models.py:343
 msgid "Entrée validée"
 msgstr "Entry validated"
 
-#: events/models.py:335
+#: events/models.py:344
 msgid "QR déjà utilisé"
 msgstr "QR already used"
 
-#: events/models.py:337
+#: events/models.py:346
 msgid "Autre événement"
 msgstr "Other event"
 
-#: events/models.py:338
+#: events/models.py:347
 msgid "Ajouté sur place"
 msgstr "Added on site"
 
-#: events/models.py:339
+#: events/models.py:348
 msgid "Pointage annulé"
 msgstr "Check-in cancelled"
 
-#: events/models.py:342
+#: events/models.py:351
 msgid "QR code"
 msgstr "QR code"
 
-#: events/models.py:343
+#: events/models.py:352
 msgid "Recherche"
 msgstr "Search"
 
-#: events/models.py:344
+#: events/models.py:353
 msgid "Sur place"
 msgstr "On site"
 
-#: events/models.py:350
+#: events/models.py:359
 msgid "code lu"
 msgstr "code read"
 
-#: events/models.py:351
+#: events/models.py:360
 msgid "résultat"
 msgstr "result"
 
-#: events/models.py:352
+#: events/models.py:361
 msgid "origine"
 msgstr "source"
 
-#: events/models.py:358
+#: events/models.py:367
 msgid "pointage"
 msgstr "check-in"
 
-#: events/models.py:359
+#: events/models.py:368
 msgid "pointages"
 msgstr "check-ins"
 
-#: events/models.py:375
+#: events/models.py:384
 msgid "commentaire"
 msgstr "comment"
 
-#: events/models.py:380
+#: events/models.py:389
 msgid "évaluation"
 msgstr "evaluation"
 
-#: events/models.py:381
+#: events/models.py:390
 msgid "évaluations"
 msgstr "evaluations"
 
@@ -1457,85 +1465,85 @@ msgstr "You have already rated this event. Thank you."
 msgid "Merci pour votre évaluation."
 msgstr "Thank you for your review."
 
-#: events/views_admin.py:41
+#: events/views_admin.py:42
 msgid "Catégorie créée."
 msgstr "Category created."
 
-#: events/views_admin.py:52
+#: events/views_admin.py:53
 msgid "Catégorie mise à jour."
 msgstr "Category updated."
 
-#: events/views_admin.py:62
+#: events/views_admin.py:63
 msgid "Catégorie supprimée. Ses événements sont conservés."
 msgstr "Category deleted. Its events have been kept."
 
-#: events/views_admin.py:67
+#: events/views_admin.py:68
 msgid "Les %(n)d événement de cette catégorie ne sont pas supprimés : ils n'auront simplement plus de catégorie."
 msgid_plural "Les %(n)d événements de cette catégorie ne sont pas supprimés : ils n'auront simplement plus de catégorie."
 msgstr[0] "%(n)d event in this category is not deleted: it will simply no longer have a category."
 msgstr[1] "%(n)d events in this category are not deleted: they will simply no longer have a category."
 
-#: events/views_admin.py:73
+#: events/views_admin.py:74
 msgid "la catégorie"
 msgstr "the category"
 
-#: events/views_admin.py:115
+#: events/views_admin.py:116
 msgid "Adresse non localisée automatiquement. Placez le repère sur la carte si besoin."
 msgstr "Address could not be located automatically. Place the marker on the map if needed."
 
-#: events/views_admin.py:125
+#: events/views_admin.py:126
 msgid "Événement créé. Ajoutez maintenant vos invités et votre liste de cadeaux."
 msgstr "Event created. Now add your guests and your gift list."
 
-#: events/views_admin.py:136
+#: events/views_admin.py:137
 msgid "Événement mis à jour."
 msgstr "Event updated."
 
-#: events/views_admin.py:147
-msgid "Impossible de supprimer : des invités ont déjà choisi des cadeaux. Annulez plutôt l'événement."
-msgstr "Cannot delete: guests have already chosen gifts. Cancel the event instead."
+#: events/views_admin.py:148
+msgid "Impossible de supprimer : des invités ont déjà choisi des cadeaux ou fait une contribution. Annulez plutôt l'événement."
+msgstr "Cannot delete: guests have already chosen gifts or made a contribution. Cancel the event instead."
 
-#: events/views_admin.py:150
+#: events/views_admin.py:151
 msgid "Événement supprimé."
 msgstr "Event deleted."
 
-#: events/views_admin.py:153
+#: events/views_admin.py:154
 msgid "l'événement"
 msgstr "the event"
 
-#: events/views_admin.py:234
+#: events/views_admin.py:237
 msgid "%(name)s a été ajouté(e). Son lien d'invitation est prêt à être envoyé."
 msgstr "%(name)s has been added. Their invitation link is ready to send."
 
-#: events/views_admin.py:248
+#: events/views_admin.py:251
 msgid "Invité mis à jour."
 msgstr "Guest updated."
 
-#: events/views_admin.py:262
-msgid "Cet invité a choisi des cadeaux : sa réponse est définitive et ne peut pas être supprimée."
-msgstr "This guest has chosen gifts: their reply is final and cannot be deleted."
-
 #: events/views_admin.py:265
+msgid "Cet invité a choisi des cadeaux ou fait une contribution : sa réponse est définitive et ne peut pas être supprimée."
+msgstr "This guest chose gifts or made a contribution: their response is final and cannot be deleted."
+
+#: events/views_admin.py:268
 msgid "Invité supprimé."
 msgstr "Guest deleted."
 
-#: events/views_admin.py:268
+#: events/views_admin.py:271
 msgid "l'invité"
 msgstr "the guest"
 
-#: events/views_admin.py:281
+#: events/views_admin.py:284
 msgid "Invitation de %(name)s marquée comme envoyée."
 msgstr "%(name)s's invitation marked as sent."
 
-#: events/views_admin.py:297 events/views_admin.py:324
+#: events/views_admin.py:300 events/views_admin.py:327
 msgid "invites-eventlead"
 msgstr "guests-eventlead"
 
-#: events/views_admin.py:301
+#: events/views_admin.py:304
 msgid "Cadeaux choisis"
 msgstr "Chosen gifts"
 
-#: events/views_admin.py:327
+#: events/views_admin.py:330
 msgid "Erreur lors de la génération du PDF."
 msgstr "Error while generating the PDF."
 
@@ -1543,39 +1551,43 @@ msgstr "Error while generating the PDF."
 msgid "Indiquez le nom de la personne."
 msgstr "Enter the person's name."
 
-#: events/views_invitation.py:49
+#: events/views_contribution.py:54 payments/views.py:49
+msgid "%(message)s Référence : %(reference)s."
+msgstr "%(message)s Reference: %(reference)s."
+
+#: events/views_invitation.py:50
 msgid "Sélection"
 msgstr "Selection"
 
-#: events/views_invitation.py:50
+#: events/views_invitation.py:51
 msgid "Récapitulatif"
 msgstr "Summary"
 
-#: events/views_invitation.py:51
+#: events/views_invitation.py:52
 msgid "Confirmation"
 msgstr "Confirmation"
 
-#: events/views_invitation.py:139
+#: events/views_invitation.py:146
 msgid "Un cadeau sélectionné n'est plus disponible. La liste a été actualisée."
 msgstr "One of the gifts you selected is no longer available. The list has been refreshed."
 
-#: events/views_invitation.py:154
+#: events/views_invitation.py:161
 msgid "%(n)d disponible"
 msgid_plural "%(n)d disponibles"
 msgstr[0] "%(n)d available"
 msgstr[1] "%(n)d available"
 
-#: events/views_invitation.py:187
+#: events/views_invitation.py:194
 msgid "Désolé, ce cadeau vient d'être choisi par un autre invité : %(cadeaux)s. Merci de revoir votre sélection."
 msgid_plural "Désolé, ces cadeaux viennent d'être choisis par d'autres invités : %(cadeaux)s. Merci de revoir votre sélection."
 msgstr[0] "Sorry, this gift was just chosen by another guest: %(cadeaux)s. Please review your selection."
 msgstr[1] "Sorry, these gifts were just chosen by other guests: %(cadeaux)s. Please review your selection."
 
-#: events/views_invitation.py:266
+#: events/views_invitation.py:274
 msgid "Mon billet d'entrée pour « %(title)s » : %(url)s"
 msgstr "My entry ticket for “%(title)s”: %(url)s"
 
-#: events/views_invitation.py:267
+#: events/views_invitation.py:275
 msgid "QR code d'entrée de %(name)s"
 msgstr "Entry QR code for %(name)s"
 
@@ -1821,6 +1833,18 @@ msgstr "Remaining"
 msgid "Choisi le"
 msgstr "Chosen on"
 
+#: payments/contributions.py:33
+msgid "Le montant minimum est de %(min)s HTG."
+msgstr "The minimum amount is %(min)s HTG."
+
+#: payments/contributions.py:35
+msgid "Le montant maximum est de %(max)s HTG."
+msgstr "The maximum amount is %(max)s HTG."
+
+#: payments/contributions.py:54
+msgid "Choisissez MonCash ou NatCash."
+msgstr "Choose MonCash or NatCash."
+
 #: payments/forms.py:49
 msgid "Champ obligatoire."
 msgstr "This field is required."
@@ -1877,41 +1901,53 @@ msgstr "Successful"
 msgid "Échoué"
 msgstr "Failed"
 
-#: payments/models.py:39
+#: payments/models.py:40
 msgid "mode de paiement"
 msgstr "payment method"
 
-#: payments/models.py:40
+#: payments/models.py:41 payments/models.py:80
 msgid "montant (HTG)"
 msgstr "amount (HTG)"
 
-#: payments/models.py:41
+#: payments/models.py:42
 msgid "nombre de billets"
 msgstr "number of tickets"
 
-#: payments/models.py:42
+#: payments/models.py:43
 msgid "référence"
 msgstr "reference"
 
-#: payments/models.py:45
+#: payments/models.py:46
 msgid "détail payeur"
 msgstr "payer details"
 
-#: payments/models.py:46
+#: payments/models.py:47
 msgid "Numéro masqué ou e-mail du payeur (jamais de données de carte complètes)."
 msgstr "Masked number or email of the payer (never full card data)."
 
-#: payments/models.py:52
+#: payments/models.py:53 payments/models.py:79
 msgid "paiement"
 msgstr "payment"
 
-#: payments/models.py:53
+#: payments/models.py:54
 msgid "paiements"
 msgstr "payments"
 
-#: payments/views.py:49
-msgid "%(message)s Référence : %(reference)s."
-msgstr "%(message)s Reference: %(reference)s."
+#: payments/models.py:81
+msgid "petit mot"
+msgstr "message"
+
+#: payments/models.py:82
+msgid "créée le"
+msgstr "created on"
+
+#: payments/models.py:86
+msgid "contribution"
+msgstr "contribution"
+
+#: payments/models.py:87
+msgid "contributions"
+msgstr "contributions"
 
 #: payments/views.py:67
 msgid "Billet - %(titre)s"
@@ -1981,7 +2017,7 @@ msgstr "My invitations"
 msgid "Événement"
 msgstr "Event"
 
-#: templates/accounts/guest_space.html:15 templates/dashboard/events/list.html:25 templates/dashboard/home.html:25 templates/dashboard/payments/history.html:20 templates/events/organizer_portal.html:39 templates/payments/success.html:20
+#: templates/accounts/guest_space.html:15 templates/dashboard/events/_live.html:56 templates/dashboard/events/list.html:25 templates/dashboard/home.html:25 templates/dashboard/payments/history.html:20 templates/events/organizer_portal.html:39
 msgid "Date"
 msgstr "Date"
 
@@ -2237,7 +2273,7 @@ msgstr "Home"
 msgid "Publications, événements publics et billets du moment, rassemblés pour vous."
 msgstr "Posts, public events and tickets of the moment, all gathered for you."
 
-#: templates/core/landing.html:21 templates/dashboard/events/form.html:63 templates/partials/_footer.html:14 templates/partials/_navbar.html:23 templates/payments/ticketing.html:4 templates/payments/ticketing.html:10
+#: templates/core/landing.html:21 templates/dashboard/events/form.html:64 templates/partials/_footer.html:14 templates/partials/_navbar.html:23 templates/payments/ticketing.html:4 templates/payments/ticketing.html:10
 msgid "Billetterie"
 msgstr "Ticketing"
 
@@ -2447,7 +2483,7 @@ msgstr "Be the first to leave a review."
 msgid "Laisser un avis"
 msgstr "Leave a review"
 
-#: templates/core/landing.html:223 templates/dashboard/checkin/event.html:68 templates/dashboard/events/detail.html:43 templates/dashboard/guests/export_pdf.html:17 core/views_admin.py:146 events/views_admin.py:300
+#: templates/core/landing.html:223 templates/dashboard/checkin/event.html:68 templates/dashboard/events/detail.html:43 templates/dashboard/guests/export_pdf.html:17 core/views_admin.py:146 events/views_admin.py:303
 msgid "Nom"
 msgstr "Name"
 
@@ -2495,7 +2531,7 @@ msgstr "Write to us"
 msgid "Nom complet"
 msgstr "Full name"
 
-#: templates/core/landing.html:258 accounts/forms.py:77 core/forms.py:28 events/views_admin.py:300
+#: templates/core/landing.html:258 accounts/forms.py:77 core/forms.py:28 events/views_admin.py:303
 msgid "Téléphone"
 msgstr "Phone"
 
@@ -2767,7 +2803,7 @@ msgstr "On site · %(n)s"
 msgid "Heure"
 msgstr "Time"
 
-#: templates/dashboard/checkin/_recent.html:13 templates/dashboard/guests/list.html:28 templates/dashboard/reminders/_table.html:13 accounts/models.py:11
+#: templates/dashboard/checkin/_recent.html:13 templates/dashboard/events/_live.html:56 templates/dashboard/guests/list.html:28 templates/dashboard/reminders/_table.html:13 accounts/models.py:11
 msgid "Invité"
 msgstr "Guest"
 
@@ -2897,7 +2933,7 @@ msgstr "Name or code EL-XXXX-XXXX"
 msgid "Ajouter un invité sur place"
 msgstr "Add a guest on site"
 
-#: templates/dashboard/checkin/event.html:65 templates/dashboard/seating/event.html:36 templates/dashboard/seating/event.html:50 templates/partials/_messages.html:11 templates/payments/_payment_modal.html:16
+#: templates/dashboard/checkin/event.html:65 templates/dashboard/seating/event.html:36 templates/dashboard/seating/event.html:50 templates/partials/_messages.html:11 templates/payments/_payment_modal.html:17
 msgid "Fermer"
 msgstr "Close"
 
@@ -2905,7 +2941,7 @@ msgstr "Close"
 msgid "Pour une personne arrivée sans être sur la liste : elle est ajoutée comme présente et pointée tout de suite."
 msgstr "For someone who arrived without being on the list: they are added as attending and checked in right away."
 
-#: templates/dashboard/checkin/event.html:70 templates/dashboard/events/detail.html:59 templates/invitation/step_presence.html:23 templates/invitation/step_recap.html:10 events/views_admin.py:300
+#: templates/dashboard/checkin/event.html:70 templates/dashboard/events/detail.html:59 templates/invitation/step_presence.html:23 templates/invitation/step_recap.html:10 events/views_admin.py:303
 msgid "Accompagnants"
 msgstr "Companions"
 
@@ -2946,8 +2982,8 @@ msgid "Suppression impossible"
 msgstr "Cannot delete"
 
 #: templates/dashboard/confirm_delete.html:9
-msgid "« %(obj)s » est lié à des choix de cadeaux déjà confirmés par des invités. Ces choix sont définitifs."
-msgstr "“%(obj)s” is linked to gift choices already confirmed by guests. These choices are final."
+msgid "« %(obj)s » est lié à des choix de cadeaux ou à des contributions déjà confirmés par des invités. Ces choix sont définitifs."
+msgstr "“%(obj)s” is linked to gift choices or contributions already confirmed by guests. These choices are final."
 
 #: templates/dashboard/confirm_delete.html:13
 msgid "Supprimer %(what)s ?"
@@ -2957,69 +2993,99 @@ msgstr "Delete %(what)s?"
 msgid "« %(obj)s » sera définitivement supprimé. Cette action est irréversible."
 msgstr "“%(obj)s” will be permanently deleted. This action cannot be undone."
 
-#: templates/dashboard/events/_live.html:4
+#: templates/dashboard/events/_live.html:5
 msgid "invités / %(max)s"
 msgstr "guests / %(max)s"
 
-#: templates/dashboard/events/_live.html:5 templates/events/organizer_event_detail.html:9
+#: templates/dashboard/events/_live.html:6 templates/events/organizer_event_detail.html:9
 msgid "présents"
 msgstr "attending"
 
-#: templates/dashboard/events/_live.html:5
+#: templates/dashboard/events/_live.html:6
 msgid "%(n)s acc."
 msgstr "%(n)s comp."
 
-#: templates/dashboard/events/_live.html:6
+#: templates/dashboard/events/_live.html:7
 msgid "peut-être"
 msgstr "maybe"
 
-#: templates/dashboard/events/_live.html:7
+#: templates/dashboard/events/_live.html:8
 msgid "absents"
 msgstr "not attending"
 
-#: templates/dashboard/events/_live.html:8
+#: templates/dashboard/events/_live.html:9
 msgid "en attente"
 msgstr "pending"
 
-#: templates/dashboard/events/_live.html:13
+#: templates/dashboard/events/_live.html:14
 msgid "Cadeaux et donateurs"
 msgstr "Gifts and donors"
 
-#: templates/dashboard/events/_live.html:18 templates/dashboard/gifts/list.html:30 gifts/models.py:7 gifts/views_admin.py:95
+#: templates/dashboard/events/_live.html:19 templates/dashboard/gifts/list.html:30 gifts/models.py:7 gifts/views_admin.py:95
 msgid "Cadeau"
 msgstr "Gift"
 
-#: templates/dashboard/events/_live.html:18
+#: templates/dashboard/events/_live.html:19
 msgid "Pris"
 msgstr "Taken"
 
-#: templates/dashboard/events/_live.html:18 gifts/views_admin.py:95
+#: templates/dashboard/events/_live.html:19 gifts/views_admin.py:95
 msgid "Donateur(s)"
 msgstr "Donor(s)"
 
-#: templates/dashboard/events/_live.html:22 gifts/views_admin.py:101
+#: templates/dashboard/events/_live.html:23 gifts/views_admin.py:101
 msgid "Disponible"
 msgstr "Available"
 
-#: templates/dashboard/events/_live.html:25
+#: templates/dashboard/events/_live.html:26
 msgid "Aucun cadeau dans la liste."
 msgstr "No gifts in the list."
 
-#: templates/dashboard/events/_live.html:25 templates/dashboard/gifts/form.html:3 templates/dashboard/gifts/form.html:6 templates/dashboard/gifts/list.html:11 templates/dashboard/gifts/list.html:54
+#: templates/dashboard/events/_live.html:26 templates/dashboard/gifts/form.html:3 templates/dashboard/gifts/form.html:6 templates/dashboard/gifts/list.html:11 templates/dashboard/gifts/list.html:54
 msgid "Ajouter un cadeau"
 msgstr "Add a gift"
 
-#: templates/dashboard/events/_live.html:30 templates/dashboard/home.html:59
+#: templates/dashboard/events/_live.html:31 templates/dashboard/home.html:59
 msgid "Dernières réponses"
 msgstr "Latest replies"
 
-#: templates/dashboard/events/_live.html:30
+#: templates/dashboard/events/_live.html:31
 msgid "màj %(t)s"
 msgstr "updated %(t)s"
 
-#: templates/dashboard/events/_live.html:38 templates/dashboard/home.html:66
+#: templates/dashboard/events/_live.html:39 templates/dashboard/home.html:66
 msgid "Aucune réponse pour l'instant."
 msgstr "No replies yet."
+
+#: templates/dashboard/events/_live.html:46
+msgid "Contributions en argent"
+msgstr "Cash contributions"
+
+#: templates/dashboard/events/_live.html:47
+msgid "Visibles seulement par l'équipe : les invités ne voient pas les contributions des autres."
+msgstr "Visible to the team only: guests do not see each other's contributions."
+
+#: templates/dashboard/events/_live.html:52
+msgid "%(counter)s contribution"
+msgid_plural "%(counter)s contributions"
+msgstr[0] "%(counter)s contribution"
+msgstr[1] "%(counter)s contributions"
+
+#: templates/dashboard/events/_live.html:56 templates/dashboard/home.html:39 templates/dashboard/payments/history.html:20 templates/invitation/step_contribution.html:19 templates/payments/success.html:19
+msgid "Montant"
+msgstr "Amount"
+
+#: templates/dashboard/events/_live.html:56 templates/dashboard/home.html:39 templates/dashboard/payments/history.html:20 templates/payments/success.html:18
+msgid "Mode"
+msgstr "Method"
+
+#: templates/dashboard/events/_live.html:56
+msgid "Petit mot"
+msgstr "Message"
+
+#: templates/dashboard/events/_live.html:65
+msgid "Aucune contribution pour l'instant."
+msgstr "No contributions yet."
 
 #: templates/dashboard/events/detail.html:17 templates/events/public_detail.html:14
 msgid "%(d)s à %(t)s"
@@ -3029,7 +3095,7 @@ msgstr "%(d)s at %(t)s"
 msgid "Gérer et envoyer"
 msgstr "Manage and send"
 
-#: templates/dashboard/events/detail.html:43 templates/dashboard/guests/export_pdf.html:17 templates/dashboard/reminders/_table.html:13 templates/dashboard/reminders/event.html:61 events/views_admin.py:300
+#: templates/dashboard/events/detail.html:43 templates/dashboard/guests/export_pdf.html:17 templates/dashboard/reminders/_table.html:13 templates/dashboard/reminders/event.html:61 events/views_admin.py:303
 msgid "Canal"
 msgstr "Channel"
 
@@ -3131,15 +3197,15 @@ msgstr "Geocoding service unavailable. Click on the map to place the marker."
 msgid "Invitations"
 msgstr "Invitations"
 
-#: templates/dashboard/events/form.html:57
+#: templates/dashboard/events/form.html:58
 msgid "Médias"
 msgstr "Media"
 
-#: templates/dashboard/events/form.html:66
+#: templates/dashboard/events/form.html:67
 msgid "Créer l'événement"
 msgstr "Create event"
 
-#: templates/dashboard/events/form.html:66
+#: templates/dashboard/events/form.html:67
 msgid "Enregistrer les modifications"
 msgstr "Save changes"
 
@@ -3307,15 +3373,15 @@ msgstr "The unique invitation link is generated automatically."
 msgid "Canal d'envoi"
 msgstr "Sending channel"
 
-#: templates/dashboard/guests/form.html:39 events/views_admin.py:301
+#: templates/dashboard/guests/form.html:39 events/views_admin.py:304
 msgid "Lien d'invitation"
 msgstr "Invitation link"
 
-#: templates/dashboard/guests/form.html:43 templates/dashboard/reminders/_table.html:18 templates/dashboard/reminders/event.html:63 events/views_admin.py:300
+#: templates/dashboard/guests/form.html:43 templates/dashboard/reminders/_table.html:18 templates/dashboard/reminders/event.html:63 events/views_admin.py:303
 msgid "E-mail"
 msgstr "Email"
 
-#: templates/dashboard/guests/form.html:46 events/views_admin.py:301
+#: templates/dashboard/guests/form.html:46 events/views_admin.py:304
 msgid "Répondu le"
 msgstr "Replied on"
 
@@ -3407,7 +3473,7 @@ msgid_plural "%(counter)s demandes d'aide nouvelles"
 msgstr[0] "%(counter)s new help request"
 msgstr[1] "%(counter)s new help requests"
 
-#: templates/dashboard/home.html:14 events/models.py:130
+#: templates/dashboard/home.html:14 events/models.py:134
 msgid "événements"
 msgstr "events"
 
@@ -3415,7 +3481,7 @@ msgstr "events"
 msgid "%(n)s à venir"
 msgstr "%(n)s upcoming"
 
-#: templates/dashboard/home.html:15 templates/events/organizer_event_detail.html:8 events/models.py:268
+#: templates/dashboard/home.html:15 templates/events/organizer_event_detail.html:8 events/models.py:277
 msgid "invités"
 msgstr "guests"
 
@@ -3460,14 +3526,6 @@ msgstr "History"
 #: templates/dashboard/home.html:39 templates/dashboard/payments/history.html:20 templates/payments/success.html:13
 msgid "Référence"
 msgstr "Reference"
-
-#: templates/dashboard/home.html:39 templates/dashboard/payments/history.html:20 templates/payments/success.html:18
-msgid "Mode"
-msgstr "Method"
-
-#: templates/dashboard/home.html:39 templates/dashboard/payments/history.html:20 templates/payments/success.html:19
-msgid "Montant"
-msgstr "Amount"
 
 #: templates/dashboard/home.html:45
 msgid "Aucun paiement."
@@ -3595,7 +3653,7 @@ msgstr "%(n)s twice"
 msgid "%(n)s trois fois"
 msgstr "%(n)s three times"
 
-#: templates/dashboard/reminders/_stats.html:6 events/models.py:317
+#: templates/dashboard/reminders/_stats.html:6 events/models.py:326
 msgid "automatique"
 msgstr "automatic"
 
@@ -3781,7 +3839,7 @@ msgstr "Remind guests who have not replied in one click, by WhatsApp or e-mail. 
 msgid "À venir"
 msgstr "Upcoming"
 
-#: templates/dashboard/seating/_board.html:3 events/models.py:218
+#: templates/dashboard/seating/_board.html:3 events/models.py:227
 msgid "tables"
 msgstr "tables"
 
@@ -3793,7 +3851,7 @@ msgstr "%(n)s seats each"
 msgid "de %(a)s à %(b)s places"
 msgstr "from %(a)s to %(b)s seats"
 
-#: templates/dashboard/seating/_board.html:4 events/models.py:211
+#: templates/dashboard/seating/_board.html:4 events/models.py:220
 msgid "places"
 msgstr "seats"
 
@@ -4059,7 +4117,7 @@ msgstr "Concerts, galas, conferences: discover what is happening near you."
 msgid "Aucun événement public à venir pour le moment."
 msgstr "No upcoming public events at the moment."
 
-#: templates/events/organizer_event_detail.html:10 events/models.py:250
+#: templates/events/organizer_event_detail.html:10 events/models.py:259
 msgid "accompagnants"
 msgstr "companions"
 
@@ -4131,37 +4189,41 @@ msgstr "Buy a ticket"
 msgid "Voir mon invitation"
 msgstr "View my invitation"
 
-#: templates/invitation/already_answered.html:7
+#: templates/invitation/already_answered.html:8
 msgid "Votre réponse est <em style=\"color:inherit\">enregistrée</em>"
 msgstr "Your response is <em style=\"color:inherit\">saved</em>"
 
-#: templates/invitation/already_answered.html:8
+#: templates/invitation/already_answered.html:9
 msgid "j F Y à H:i"
 msgstr "F j, Y \\a\\t H:i"
 
-#: templates/invitation/already_answered.html:9
+#: templates/invitation/already_answered.html:10
 msgid "Cette réponse est définitive."
 msgstr "This response is final."
 
-#: templates/invitation/already_answered.html:9
+#: templates/invitation/already_answered.html:10
 msgid "Vous avez confirmé votre présence le %(date)s, avec %(counter)s accompagnant."
 msgid_plural "Vous avez confirmé votre présence le %(date)s, avec %(counter)s accompagnants."
 msgstr[0] "You confirmed your attendance on %(date)s, with %(counter)s companion."
 msgstr[1] "You confirmed your attendance on %(date)s, with %(counter)s companions."
 
-#: templates/invitation/already_answered.html:9
+#: templates/invitation/already_answered.html:10
 msgid "Vous avez confirmé votre présence le %(date)s."
 msgstr "You confirmed your attendance on %(date)s."
 
-#: templates/invitation/already_answered.html:13 templates/invitation/step_done.html:15
+#: templates/invitation/already_answered.html:14 templates/invitation/step_done.html:16
 msgid "Vos cadeaux réservés"
 msgstr "Your reserved gifts"
 
-#: templates/invitation/already_answered.html:17 templates/invitation/step_done.html:19
+#: templates/invitation/already_answered.html:20 templates/invitation/step_done.html:22
+msgid "Votre contribution"
+msgstr "Your contribution"
+
+#: templates/invitation/already_answered.html:24 templates/invitation/step_done.html:27
 msgid "Voir mon QR code d'entrée"
 msgstr "View my entry QR code"
 
-#: templates/invitation/already_answered.html:18
+#: templates/invitation/already_answered.html:25
 msgid "Découvrir les événements publics"
 msgstr "Discover public events"
 
@@ -4217,7 +4279,7 @@ msgstr "Already checked in at %(time)s."
 msgid "Valider l'entrée"
 msgstr "Validate entry"
 
-#: templates/invitation/entry_code.html:22 events/models.py:336
+#: templates/invitation/entry_code.html:22 events/models.py:345
 msgid "QR inconnu"
 msgstr "QR unknown"
 
@@ -4233,41 +4295,101 @@ msgstr "EventLead entry ticket"
 msgid "Ce code se présente à l'entrée de l'événement : seule l'équipe à l'entrée peut le valider."
 msgstr "This code is shown at the event entrance: only the team at the entrance can validate it."
 
-#: templates/invitation/step_done.html:7
+#: templates/invitation/step_contribution.html:8 templates/invitation/step_contribution.html:44
+msgid "Contribuer %(n)s HTG"
+msgstr "Contribute %(n)s HTG"
+
+#: templates/invitation/step_contribution.html:9
+msgid "Le montant minimum est de %(n)s HTG."
+msgstr "The minimum amount is %(n)s HTG."
+
+#: templates/invitation/step_contribution.html:10
+msgid "Le montant maximum est de %(n)s HTG."
+msgstr "The maximum amount is %(n)s HTG."
+
+#: templates/invitation/step_contribution.html:11 payments/contributions.py:30
+msgid "Indiquez un montant en gourdes."
+msgstr "Enter an amount in gourdes (HTG)."
+
+#: templates/invitation/step_contribution.html:14
+msgid "Contribuer en <em style=\"color:inherit\">argent</em>"
+msgstr "Contribute with <em style=\"color:inherit\">money</em>"
+
+#: templates/invitation/step_contribution.html:15
+msgid "À la place d'un cadeau, vous offrez une contribution aux hôtes de « %(title)s »."
+msgstr "Instead of a gift, you are making a contribution to the hosts of “%(title)s”."
+
+#: templates/invitation/step_contribution.html:23 templates/invitation/step_contribution.html:24
+msgid "Autre montant"
+msgstr "Other amount"
+
+#: templates/invitation/step_contribution.html:31
+msgid "Payer avec"
+msgstr "Pay with"
+
+#: templates/invitation/step_contribution.html:39
+msgid "Un petit mot pour les hôtes"
+msgstr "A short note for the hosts"
+
+#: templates/invitation/step_contribution.html:39
+msgid "(facultatif)"
+msgstr "(optional)"
+
+#: templates/invitation/step_contribution.html:40
+msgid "Merci pour cette belle invitation !"
+msgstr "Thank you for this lovely invitation!"
+
+#: templates/invitation/step_contribution.html:42
+msgid "Seuls les hôtes voient votre nom et votre montant. Les autres invités ne voient rien."
+msgstr "Only the hosts see your name and amount. Other guests see nothing."
+
+#: templates/invitation/step_contribution.html:47
+msgid "Je préfère choisir un cadeau"
+msgstr "I'd rather choose a gift"
+
+#: templates/invitation/step_contribution.html:52 payments/models.py:27
+msgid "Contribution en argent"
+msgstr "Cash contribution"
+
+#: templates/invitation/step_done.html:8
 msgid "Merci <em style=\"color:inherit\">%(name)s</em>"
 msgstr "Thank you <em style=\"color:inherit\">%(name)s</em>"
 
-#: templates/invitation/step_done.html:9
+#: templates/invitation/step_done.html:10
 msgid "Votre présence est confirmée."
 msgstr "Your attendance is confirmed."
 
-#: templates/invitation/step_done.html:9
+#: templates/invitation/step_done.html:10
 msgid "Votre présence est confirmée avec %(counter)s accompagnant."
 msgid_plural "Votre présence est confirmée avec %(counter)s accompagnants."
 msgstr[0] "Your attendance is confirmed with %(counter)s companion."
 msgstr[1] "Your attendance is confirmed with %(counter)s companions."
 
-#: templates/invitation/step_done.html:10
+#: templates/invitation/step_done.html:11
 msgid "Votre réponse a bien été transmise à l'hôte."
 msgstr "Your response has been sent to the host."
 
-#: templates/invitation/step_done.html:11
+#: templates/invitation/step_done.html:12
 msgid "Votre réponse « Peut-être » a été enregistrée."
 msgstr "Your \"Maybe\" response has been saved."
 
-#: templates/invitation/step_done.html:20
+#: templates/invitation/step_done.html:24
+msgid "Merci, les hôtes seront touchés par ce geste."
+msgstr "Thank you, the hosts will be touched by this gesture."
+
+#: templates/invitation/step_done.html:28
 msgid "Redirection"
 msgstr "Redirecting"
 
-#: templates/invitation/step_done.html:21
+#: templates/invitation/step_done.html:29
 msgid "Redirection vers nos partenaires..."
 msgstr "Taking you to our partners..."
 
-#: templates/invitation/step_done.html:21
+#: templates/invitation/step_done.html:29
 msgid "Redirection automatique vers l'accueil..."
 msgstr "Taking you to the home page automatically..."
 
-#: templates/invitation/step_done.html:22
+#: templates/invitation/step_done.html:30
 msgid "Continuer"
 msgstr "Continue"
 
@@ -4317,17 +4439,37 @@ msgstr "Another guest chose it before you and there are none left. The list upda
 msgid "Confirmer (<span id=\"selected-count\">0</span> cadeau(x) sélectionné(s))"
 msgstr "Confirm (<span id=\"selected-count\">0</span> gift(s) selected)"
 
-#: templates/invitation/step_gift_question.html:7
+#: templates/invitation/step_gift_question.html:8
 msgid "Souhaitez-vous envoyer un <em style=\"color:inherit\">cadeau</em> ?"
 msgstr "Would you like to send a <em style=\"color:inherit\">gift</em>?"
 
-#: templates/invitation/step_gift_question.html:8
+#: templates/invitation/step_gift_question.html:9
 msgid "L'hôte a préparé une liste de cadeaux. Chaque cadeau choisi est réservé pour vous seul."
 msgstr "The host has prepared a gift list. Each gift you choose is reserved just for you."
 
-#: templates/invitation/step_gift_question.html:18 templates/invitation/step_presence.html:35
+#: templates/invitation/step_gift_question.html:17
+msgid "Je préfère contribuer en argent"
+msgstr "I'd rather contribute money"
+
+#: templates/invitation/step_gift_question.html:20 templates/invitation/step_presence.html:35
 msgid "Suivant"
 msgstr "Next"
+
+#: templates/invitation/step_gift_question.html:26
+msgid "Souhaitez-vous faire une <em style=\"color:inherit\">contribution</em> ?"
+msgstr "Would you like to make a <em style=\"color:inherit\">contribution</em>?"
+
+#: templates/invitation/step_gift_question.html:27
+msgid "Les hôtes acceptent une contribution en argent, par MonCash ou NatCash. C'est facultatif."
+msgstr "The hosts accept a cash contribution through MonCash or NatCash. It is optional."
+
+#: templates/invitation/step_gift_question.html:28
+msgid "Contribuer en argent"
+msgstr "Contribute money"
+
+#: templates/invitation/step_gift_question.html:29
+msgid "Non merci, continuer"
+msgstr "No thanks, continue"
 
 #: templates/invitation/step_presence.html:10
 msgid "Serez-vous <em style=\"color:inherit\">présent(e)</em> ?"
@@ -4365,7 +4507,7 @@ msgstr "This link is personal to you: it is all you need to reply, with no accou
 msgid "Récapitulatif de votre <em style=\"color:inherit\">réponse</em>"
 msgstr "Summary of your <em style=\"color:inherit\">response</em>"
 
-#: templates/invitation/step_recap.html:7 events/views_invitation.py:47
+#: templates/invitation/step_recap.html:7 events/views_invitation.py:48
 msgid "Présence"
 msgstr "Attendance"
 
@@ -4517,131 +4659,131 @@ msgstr "CARDHOLDER NAME"
 msgid "MM/AA"
 msgstr "MM/YY"
 
-#: templates/payments/_payment_modal.html:29
+#: templates/payments/_payment_modal.html:30
 msgid "Carte bancaire"
 msgstr "Bank card"
 
-#: templates/payments/_payment_modal.html:30
+#: templates/payments/_payment_modal.html:31
 msgid "Compte ou carte"
 msgstr "Account or card"
 
-#: templates/payments/_payment_modal.html:32
+#: templates/payments/_payment_modal.html:33
 msgid "Un souci pour payer ?"
 msgstr "Trouble paying?"
 
-#: templates/payments/_payment_modal.html:32
+#: templates/payments/_payment_modal.html:33
 msgid "Demander de l'aide"
 msgstr "Ask for help"
 
-#: templates/payments/_payment_modal.html:33
+#: templates/payments/_payment_modal.html:34
 msgid "Mode démonstration : aucun montant réel n'est débité."
 msgstr "Demo mode: no real money is charged."
 
-#: templates/payments/_payment_modal.html:36
+#: templates/payments/_payment_modal.html:37
 msgid "Payer avec MonCash"
 msgstr "Pay with MonCash"
 
-#: templates/payments/_payment_modal.html:37
+#: templates/payments/_payment_modal.html:38
 msgid "Numéro MonCash"
 msgstr "MonCash number"
 
-#: templates/payments/_payment_modal.html:40
+#: templates/payments/_payment_modal.html:41
 msgid "Un code de confirmation à 6 chiffres vous est envoyé par SMS à ce numéro. Gardez votre téléphone à portée de main."
 msgstr "A 6-digit confirmation code is sent by SMS to this number. Keep your phone within reach."
 
-#: templates/payments/_payment_modal.html:41
+#: templates/payments/_payment_modal.html:42
 msgid "Envoi du code..."
 msgstr "Sending the code..."
 
-#: templates/payments/_payment_modal.html:41
+#: templates/payments/_payment_modal.html:42
 msgid "Recevoir le code de confirmation"
 msgstr "Get the confirmation code"
 
-#: templates/payments/_payment_modal.html:43
+#: templates/payments/_payment_modal.html:44
 msgid "Code OTP reçu par SMS"
 msgstr "OTP code received by SMS"
 
-#: templates/payments/_payment_modal.html:46
+#: templates/payments/_payment_modal.html:47
 msgid "Démonstration : utilisez le code <strong>123456</strong>."
 msgstr "Demo: use the code <strong>123456</strong>."
 
-#: templates/payments/_payment_modal.html:47 templates/payments/_payment_modal.html:58
+#: templates/payments/_payment_modal.html:48 templates/payments/_payment_modal.html:59
 msgid "Confirmer le paiement"
 msgstr "Confirm payment"
 
-#: templates/payments/_payment_modal.html:51
+#: templates/payments/_payment_modal.html:52
 msgid "Payer avec NatCash"
 msgstr "Pay with NatCash"
 
-#: templates/payments/_payment_modal.html:52
+#: templates/payments/_payment_modal.html:53
 msgid "Numéro NatCash"
 msgstr "NatCash number"
 
-#: templates/payments/_payment_modal.html:55
+#: templates/payments/_payment_modal.html:56
 msgid "Code PIN (4 chiffres)"
 msgstr "PIN code (4 digits)"
 
-#: templates/payments/_payment_modal.html:61
+#: templates/payments/_payment_modal.html:63
 msgid "Payer par carte bancaire"
 msgstr "Pay by bank card"
 
-#: templates/payments/_payment_modal.html:65
+#: templates/payments/_payment_modal.html:67
 msgid "Titulaire"
 msgstr "Cardholder"
 
-#: templates/payments/_payment_modal.html:65
+#: templates/payments/_payment_modal.html:67
 msgid "Expire"
 msgstr "Expires"
 
-#: templates/payments/_payment_modal.html:67
+#: templates/payments/_payment_modal.html:69
 msgid "Numéro de carte"
 msgstr "Card number"
 
-#: templates/payments/_payment_modal.html:69
+#: templates/payments/_payment_modal.html:71
 msgid "Expiration"
 msgstr "Expiry date"
 
-#: templates/payments/_payment_modal.html:72
+#: templates/payments/_payment_modal.html:74
 msgid "Nom sur la carte"
 msgstr "Name on card"
 
-#: templates/payments/_payment_modal.html:73
+#: templates/payments/_payment_modal.html:75
 msgid "Montant débité en dollars :"
 msgstr "Amount charged in US dollars:"
 
-#: templates/payments/_payment_modal.html:73
+#: templates/payments/_payment_modal.html:75
 msgid "Test : 4242 4242 4242 4242 (acceptée), 4000 0000 0000 0002 (refusée)."
 msgstr "Test: 4242 4242 4242 4242 (accepted), 4000 0000 0000 0002 (declined)."
 
-#: templates/payments/_payment_modal.html:74
+#: templates/payments/_payment_modal.html:76
 msgid "Payer"
 msgstr "Pay"
 
-#: templates/payments/_payment_modal.html:77
+#: templates/payments/_payment_modal.html:81
 msgid "Payer avec PayPal"
 msgstr "Pay with PayPal"
 
-#: templates/payments/_payment_modal.html:79
+#: templates/payments/_payment_modal.html:83
 msgid "E-mail PayPal"
 msgstr "PayPal email"
 
-#: templates/payments/_payment_modal.html:80
+#: templates/payments/_payment_modal.html:84
 msgid "Mot de passe PayPal"
 msgstr "PayPal password"
 
-#: templates/payments/_payment_modal.html:81
+#: templates/payments/_payment_modal.html:85
 msgid "Se connecter et payer"
 msgstr "Log in and pay"
 
-#: templates/payments/_payment_modal.html:84
+#: templates/payments/_payment_modal.html:90
 msgid "Traitement en cours"
 msgstr "Processing"
 
-#: templates/payments/_payment_modal.html:86
+#: templates/payments/_payment_modal.html:92
 msgid "Validation du paiement..."
 msgstr "Validating your payment..."
 
-#: templates/payments/_payment_modal.html:87
+#: templates/payments/_payment_modal.html:93
 msgid "Ne fermez pas cette fenêtre."
 msgstr "Please don't close this window."
 

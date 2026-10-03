@@ -6,7 +6,7 @@
   {% if blocked %}
     <span class="icon-bubble warning lg mb-3"><i class="bi bi-lock"></i></span>
     <h1 class="h4 fw-bold">{% trans "Suppression impossible" %}</h1>
-    <p class="text-muted">{% blocktranslate trimmed with obj=object %}« {{ obj }} » est lié à des choix de cadeaux déjà confirmés par des invités. Ces choix sont définitifs.{% endblocktranslate %}</p>
+    <p class="text-muted">{% blocktranslate trimmed with obj=object %}« {{ obj }} » est lié à des choix de cadeaux ou à des contributions déjà confirmés par des invités. Ces choix sont définitifs.{% endblocktranslate %}</p>
     <a href="{{ cancel_url }}" class="btn btn-primary">{% trans "Retour" %}</a>
   {% else %}
     <span class="icon-bubble danger lg mb-3"><i class="bi bi-trash3"></i></span>

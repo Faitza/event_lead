@@ -24,6 +24,7 @@ class Payment(models.Model):
     class Kind(models.TextChoices):
         TICKET = "ticket", _("Billet")
         ORGANIZER_ACCESS = "organizer_access", _("Accès Organisateur VIP")
+        CONTRIBUTION = "contribution", _("Contribution en argent")
 
     kind = models.CharField(_("type"), max_length=20, choices=Kind.choices, default=Kind.TICKET)
     event = models.ForeignKey(
@@ -62,6 +63,31 @@ class Payment(models.Model):
             ref = f"{prefix}-{secrets.token_hex(3).upper()}"
             if not cls.objects.filter(reference=ref).exists():
                 return ref
+
+    @property
+    def amount_usd(self):
+        return (self.amount_htg * settings.HTG_TO_USD_RATE).quantize(self.amount_htg.__class__("0.01"))
+
+
+class Contribution(models.Model):
+    """Contribution en argent d'un invité à la place d'un cadeau : seule l'équipe de l'événement la voit."""
+
+    MESSAGE_MAX = 300
+
+    event = models.ForeignKey(Event, on_delete=models.CASCADE, related_name="contributions", verbose_name=_("événement"))
+    guest = models.OneToOneField(Guest, on_delete=models.PROTECT, related_name="contribution", verbose_name=_("invité"))
+    payment = models.OneToOneField(Payment, on_delete=models.PROTECT, related_name="contribution", verbose_name=_("paiement"))
+    amount_htg = models.DecimalField(_("montant (HTG)"), max_digits=12, decimal_places=2)
+    message = models.CharField(_("petit mot"), max_length=MESSAGE_MAX, blank=True)
+    created_at = models.DateTimeField(_("créée le"), auto_now_add=True)
+
+    class Meta:
+        ordering = ["-created_at"]
+        verbose_name = _("contribution")
+        verbose_name_plural = _("contributions")
+
+    def __str__(self):
+        return f"{self.guest.name} : {self.amount_htg} HTG"
 
     @property
     def amount_usd(self):

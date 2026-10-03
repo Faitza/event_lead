@@ -44,3 +44,32 @@ def percent(value, total):
 @register.filter
 def stars_range(value):
     return range(1, 6)
+
+
+def _grouped(value, decimals=0):
+    """Nombre avec séparateurs : « 25 000 » en français et en créole, « 25,000 » en anglais (comme les scripts de la page)."""
+    from decimal import Decimal, InvalidOperation
+
+    from django.utils.translation import get_language
+
+    try:
+        number = Decimal(str(value))
+    except (InvalidOperation, ValueError):
+        return value
+    english = (get_language() or "fr").startswith("en")
+    text = f"{number:,.{decimals}f}"  # 25,000.50
+    if english:
+        return text
+    return text.replace(",", " ").replace(".", ",")
+
+
+@register.filter
+def htg(value):
+    """Montant en gourdes sans décimales, avec séparateurs de milliers selon la langue."""
+    return _grouped(value, 0)
+
+
+@register.filter
+def usd(value):
+    """Montant en dollars à deux décimales, avec séparateurs selon la langue."""
+    return _grouped(value, 2)

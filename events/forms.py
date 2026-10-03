@@ -20,7 +20,7 @@ class EventForm(forms.ModelForm):
         fields = [
             "title", "event_type", "status", "date", "time", "venue", "latitude", "longitude",
             "max_guests", "allow_companions", "max_companions", "evaluation_delay_days",
-            "price_htg", "description", "cover_image", "cover_video", "category",
+            "accept_contributions", "price_htg", "description", "cover_image", "cover_video", "category",
         ]
         widgets = {
             "date": forms.DateInput(attrs={"type": "date"}, format="%Y-%m-%d"),

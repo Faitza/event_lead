@@ -1,6 +1,7 @@
 {% extends "invitation/base_invitation.html" %}
 {% load i18n %}
 {% block inv_content %}
+{% if has_gifts %}
 <form method="post" class="text-center d-flex flex-column gap-3" novalidate>
   {% csrf_token %}
   <span class="icon-bubble gold lg mb-3"><i class="bi bi-gift"></i></span>
@@ -13,17 +14,30 @@
     {% endfor %}
   </div>
   {{ form.wants_gift.errors }}
+  {% if can_contribute %}<a href="{% url 'events:invitation_contribution' guest.magic_token %}" class="btn btn-outline-gold"><i class="bi bi-cash-coin me-2"></i>{% trans "Je préfère contribuer en argent" %}</a>{% endif %}
   <div class="d-flex gap-2">
     <a href="{% url 'events:invitation' guest.magic_token %}" class="btn btn-light btn-lg"><i class="bi bi-arrow-left"></i></a>
     <button class="btn btn-primary btn-lg flex-grow-1">{% trans "Suivant" %}<i class="bi bi-arrow-right ms-2"></i></button>
   </div>
 </form>
+{% else %}
+<div class="text-center d-flex flex-column gap-3">
+  <span class="icon-bubble gold lg mb-3"><i class="bi bi-cash-coin"></i></span>
+  <h1>{% blocktranslate trimmed %}Souhaitez-vous faire une <em style="color:inherit">contribution</em> ?{% endblocktranslate %}</h1>
+  <p class="text-muted mb-1">{% trans "Les hôtes acceptent une contribution en argent, par MonCash ou NatCash. C'est facultatif." %}</p>
+  <a href="{% url 'events:invitation_contribution' guest.magic_token %}" class="btn btn-primary btn-lg"><i class="bi bi-cash-coin me-2"></i>{% trans "Contribuer en argent" %}</a>
+  <form method="post">{% csrf_token %}<input type="hidden" name="wants_gift" value="no"><button class="btn btn-light btn-lg w-100">{% trans "Non merci, continuer" %}</button></form>
+  <div><a href="{% url 'events:invitation' guest.magic_token %}" class="btn btn-light"><i class="bi bi-arrow-left"></i></a></div>
+</div>
+{% endif %}
 {% endblock %}
 {% block extra_js %}
+{% if has_gifts %}
 <script>
   // Un clic sur une carte suffit : on passe à l'étape suivante
   document.querySelectorAll("input[name=wants_gift]").forEach(function (r) {
     r.addEventListener("change", function () { setTimeout(function () { r.form.submit(); }, 220); });
   });
 </script>
+{% endif %}
 {% endblock %}

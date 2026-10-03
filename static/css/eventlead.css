@@ -862,3 +862,17 @@ h1 em, h2 em, h3 em, .disp em { color: var(--el-gold); font-style: italic; }
 .seat-remove:hover { color: var(--el-danger); }
 .seat-empty { padding: 8px; border: 1px dashed var(--el-tint-strong); border-radius: 10px; text-align: center; }
 .seat-pool .seat-list { max-height: 60vh; overflow-y: auto; }
+
+/* Contribution en argent */
+.amount-chips { display: grid; grid-template-columns: repeat(3, 1fr); gap: .6rem; }
+.amount-chip { display: flex; flex-direction: column; align-items: center; gap: 0; padding: .7rem .4rem; border: 1px solid #D9CCDF; border-radius: var(--el-radius); background: #fff; cursor: pointer; transition: all var(--el-ease); color: var(--el-primary-dark); }
+.amount-chip strong { font-family: var(--font-display); font-size: 1.25rem; font-weight: 500; line-height: 1.15; }
+.amount-chip small { color: var(--el-muted); font-size: .7rem; letter-spacing: .08em; }
+.amount-chip:hover { border-color: var(--el-gold); transform: translateY(-2px); box-shadow: var(--el-shadow); }
+.amount-chip.active { border-color: var(--el-gold); background: #FFFBEF; box-shadow: 0 0 0 3px rgba(212, 175, 55, .2); }
+.pay-choices { display: grid; grid-template-columns: 1fr 1fr; gap: .75rem; }
+.pay-choice { display: flex; align-items: center; gap: .7rem; padding: .8rem; border: 1px solid #D9CCDF; border-radius: var(--el-radius); background: #fff; cursor: pointer; text-align: left; transition: all var(--el-ease); }
+.pay-choice .pm-logo { width: 40px; height: 40px; border-radius: 11px; display: flex; align-items: center; justify-content: center; color: #fff; font-weight: 700; font-size: .75rem; flex-shrink: 0; }
+.pay-choice:hover { border-color: var(--el-gold); }
+.pay-choice.active { border-color: var(--el-gold); background: #FFFBEF; box-shadow: 0 0 0 3px rgba(212, 175, 55, .2); }
+@media (max-width: 575.98px) { .amount-chip strong { font-size: 1.1rem; } .pay-choice { padding: .65rem; } }

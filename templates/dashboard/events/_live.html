@@ -40,3 +40,27 @@
     </div>
   </div>
 </div>
+{% if event.accept_contributions or contributions %}
+<div class="el-card mb-4">
+  <div class="el-card-header flex-wrap gap-2"><h2><i class="bi bi-cash-coin me-2"></i>{% trans "Contributions en argent" %}</h2>
+    <span class="small text-muted"><i class="bi bi-lock me-1"></i>{% trans "Visibles seulement par l'équipe : les invités ne voient pas les contributions des autres." %}</span>
+  </div>
+  {% if contributions %}
+  <div class="el-card-body pb-0">
+    <div class="d-flex flex-wrap gap-4 align-items-baseline mb-3">
+      <div><span class="disp fs-3" style="color:var(--el-primary-dark)">{{ contributions_total|htg }} HTG</span> <span class="small text-muted">{% blocktranslate trimmed count counter=contributions|length %}{{ counter }} contribution{% plural %}{{ counter }} contributions{% endblocktranslate %}</span></div>
+    </div>
+  </div>
+  <div class="table-wrap"><table class="table table-el">
+    <thead><tr><th>{% trans "Invité" %}</th><th>{% trans "Montant" %}</th><th>{% trans "Mode" %}</th><th>{% trans "Petit mot" %}</th><th>{% trans "Date" %}</th></tr></thead>
+    <tbody>{% for c in contributions %}
+      <tr><td class="fw-semibold">{{ c.guest.name }}<div class="small text-muted fw-normal">{{ c.payment.reference }}</div></td>
+      <td class="text-nowrap fw-semibold">{{ c.amount_htg|htg }} HTG<div class="small text-muted fw-normal">&asymp; {{ c.amount_usd|usd }} USD</div></td>
+      <td>{{ c.payment.get_method_display }}</td>
+      <td class="small">{{ c.message|default:"-" }}</td>
+      <td class="small text-muted text-nowrap">{{ c.created_at|date:"j/m H:i" }}</td></tr>
+    {% endfor %}</tbody>
+  </table></div>
+  {% else %}<div class="empty-state small"><i class="bi bi-cash-coin"></i><p class="mt-2 mb-0">{% trans "Aucune contribution pour l'instant." %}</p></div>{% endif %}
+</div>
+{% endif %}

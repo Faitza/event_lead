@@ -73,7 +73,7 @@ msgstr "adrès imèl"
 msgid "rôle"
 msgstr "wòl"
 
-#: accounts/models.py:15 core/models.py:27 events/models.py:248
+#: accounts/models.py:15 core/models.py:27 events/models.py:257
 msgid "téléphone"
 msgstr "telefòn"
 
@@ -93,7 +93,7 @@ msgstr "VIP depi"
 msgid "langue"
 msgstr "lang"
 
-#: accounts/models.py:23 payments/models.py:37
+#: accounts/models.py:23 payments/models.py:38
 msgid "utilisateur"
 msgstr "itilizatè"
 
@@ -727,11 +727,11 @@ msgid_plural "This password is too short. It must contain at least %(min_length)
 msgstr[0] "Modpas sa a two kout. Li dwe gen omwen %(min_length)d karaktè."
 msgstr[1] "Modpas sa a two kout. Li dwe gen omwen %(min_length)d karaktè."
 
-#: core/models.py:9 core/models.py:25 core/models.py:57 events/models.py:52 events/models.py:209 events/models.py:246
+#: core/models.py:9 core/models.py:25 core/models.py:57 events/models.py:52 events/models.py:218 events/models.py:255
 msgid "nom"
 msgstr "non"
 
-#: core/models.py:10 events/models.py:374
+#: core/models.py:10 events/models.py:383
 msgid "note"
 msgstr "nòt"
 
@@ -743,7 +743,7 @@ msgstr "opinyon"
 msgid "publié"
 msgstr "pibliye"
 
-#: core/models.py:26 events/models.py:247
+#: core/models.py:26 events/models.py:256
 msgid "email"
 msgstr "imèl"
 
@@ -795,7 +795,7 @@ msgstr "imèl oswa telefòn"
 msgid "sujet"
 msgstr "sijè"
 
-#: core/models.py:61 events/models.py:92 events/models.py:249 payments/models.py:43
+#: core/models.py:61 events/models.py:92 events/models.py:258 payments/models.py:44
 msgid "statut"
 msgstr "estati"
 
@@ -1017,7 +1017,7 @@ msgstr "Ou bezwen yon nimewo pou voye sou WhatsApp."
 msgid "Cet événement a atteint son nombre maximum d'invités (%(max)d)."
 msgstr "Evènman sa a rive nan kantite maksimòm envite li yo (%(max)d)."
 
-#: events/forms.py:120 events/models.py:235
+#: events/forms.py:120 events/models.py:244
 msgid "Peut-être"
 msgstr "Petèt"
 
@@ -1117,7 +1117,7 @@ msgstr "Bwouyon"
 msgid "Annulé"
 msgstr "Anile"
 
-#: events/models.py:91 payments/models.py:28
+#: events/models.py:91 payments/models.py:29
 msgid "type"
 msgstr "tip"
 
@@ -1177,191 +1177,199 @@ msgstr "lè pou voye rapèl yo"
 msgid "envoi automatique des relances par e-mail"
 msgstr "voye rapèl pa imèl otomatikman"
 
-#: events/models.py:108
+#: events/models.py:109
+msgid "accepter les contributions en argent"
+msgstr "aksepte kontribisyon lajan"
+
+#: events/models.py:110
+msgid "Les invités peuvent contribuer en argent (MonCash ou NatCash) à la place d'un cadeau."
+msgstr "Envite yo ka kontribye ak lajan (MonCash oswa NatCash) olye yon kado."
+
+#: events/models.py:112
 msgid "description"
 msgstr "deskripsyon"
 
-#: events/models.py:109
+#: events/models.py:113
 msgid "photo de couverture"
 msgstr "foto kouvèti"
 
-#: events/models.py:110
+#: events/models.py:114
 msgid "vidéo de couverture"
 msgstr "videyo kouvèti"
 
-#: events/models.py:112
+#: events/models.py:116
 msgid "prix du billet (HTG)"
 msgstr "pri biyè a (HTG)"
 
-#: events/models.py:113
+#: events/models.py:117
 msgid "Laisser vide si l'événement est gratuit."
 msgstr "Kite l vid si evènman an gratis."
 
-#: events/models.py:117
+#: events/models.py:121
 msgid "catégorie"
 msgstr "kategori"
 
-#: events/models.py:121
+#: events/models.py:125
 msgid "créé par"
 msgstr "kreye pa"
 
-#: events/models.py:123 payments/models.py:48
+#: events/models.py:127 payments/models.py:49
 msgid "créé le"
 msgstr "dat kreyasyon"
 
-#: events/models.py:129 events/models.py:207 events/models.py:241 events/models.py:348 gifts/models.py:42 payments/models.py:30
+#: events/models.py:133 events/models.py:216 events/models.py:250 events/models.py:357 gifts/models.py:42 payments/models.py:31
 msgid "événement"
 msgstr "evènman"
 
-#: events/models.py:208
+#: events/models.py:217
 msgid "numéro"
 msgstr "nimewo"
 
-#: events/models.py:217 events/models.py:261
+#: events/models.py:226 events/models.py:270
 msgid "table"
 msgstr "tab"
 
-#: events/models.py:226
+#: events/models.py:235
 msgid "Table %(n)d"
 msgstr "Tab %(n)d"
 
-#: events/models.py:232 payments/models.py:20
+#: events/models.py:241 payments/models.py:20
 msgid "En attente"
 msgstr "Ap tann"
 
-#: events/models.py:233
+#: events/models.py:242
 msgid "Présent"
 msgstr "Prezan"
 
-#: events/models.py:234
+#: events/models.py:243
 msgid "Absent"
 msgstr "Absan"
 
-#: events/models.py:238
+#: events/models.py:247
 msgid "Email"
 msgstr "Imèl"
 
-#: events/models.py:244
+#: events/models.py:253
 msgid "compte lié"
 msgstr "kont ki lye"
 
-#: events/models.py:251
+#: events/models.py:260
 msgid "canal d'envoi"
 msgstr "chanèl pou voye"
 
-#: events/models.py:252
+#: events/models.py:261
 msgid "langue de l'invitation"
 msgstr "lang envitasyon an"
 
-#: events/models.py:253
+#: events/models.py:262
 msgid "lien magique"
 msgstr "lyen majik"
 
-#: events/models.py:254
+#: events/models.py:263
 msgid "invitation envoyée le"
 msgstr "dat envitasyon an te voye"
 
-#: events/models.py:255
+#: events/models.py:264
 msgid "répondu le"
 msgstr "dat repons"
 
-#: events/models.py:256
+#: events/models.py:265
 msgid "souhaite offrir un cadeau"
 msgstr "vle bay yon kado"
 
-#: events/models.py:257
+#: events/models.py:266
 msgid "code d'entrée"
 msgstr "kòd antre"
 
-#: events/models.py:258
+#: events/models.py:267
 msgid "arrivé le"
 msgstr "rive le"
 
-#: events/models.py:259
+#: events/models.py:268
 msgid "ajouté sur place"
 msgstr "ajoute sou plas"
 
-#: events/models.py:267 events/models.py:315 events/models.py:349 gifts/models.py:79 payments/models.py:33
+#: events/models.py:276 events/models.py:324 events/models.py:358 gifts/models.py:79 payments/models.py:34 payments/models.py:78
 msgid "invité"
 msgstr "envite"
 
-#: events/models.py:316
+#: events/models.py:325
 msgid "canal"
 msgstr "chanèl"
 
-#: events/models.py:319
+#: events/models.py:328
 msgid "envoyée le"
 msgstr "voye le"
 
-#: events/models.py:323
+#: events/models.py:332
 msgid "relance"
 msgstr "rapèl"
 
-#: events/models.py:324
+#: events/models.py:333
 msgid "relances"
 msgstr "rapèl"
 
-#: events/models.py:334
+#: events/models.py:343
 msgid "Entrée validée"
 msgstr "Antre valide"
 
-#: events/models.py:335
+#: events/models.py:344
 msgid "QR déjà utilisé"
 msgstr "Kòd QR deja itilize"
 
-#: events/models.py:337
+#: events/models.py:346
 msgid "Autre événement"
 msgstr "Lòt evènman"
 
-#: events/models.py:338
+#: events/models.py:347
 msgid "Ajouté sur place"
 msgstr "Ajoute sou plas"
 
-#: events/models.py:339
+#: events/models.py:348
 msgid "Pointage annulé"
 msgstr "Kontwòl anile"
 
-#: events/models.py:342
+#: events/models.py:351
 msgid "QR code"
 msgstr "Kòd QR"
 
-#: events/models.py:343
+#: events/models.py:352
 msgid "Recherche"
 msgstr "Rechèch"
 
-#: events/models.py:344
+#: events/models.py:353
 msgid "Sur place"
 msgstr "Sou plas"
 
-#: events/models.py:350
+#: events/models.py:359
 msgid "code lu"
 msgstr "kòd ki li"
 
-#: events/models.py:351
+#: events/models.py:360
 msgid "résultat"
 msgstr "rezilta"
 
-#: events/models.py:352
+#: events/models.py:361
 msgid "origine"
 msgstr "orijin"
 
-#: events/models.py:358
+#: events/models.py:367
 msgid "pointage"
 msgstr "kontwòl antre"
 
-#: events/models.py:359
+#: events/models.py:368
 msgid "pointages"
 msgstr "kontwòl antre yo"
 
-#: events/models.py:375
+#: events/models.py:384
 msgid "commentaire"
 msgstr "kòmantè"
 
-#: events/models.py:380
+#: events/models.py:389
 msgid "évaluation"
 msgstr "evalyasyon"
 
-#: events/models.py:381
+#: events/models.py:390
 msgid "évaluations"
 msgstr "evalyasyon"
 
@@ -1457,85 +1465,85 @@ msgstr "Ou deja evalye evènman sa a. Mèsi."
 msgid "Merci pour votre évaluation."
 msgstr "Mèsi pou evalyasyon ou."
 
-#: events/views_admin.py:41
+#: events/views_admin.py:42
 msgid "Catégorie créée."
 msgstr "Kategori a kreye."
 
-#: events/views_admin.py:52
+#: events/views_admin.py:53
 msgid "Catégorie mise à jour."
 msgstr "Kategori a mete ajou."
 
-#: events/views_admin.py:62
+#: events/views_admin.py:63
 msgid "Catégorie supprimée. Ses événements sont conservés."
 msgstr "Kategori a siprime. Evènman li yo rete."
 
-#: events/views_admin.py:67
+#: events/views_admin.py:68
 msgid "Les %(n)d événement de cette catégorie ne sont pas supprimés : ils n'auront simplement plus de catégorie."
 msgid_plural "Les %(n)d événements de cette catégorie ne sont pas supprimés : ils n'auront simplement plus de catégorie."
 msgstr[0] "%(n)d evènman nan kategori sa a pa siprime : li pral senpleman pa gen kategori ankò."
 msgstr[1] "%(n)d evènman nan kategori sa a pa siprime : yo pral senpleman pa gen kategori ankò."
 
-#: events/views_admin.py:73
+#: events/views_admin.py:74
 msgid "la catégorie"
 msgstr "kategori a"
 
-#: events/views_admin.py:115
+#: events/views_admin.py:116
 msgid "Adresse non localisée automatiquement. Placez le repère sur la carte si besoin."
 msgstr "Nou pa t ka jwenn adrès la otomatikman. Mete mak la sou kat la si sa nesesè."
 
-#: events/views_admin.py:125
+#: events/views_admin.py:126
 msgid "Événement créé. Ajoutez maintenant vos invités et votre liste de cadeaux."
 msgstr "Evènman an kreye. Ajoute envite w yo ak lis kado w la kounye a."
 
-#: events/views_admin.py:136
+#: events/views_admin.py:137
 msgid "Événement mis à jour."
 msgstr "Evènman an mete ajou."
 
-#: events/views_admin.py:147
-msgid "Impossible de supprimer : des invités ont déjà choisi des cadeaux. Annulez plutôt l'événement."
-msgstr "Pa ka siprime : gen envite ki deja chwazi kado. Anile evènman an olye de sa."
+#: events/views_admin.py:148
+msgid "Impossible de supprimer : des invités ont déjà choisi des cadeaux ou fait une contribution. Annulez plutôt l'événement."
+msgstr "Pa ka efase : gen envite ki deja chwazi kado oswa ki fè yon kontribisyon. Anile evènman an pito."
 
-#: events/views_admin.py:150
+#: events/views_admin.py:151
 msgid "Événement supprimé."
 msgstr "Evènman an siprime."
 
-#: events/views_admin.py:153
+#: events/views_admin.py:154
 msgid "l'événement"
 msgstr "evènman an"
 
-#: events/views_admin.py:234
+#: events/views_admin.py:237
 msgid "%(name)s a été ajouté(e). Son lien d'invitation est prêt à être envoyé."
 msgstr "%(name)s ajoute. Lyen envitasyon li a pare pou voye."
 
-#: events/views_admin.py:248
+#: events/views_admin.py:251
 msgid "Invité mis à jour."
 msgstr "Envite a mete ajou."
 
-#: events/views_admin.py:262
-msgid "Cet invité a choisi des cadeaux : sa réponse est définitive et ne peut pas être supprimée."
-msgstr "Envite sa a chwazi kado : repons li a definitif, li pa ka siprime."
-
 #: events/views_admin.py:265
+msgid "Cet invité a choisi des cadeaux ou fait une contribution : sa réponse est définitive et ne peut pas être supprimée."
+msgstr "Envite sa a chwazi kado oswa li fè yon kontribisyon : repons li final epi yo pa ka efase l."
+
+#: events/views_admin.py:268
 msgid "Invité supprimé."
 msgstr "Envite a siprime."
 
-#: events/views_admin.py:268
+#: events/views_admin.py:271
 msgid "l'invité"
 msgstr "envite a"
 
-#: events/views_admin.py:281
+#: events/views_admin.py:284
 msgid "Invitation de %(name)s marquée comme envoyée."
 msgstr "Envitasyon %(name)s make kòm voye."
 
-#: events/views_admin.py:297 events/views_admin.py:324
+#: events/views_admin.py:300 events/views_admin.py:327
 msgid "invites-eventlead"
 msgstr "envite-eventlead"
 
-#: events/views_admin.py:301
+#: events/views_admin.py:304
 msgid "Cadeaux choisis"
 msgstr "Kado ki chwazi"
 
-#: events/views_admin.py:327
+#: events/views_admin.py:330
 msgid "Erreur lors de la génération du PDF."
 msgstr "Te gen yon erè pandan nou t ap fè PDF la."
 
@@ -1543,39 +1551,43 @@ msgstr "Te gen yon erè pandan nou t ap fè PDF la."
 msgid "Indiquez le nom de la personne."
 msgstr "Ekri non moun nan."
 
-#: events/views_invitation.py:49
+#: events/views_contribution.py:54 payments/views.py:49
+msgid "%(message)s Référence : %(reference)s."
+msgstr "%(message)s Referans : %(reference)s."
+
+#: events/views_invitation.py:50
 msgid "Sélection"
 msgstr "Seleksyon"
 
-#: events/views_invitation.py:50
+#: events/views_invitation.py:51
 msgid "Récapitulatif"
 msgstr "Rezime"
 
-#: events/views_invitation.py:51
+#: events/views_invitation.py:52
 msgid "Confirmation"
 msgstr "Konfimasyon"
 
-#: events/views_invitation.py:139
+#: events/views_invitation.py:146
 msgid "Un cadeau sélectionné n'est plus disponible. La liste a été actualisée."
 msgstr "Yon kado ou te chwazi pa disponib ankò. Lis la mete ajou."
 
-#: events/views_invitation.py:154
+#: events/views_invitation.py:161
 msgid "%(n)d disponible"
 msgid_plural "%(n)d disponibles"
 msgstr[0] "%(n)d disponib"
 msgstr[1] "%(n)d disponib"
 
-#: events/views_invitation.py:187
+#: events/views_invitation.py:194
 msgid "Désolé, ce cadeau vient d'être choisi par un autre invité : %(cadeaux)s. Merci de revoir votre sélection."
 msgid_plural "Désolé, ces cadeaux viennent d'être choisis par d'autres invités : %(cadeaux)s. Merci de revoir votre sélection."
 msgstr[0] "Dezole, yon lòt envite fenk chwazi kado sa a : %(cadeaux)s. Tanpri, revize seleksyon ou an."
 msgstr[1] "Dezole, lòt envite fenk chwazi kado sa yo : %(cadeaux)s. Tanpri, revize seleksyon ou an."
 
-#: events/views_invitation.py:266
+#: events/views_invitation.py:274
 msgid "Mon billet d'entrée pour « %(title)s » : %(url)s"
 msgstr "Biyè antre mwen pou « %(title)s » : %(url)s"
 
-#: events/views_invitation.py:267
+#: events/views_invitation.py:275
 msgid "QR code d'entrée de %(name)s"
 msgstr "Kòd QR antre pou %(name)s"
 
@@ -1821,6 +1833,18 @@ msgstr "Ki rete"
 msgid "Choisi le"
 msgstr "Dat chwa"
 
+#: payments/contributions.py:33
+msgid "Le montant minimum est de %(min)s HTG."
+msgstr "Montan minimòm lan se %(min)s HTG."
+
+#: payments/contributions.py:35
+msgid "Le montant maximum est de %(max)s HTG."
+msgstr "Montan maksimòm lan se %(max)s HTG."
+
+#: payments/contributions.py:54
+msgid "Choisissez MonCash ou NatCash."
+msgstr "Chwazi MonCash oswa NatCash."
+
 #: payments/forms.py:49
 msgid "Champ obligatoire."
 msgstr "Chan sa a obligatwa."
@@ -1877,41 +1901,53 @@ msgstr "Reyisi"
 msgid "Échoué"
 msgstr "Echwe"
 
-#: payments/models.py:39
+#: payments/models.py:40
 msgid "mode de paiement"
 msgstr "mwayen peman"
 
-#: payments/models.py:40
+#: payments/models.py:41 payments/models.py:80
 msgid "montant (HTG)"
 msgstr "montan (HTG)"
 
-#: payments/models.py:41
+#: payments/models.py:42
 msgid "nombre de billets"
 msgstr "kantite biyè"
 
-#: payments/models.py:42
+#: payments/models.py:43
 msgid "référence"
 msgstr "referans"
 
-#: payments/models.py:45
+#: payments/models.py:46
 msgid "détail payeur"
 msgstr "detay moun k ap peye a"
 
-#: payments/models.py:46
+#: payments/models.py:47
 msgid "Numéro masqué ou e-mail du payeur (jamais de données de carte complètes)."
 msgstr "Nimewo ki kache oswa imèl moun k ap peye a (pa janm gen tout done kat la)."
 
-#: payments/models.py:52
+#: payments/models.py:53 payments/models.py:79
 msgid "paiement"
 msgstr "peman"
 
-#: payments/models.py:53
+#: payments/models.py:54
 msgid "paiements"
 msgstr "peman"
 
-#: payments/views.py:49
-msgid "%(message)s Référence : %(reference)s."
-msgstr "%(message)s Referans : %(reference)s."
+#: payments/models.py:81
+msgid "petit mot"
+msgstr "ti mo"
+
+#: payments/models.py:82
+msgid "créée le"
+msgstr "dat kreyasyon"
+
+#: payments/models.py:86
+msgid "contribution"
+msgstr "kontribisyon"
+
+#: payments/models.py:87
+msgid "contributions"
+msgstr "kontribisyon"
 
 #: payments/views.py:67
 msgid "Billet - %(titre)s"
@@ -1981,7 +2017,7 @@ msgstr "Envitasyon mwen yo"
 msgid "Événement"
 msgstr "Evènman"
 
-#: templates/accounts/guest_space.html:15 templates/dashboard/events/list.html:25 templates/dashboard/home.html:25 templates/dashboard/payments/history.html:20 templates/events/organizer_portal.html:39 templates/payments/success.html:20
+#: templates/accounts/guest_space.html:15 templates/dashboard/events/_live.html:56 templates/dashboard/events/list.html:25 templates/dashboard/home.html:25 templates/dashboard/payments/history.html:20 templates/events/organizer_portal.html:39
 msgid "Date"
 msgstr "Dat"
 
@@ -2237,7 +2273,7 @@ msgstr "Akèy"
 msgid "Publications, événements publics et billets du moment, rassemblés pour vous."
 msgstr "Piblikasyon, evènman piblik ak biyè ki disponib kounye a, tout rasanble pou ou."
 
-#: templates/core/landing.html:21 templates/dashboard/events/form.html:63 templates/partials/_footer.html:14 templates/partials/_navbar.html:23 templates/payments/ticketing.html:4 templates/payments/ticketing.html:10
+#: templates/core/landing.html:21 templates/dashboard/events/form.html:64 templates/partials/_footer.html:14 templates/partials/_navbar.html:23 templates/payments/ticketing.html:4 templates/payments/ticketing.html:10
 msgid "Billetterie"
 msgstr "Vant biyè"
 
@@ -2447,7 +2483,7 @@ msgstr "Kite premye opinyon an."
 msgid "Laisser un avis"
 msgstr "Kite yon opinyon"
 
-#: templates/core/landing.html:223 templates/dashboard/checkin/event.html:68 templates/dashboard/events/detail.html:43 templates/dashboard/guests/export_pdf.html:17 core/views_admin.py:146 events/views_admin.py:300
+#: templates/core/landing.html:223 templates/dashboard/checkin/event.html:68 templates/dashboard/events/detail.html:43 templates/dashboard/guests/export_pdf.html:17 core/views_admin.py:146 events/views_admin.py:303
 msgid "Nom"
 msgstr "Non"
 
@@ -2495,7 +2531,7 @@ msgstr "Ekri nou"
 msgid "Nom complet"
 msgstr "Non konplè"
 
-#: templates/core/landing.html:258 accounts/forms.py:77 core/forms.py:28 events/views_admin.py:300
+#: templates/core/landing.html:258 accounts/forms.py:77 core/forms.py:28 events/views_admin.py:303
 msgid "Téléphone"
 msgstr "Telefòn"
 
@@ -2767,7 +2803,7 @@ msgstr "Sou plas · %(n)s"
 msgid "Heure"
 msgstr "Lè"
 
-#: templates/dashboard/checkin/_recent.html:13 templates/dashboard/guests/list.html:28 templates/dashboard/reminders/_table.html:13 accounts/models.py:11
+#: templates/dashboard/checkin/_recent.html:13 templates/dashboard/events/_live.html:56 templates/dashboard/guests/list.html:28 templates/dashboard/reminders/_table.html:13 accounts/models.py:11
 msgid "Invité"
 msgstr "Envite"
 
@@ -2897,7 +2933,7 @@ msgstr "Non oswa kòd EL-XXXX-XXXX"
 msgid "Ajouter un invité sur place"
 msgstr "Ajoute yon envite sou plas"
 
-#: templates/dashboard/checkin/event.html:65 templates/dashboard/seating/event.html:36 templates/dashboard/seating/event.html:50 templates/partials/_messages.html:11 templates/payments/_payment_modal.html:16
+#: templates/dashboard/checkin/event.html:65 templates/dashboard/seating/event.html:36 templates/dashboard/seating/event.html:50 templates/partials/_messages.html:11 templates/payments/_payment_modal.html:17
 msgid "Fermer"
 msgstr "Fèmen"
 
@@ -2905,7 +2941,7 @@ msgstr "Fèmen"
 msgid "Pour une personne arrivée sans être sur la liste : elle est ajoutée comme présente et pointée tout de suite."
 msgstr "Pou yon moun ki rive san l pa sou lis la : li ajoute kòm prezan epi li valide touswit."
 
-#: templates/dashboard/checkin/event.html:70 templates/dashboard/events/detail.html:59 templates/invitation/step_presence.html:23 templates/invitation/step_recap.html:10 events/views_admin.py:300
+#: templates/dashboard/checkin/event.html:70 templates/dashboard/events/detail.html:59 templates/invitation/step_presence.html:23 templates/invitation/step_recap.html:10 events/views_admin.py:303
 msgid "Accompagnants"
 msgstr "Moun k ap akonpanye w"
 
@@ -2946,8 +2982,8 @@ msgid "Suppression impossible"
 msgstr "Pa ka siprime"
 
 #: templates/dashboard/confirm_delete.html:9
-msgid "« %(obj)s » est lié à des choix de cadeaux déjà confirmés par des invités. Ces choix sont définitifs."
-msgstr "« %(obj)s » gen rapò ak chwa kado ke envite yo deja konfime. Chwa sa yo definitif."
+msgid "« %(obj)s » est lié à des choix de cadeaux ou à des contributions déjà confirmés par des invités. Ces choix sont définitifs."
+msgstr "« %(obj)s » gen rapò ak chwa kado oswa kontribisyon envite yo deja konfime. Chwa sa yo final."
 
 #: templates/dashboard/confirm_delete.html:13
 msgid "Supprimer %(what)s ?"
@@ -2957,69 +2993,99 @@ msgstr "Siprime %(what)s ?"
 msgid "« %(obj)s » sera définitivement supprimé. Cette action est irréversible."
 msgstr "« %(obj)s » pral siprime pou tout tan. Ou pa ka defèt aksyon sa a."
 
-#: templates/dashboard/events/_live.html:4
+#: templates/dashboard/events/_live.html:5
 msgid "invités / %(max)s"
 msgstr "envite / %(max)s"
 
-#: templates/dashboard/events/_live.html:5 templates/events/organizer_event_detail.html:9
+#: templates/dashboard/events/_live.html:6 templates/events/organizer_event_detail.html:9
 msgid "présents"
 msgstr "prezan"
 
-#: templates/dashboard/events/_live.html:5
+#: templates/dashboard/events/_live.html:6
 msgid "%(n)s acc."
 msgstr "%(n)s akonp."
 
-#: templates/dashboard/events/_live.html:6
+#: templates/dashboard/events/_live.html:7
 msgid "peut-être"
 msgstr "petèt"
 
-#: templates/dashboard/events/_live.html:7
+#: templates/dashboard/events/_live.html:8
 msgid "absents"
 msgstr "absan"
 
-#: templates/dashboard/events/_live.html:8
+#: templates/dashboard/events/_live.html:9
 msgid "en attente"
 msgstr "ap tann"
 
-#: templates/dashboard/events/_live.html:13
+#: templates/dashboard/events/_live.html:14
 msgid "Cadeaux et donateurs"
 msgstr "Kado ak donatè"
 
-#: templates/dashboard/events/_live.html:18 templates/dashboard/gifts/list.html:30 gifts/models.py:7 gifts/views_admin.py:95
+#: templates/dashboard/events/_live.html:19 templates/dashboard/gifts/list.html:30 gifts/models.py:7 gifts/views_admin.py:95
 msgid "Cadeau"
 msgstr "Kado"
 
-#: templates/dashboard/events/_live.html:18
+#: templates/dashboard/events/_live.html:19
 msgid "Pris"
 msgstr "Pran"
 
-#: templates/dashboard/events/_live.html:18 gifts/views_admin.py:95
+#: templates/dashboard/events/_live.html:19 gifts/views_admin.py:95
 msgid "Donateur(s)"
 msgstr "Donatè"
 
-#: templates/dashboard/events/_live.html:22 gifts/views_admin.py:101
+#: templates/dashboard/events/_live.html:23 gifts/views_admin.py:101
 msgid "Disponible"
 msgstr "Disponib"
 
-#: templates/dashboard/events/_live.html:25
+#: templates/dashboard/events/_live.html:26
 msgid "Aucun cadeau dans la liste."
 msgstr "Pa gen kado nan lis la."
 
-#: templates/dashboard/events/_live.html:25 templates/dashboard/gifts/form.html:3 templates/dashboard/gifts/form.html:6 templates/dashboard/gifts/list.html:11 templates/dashboard/gifts/list.html:54
+#: templates/dashboard/events/_live.html:26 templates/dashboard/gifts/form.html:3 templates/dashboard/gifts/form.html:6 templates/dashboard/gifts/list.html:11 templates/dashboard/gifts/list.html:54
 msgid "Ajouter un cadeau"
 msgstr "Ajoute yon kado"
 
-#: templates/dashboard/events/_live.html:30 templates/dashboard/home.html:59
+#: templates/dashboard/events/_live.html:31 templates/dashboard/home.html:59
 msgid "Dernières réponses"
 msgstr "Dènye repons"
 
-#: templates/dashboard/events/_live.html:30
+#: templates/dashboard/events/_live.html:31
 msgid "màj %(t)s"
 msgstr "mizajou %(t)s"
 
-#: templates/dashboard/events/_live.html:38 templates/dashboard/home.html:66
+#: templates/dashboard/events/_live.html:39 templates/dashboard/home.html:66
 msgid "Aucune réponse pour l'instant."
 msgstr "Poko gen repons."
+
+#: templates/dashboard/events/_live.html:46
+msgid "Contributions en argent"
+msgstr "Kontribisyon lajan"
+
+#: templates/dashboard/events/_live.html:47
+msgid "Visibles seulement par l'équipe : les invités ne voient pas les contributions des autres."
+msgstr "Se sèlman ekip la ki wè yo : envite yo pa wè kontribisyon lòt yo."
+
+#: templates/dashboard/events/_live.html:52
+msgid "%(counter)s contribution"
+msgid_plural "%(counter)s contributions"
+msgstr[0] "%(counter)s kontribisyon"
+msgstr[1] "%(counter)s kontribisyon"
+
+#: templates/dashboard/events/_live.html:56 templates/dashboard/home.html:39 templates/dashboard/payments/history.html:20 templates/invitation/step_contribution.html:19 templates/payments/success.html:19
+msgid "Montant"
+msgstr "Montan"
+
+#: templates/dashboard/events/_live.html:56 templates/dashboard/home.html:39 templates/dashboard/payments/history.html:20 templates/payments/success.html:18
+msgid "Mode"
+msgstr "Mwayen peman"
+
+#: templates/dashboard/events/_live.html:56
+msgid "Petit mot"
+msgstr "Ti mo"
+
+#: templates/dashboard/events/_live.html:65
+msgid "Aucune contribution pour l'instant."
+msgstr "Poko gen kontribisyon."
 
 #: templates/dashboard/events/detail.html:17 templates/events/public_detail.html:14
 msgid "%(d)s à %(t)s"
@@ -3029,7 +3095,7 @@ msgstr "%(d)s a %(t)s"
 msgid "Gérer et envoyer"
 msgstr "Jere ak voye"
 
-#: templates/dashboard/events/detail.html:43 templates/dashboard/guests/export_pdf.html:17 templates/dashboard/reminders/_table.html:13 templates/dashboard/reminders/event.html:61 events/views_admin.py:300
+#: templates/dashboard/events/detail.html:43 templates/dashboard/guests/export_pdf.html:17 templates/dashboard/reminders/_table.html:13 templates/dashboard/reminders/event.html:61 events/views_admin.py:303
 msgid "Canal"
 msgstr "Chanèl"
 
@@ -3131,15 +3197,15 @@ msgstr "Sèvis lokalizasyon an pa disponib. Klike sou kat la pou mete mak la."
 msgid "Invitations"
 msgstr "Envitasyon"
 
-#: templates/dashboard/events/form.html:57
+#: templates/dashboard/events/form.html:58
 msgid "Médias"
 msgstr "Medya"
 
-#: templates/dashboard/events/form.html:66
+#: templates/dashboard/events/form.html:67
 msgid "Créer l'événement"
 msgstr "Kreye evènman an"
 
-#: templates/dashboard/events/form.html:66
+#: templates/dashboard/events/form.html:67
 msgid "Enregistrer les modifications"
 msgstr "Anrejistre chanjman yo"
 
@@ -3307,15 +3373,15 @@ msgstr "Lyen envitasyon inik la kreye otomatikman."
 msgid "Canal d'envoi"
 msgstr "Chanèl pou voye"
 
-#: templates/dashboard/guests/form.html:39 events/views_admin.py:301
+#: templates/dashboard/guests/form.html:39 events/views_admin.py:304
 msgid "Lien d'invitation"
 msgstr "Lyen envitasyon an"
 
-#: templates/dashboard/guests/form.html:43 templates/dashboard/reminders/_table.html:18 templates/dashboard/reminders/event.html:63 events/views_admin.py:300
+#: templates/dashboard/guests/form.html:43 templates/dashboard/reminders/_table.html:18 templates/dashboard/reminders/event.html:63 events/views_admin.py:303
 msgid "E-mail"
 msgstr "Imèl"
 
-#: templates/dashboard/guests/form.html:46 events/views_admin.py:301
+#: templates/dashboard/guests/form.html:46 events/views_admin.py:304
 msgid "Répondu le"
 msgstr "Dat repons"
 
@@ -3407,7 +3473,7 @@ msgid_plural "%(counter)s demandes d'aide nouvelles"
 msgstr[0] "%(counter)s nouvo demann èd"
 msgstr[1] "%(counter)s nouvo demann èd"
 
-#: templates/dashboard/home.html:14 events/models.py:130
+#: templates/dashboard/home.html:14 events/models.py:134
 msgid "événements"
 msgstr "evènman"
 
@@ -3415,7 +3481,7 @@ msgstr "evènman"
 msgid "%(n)s à venir"
 msgstr "%(n)s k ap vini"
 
-#: templates/dashboard/home.html:15 templates/events/organizer_event_detail.html:8 events/models.py:268
+#: templates/dashboard/home.html:15 templates/events/organizer_event_detail.html:8 events/models.py:277
 msgid "invités"
 msgstr "envite"
 
@@ -3460,14 +3526,6 @@ msgstr "Istorik"
 #: templates/dashboard/home.html:39 templates/dashboard/payments/history.html:20 templates/payments/success.html:13
 msgid "Référence"
 msgstr "Referans"
-
-#: templates/dashboard/home.html:39 templates/dashboard/payments/history.html:20 templates/payments/success.html:18
-msgid "Mode"
-msgstr "Mwayen peman"
-
-#: templates/dashboard/home.html:39 templates/dashboard/payments/history.html:20 templates/payments/success.html:19
-msgid "Montant"
-msgstr "Montan"
 
 #: templates/dashboard/home.html:45
 msgid "Aucun paiement."
@@ -3595,7 +3653,7 @@ msgstr "%(n)s de fwa"
 msgid "%(n)s trois fois"
 msgstr "%(n)s twa fwa"
 
-#: templates/dashboard/reminders/_stats.html:6 events/models.py:317
+#: templates/dashboard/reminders/_stats.html:6 events/models.py:326
 msgid "automatique"
 msgstr "otomatik"
 
@@ -3781,7 +3839,7 @@ msgstr "Voye rapèl ak yon sèl klik bay envite ki poko reponn yo, pa WhatsApp o
 msgid "À venir"
 msgstr "Ki ap vini"
 
-#: templates/dashboard/seating/_board.html:3 events/models.py:218
+#: templates/dashboard/seating/_board.html:3 events/models.py:227
 msgid "tables"
 msgstr "tab"
 
@@ -3793,7 +3851,7 @@ msgstr "%(n)s plas chak"
 msgid "de %(a)s à %(b)s places"
 msgstr "de %(a)s a %(b)s plas"
 
-#: templates/dashboard/seating/_board.html:4 events/models.py:211
+#: templates/dashboard/seating/_board.html:4 events/models.py:220
 msgid "places"
 msgstr "plas"
 
@@ -4059,7 +4117,7 @@ msgstr "Konsè, gala, konferans : dekouvri sa k ap pase tou pre ou."
 msgid "Aucun événement public à venir pour le moment."
 msgstr "Pa gen okenn evènman piblik k ap vini pou kounye a."
 
-#: templates/events/organizer_event_detail.html:10 events/models.py:250
+#: templates/events/organizer_event_detail.html:10 events/models.py:259
 msgid "accompagnants"
 msgstr "moun k ap akonpanye w"
 
@@ -4131,37 +4189,41 @@ msgstr "Achte yon biyè"
 msgid "Voir mon invitation"
 msgstr "Gade envitasyon mwen"
 
-#: templates/invitation/already_answered.html:7
+#: templates/invitation/already_answered.html:8
 msgid "Votre réponse est <em style=\"color:inherit\">enregistrée</em>"
 msgstr "Repons ou an <em style=\"color:inherit\">anrejistre</em>"
 
-#: templates/invitation/already_answered.html:8
+#: templates/invitation/already_answered.html:9
 msgid "j F Y à H:i"
 msgstr "j F Y \\a H:i"
 
-#: templates/invitation/already_answered.html:9
+#: templates/invitation/already_answered.html:10
 msgid "Cette réponse est définitive."
 msgstr "Repons sa a final."
 
-#: templates/invitation/already_answered.html:9
+#: templates/invitation/already_answered.html:10
 msgid "Vous avez confirmé votre présence le %(date)s, avec %(counter)s accompagnant."
 msgid_plural "Vous avez confirmé votre présence le %(date)s, avec %(counter)s accompagnants."
 msgstr[0] "Ou konfime prezans ou nan dat %(date)s, avèk %(counter)s moun k ap akonpanye w."
 msgstr[1] "Ou konfime prezans ou nan dat %(date)s, avèk %(counter)s moun k ap akonpanye w."
 
-#: templates/invitation/already_answered.html:9
+#: templates/invitation/already_answered.html:10
 msgid "Vous avez confirmé votre présence le %(date)s."
 msgstr "Ou konfime prezans ou nan dat %(date)s."
 
-#: templates/invitation/already_answered.html:13 templates/invitation/step_done.html:15
+#: templates/invitation/already_answered.html:14 templates/invitation/step_done.html:16
 msgid "Vos cadeaux réservés"
 msgstr "Kado ou rezève yo"
 
-#: templates/invitation/already_answered.html:17 templates/invitation/step_done.html:19
+#: templates/invitation/already_answered.html:20 templates/invitation/step_done.html:22
+msgid "Votre contribution"
+msgstr "Kontribisyon w lan"
+
+#: templates/invitation/already_answered.html:24 templates/invitation/step_done.html:27
 msgid "Voir mon QR code d'entrée"
 msgstr "Wè kòd QR antre mwen"
 
-#: templates/invitation/already_answered.html:18
+#: templates/invitation/already_answered.html:25
 msgid "Découvrir les événements publics"
 msgstr "Dekouvri evènman piblik yo"
 
@@ -4217,7 +4279,7 @@ msgstr "Deja valide a %(time)s."
 msgid "Valider l'entrée"
 msgstr "Valide antre a"
 
-#: templates/invitation/entry_code.html:22 events/models.py:336
+#: templates/invitation/entry_code.html:22 events/models.py:345
 msgid "QR inconnu"
 msgstr "Kòd QR pa konnen"
 
@@ -4233,41 +4295,101 @@ msgstr "Biyè antre EventLead"
 msgid "Ce code se présente à l'entrée de l'événement : seule l'équipe à l'entrée peut le valider."
 msgstr "Kòd sa a prezante nan antre evènman an : se sèlman ekip la nan antre a ki ka valide l."
 
-#: templates/invitation/step_done.html:7
+#: templates/invitation/step_contribution.html:8 templates/invitation/step_contribution.html:44
+msgid "Contribuer %(n)s HTG"
+msgstr "Kontribye %(n)s HTG"
+
+#: templates/invitation/step_contribution.html:9
+msgid "Le montant minimum est de %(n)s HTG."
+msgstr "Montan minimòm lan se %(n)s HTG."
+
+#: templates/invitation/step_contribution.html:10
+msgid "Le montant maximum est de %(n)s HTG."
+msgstr "Montan maksimòm lan se %(n)s HTG."
+
+#: templates/invitation/step_contribution.html:11 payments/contributions.py:30
+msgid "Indiquez un montant en gourdes."
+msgstr "Make yon montan an goud."
+
+#: templates/invitation/step_contribution.html:14
+msgid "Contribuer en <em style=\"color:inherit\">argent</em>"
+msgstr "Kontribye ak <em style=\"color:inherit\">lajan</em>"
+
+#: templates/invitation/step_contribution.html:15
+msgid "À la place d'un cadeau, vous offrez une contribution aux hôtes de « %(title)s »."
+msgstr "Olye yon kado, w ap fè yon kontribisyon pou òganizatè « %(title)s » yo."
+
+#: templates/invitation/step_contribution.html:23 templates/invitation/step_contribution.html:24
+msgid "Autre montant"
+msgstr "Lòt montan"
+
+#: templates/invitation/step_contribution.html:31
+msgid "Payer avec"
+msgstr "Peye ak"
+
+#: templates/invitation/step_contribution.html:39
+msgid "Un petit mot pour les hôtes"
+msgstr "Yon ti mo pou òganizatè yo"
+
+#: templates/invitation/step_contribution.html:39
+msgid "(facultatif)"
+msgstr "(si w vle)"
+
+#: templates/invitation/step_contribution.html:40
+msgid "Merci pour cette belle invitation !"
+msgstr "Mèsi pou bèl envitasyon sa a !"
+
+#: templates/invitation/step_contribution.html:42
+msgid "Seuls les hôtes voient votre nom et votre montant. Les autres invités ne voient rien."
+msgstr "Se sèlman òganizatè yo ki wè non w ak montan w. Lòt envite yo pa wè anyen."
+
+#: templates/invitation/step_contribution.html:47
+msgid "Je préfère choisir un cadeau"
+msgstr "Mwen prefere chwazi yon kado"
+
+#: templates/invitation/step_contribution.html:52 payments/models.py:27
+msgid "Contribution en argent"
+msgstr "Kontribisyon lajan"
+
+#: templates/invitation/step_done.html:8
 msgid "Merci <em style=\"color:inherit\">%(name)s</em>"
 msgstr "Mèsi <em style=\"color:inherit\">%(name)s</em>"
 
-#: templates/invitation/step_done.html:9
+#: templates/invitation/step_done.html:10
 msgid "Votre présence est confirmée."
 msgstr "Prezans ou konfime."
 
-#: templates/invitation/step_done.html:9
+#: templates/invitation/step_done.html:10
 msgid "Votre présence est confirmée avec %(counter)s accompagnant."
 msgid_plural "Votre présence est confirmée avec %(counter)s accompagnants."
 msgstr[0] "Prezans ou konfime, avèk %(counter)s moun k ap akonpanye w."
 msgstr[1] "Prezans ou konfime, avèk %(counter)s moun k ap akonpanye w."
 
-#: templates/invitation/step_done.html:10
+#: templates/invitation/step_done.html:11
 msgid "Votre réponse a bien été transmise à l'hôte."
 msgstr "Yo voye repons ou an bay òganizatè a."
 
-#: templates/invitation/step_done.html:11
+#: templates/invitation/step_done.html:12
 msgid "Votre réponse « Peut-être » a été enregistrée."
 msgstr "Repons ou an « Petèt » anrejistre."
 
-#: templates/invitation/step_done.html:20
+#: templates/invitation/step_done.html:24
+msgid "Merci, les hôtes seront touchés par ce geste."
+msgstr "Mèsi, jès sa a pral touche òganizatè yo."
+
+#: templates/invitation/step_done.html:28
 msgid "Redirection"
 msgstr "Redireksyon"
 
-#: templates/invitation/step_done.html:21
+#: templates/invitation/step_done.html:29
 msgid "Redirection vers nos partenaires..."
 msgstr "Ap voye w bò patnè nou yo..."
 
-#: templates/invitation/step_done.html:21
+#: templates/invitation/step_done.html:29
 msgid "Redirection automatique vers l'accueil..."
 msgstr "N ap mennen w sou paj akèy la otomatikman..."
 
-#: templates/invitation/step_done.html:22
+#: templates/invitation/step_done.html:30
 msgid "Continuer"
 msgstr "Kontinye"
 
@@ -4317,17 +4439,37 @@ msgstr "Yon lòt envite te chwazi l anvan w, e pa rete ankò. Lis la mete ajou p
 msgid "Confirmer (<span id=\"selected-count\">0</span> cadeau(x) sélectionné(s))"
 msgstr "Konfime (<span id=\"selected-count\">0</span> kado chwazi)"
 
-#: templates/invitation/step_gift_question.html:7
+#: templates/invitation/step_gift_question.html:8
 msgid "Souhaitez-vous envoyer un <em style=\"color:inherit\">cadeau</em> ?"
 msgstr "Èske w ta renmen voye yon <em style=\"color:inherit\">kado</em> ?"
 
-#: templates/invitation/step_gift_question.html:8
+#: templates/invitation/step_gift_question.html:9
 msgid "L'hôte a préparé une liste de cadeaux. Chaque cadeau choisi est réservé pour vous seul."
 msgstr "Òganizatè a prepare yon lis kado. Chak kado ou chwazi rezève pou ou sèl."
 
-#: templates/invitation/step_gift_question.html:18 templates/invitation/step_presence.html:35
+#: templates/invitation/step_gift_question.html:17
+msgid "Je préfère contribuer en argent"
+msgstr "Mwen prefere kontribye ak lajan"
+
+#: templates/invitation/step_gift_question.html:20 templates/invitation/step_presence.html:35
 msgid "Suivant"
 msgstr "Pwochen"
+
+#: templates/invitation/step_gift_question.html:26
+msgid "Souhaitez-vous faire une <em style=\"color:inherit\">contribution</em> ?"
+msgstr "Èske w ta renmen fè yon <em style=\"color:inherit\">kontribisyon</em> ?"
+
+#: templates/invitation/step_gift_question.html:27
+msgid "Les hôtes acceptent une contribution en argent, par MonCash ou NatCash. C'est facultatif."
+msgstr "Òganizatè yo aksepte yon kontribisyon lajan pa MonCash oswa NatCash. Se opsyonèl."
+
+#: templates/invitation/step_gift_question.html:28
+msgid "Contribuer en argent"
+msgstr "Kontribye ak lajan"
+
+#: templates/invitation/step_gift_question.html:29
+msgid "Non merci, continuer"
+msgstr "Non mèsi, kontinye"
 
 #: templates/invitation/step_presence.html:10
 msgid "Serez-vous <em style=\"color:inherit\">présent(e)</em> ?"
@@ -4365,7 +4507,7 @@ msgstr "Lyen sa a se pou ou sèl : se sa ou bezwen pou reponn, san kont ni modpa
 msgid "Récapitulatif de votre <em style=\"color:inherit\">réponse</em>"
 msgstr "Rezime <em style=\"color:inherit\">repons</em> ou an"
 
-#: templates/invitation/step_recap.html:7 events/views_invitation.py:47
+#: templates/invitation/step_recap.html:7 events/views_invitation.py:48
 msgid "Présence"
 msgstr "Prezans"
 
@@ -4517,131 +4659,131 @@ msgstr "NON SOU KAT LA"
 msgid "MM/AA"
 msgstr "MM/AA"
 
-#: templates/payments/_payment_modal.html:29
+#: templates/payments/_payment_modal.html:30
 msgid "Carte bancaire"
 msgstr "Kat bankè"
 
-#: templates/payments/_payment_modal.html:30
+#: templates/payments/_payment_modal.html:31
 msgid "Compte ou carte"
 msgstr "Kont oswa kat"
 
-#: templates/payments/_payment_modal.html:32
+#: templates/payments/_payment_modal.html:33
 msgid "Un souci pour payer ?"
 msgstr "Ou gen pwoblèm pou peye ?"
 
-#: templates/payments/_payment_modal.html:32
+#: templates/payments/_payment_modal.html:33
 msgid "Demander de l'aide"
 msgstr "Mande èd"
 
-#: templates/payments/_payment_modal.html:33
+#: templates/payments/_payment_modal.html:34
 msgid "Mode démonstration : aucun montant réel n'est débité."
 msgstr "Mòd demonstrasyon : yo pa pran okenn vrè lajan."
 
-#: templates/payments/_payment_modal.html:36
+#: templates/payments/_payment_modal.html:37
 msgid "Payer avec MonCash"
 msgstr "Peye ak MonCash"
 
-#: templates/payments/_payment_modal.html:37
+#: templates/payments/_payment_modal.html:38
 msgid "Numéro MonCash"
 msgstr "Nimewo MonCash"
 
-#: templates/payments/_payment_modal.html:40
+#: templates/payments/_payment_modal.html:41
 msgid "Un code de confirmation à 6 chiffres vous est envoyé par SMS à ce numéro. Gardez votre téléphone à portée de main."
 msgstr "Y ap voye yon kòd konfimasyon 6 chif pa SMS sou nimewo sa a. Kenbe telefòn ou bò kote w."
 
-#: templates/payments/_payment_modal.html:41
+#: templates/payments/_payment_modal.html:42
 msgid "Envoi du code..."
 msgstr "N ap voye kòd la..."
 
-#: templates/payments/_payment_modal.html:41
+#: templates/payments/_payment_modal.html:42
 msgid "Recevoir le code de confirmation"
 msgstr "Resevwa kòd konfimasyon an"
 
-#: templates/payments/_payment_modal.html:43
+#: templates/payments/_payment_modal.html:44
 msgid "Code OTP reçu par SMS"
 msgstr "Kòd OTP ou resevwa pa SMS"
 
-#: templates/payments/_payment_modal.html:46
+#: templates/payments/_payment_modal.html:47
 msgid "Démonstration : utilisez le code <strong>123456</strong>."
 msgstr "Demonstrasyon : itilize kòd <strong>123456</strong> la."
 
-#: templates/payments/_payment_modal.html:47 templates/payments/_payment_modal.html:58
+#: templates/payments/_payment_modal.html:48 templates/payments/_payment_modal.html:59
 msgid "Confirmer le paiement"
 msgstr "Konfime peman an"
 
-#: templates/payments/_payment_modal.html:51
+#: templates/payments/_payment_modal.html:52
 msgid "Payer avec NatCash"
 msgstr "Peye ak NatCash"
 
-#: templates/payments/_payment_modal.html:52
+#: templates/payments/_payment_modal.html:53
 msgid "Numéro NatCash"
 msgstr "Nimewo NatCash"
 
-#: templates/payments/_payment_modal.html:55
+#: templates/payments/_payment_modal.html:56
 msgid "Code PIN (4 chiffres)"
 msgstr "Kòd PIN (4 chif)"
 
-#: templates/payments/_payment_modal.html:61
+#: templates/payments/_payment_modal.html:63
 msgid "Payer par carte bancaire"
 msgstr "Peye ak kat bankè"
 
-#: templates/payments/_payment_modal.html:65
+#: templates/payments/_payment_modal.html:67
 msgid "Titulaire"
 msgstr "Pwopriyetè"
 
-#: templates/payments/_payment_modal.html:65
+#: templates/payments/_payment_modal.html:67
 msgid "Expire"
 msgstr "Ekspire"
 
-#: templates/payments/_payment_modal.html:67
+#: templates/payments/_payment_modal.html:69
 msgid "Numéro de carte"
 msgstr "Nimewo kat la"
 
-#: templates/payments/_payment_modal.html:69
+#: templates/payments/_payment_modal.html:71
 msgid "Expiration"
 msgstr "Dat ekspirasyon"
 
-#: templates/payments/_payment_modal.html:72
+#: templates/payments/_payment_modal.html:74
 msgid "Nom sur la carte"
 msgstr "Non ki sou kat la"
 
-#: templates/payments/_payment_modal.html:73
+#: templates/payments/_payment_modal.html:75
 msgid "Montant débité en dollars :"
 msgstr "Montan yo pral pran an dola :"
 
-#: templates/payments/_payment_modal.html:73
+#: templates/payments/_payment_modal.html:75
 msgid "Test : 4242 4242 4242 4242 (acceptée), 4000 0000 0000 0002 (refusée)."
 msgstr "Tès : 4242 4242 4242 4242 (aksepte), 4000 0000 0000 0002 (refize)."
 
-#: templates/payments/_payment_modal.html:74
+#: templates/payments/_payment_modal.html:76
 msgid "Payer"
 msgstr "Peye"
 
-#: templates/payments/_payment_modal.html:77
+#: templates/payments/_payment_modal.html:81
 msgid "Payer avec PayPal"
 msgstr "Peye ak PayPal"
 
-#: templates/payments/_payment_modal.html:79
+#: templates/payments/_payment_modal.html:83
 msgid "E-mail PayPal"
 msgstr "Imèl PayPal"
 
-#: templates/payments/_payment_modal.html:80
+#: templates/payments/_payment_modal.html:84
 msgid "Mot de passe PayPal"
 msgstr "Modpas PayPal"
 
-#: templates/payments/_payment_modal.html:81
+#: templates/payments/_payment_modal.html:85
 msgid "Se connecter et payer"
 msgstr "Konekte epi peye"
 
-#: templates/payments/_payment_modal.html:84
+#: templates/payments/_payment_modal.html:90
 msgid "Traitement en cours"
 msgstr "Tretman ankou"
 
-#: templates/payments/_payment_modal.html:86
+#: templates/payments/_payment_modal.html:92
 msgid "Validation du paiement..."
 msgstr "N ap valide peman an..."
 
-#: templates/payments/_payment_modal.html:87
+#: templates/payments/_payment_modal.html:93
 msgid "Ne fermez pas cette fenêtre."
 msgstr "Pa fèmen fenèt sa a."
 

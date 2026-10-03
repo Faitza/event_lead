@@ -16,7 +16,7 @@ from ads.models import Ad
 from core.models import ContactMessage, HelpRequest, Review
 from events.models import Event, EventCategory, EventEvaluation, Guest, Reminder, Table
 from gifts.models import Gift, GiftClaim
-from payments.models import Payment
+from payments.models import Contribution, Payment
 
 DEMO_PASSWORD = "EventLead2026!"
 
@@ -31,6 +31,7 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         if options["reset"]:
             GiftClaim.objects.all().delete()
+            Contribution.objects.all().delete()
             Payment.objects.all().delete()
             Event.objects.all().delete()
             EventCategory.objects.all().delete()
@@ -164,6 +165,21 @@ class Command(BaseCommand):
         GiftClaim.objects.create(gift=gifts["Lot de verres en cristal"], guest=guests["Roseline Augustin"])
         GiftClaim.objects.create(gift=gifts["Enceinte Bluetooth"], guest=guests["Nadège Louis"])
         GiftClaim.objects.create(gift=gifts["Bouquet de fleurs du jardin"], guest=guests["Jonathan Pierre"])
+
+        # Contribution en argent à la place d'un cadeau (acceptée pour le mariage)
+        Event.objects.filter(pk=wedding.pk).update(accept_contributions=True)
+        donor = Guest.objects.create(
+            event=wedding, name="Fabiola Désir", email="fabiola@example.com", phone="+509 3344 5566", sent_via="whatsapp",
+            status="confirmed", companions=1, wants_gift=False, invitation_sent_at=timezone.now() - timedelta(days=5),
+            replied_at=timezone.now() - timedelta(hours=30),
+        )
+        gift_payment = Payment.objects.create(
+            kind="contribution", event=wedding, guest=donor, method="moncash", amount_htg=5000,
+            reference=Payment.generate_reference("moncash"), status="success", payer_detail="+509 **** 5566",
+        )
+        Contribution.objects.create(
+            event=wedding, guest=donor, payment=gift_payment, amount_htg=5000, message="Félicitations, tous nos vœux de bonheur !",
+        )
 
         # Événement passé : l'organisateur VIP peut l'évaluer (délai écoulé)
         Guest.objects.create(event=anniversary, name="Jonathan Pierre", email="organisateur@eventlead.ht",

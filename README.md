@@ -34,7 +34,7 @@ Mot de passe commun : `EventLead2026!`
 
 La commande affiche aussi un lien magique `/invitation/<uuid>/` d'un invité en attente pour tester le parcours complet sans connexion. `python manage.py seed_demo --reset` repart de zéro.
 
-Le jeu de démonstration contient 6 catégories (Mariage, Gala, Anniversaire, Baptême, Conférence, Concert), 6 événements rangés dans ces catégories (4 publics, un mariage privé, un anniversaire passé pour tester l'évaluation), 11 invités à différents statuts, 8 cadeaux sur le mariage (dont 4 déjà choisis), 3 publicités actives (une seule, « Pâtisserie Kay Dous », est dans la séquence après réponse), 3 avis, 4 paiements et 3 demandes d'aide (une nouvelle, une en cours, une résolue).
+Le jeu de démonstration contient 6 catégories (Mariage, Gala, Anniversaire, Baptême, Conférence, Concert), 6 événements rangés dans ces catégories (4 publics, un mariage privé, un anniversaire passé pour tester l'évaluation), 12 invités à différents statuts, 8 cadeaux sur le mariage (dont 4 déjà choisis), 3 publicités actives (une seule, « Pâtisserie Kay Dous », est dans la séquence après réponse), 3 avis, 5 paiements (dont une contribution en argent) et 3 demandes d'aide (une nouvelle, une en cours, une résolue).
 
 ## Paiements en mode démo
 
@@ -76,6 +76,7 @@ Sans ces valeurs, le bouton « Continuer avec Google » est affiché désactivé
 | `/organisateur/` | Portail Organisateur VIP |
 | `/organisateur/devenir-vip/` | Paiement de l'accès VIP |
 | `/invitation/<uuid:token>/` | Flux invité (présence, cadeaux, récapitulatif, confirmation), sans compte ni connexion : le lien personnel suffit |
+| `/invitation/<uuid:token>/contribution/` | Contribution en argent (MonCash ou NatCash) à la place d'un cadeau, si l'événement l'accepte |
 | `/invitation/<uuid:token>/publicite/<int:ad_id>/` | Page publicité |
 | `/aide/` | Aide : questions fréquentes par profil, WhatsApp, formulaire « J'ai besoin d'aide » (`?sujet=` présélectionne le sujet) |
 | `/evenements/` (+ `?categorie=<identifiant>`) | Exploration des événements publics, filtrable par catégorie |
@@ -158,6 +159,15 @@ Le site existe en français (langue par défaut), en anglais et en créole haït
 - **E-mails réels** : tant que `EMAIL_BACKEND` est celui par défaut (console), les e-mails s'affichent dans le terminal du serveur au lieu de partir, et la page l'indique. Configurez `EMAIL_*` dans le `.env` pour les envoyer vraiment.
 - Après un `git pull` : `python manage.py migrate`, puis `python manage.py seed_demo --reset` si vous voulez des données neuves (un invité du mariage y a déjà reçu une relance).
 
+## Contribution en argent
+
+- **Réglage par événement** : la case « accepter les contributions en argent » du formulaire de l'événement (désactivée par défaut). Elle peut s'ajouter à une liste de cadeaux ou la remplacer : sans liste de cadeaux, l'invité qui confirme sa présence voit seulement « Souhaitez-vous faire une contribution ? » (Contribuer en argent / Non merci, continuer).
+- **Côté invité** (lien personnel, sans compte) : après avoir confirmé sa présence, l'invité choisit « Je préfère contribuer en argent » au lieu d'un cadeau. La page propose 1 000, 2 500, 5 000, 10 000 ou 25 000 HTG, ou « Autre montant » (de 500 à 500 000 HTG), avec l'équivalent en dollars (taux fixe, 5 000 HTG = 37,50 USD), le choix MonCash ou NatCash, un petit mot facultatif (300 signes) et la mention « Seuls les hôtes voient votre nom et votre montant ». « Je préfère choisir un cadeau » ramène à la liste.
+- **Paiement et réponse en une seule étape** : le bouton « Contribuer N HTG » ouvre la fenêtre de paiement déjà sur le bon mode. Si le paiement est accepté, la réponse de l'invité est confirmée (présent, sans cadeau) et devient définitive ; s'il est refusé (mauvais code, par exemple), la fenêtre se rouvre avec le motif, rien n'est confirmé et l'invité peut réessayer. Un invité qui a déjà répondu n'est jamais débité une seconde fois. Stripe et PayPal ne sont pas proposés ici.
+- **Côté équipe** : sur la page de l'événement, la carte « Contributions en argent » (mise à jour toute seule) donne le total, puis pour chaque contribution l'invité, le montant, le mode, la référence, le petit mot et la date. Les autres invités ne voient jamais ni nom, ni montant, ni message. Un invité qui a contribué, et un événement qui a des contributions, ne peuvent pas être supprimés.
+- **Modèle** : `payments.Contribution` (un invité, un paiement `Payment` de type `contribution`, un montant et le petit mot). Paiements en mode démo comme partout : MonCash code `123456`, NatCash PIN à 4 chiffres.
+- Après un `git pull` : `python manage.py migrate` (deux migrations : `events.0007`, `payments.0002`), puis `python manage.py seed_demo --reset` si vous voulez des données neuves (le mariage de démonstration accepte les contributions et un invité y a déjà contribué 5 000 HTG).
+
 ## Envoi des invitations (V1)
 
 Chaque invité possède un `magic_token`. Dans `/admin-dashboard/invites/`, l'admin ouvre WhatsApp (`wa.me`) ou son client e-mail (`mailto:`) avec un message prérempli, dans la langue de l'invité, contenant le lien, ou copie le lien, puis marque l'invitation comme envoyée.
@@ -168,7 +178,7 @@ Chaque invité possède un `magic_token`. Dans `/admin-dashboard/invites/`, l'ad
 python manage.py test
 ```
 
-205 tests couvrent la règle « dernière unité », la transaction annulée en cas de conflit, le caractère définitif des réponses, le parcours invité complet jusqu'à la publicité puis l'accueil, le défilé de l'accueil, les redirections après connexion, les règles d'accès par rôle, le paiement VIP et l'affichage de chaque page principale, l'absence de connexion forcée sur le parcours invité et la page d'accueil publique, les catégories d'événements (gestion réservée à l'administrateur, filtre, badge, événements privés jamais exposés) l'espace d'aide (page, bouton WhatsApp, formulaire, statuts, export CSV, aides du parcours) le QR code d'entrée et le pointage (codes uniques, billet réservé aux présents, validation une seule fois, refus des codes inconnus ou d'un autre événement, ajout sur place, annulation, chiffres) les relances (qui est à relancer et quand, arrêt à la réponse, maximum de 3, e-mail dans la langue de l'invité, WhatsApp seulement noté, jamais de SMS, réglages, commande planifiée) le plan de table (places et accompagnants, déplacement, tables, placement automatique, numéro sur le billet et au pointage) et les trois langues (sélecteur, cookie, profil, `?lang=`, pages principales en anglais et en créole sans reste de français, message d'invitation par langue, catalogues complets).
+245 tests couvrent la règle « dernière unité », la transaction annulée en cas de conflit, le caractère définitif des réponses, le parcours invité complet jusqu'à la publicité puis l'accueil, le défilé de l'accueil, les redirections après connexion, les règles d'accès par rôle, le paiement VIP et l'affichage de chaque page principale, l'absence de connexion forcée sur le parcours invité et la page d'accueil publique, les catégories d'événements (gestion réservée à l'administrateur, filtre, badge, événements privés jamais exposés) l'espace d'aide (page, bouton WhatsApp, formulaire, statuts, export CSV, aides du parcours) le QR code d'entrée et le pointage (codes uniques, billet réservé aux présents, validation une seule fois, refus des codes inconnus ou d'un autre événement, ajout sur place, annulation, chiffres) les relances (qui est à relancer et quand, arrêt à la réponse, maximum de 3, e-mail dans la langue de l'invité, WhatsApp seulement noté, jamais de SMS, réglages, commande planifiée) le plan de table (places et accompagnants, déplacement, tables, placement automatique, numéro sur le billet et au pointage) la contribution en argent (montants, MonCash et NatCash seulement, paiement refusé sans réponse enregistrée, jamais de double débit, montants jamais montrés aux autres invités, carte réservée à l'équipe) et les trois langues (sélecteur, cookie, profil, `?lang=`, pages principales en anglais et en créole sans reste de français, message d'invitation par langue, catalogues complets).
 
 ## Production
 

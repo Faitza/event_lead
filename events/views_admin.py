@@ -2,7 +2,7 @@
 import csv
 
 from django.contrib import messages
-from django.db.models import Count, Q
+from django.db.models import Count, Q, Sum
 from django.http import HttpResponse, JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.template.loader import render_to_string
@@ -14,6 +14,7 @@ from django.views.decorators.http import require_GET, require_POST
 
 from accounts.decorators import admin_required
 from gifts.models import GiftClaim
+from payments.models import Contribution
 
 from .forms import EventCategoryForm, EventForm, GuestForm
 from .geocoding import geocode_address
@@ -141,10 +142,10 @@ def event_edit(request, pk):
 @admin_required
 def event_delete(request, pk):
     event = get_object_or_404(Event, pk=pk)
-    has_claims = GiftClaim.objects.filter(gift__event=event).exists()
+    has_claims = GiftClaim.objects.filter(gift__event=event).exists() or Contribution.objects.filter(event=event).exists()
     if request.method == "POST":
         if has_claims:
-            messages.error(request, _("Impossible de supprimer : des invités ont déjà choisi des cadeaux. Annulez plutôt l'événement."))
+            messages.error(request, _("Impossible de supprimer : des invités ont déjà choisi des cadeaux ou fait une contribution. Annulez plutôt l'événement."))
             return redirect("dashboard:event_detail", pk=pk)
         event.delete()
         messages.success(request, _("Événement supprimé."))
@@ -161,6 +162,8 @@ def _tracking_context(event):
         "event": event,
         "stats": event.stats(),
         "gifts": gifts,
+        "contributions": list(event.contributions.select_related("guest", "payment")),
+        "contributions_total": event.contributions.aggregate(s=Sum("amount_htg"))["s"] or 0,
         "recent": event.guests.exclude(replied_at=None).order_by("-replied_at")[:8],
         "now": timezone.now(),
     }
@@ -255,11 +258,11 @@ def guest_edit(request, pk):
 @admin_required
 def guest_delete(request, pk):
     guest = get_object_or_404(Guest, pk=pk)
-    blocked = guest.gift_claims.exists()
+    blocked = guest.gift_claims.exists() or Contribution.objects.filter(guest=guest).exists()
     back = f"{reverse('dashboard:guest_list')}?event={guest.event_id}"
     if request.method == "POST":
         if blocked:
-            messages.error(request, _("Cet invité a choisi des cadeaux : sa réponse est définitive et ne peut pas être supprimée."))
+            messages.error(request, _("Cet invité a choisi des cadeaux ou fait une contribution : sa réponse est définitive et ne peut pas être supprimée."))
         else:
             guest.delete()
             messages.success(request, _("Invité supprimé."))

@@ -1,4 +1,5 @@
 {% extends "invitation/base_invitation.html" %}
+{% load el_tags %}
 {% load i18n %}
 {% block inv_content %}
 {% include "invitation/_event_summary.html" %}
@@ -12,6 +13,12 @@
   <div class="inv-pane w-100 text-start">
     <div class="small text-muted mb-2">{% trans "Vos cadeaux réservés" %}</div>
     {% for c in claims %}<div class="fw-semibold"><i class="bi {{ c.gift.icon_name }} text-primary me-2"></i>{{ c.gift.name }}</div>{% endfor %}
+  </div>
+  {% endif %}
+  {% if contribution %}
+  <div class="inv-pane w-100 text-start">
+    <div class="small text-muted mb-2">{% trans "Votre contribution" %}</div>
+    <div class="fw-semibold"><i class="bi bi-cash-coin text-primary me-2"></i>{{ contribution.amount_htg|htg }} HTG &middot; {{ contribution.payment.get_method_display }}</div>
   </div>
   {% endif %}
   {% if guest.status == 'confirmed' %}<a href="{{ guest.get_ticket_url }}" class="btn btn-primary w-100"><i class="bi bi-qr-code me-2"></i>{% trans "Voir mon QR code d'entrée" %}</a>{% endif %}

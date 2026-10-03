@@ -10,6 +10,7 @@
         {% csrf_token %}
         <input type="hidden" name="method" value="{{ form.method.value|default:'' }}">
         <input type="hidden" name="quantity" value="{{ form.quantity.value|default:1 }}">
+        {% if contribution %}<input type="hidden" name="amount" id="pay-amount" value="{{ amount }}"><input type="hidden" name="message" id="pay-message" value="{{ message }}">{% endif %}
         <div class="modal-header border-0 pb-0">
           <button type="button" id="pay-back" class="btn btn-sm btn-light me-2 d-none" aria-label="{% trans 'Retour' %}"><i class="bi bi-arrow-left"></i></button>
           <h2 class="modal-title" id="pay-title">{{ t_choose }}</h2>
@@ -18,7 +19,7 @@
         <div class="modal-body">
           <div class="d-flex justify-content-between align-items-center inv-pane mb-3">
             <span class="text-muted small">{{ title }}</span>
-            <span class="text-end"><strong class="disp" style="font-size:1.35rem;color:var(--el-primary-dark)" data-amount-htg>{{ amount_htg }} HTG</strong><br><span class="small text-muted" data-amount-usd>{{ amount_usd }} USD</span></span>
+            <span class="text-end"><strong class="disp text-nowrap" style="font-size:1.35rem;color:var(--el-primary-dark)" data-amount-htg>{{ amount_htg }} HTG</strong><br><span class="small text-muted" data-amount-usd>{{ amount_usd }} USD</span></span>
           </div>
           {% if form.non_field_errors %}<div class="notice notice-danger mb-3"><i class="bi bi-exclamation-circle"></i><div>{{ form.non_field_errors|join:" " }}</div></div>{% endif %}
 
@@ -26,8 +27,8 @@
             <div class="pay-methods">
               <button type="button" class="pay-method" data-method="moncash"><span class="pm-logo pm-moncash">MC</span><span><strong class="d-block">MonCash</strong><span class="small text-muted">Digicel Haïti</span></span></button>
               <button type="button" class="pay-method" data-method="natcash"><span class="pm-logo pm-natcash">NAT</span><span><strong class="d-block">NatCash</strong><span class="small text-muted">Natcom Haïti</span></span></button>
-              <button type="button" class="pay-method" data-method="stripe"><span class="pm-logo pm-stripe"><i class="bi bi-credit-card-2-front fs-5"></i></span><span><strong class="d-block">{% trans "Carte bancaire" %}</strong><span class="small text-muted">Visa, Mastercard (USD)</span></span></button>
-              <button type="button" class="pay-method" data-method="paypal"><span class="pm-logo pm-paypal">PP</span><span><strong class="d-block">PayPal</strong><span class="small text-muted">{% trans "Compte ou carte" %}</span></span></button>
+              {% if not pay_methods or 'stripe' in pay_methods %}<button type="button" class="pay-method" data-method="stripe"><span class="pm-logo pm-stripe"><i class="bi bi-credit-card-2-front fs-5"></i></span><span><strong class="d-block">{% trans "Carte bancaire" %}</strong><span class="small text-muted">Visa, Mastercard (USD)</span></span></button>{% endif %}
+              {% if not pay_methods or 'paypal' in pay_methods %}<button type="button" class="pay-method" data-method="paypal"><span class="pm-logo pm-paypal">PP</span><span><strong class="d-block">PayPal</strong><span class="small text-muted">{% trans "Compte ou carte" %}</span></span></button>{% endif %}
             </div>
             <p class="small text-muted text-center mt-3 mb-0">{% trans "Un souci pour payer ?" %} <a href="{% url 'core:help' %}?sujet=payment#demande" target="_blank" rel="noopener">{% trans "Demander de l'aide" %}</a></p>
             {% if PAYMENT_DEMO_MODE %}<p class="small text-muted text-center mt-2 mb-0"><i class="bi bi-info-circle me-1"></i>{% trans "Mode démonstration : aucun montant réel n'est débité." %}</p>{% endif %}
@@ -58,6 +59,7 @@
             <button class="btn btn-primary btn-lg w-100 mt-3">{% trans "Confirmer le paiement" %}</button>
           </div>
 
+          {% if not pay_methods or 'stripe' in pay_methods %}
           <div class="pay-step" data-step="stripe" data-title="{% trans 'Payer par carte bancaire' %}">
             <div class="card-preview">
               <div class="d-flex justify-content-between align-items-start"><span class="chip"></span><i class="bi bi-credit-card-2-front fs-4 opacity-75"></i></div>
@@ -74,12 +76,16 @@
             <button class="btn btn-primary btn-lg w-100 mt-3"><i class="bi bi-lock me-2"></i>{% trans "Payer" %} <span data-amount-usd>{{ amount_usd }} USD</span></button>
           </div>
 
+          {% endif %}
+          {% if not pay_methods or 'paypal' in pay_methods %}
           <div class="pay-step" data-step="paypal" data-title="{% trans 'Payer avec PayPal' %}">
             <div class="text-center mb-3"><span class="pm-logo pm-paypal d-inline-flex" style="width:56px;height:56px">PP</span></div>
             <div class="mb-2"><label class="form-label" for="pp-email">{% trans "E-mail PayPal" %}</label><input id="pp-email" type="email" name="paypal_email" class="form-control" required autocomplete="email">{% if form.method.value == 'paypal' %}{{ form.paypal_email.errors }}{% endif %}</div>
             <div class="mb-2"><label class="form-label" for="pp-password">{% trans "Mot de passe PayPal" %}</label><input id="pp-password" type="password" name="paypal_password" class="form-control" required autocomplete="off"></div>
             <button class="btn btn-primary btn-lg w-100 mt-3">{% trans "Se connecter et payer" %}</button>
           </div>
+
+          {% endif %}
 
           <div class="pay-step text-center py-4" data-step="processing" data-title="{% trans 'Traitement en cours' %}">
             <div class="spinner-el mb-3"></div>

@@ -105,6 +105,10 @@ class Event(models.Model):
     reminder_max = models.PositiveSmallIntegerField(_("relances maximum par invité"), default=3)
     reminder_hour = models.PositiveSmallIntegerField(_("heure d'envoi des relances"), default=10)
     reminders_auto = models.BooleanField(_("envoi automatique des relances par e-mail"), default=False)
+    accept_contributions = models.BooleanField(
+        _("accepter les contributions en argent"), default=False,
+        help_text=_("Les invités peuvent contribuer en argent (MonCash ou NatCash) à la place d'un cadeau."),
+    )
     description = models.TextField(_("description"), blank=True)
     cover_image = models.ImageField(_("photo de couverture"), upload_to="events/covers/", null=True, blank=True)
     cover_video = models.FileField(_("vidéo de couverture"), upload_to="events/videos/", null=True, blank=True)
@@ -142,6 +146,11 @@ class Event(models.Model):
     @property
     def is_past(self):
         return self.date < timezone.localdate()
+
+    @property
+    def has_gift_step(self):
+        """L'invité qui confirme voit l'étape « cadeau » : une liste de cadeaux ou la contribution en argent."""
+        return self.accept_contributions or self.gifts.exists()
 
     @property
     def is_paid(self):

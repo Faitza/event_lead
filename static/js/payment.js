@@ -48,6 +48,7 @@
     });
   }
   if (qty) qty.addEventListener("input", syncAmount);
+  form.addEventListener("el:amount", syncAmount);  // la page de contribution change le montant avant d'ouvrir la fenêtre
   syncAmount();
 
   // MonCash : numéro -> code OTP -> confirmation
