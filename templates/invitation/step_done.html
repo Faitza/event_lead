@@ -1,6 +1,6 @@
 {% extends "invitation/base_invitation.html" %}
 {% load i18n %}
-{% block extra_head %}<meta http-equiv="refresh" content="3;url={{ next_url }}">{% endblock %}
+{% block extra_head %}<meta http-equiv="refresh" content="{{ delay }};url={{ next_url }}">{% endblock %}
 {% block inv_content %}
 <div class="text-center d-flex flex-column gap-3 align-items-center">
   <div class="success-check"><i class="bi bi-check-lg"></i></div>
@@ -16,8 +16,10 @@
     {% for c in claims %}<div class="fw-semibold"><i class="bi {{ c.gift.icon_name }} text-primary me-2"></i>{{ c.gift.name }}</div>{% endfor %}
   </div>
   {% endif %}
-  <p class="small text-muted mb-0">{% trans "Redirection automatique vers l'accueil..." %}</p>
+  {% if guest.status == 'confirmed' %}<a href="{{ guest.get_ticket_url }}" class="btn btn-outline-gold w-100"><i class="bi bi-qr-code me-2"></i>{% trans "Voir mon QR code d'entrée" %}</a>{% endif %}
+  <div class="redirect-bar w-100" role="progressbar" aria-label="{% trans 'Redirection' %}" style="--delay:{{ delay }}s"><span></span></div>
+  <p class="small text-muted mb-0">{% if ads_follow %}{% trans "Redirection vers nos partenaires..." %}{% else %}{% trans "Redirection automatique vers l'accueil..." %}{% endif %}</p>
   <a href="{{ next_url }}" class="btn btn-primary">{% trans "Continuer" %}<i class="bi bi-arrow-right ms-2"></i></a>
 </div>
 {% endblock %}
-{% block extra_js %}<script>setTimeout(function () { window.location.href = "{{ next_url|escapejs }}"; }, 2500);</script>{% endblock %}
+{% block extra_js %}<script>setTimeout(function () { window.location.href = "{{ next_url|escapejs }}"; }, {{ delay }}000 - 500);</script>{% endblock %}

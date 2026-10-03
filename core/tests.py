@@ -144,9 +144,10 @@ class InvitationFlowTests(TestCase):
         self.assertTrue(self.guest.wants_gift)
         self.assertIsNotNone(self.guest.replied_at)
         self.assertEqual(self.gift.claims.get().guest, self.guest)
-        # Confirmation -> redirection automatique vers la publicité -> accueil
+        # Confirmation (avec le QR code d'entrée) -> redirection automatique vers la publicité -> accueil
         r = self.client.get(self.url("invitation_done"))
-        self.assertRedirects(r, self.url("invitation_ad", self.ad.pk), fetch_redirect_response=False)
+        self.assertContains(r, self.guest.get_ticket_url())
+        self.assertContains(r, f'url={self.url("invitation_ad", self.ad.pk)}')
         r = self.client.get(self.url("invitation_ad", self.ad.pk))
         self.assertContains(r, reverse("core:landing") + "#affiche")
         self.assertContains(r, "Merci Carla")

@@ -14,6 +14,7 @@
     {% for c in claims %}<div class="fw-semibold"><i class="bi {{ c.gift.icon_name }} text-primary me-2"></i>{{ c.gift.name }}</div>{% endfor %}
   </div>
   {% endif %}
-  <a href="{% url 'core:landing' %}#affiche" class="btn btn-primary">{% trans "Découvrir les événements publics" %}</a>
+  {% if guest.status == 'confirmed' %}<a href="{{ guest.get_ticket_url }}" class="btn btn-primary w-100"><i class="bi bi-qr-code me-2"></i>{% trans "Voir mon QR code d'entrée" %}</a>{% endif %}
+  <a href="{% url 'core:landing' %}#affiche" class="btn btn-outline-primary">{% trans "Découvrir les événements publics" %}</a>
 </div>
 {% endblock %}

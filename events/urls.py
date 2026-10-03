@@ -18,4 +18,7 @@ urlpatterns = [
     path("invitation/<uuid:token>/recapitulatif/", inv.invitation_recap, name="invitation_recap"),
     path("invitation/<uuid:token>/confirmation/", inv.invitation_done, name="invitation_done"),
     path("invitation/<uuid:token>/publicite/<int:ad_id>/", inv.invitation_ad, name="invitation_ad"),
+    path("invitation/<uuid:token>/billet/", inv.invitation_ticket, name="invitation_ticket"),
+    path("invitation/<uuid:token>/billet.png", inv.invitation_ticket_png, name="invitation_ticket_png"),
+    path("entree/<str:code>/", inv.entry_code, name="entry_code"),
 ]

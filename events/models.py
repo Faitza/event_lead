@@ -1,3 +1,4 @@
+import secrets
 import uuid
 from datetime import timedelta
 
@@ -173,6 +174,25 @@ class Event(models.Model):
         }
 
 
+ENTRY_ALPHABET = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789"  # sans I, O, 0 et 1 : faciles à relire à voix haute
+
+
+def new_entry_code():
+    """Code d'entrée de l'invité, par exemple EL-7K4Q-92MD : il est dans le QR code et se saisit à la main."""
+    def pick(n):
+        return "".join(secrets.choice(ENTRY_ALPHABET) for _unused in range(n))
+
+    return f"EL-{pick(4)}-{pick(4)}"
+
+
+def normalize_entry_code(raw):
+    """Accepte « el-7k4q-92md », « EL7K4Q92MD » ou avec des espaces ; renvoie la forme EL-XXXX-XXXX."""
+    letters = "".join(c for c in (raw or "").upper() if c.isalnum())
+    if letters.startswith("EL") and len(letters) == 10:
+        return f"EL-{letters[2:6]}-{letters[6:10]}"
+    return (raw or "").strip().upper()
+
+
 class Guest(models.Model):
     class Status(models.TextChoices):
         PENDING = "pending", _("En attente")
@@ -200,6 +220,9 @@ class Guest(models.Model):
     invitation_sent_at = models.DateTimeField(_("invitation envoyée le"), null=True, blank=True)
     replied_at = models.DateTimeField(_("répondu le"), null=True, blank=True)
     wants_gift = models.BooleanField(_("souhaite offrir un cadeau"), null=True, blank=True)
+    entry_code = models.CharField(_("code d'entrée"), max_length=14, unique=True, editable=False)
+    checked_in_at = models.DateTimeField(_("arrivé le"), null=True, blank=True)
+    added_on_site = models.BooleanField(_("ajouté sur place"), default=False)
     created_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:
@@ -210,8 +233,24 @@ class Guest(models.Model):
     def __str__(self):
         return f"{self.name} ({self.event})"
 
+    def save(self, *args, **kwargs):
+        if not self.entry_code:
+            code = new_entry_code()
+            while Guest.objects.filter(entry_code=code).exists():
+                code = new_entry_code()
+            self.entry_code = code
+        super().save(*args, **kwargs)
+
     def get_invitation_url(self):
         return reverse("events:invitation", args=[self.magic_token])
+
+    def get_ticket_url(self):
+        return reverse("events:invitation_ticket", args=[self.magic_token])
+
+    @property
+    def party_size(self):
+        """Nombre de personnes qui entrent avec ce billet : l'invité et ses accompagnants."""
+        return 1 + self.companions
 
     @property
     def is_locked(self):
@@ -226,6 +265,45 @@ class Guest(models.Model):
             self.Status.MAYBE: "warning",
             self.Status.PENDING: "muted",
         }[self.status]
+
+
+class CheckIn(models.Model):
+    """Journal du pointage à l'entrée : chaque lecture de QR code ou pointage manuel, accepté ou refusé."""
+
+    class Result(models.TextChoices):
+        VALIDATED = "validated", _("Entrée validée")
+        DUPLICATE = "duplicate", _("QR déjà utilisé")
+        UNKNOWN = "unknown", _("QR inconnu")
+        WRONG_EVENT = "wrong_event", _("Autre événement")
+        WALK_IN = "walk_in", _("Ajouté sur place")
+        CANCELLED = "cancelled", _("Pointage annulé")
+
+    class Source(models.TextChoices):
+        QR = "qr", _("QR code")
+        MANUAL = "manual", _("Recherche")
+        WALK_IN = "walk_in", _("Sur place")
+
+    REFUSED = (Result.DUPLICATE, Result.UNKNOWN, Result.WRONG_EVENT)
+
+    event = models.ForeignKey(Event, on_delete=models.CASCADE, related_name="check_ins", verbose_name=_("événement"))
+    guest = models.ForeignKey(Guest, on_delete=models.SET_NULL, null=True, blank=True, related_name="check_ins", verbose_name=_("invité"))
+    code = models.CharField(_("code lu"), max_length=60, blank=True)
+    result = models.CharField(_("résultat"), max_length=12, choices=Result.choices)
+    source = models.CharField(_("origine"), max_length=10, choices=Source.choices, default=Source.QR)
+    scanned_by = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, null=True, blank=True, related_name="+")
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ["-created_at", "-pk"]
+        verbose_name = _("pointage")
+        verbose_name_plural = _("pointages")
+
+    def __str__(self):
+        return f"{self.event} : {self.get_result_display()}"
+
+    @property
+    def is_refused(self):
+        return self.result in self.REFUSED
 
 
 class EventEvaluation(models.Model):

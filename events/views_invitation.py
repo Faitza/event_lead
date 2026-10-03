@@ -1,7 +1,9 @@
 """Flux invité multi-étapes accessible par lien magique (section 6)."""
+from urllib.parse import quote
+
 from django.contrib import messages
 from django.db.models import F
-from django.http import JsonResponse
+from django.http import HttpResponse, JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
 from django.utils.translation import gettext as _
@@ -18,8 +20,11 @@ from gifts.services import (
     gifts_for_guest,
 )
 
+from . import checkin
 from .forms import GiftSelectionForm, GiftWishForm, PresenceForm
-from .models import Event, Guest
+from .messaging import supported_language
+from .models import Event, Guest, normalize_entry_code
+from .qr import entry_url, qr_png, qr_svg
 
 
 def _session_key(guest):
@@ -210,15 +215,18 @@ def _after_ads_url():
 
 
 def invitation_done(request, token):
-    """Étape 5 : après la réponse, redirection automatique vers une publication puis l'accueil."""
+    """Étape 5 : « c'est confirmé » (avec le QR code d'entrée), puis une publication et l'accueil."""
     guest = _load_guest(token)
     if guest.replied_at is None:
         return redirect("events:invitation", token=token)
     ads = _ad_sequence()
-    if ads:
-        return redirect("events:invitation_ad", token=token, ad_id=ads[0])
+    next_url = reverse("events:invitation_ad", args=[token, ads[0]]) if ads else _after_ads_url()
     claims = GiftClaim.objects.filter(guest=guest).select_related("gift")
-    return render(request, "invitation/step_done.html", _ctx(guest, "confirmation", next_url=_after_ads_url(), claims=claims))
+    # Un invité présent a le temps de toucher « Voir mon QR code d'entrée » avant la redirection
+    delay = 8 if guest.status == Guest.Status.CONFIRMED else 3
+    return render(request, "invitation/step_done.html", _ctx(
+        guest, "confirmation", next_url=next_url, claims=claims, delay=delay, ads_follow=bool(ads),
+    ))
 
 
 def invitation_ad(request, token, ad_id):
@@ -236,4 +244,53 @@ def invitation_ad(request, token, ad_id):
     return render(request, "ads/ad_page.html", {
         "ad": ad, "guest": guest, "next_url": next_url,
         "position": position + 1, "total": len(ads),
+    })
+
+
+# ---------------------------------------------------------------------------
+# QR code d'entrée
+# ---------------------------------------------------------------------------
+
+
+def _ticket_guest(token):
+    """Le billet d'entrée n'existe que pour un invité qui a confirmé sa présence."""
+    guest = _load_guest(token)
+    return guest if guest.status == Guest.Status.CONFIRMED and guest.replied_at else None
+
+
+def invitation_ticket(request, token):
+    guest = _ticket_guest(token)
+    if guest is None:
+        return redirect("events:invitation", token=token)
+    link = request.build_absolute_uri(guest.get_ticket_url()) + f"?lang={supported_language(guest.language)}"
+    share = _("Mon billet d'entrée pour « %(title)s » : %(url)s") % {"title": guest.event.title, "url": link}
+    qr = qr_svg(entry_url(request, guest), label=_("QR code d'entrée de %(name)s") % {"name": guest.name})
+    return render(request, "invitation/ticket.html", {
+        "guest": guest, "event": guest.event, "qr": qr, "party": checkin.party_text(guest),
+        "whatsapp_url": f"https://wa.me/?text={quote(share)}",
+    })
+
+
+@require_GET
+def invitation_ticket_png(request, token):
+    guest = _ticket_guest(token)
+    if guest is None:
+        return redirect("events:invitation", token=token)
+    response = HttpResponse(qr_png(entry_url(request, guest)), content_type="image/png")
+    response["Content-Disposition"] = f'attachment; filename="billet-{guest.entry_code}.png"'
+    return response
+
+
+def entry_code(request, code):
+    """Adresse contenue dans le QR code. Public : rien sur l'invité. Équipe EventLead : validation de l'entrée."""
+    code = normalize_entry_code(code)
+    guest = Guest.objects.select_related("event").filter(entry_code=code).first()
+    user = request.user
+    staff = user.is_authenticated and user.is_admin_role
+    result = None
+    if staff and guest is not None and request.method == "POST":
+        result = checkin.describe(checkin.scan(guest.event, code, user))
+    return render(request, "invitation/entry_code.html", {
+        "guest": guest if staff else None, "code": code, "staff": staff, "known": guest is not None, "result": result,
+        "event": guest.event if guest and staff else None,
     })

@@ -1,0 +1,29 @@
+{% load i18n %}
+<div class="el-card">
+  <div class="el-card-header">
+    <h2><span class="live-dot me-2"></span>{% trans "Dernières arrivées" %}</h2>
+    <div class="chip-tabs" role="group" aria-label="{% trans 'Filtrer' %}">
+      <button type="button" class="active" data-filter="all">{% trans "Tous" %}</button>
+      <button type="button" data-filter="refused">{% blocktranslate trimmed with n=refused_count %}Refusés · {{ n }}{% endblocktranslate %}</button>
+      <button type="button" data-filter="walk_in">{% blocktranslate trimmed with n=on_site_count %}Sur place · {{ n }}{% endblocktranslate %}</button>
+    </div>
+  </div>
+  {% if recent %}
+  <div class="table-wrap"><table class="table table-el checkin-table">
+    <thead><tr><th>{% trans "Heure" %}</th><th>{% trans "Invité" %}</th><th>{% trans "Résultat" %}</th><th class="text-end"><span class="visually-hidden">{% trans "Actions" %}</span></th></tr></thead>
+    <tbody>
+    {% for c in recent %}
+      <tr data-result="{{ c.result }}" data-refused="{% if c.is_refused %}1{% else %}0{% endif %}">
+        <td class="text-nowrap">{{ c.created_at|time:_("H\\hi") }}</td>
+        <td>{% if c.guest %}<strong>{{ c.guest.name }}</strong>{% if c.guest.companions %} <span class="text-muted">+{{ c.guest.companions }}</span>{% endif %}{% else %}<span class="text-muted">{{ c.code|default:"-" }}</span>{% endif %}</td>
+        <td><span class="badge-el badge-{% if c.result == 'validated' or c.result == 'walk_in' %}success{% elif c.result == 'duplicate' %}warning{% elif c.result == 'cancelled' %}muted{% else %}danger{% endif %}">{{ c.get_result_display }}</span></td>
+        <td class="text-end">{% if c.guest.checked_in_at %}{% if c.result == 'validated' or c.result == 'walk_in' %}<button type="button" class="btn btn-sm btn-light" data-cancel="{{ c.guest.pk }}" title="{% trans 'Annuler ce pointage' %}"><i class="bi bi-arrow-counterclockwise"></i><span class="visually-hidden">{% trans "Annuler ce pointage" %}</span></button>{% endif %}{% endif %}</td>
+      </tr>
+    {% endfor %}
+    </tbody>
+  </table></div>
+  <p class="empty-filter small text-muted px-4 pb-3 mb-0" hidden>{% trans "Rien à afficher pour ce filtre." %}</p>
+  {% else %}
+  <div class="empty-state small"><i class="bi bi-qr-code-scan"></i><p class="mt-2 mb-0">{% trans "Aucune arrivée pour l'instant. Lisez un QR code pour commencer." %}</p></div>
+  {% endif %}
+</div>

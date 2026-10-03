@@ -1,0 +1,14 @@
+{% load i18n %}
+<div class="row g-3 mb-3">
+  <div class="col-6 col-xl-3"><div class="el-card stat-card"><span class="icon-bubble success"><i class="bi bi-person-check"></i></span><div><div class="value">{{ stats.arrived }}</div><div class="label">{% trans "arrivés" %}{% if stats.people != stats.arrived %} &middot; {% blocktranslate trimmed count counter=stats.people %}{{ counter }} personne{% plural %}{{ counter }} personnes{% endblocktranslate %}{% endif %}</div></div></div></div>
+  <div class="col-6 col-xl-3"><div class="el-card stat-card"><span class="icon-bubble"><i class="bi bi-hourglass-split"></i></span><div><div class="value">{{ stats.expected }}</div><div class="label">{% trans "attendus, pas encore arrivés" %}</div></div></div></div>
+  <div class="col-6 col-xl-3"><div class="el-card stat-card"><span class="icon-bubble danger"><i class="bi bi-slash-circle"></i></span><div><div class="value">{{ stats.refused }}</div><div class="label">{% trans "QR refusés (déjà utilisés ou inconnus)" %}</div></div></div></div>
+  <div class="col-6 col-xl-3"><div class="el-card stat-card"><span class="icon-bubble warning"><i class="bi bi-person-plus"></i></span><div><div class="value">{{ stats.on_site }}</div><div class="label">{% trans "ajoutés sur place, hors liste" %}</div></div></div></div>
+</div>
+<div class="el-card el-card-body mb-4">
+  <div class="d-flex justify-content-between align-items-baseline gap-3 mb-2">
+    <span class="fw-semibold">{% blocktranslate trimmed with arrived=stats.arrived confirmed=stats.confirmed %}{{ arrived }} sur {{ confirmed }} invités confirmés{% endblocktranslate %}</span>
+    <span class="disp fs-4" style="color:var(--el-primary)">{{ stats.percent }} %</span>
+  </div>
+  <div class="progress-el gold" role="progressbar" aria-valuenow="{{ stats.percent }}" aria-valuemin="0" aria-valuemax="100"><span style="width:{{ stats.percent }}%"></span></div>
+</div>

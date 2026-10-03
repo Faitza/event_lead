@@ -1,0 +1,84 @@
+{% extends "dashboard/base_dashboard.html" %}
+{% load static %}
+{% load i18n %}
+{% block title %}{% blocktranslate trimmed with titre=event.title %}Pointage - {{ titre }}{% endblocktranslate %}{% endblock %}
+{% block dash_content %}
+<div id="checkin"
+     data-live-url="{% url 'dashboard:checkin_live' event.pk %}"
+     data-scan-url="{% url 'dashboard:checkin_scan' event.pk %}"
+     data-manual-url="{% url 'dashboard:checkin_manual' event.pk %}"
+     data-search-url="{% url 'dashboard:checkin_search' event.pk %}"
+     data-walk-in-url="{% url 'dashboard:checkin_walk_in' event.pk %}"
+     data-cancel-url="{% url 'dashboard:checkin_cancel' event.pk 0 %}"
+     data-msg-start="{% trans 'Activer la caméra' %}"
+     data-msg-stop="{% trans 'Arrêter la caméra' %}"
+     data-msg-denied="{% trans 'La caméra n\'est pas accessible. Autorisez-la dans le navigateur, ou cherchez l\'invité par son nom.' %}"
+     data-msg-unsupported="{% trans 'Ce navigateur ne peut pas ouvrir la caméra (il faut une adresse sécurisée https). Cherchez l\'invité par son nom ou son code.' %}"
+     data-msg-none="{% trans 'Aucun invité trouvé.' %}"
+     data-msg-arrived="{% trans 'Arrivé à' %}"
+     data-msg-check="{% trans 'Pointer' %}"
+     data-msg-error="{% trans 'Une erreur est survenue. Réessayez.' %}"
+     data-msg-confirm-cancel="{% trans 'Annuler ce pointage ? L\'invité redeviendra attendu.' %}"
+     data-msg-cancelled="{% trans 'Pointage annulé.' %}">
+  {% csrf_token %}
+  <div class="page-head">
+    <div>
+      <span class="eyebrow-row"><span class="diamond"></span><span class="eyebrow">{% trans "Jour J" %}</span></span>
+      <h1>{% trans "Pointage de l'entrée" %}</h1>
+      <p>{{ event.title }} &middot; {{ event.date|date:_("l j F Y") }} &middot; {{ event.time|time:_("H\\hi") }}</p>
+    </div>
+    <div class="d-flex flex-wrap gap-2 align-items-center">
+      {% if is_today %}<span class="badge-el badge-success"><span class="live-dot me-1"></span>{% trans "Pointage ouvert" %}</span>{% endif %}
+      <button type="button" class="btn btn-light" id="fullscreen-toggle" hidden><i class="bi bi-arrows-fullscreen me-2"></i>{% trans "Plein écran" %}</button>
+      <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#walk-in-modal"><i class="bi bi-person-plus me-2"></i>{% trans "Ajouter un invité" %}</button>
+    </div>
+  </div>
+  {% if not is_today %}<div class="notice notice-warning mb-4"><i class="bi bi-info-circle"></i><div>{% trans "Cet événement n'a pas lieu aujourd'hui. Le pointage fonctionne quand même, pratique pour essayer avant le jour J." %}</div></div>{% endif %}
+
+  <div id="stats-slot">{% include "dashboard/checkin/_stats.html" %}</div>
+
+  <div class="row g-4">
+    <div class="col-xl-5">
+      <div class="el-card">
+        <div class="el-card-header flex-wrap gap-2"><h2><i class="bi bi-qr-code-scan me-2"></i>{% trans "Lire un QR code" %}</h2><button type="button" class="btn btn-sm btn-primary text-nowrap" id="scan-toggle">{% trans "Activer la caméra" %}</button></div>
+        <div class="el-card-body">
+          <div class="scan-box" id="scan-box">
+            <video id="scan-video" playsinline muted></video>
+            <div class="scan-frame" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
+            <p class="scan-hint" id="scan-hint">{% trans "Placez le QR code dans le cadre" %}</p>
+          </div>
+          <div class="scan-result" id="scan-result" aria-live="polite" hidden></div>
+          <div class="mt-4">
+            <label class="form-label" for="guest-search">{% trans "Chercher un invité" %}</label>
+            <div><input type="search" class="form-control" id="guest-search" placeholder="{% trans 'Nom ou code EL-XXXX-XXXX' %}" autocomplete="off"></div>
+            <ul class="search-results list-unstyled mb-0" id="search-results" aria-live="polite"></ul>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-xl-7" id="recent-slot">{% include "dashboard/checkin/_recent.html" %}</div>
+  </div>
+
+  <div class="modal fade" id="walk-in-modal" tabindex="-1" aria-labelledby="walk-in-title" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered"><div class="modal-content">
+      <form id="walk-in-form" novalidate>
+        <div class="modal-header border-0"><h2 class="modal-title h5" id="walk-in-title">{% trans "Ajouter un invité sur place" %}</h2><button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="{% trans 'Fermer' %}"></button></div>
+        <div class="modal-body">
+          <p class="small text-muted">{% trans "Pour une personne arrivée sans être sur la liste : elle est ajoutée comme présente et pointée tout de suite." %}</p>
+          <div class="mb-3"><label class="form-label" for="walk-name">{% trans "Nom" %}</label><input class="form-control" id="walk-name" name="name" maxlength="150" required></div>
+          <div class="row">
+            <div class="col-5 mb-3"><label class="form-label" for="walk-comp">{% trans "Accompagnants" %}</label><input class="form-control" id="walk-comp" name="companions" type="number" min="0" max="20" value="0"></div>
+            <div class="col-7 mb-3"><label class="form-label" for="walk-phone">{% trans "Téléphone (optionnel)" %}</label><input class="form-control" id="walk-phone" name="phone" maxlength="30" placeholder="+509 ..."></div>
+          </div>
+          <div class="notice notice-danger" id="walk-error" hidden></div>
+        </div>
+        <div class="modal-footer border-0"><button type="button" class="btn btn-light" data-bs-dismiss="modal">{% trans "Annuler" %}</button><button type="submit" class="btn btn-primary"><i class="bi bi-check2 me-2"></i>{% trans "Ajouter et pointer" %}</button></div>
+      </form>
+    </div></div>
+  </div>
+</div>
+{% endblock %}
+{% block extra_js %}
+<script src="https://cdn.jsdelivr.net/npm/jsqr@1.4.0/dist/jsQR.js" defer></script>
+<script src="{% static 'js/checkin.js' %}" defer></script>
+{% endblock %}

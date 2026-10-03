@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% block title %}{% trans "Billet d'entrée" %}{% endblock %}
+{% block content %}
+<section class="section"><div class="container text-center" style="max-width:520px">
+  {% if staff and known %}
+    <span class="icon-bubble lg mb-3"><i class="bi bi-qr-code-scan"></i></span>
+    <h1 class="mb-2">{{ guest.name }}</h1>
+    <p class="text-muted mb-1">{{ event.title }} &middot; {{ event.date|date:_("j F Y") }}</p>
+    <p class="mb-3"><span class="badge-el badge-{{ guest.status_badge }}">{{ guest.get_status_display }}</span> <span class="small text-muted ms-2">{{ guest.entry_code }}</span></p>
+    {% if result %}
+      <div class="notice notice-{% if result.tone == 'success' %}success{% elif result.tone == 'warning' %}warning{% else %}danger{% endif %} text-start mb-3"><i class="bi bi-{% if result.tone == 'success' %}check-circle{% else %}exclamation-circle{% endif %}"></i><div><strong>{{ result.title }}</strong><div>{{ result.detail }}</div>{% if result.note %}<div class="small">{{ result.note }}</div>{% endif %}</div></div>
+      <a href="{% url 'dashboard:checkin_event' event.pk %}" class="btn btn-primary">{% trans "Ouvrir le pointage" %}</a>
+    {% elif guest.checked_in_at %}
+      <div class="notice notice-warning text-start mb-3"><i class="bi bi-exclamation-circle"></i><div>{% blocktranslate trimmed with time=guest.checked_in_at|time:_("H\\hi") %}Déjà pointé à {{ time }}.{% endblocktranslate %}</div></div>
+      <a href="{% url 'dashboard:checkin_event' event.pk %}" class="btn btn-primary">{% trans "Ouvrir le pointage" %}</a>
+    {% else %}
+      <form method="post">{% csrf_token %}<button class="btn btn-primary btn-lg"><i class="bi bi-check2-circle me-2"></i>{% trans "Valider l'entrée" %}</button></form>
+    {% endif %}
+  {% elif staff %}
+    <span class="icon-bubble lg mb-3"><i class="bi bi-x-circle"></i></span>
+    <h1 class="mb-3">{% trans "QR inconnu" %}</h1>
+    <p class="text-muted">{% trans "Ce code ne correspond à aucun invité." %}</p>
+  {% else %}
+    <span class="icon-bubble lg mb-3"><i class="bi bi-qr-code"></i></span>
+    <h1 class="mb-3">{% trans "Billet d'entrée EventLead" %}</h1>
+    <p class="text-muted">{% trans "Ce code se présente à l'entrée de l'événement : seule l'équipe à l'entrée peut le valider." %}</p>
+    <a href="{% url 'core:landing' %}" class="btn btn-primary">{% trans "Retour à l'accueil" %}</a>
+  {% endif %}
+</div></section>
+{% endblock %}

@@ -13,6 +13,7 @@
     <a class="side-link {% active '/admin-dashboard/evenements/' %}" href="{% url 'dashboard:event_list' %}"><i class="bi bi-calendar2-event"></i>{% trans "Événements" %}</a>
     <a class="side-link {% active '/admin-dashboard/categories/' %}" href="{% url 'dashboard:category_list' %}"><i class="bi bi-tags"></i>{% trans "Catégories" %}</a>
     <a class="side-link {% active '/admin-dashboard/invites/' %}" href="{% url 'dashboard:guest_list' %}"><i class="bi bi-people"></i>{% trans "Invités" %}</a>
+    <a class="side-link {% active '/admin-dashboard/pointage/' %}" href="{% url 'dashboard:checkin_index' %}"><i class="bi bi-qr-code-scan"></i>{% trans "Pointage" %}</a>
     <a class="side-link {% active '/admin-dashboard/cadeaux/' %}" href="{% url 'dashboard:gift_list' %}"><i class="bi bi-gift"></i>{% trans "Cadeaux" %}</a>
     <div class="nav-section">{% trans "Revenus" %}</div>
     <a class="side-link {% active '/admin-dashboard/publicites/' %}" href="{% url 'dashboard:ad_list' %}"><i class="bi bi-megaphone"></i>{% trans "Publicités" %}</a>
@@ -34,7 +35,7 @@
       </div>
       <div class="d-flex align-items-center gap-2">
         {% include "partials/_language_switcher.html" %}
-        <a href="{% url 'dashboard:event_create' %}" class="btn btn-primary btn-sm"><i class="bi bi-plus-lg me-1"></i>{% trans "Nouvel événement" %}</a>
+        <a href="{% url 'dashboard:event_create' %}" class="btn btn-primary btn-sm text-nowrap" title="{% trans 'Nouvel événement' %}"><i class="bi bi-plus-lg me-1"></i><span class="d-none d-sm-inline">{% trans "Nouvel événement" %}</span><span class="visually-hidden d-sm-none">{% trans "Nouvel événement" %}</span></a>
         <span class="user-pill"><span class="avatar">{{ user.initials }}</span><span class="d-none d-sm-inline">{{ user.display_name }}</span><span class="badge-el badge-primary">Admin</span></span>
       </div>
     </header>

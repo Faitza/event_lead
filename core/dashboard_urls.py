@@ -3,6 +3,7 @@ from django.urls import path
 
 from ads import views_admin as ads_admin
 from events import views_admin as events_admin
+from events import views_checkin as checkin_admin
 from gifts import views_admin as gifts_admin
 from payments import views as payments_views
 
@@ -40,6 +41,15 @@ urlpatterns = [
     path("invites/<int:pk>/envoye/", events_admin.guest_mark_sent, name="guest_mark_sent"),
     path("invites/export.csv", events_admin.guest_export_csv, name="guest_export_csv"),
     path("invites/export.pdf", events_admin.guest_export_pdf, name="guest_export_pdf"),
+    # Pointage à l'entrée (jour J)
+    path("pointage/", checkin_admin.checkin_index, name="checkin_index"),
+    path("pointage/<int:pk>/", checkin_admin.checkin_event, name="checkin_event"),
+    path("pointage/<int:pk>/live/", checkin_admin.checkin_live, name="checkin_live"),
+    path("pointage/<int:pk>/scan/", checkin_admin.checkin_scan, name="checkin_scan"),
+    path("pointage/<int:pk>/manuel/", checkin_admin.checkin_manual, name="checkin_manual"),
+    path("pointage/<int:pk>/chercher/", checkin_admin.checkin_search, name="checkin_search"),
+    path("pointage/<int:pk>/ajouter/", checkin_admin.checkin_walk_in, name="checkin_walk_in"),
+    path("pointage/<int:pk>/<int:guest_pk>/annuler/", checkin_admin.checkin_cancel, name="checkin_cancel"),
     # Cadeaux
     path("cadeaux/", gifts_admin.gift_list, name="gift_list"),
     path("cadeaux/nouveau/", gifts_admin.gift_create, name="gift_create"),

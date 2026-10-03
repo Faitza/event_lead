@@ -1,0 +1,13 @@
+{% load i18n %}
+<div class="col-md-6 col-xl-4">
+  <a href="{% url 'dashboard:checkin_event' e.pk %}" class="el-card el-card-body d-block text-decoration-none h-100 checkin-card">
+    <div class="d-flex justify-content-between align-items-start gap-2 mb-2">
+      <strong class="text-dark">{{ e.title }}</strong>
+      {% if e.date == today %}<span class="badge-el badge-success">{% trans "Aujourd'hui" %}</span>{% endif %}
+    </div>
+    <div class="small text-muted mb-3">{{ e.date|date:_("j F Y") }} &middot; {{ e.time|time:_("H\\hi") }}</div>
+    <div class="d-flex justify-content-between small mb-1"><span>{% blocktranslate trimmed with arrived=e.arrived confirmed=e.confirmed %}{{ arrived }} sur {{ confirmed }} invités confirmés{% endblocktranslate %}</span></div>
+    <div class="progress-el gold"><span style="width:{% if e.confirmed %}{% widthratio e.arrived e.confirmed 100 %}{% else %}0{% endif %}%"></span></div>
+    <span class="btn btn-sm btn-soft mt-3"><i class="bi bi-qr-code-scan me-2"></i>{% trans "Ouvrir le pointage" %}</span>
+  </a>
+</div>
