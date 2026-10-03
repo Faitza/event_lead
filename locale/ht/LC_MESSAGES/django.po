@@ -73,7 +73,7 @@ msgstr "adrès imèl"
 msgid "rôle"
 msgstr "wòl"
 
-#: accounts/models.py:15 core/models.py:27 events/models.py:220
+#: accounts/models.py:15 core/models.py:27 events/models.py:248
 msgid "téléphone"
 msgstr "telefòn"
 
@@ -727,11 +727,11 @@ msgid_plural "This password is too short. It must contain at least %(min_length)
 msgstr[0] "Modpas sa a two kout. Li dwe gen omwen %(min_length)d karaktè."
 msgstr[1] "Modpas sa a two kout. Li dwe gen omwen %(min_length)d karaktè."
 
-#: core/models.py:9 core/models.py:25 core/models.py:57 events/models.py:52 events/models.py:218
+#: core/models.py:9 core/models.py:25 core/models.py:57 events/models.py:52 events/models.py:209 events/models.py:246
 msgid "nom"
 msgstr "non"
 
-#: core/models.py:10 events/models.py:338
+#: core/models.py:10 events/models.py:374
 msgid "note"
 msgstr "nòt"
 
@@ -743,7 +743,7 @@ msgstr "opinyon"
 msgid "publié"
 msgstr "pibliye"
 
-#: core/models.py:26 events/models.py:219
+#: core/models.py:26 events/models.py:247
 msgid "email"
 msgstr "imèl"
 
@@ -795,7 +795,7 @@ msgstr "imèl oswa telefòn"
 msgid "sujet"
 msgstr "sijè"
 
-#: core/models.py:61 events/models.py:92 events/models.py:221 payments/models.py:43
+#: core/models.py:61 events/models.py:92 events/models.py:249 payments/models.py:43
 msgid "statut"
 msgstr "estati"
 
@@ -1017,7 +1017,7 @@ msgstr "Ou bezwen yon nimewo pou voye sou WhatsApp."
 msgid "Cet événement a atteint son nombre maximum d'invités (%(max)d)."
 msgstr "Evènman sa a rive nan kantite maksimòm envite li yo (%(max)d)."
 
-#: events/forms.py:120 events/models.py:207
+#: events/forms.py:120 events/models.py:235
 msgid "Peut-être"
 msgstr "Petèt"
 
@@ -1209,147 +1209,159 @@ msgstr "kreye pa"
 msgid "créé le"
 msgstr "dat kreyasyon"
 
-#: events/models.py:129 events/models.py:213 events/models.py:312 gifts/models.py:42 payments/models.py:30
+#: events/models.py:129 events/models.py:207 events/models.py:241 events/models.py:348 gifts/models.py:42 payments/models.py:30
 msgid "événement"
 msgstr "evènman"
 
-#: events/models.py:204 payments/models.py:20
+#: events/models.py:208
+msgid "numéro"
+msgstr "nimewo"
+
+#: events/models.py:217 events/models.py:261
+msgid "table"
+msgstr "tab"
+
+#: events/models.py:226
+msgid "Table %(n)d"
+msgstr "Tab %(n)d"
+
+#: events/models.py:232 payments/models.py:20
 msgid "En attente"
 msgstr "Ap tann"
 
-#: events/models.py:205
+#: events/models.py:233
 msgid "Présent"
 msgstr "Prezan"
 
-#: events/models.py:206
+#: events/models.py:234
 msgid "Absent"
 msgstr "Absan"
 
-#: events/models.py:210
+#: events/models.py:238
 msgid "Email"
 msgstr "Imèl"
 
-#: events/models.py:216
+#: events/models.py:244
 msgid "compte lié"
 msgstr "kont ki lye"
 
-#: events/models.py:223
+#: events/models.py:251
 msgid "canal d'envoi"
 msgstr "chanèl pou voye"
 
-#: events/models.py:224
+#: events/models.py:252
 msgid "langue de l'invitation"
 msgstr "lang envitasyon an"
 
-#: events/models.py:225
+#: events/models.py:253
 msgid "lien magique"
 msgstr "lyen majik"
 
-#: events/models.py:226
+#: events/models.py:254
 msgid "invitation envoyée le"
 msgstr "dat envitasyon an te voye"
 
-#: events/models.py:227
+#: events/models.py:255
 msgid "répondu le"
 msgstr "dat repons"
 
-#: events/models.py:228
+#: events/models.py:256
 msgid "souhaite offrir un cadeau"
 msgstr "vle bay yon kado"
 
-#: events/models.py:229
+#: events/models.py:257
 msgid "code d'entrée"
 msgstr "kòd antre"
 
-#: events/models.py:230
+#: events/models.py:258
 msgid "arrivé le"
 msgstr "rive le"
 
-#: events/models.py:231
+#: events/models.py:259
 msgid "ajouté sur place"
 msgstr "ajoute sou plas"
 
-#: events/models.py:236 events/models.py:279 events/models.py:313 gifts/models.py:79 payments/models.py:33
+#: events/models.py:267 events/models.py:315 events/models.py:349 gifts/models.py:79 payments/models.py:33
 msgid "invité"
 msgstr "envite"
 
-#: events/models.py:280
+#: events/models.py:316
 msgid "canal"
 msgstr "chanèl"
 
-#: events/models.py:283
+#: events/models.py:319
 msgid "envoyée le"
 msgstr "voye le"
 
-#: events/models.py:287
+#: events/models.py:323
 msgid "relance"
 msgstr "rapèl"
 
-#: events/models.py:288
+#: events/models.py:324
 msgid "relances"
 msgstr "rapèl"
 
-#: events/models.py:298
+#: events/models.py:334
 msgid "Entrée validée"
 msgstr "Antre valide"
 
-#: events/models.py:299
+#: events/models.py:335
 msgid "QR déjà utilisé"
 msgstr "Kòd QR deja itilize"
 
-#: events/models.py:301
+#: events/models.py:337
 msgid "Autre événement"
 msgstr "Lòt evènman"
 
-#: events/models.py:302
+#: events/models.py:338
 msgid "Ajouté sur place"
 msgstr "Ajoute sou plas"
 
-#: events/models.py:303
+#: events/models.py:339
 msgid "Pointage annulé"
 msgstr "Kontwòl anile"
 
-#: events/models.py:306
+#: events/models.py:342
 msgid "QR code"
 msgstr "Kòd QR"
 
-#: events/models.py:307
+#: events/models.py:343
 msgid "Recherche"
 msgstr "Rechèch"
 
-#: events/models.py:308
+#: events/models.py:344
 msgid "Sur place"
 msgstr "Sou plas"
 
-#: events/models.py:314
+#: events/models.py:350
 msgid "code lu"
 msgstr "kòd ki li"
 
-#: events/models.py:315
+#: events/models.py:351
 msgid "résultat"
 msgstr "rezilta"
 
-#: events/models.py:316
+#: events/models.py:352
 msgid "origine"
 msgstr "orijin"
 
-#: events/models.py:322
+#: events/models.py:358
 msgid "pointage"
 msgstr "kontwòl antre"
 
-#: events/models.py:323
+#: events/models.py:359
 msgid "pointages"
 msgstr "kontwòl antre yo"
 
-#: events/models.py:339
+#: events/models.py:375
 msgid "commentaire"
 msgstr "kòmantè"
 
-#: events/models.py:344
+#: events/models.py:380
 msgid "évaluation"
 msgstr "evalyasyon"
 
-#: events/models.py:345
+#: events/models.py:381
 msgid "évaluations"
 msgstr "evalyasyon"
 
@@ -1384,6 +1396,50 @@ msgstr "Imèl pou %(name)s pa t kapab pati. Eseye ankò pita."
 #: events/reminders.py:235 events/reminders.py:228
 msgid "Réglages invalides."
 msgstr "Règleman yo pa valab."
+
+#: events/seating.py:81
+msgid "Cette table n'existe plus."
+msgstr "Tab sa a pa egziste ankò."
+
+#: events/seating.py:97
+msgid "Cet invité n'existe plus."
+msgstr "Envite sa a pa egziste ankò."
+
+#: events/seating.py:99
+msgid "%(name)s n'a pas confirmé sa présence : pas de place à table."
+msgstr "%(name)s pa konfime prezans li : pa gen plas nan tab."
+
+#: events/seating.py:107
+msgid "%(label)s n'a plus assez de places : %(free)d libre, il en faut %(need)d pour %(name)s et ses accompagnants."
+msgid_plural "%(label)s n'a plus assez de places : %(free)d libres, il en faut %(need)d pour %(name)s et ses accompagnants."
+msgstr[0] "%(label)s pa gen ase plas : %(free)d lib, ou bezwen %(need)d pou %(name)s ak moun k ap akonpanye l yo."
+msgstr[1] "%(label)s pa gen ase plas : %(free)d lib, ou bezwen %(need)d pou %(name)s ak moun k ap akonpanye l yo."
+
+#: events/seating.py:121
+msgid "Indiquez un nombre de places."
+msgstr "Antre kantite plas yo."
+
+#: events/seating.py:123
+msgid "Une table a entre 1 et %(max)d places."
+msgstr "Yon tab gen ant 1 ak %(max)d plas."
+
+#: events/seating.py:138 events/seating.py:153
+msgid "Un événement a au plus %(max)d tables."
+msgstr "Yon evènman gen pi plis %(max)d tab."
+
+#: events/seating.py:146
+msgid "Indiquez un nombre de tables."
+msgstr "Antre kantite tab yo."
+
+#: events/seating.py:148
+msgid "Choisissez entre 1 et %(max)d tables."
+msgstr "Chwazi ant 1 ak %(max)d tab."
+
+#: events/seating.py:166
+msgid "%(label)s accueille déjà %(n)d personne : retirez des invités avant de réduire les places."
+msgid_plural "%(label)s accueille déjà %(n)d personnes : retirez des invités avant de réduire les places."
+msgstr[0] "%(label)s deja gen %(n)d moun : retire envite anvan ou diminye plas yo."
+msgstr[1] "%(label)s deja gen %(n)d moun : retire envite anvan ou diminye plas yo."
 
 #: events/views.py:29
 msgid "Événement introuvable."
@@ -1552,6 +1608,54 @@ msgstr[1] "%(n)d imèl pa t kapab pati."
 #: events/views_reminders.py:134
 msgid "Aucune relance à envoyer pour le moment."
 msgstr "Pa gen rapèl pou voye pou kounye a."
+
+#: events/views_seating.py:83
+msgid "%(name)s est retiré(e) de sa table."
+msgstr "%(name)s retire sou tab li a."
+
+#: events/views_seating.py:84
+msgid "%(name)s est placé(e) à la %(label)s."
+msgstr "%(name)s gen plas nan %(label)s."
+
+#: events/views_seating.py:96
+msgid "%(label)s ajoutée."
+msgstr "%(label)s ajoute."
+
+#: events/views_seating.py:109
+msgid "%(n)d table créée."
+msgid_plural "%(n)d tables créées."
+msgstr[0] "%(n)d tab kreye."
+msgstr[1] "%(n)d tab kreye."
+
+#: events/views_seating.py:121
+msgid "%(label)s enregistrée."
+msgstr "%(label)s anrejistre."
+
+#: events/views_seating.py:134
+msgid "%(label)s supprimée : %(n)d invité retourne dans « Sans table »."
+msgid_plural "%(label)s supprimée : %(n)d invités retournent dans « Sans table »."
+msgstr[0] "%(label)s siprime : %(n)d envite tounen nan « San tab »."
+msgstr[1] "%(label)s siprime : %(n)d envite tounen nan « San tab »."
+
+#: events/views_seating.py:138
+msgid "%(label)s supprimée."
+msgstr "%(label)s siprime."
+
+#: events/views_seating.py:150
+msgid "%(n)d invité placé."
+msgid_plural "%(n)d invités placés."
+msgstr[0] "%(n)d envite gen plas."
+msgstr[1] "%(n)d envite gen plas."
+
+#: events/views_seating.py:152
+msgid "%(n)d invité n'a pas trouvé de place : ajoutez une table."
+msgid_plural "%(n)d invités n'ont pas trouvé de place : ajoutez une table."
+msgstr[0] "%(n)d envite pa jwenn plas : ajoute yon tab."
+msgstr[1] "%(n)d envite pa jwenn plas : ajoute yon tab."
+
+#: events/views_seating.py:156
+msgid "Personne à placer pour le moment."
+msgstr "Pa gen moun pou plase pou kounye a."
 
 #: gifts/forms.py:13
 msgid "Nom du cadeau"
@@ -1885,7 +1989,7 @@ msgstr "Dat"
 msgid "Ma réponse"
 msgstr "Repons mwen"
 
-#: templates/accounts/guest_space.html:20 templates/dashboard/checkin/_event_card.html:8 templates/dashboard/guests/export_pdf.html:15 templates/dashboard/help/list.html:29 templates/dashboard/reminders/_event_card.html:8 templates/events/organizer_portal.html:16
+#: templates/accounts/guest_space.html:20 templates/dashboard/checkin/_event_card.html:8 templates/dashboard/guests/export_pdf.html:15 templates/dashboard/help/list.html:29 templates/dashboard/reminders/_event_card.html:8 templates/dashboard/seating/_event_card.html:8
 msgid "j F Y"
 msgstr "j F Y"
 
@@ -2427,7 +2531,7 @@ msgstr "Li parèt ak yon konte a rebou anvan envite a ka pase l."
 msgid "Retour"
 msgstr "Retounen"
 
-#: templates/dashboard/ads/list.html:4 templates/dashboard/base_dashboard.html:20
+#: templates/dashboard/ads/list.html:4 templates/dashboard/base_dashboard.html:21
 msgid "Publicités"
 msgstr "Piblisite"
 
@@ -2523,55 +2627,59 @@ msgstr "Kontwòl antre"
 msgid "Relances"
 msgstr "Rapèl"
 
-#: templates/dashboard/base_dashboard.html:18 templates/dashboard/events/list.html:25 templates/dashboard/gifts/list.html:4 templates/dashboard/guests/export_pdf.html:17 templates/dashboard/guests/list.html:28 templates/invitation/step_recap.html:13
+#: templates/dashboard/base_dashboard.html:18 templates/dashboard/seating/index.html:3 templates/dashboard/seating/index.html:6 templates/dashboard/seating/print.html:36
+msgid "Plan de table"
+msgstr "Plan tab yo"
+
+#: templates/dashboard/base_dashboard.html:19 templates/dashboard/events/list.html:25 templates/dashboard/gifts/list.html:4 templates/dashboard/guests/export_pdf.html:17 templates/dashboard/guests/list.html:28 templates/invitation/step_recap.html:13
 msgid "Cadeaux"
 msgstr "Kado"
 
-#: templates/dashboard/base_dashboard.html:19
+#: templates/dashboard/base_dashboard.html:20
 msgid "Revenus"
 msgstr "Revni"
 
-#: templates/dashboard/base_dashboard.html:21 templates/dashboard/payments/history.html:4
+#: templates/dashboard/base_dashboard.html:22 templates/dashboard/payments/history.html:4
 msgid "Paiements"
 msgstr "Peman"
 
-#: templates/dashboard/base_dashboard.html:22
+#: templates/dashboard/base_dashboard.html:23
 msgid "Communauté"
 msgstr "Kominote"
 
-#: templates/dashboard/base_dashboard.html:23 templates/dashboard/inbox.html:3 templates/dashboard/inbox.html:5
+#: templates/dashboard/base_dashboard.html:24 templates/dashboard/inbox.html:3 templates/dashboard/inbox.html:5
 msgid "Messages et avis"
 msgstr "Mesaj ak opinyon"
 
-#: templates/dashboard/base_dashboard.html:24 templates/dashboard/help/list.html:3 templates/dashboard/help/list.html:6
+#: templates/dashboard/base_dashboard.html:25 templates/dashboard/help/list.html:3 templates/dashboard/help/list.html:6
 msgid "Demandes d'aide"
 msgstr "Demann èd"
 
-#: templates/dashboard/base_dashboard.html:24
+#: templates/dashboard/base_dashboard.html:25
 msgid "Demandes nouvelles"
 msgstr "Nouvo demann"
 
-#: templates/dashboard/base_dashboard.html:25
+#: templates/dashboard/base_dashboard.html:26
 msgid "Back-office Django"
 msgstr "Back-office Django"
 
-#: templates/dashboard/base_dashboard.html:26
+#: templates/dashboard/base_dashboard.html:27
 msgid "Voir le site"
 msgstr "Gade sit la"
 
-#: templates/dashboard/base_dashboard.html:28 templates/partials/_navbar.html:44
+#: templates/dashboard/base_dashboard.html:29 templates/partials/_navbar.html:44
 msgid "Se déconnecter"
 msgstr "Dekonekte"
 
-#: templates/dashboard/base_dashboard.html:34 templates/partials/_navbar.html:16
+#: templates/dashboard/base_dashboard.html:35 templates/partials/_navbar.html:16
 msgid "Menu"
 msgstr "Meni"
 
-#: templates/dashboard/base_dashboard.html:35 templates/dashboard/checkin/event.html:28 templates/dashboard/events/detail.html:17 templates/dashboard/reminders/event.html:20 templates/events/public_detail.html:14 templates/invitation/base_invitation.html:22
+#: templates/dashboard/base_dashboard.html:36 templates/dashboard/checkin/event.html:28 templates/dashboard/events/detail.html:17 templates/dashboard/reminders/event.html:20 templates/dashboard/seating/event.html:22 templates/dashboard/seating/print.html:37
 msgid "l j F Y"
 msgstr "l j F Y"
 
-#: templates/dashboard/base_dashboard.html:39 templates/dashboard/base_dashboard.html:39 templates/dashboard/base_dashboard.html:39 templates/dashboard/events/form.html:4 templates/dashboard/events/form.html:8 templates/dashboard/events/list.html:7
+#: templates/dashboard/base_dashboard.html:40 templates/dashboard/base_dashboard.html:40 templates/dashboard/base_dashboard.html:40 templates/dashboard/events/form.html:4 templates/dashboard/events/form.html:8 templates/dashboard/events/list.html:7
 msgid "Nouvel événement"
 msgstr "Nouvo evènman"
 
@@ -2607,7 +2715,7 @@ msgstr "Lòd"
 msgid "Modifier"
 msgstr "Modifye"
 
-#: templates/dashboard/categories/list.html:21 templates/dashboard/confirm_delete.html:18 templates/dashboard/events/list.html:42 templates/dashboard/gifts/list.html:46 templates/dashboard/guests/list.html:50
+#: templates/dashboard/categories/list.html:21 templates/dashboard/confirm_delete.html:18 templates/dashboard/events/list.html:42 templates/dashboard/gifts/list.html:46 templates/dashboard/guests/list.html:50 templates/dashboard/seating/event.html:56
 msgid "Supprimer"
 msgstr "Siprime"
 
@@ -2721,7 +2829,7 @@ msgstr "Kamera a pa disponib. Otorize l nan navigatè a, oswa chèche envite a p
 msgid "Ce navigateur ne peut pas ouvrir la caméra (il faut une adresse sécurisée https). Cherchez l'invité par son nom ou son code."
 msgstr "Navigatè sa a pa ka louvri kamera a (li bezwen yon adrès sekirize https). Chèche envite a pa non li oswa pa kòd li."
 
-#: templates/dashboard/checkin/event.html:17 templates/dashboard/guests/list.html:57
+#: templates/dashboard/checkin/event.html:17 templates/dashboard/guests/list.html:57 templates/dashboard/seating/_board.html:32 templates/dashboard/seating/event.html:16
 msgid "Aucun invité trouvé."
 msgstr "Pa jwenn okenn envite."
 
@@ -2733,7 +2841,7 @@ msgstr "Rive a"
 msgid "Pointer"
 msgstr "Valide"
 
-#: templates/dashboard/checkin/event.html:20 templates/dashboard/reminders/event.html:13
+#: templates/dashboard/checkin/event.html:20 templates/dashboard/reminders/event.html:13 templates/dashboard/seating/event.html:14
 msgid "Une erreur est survenue. Réessayez."
 msgstr "Gen yon erè. Eseye ankò."
 
@@ -2777,7 +2885,7 @@ msgstr "Li yon kòd QR"
 msgid "Placez le QR code dans le cadre"
 msgstr "Mete kòd QR a nan kad la"
 
-#: templates/dashboard/checkin/event.html:52
+#: templates/dashboard/checkin/event.html:52 templates/dashboard/seating/_board.html:16 templates/dashboard/seating/_board.html:17
 msgid "Chercher un invité"
 msgstr "Chèche yon envite"
 
@@ -2789,7 +2897,7 @@ msgstr "Non oswa kòd EL-XXXX-XXXX"
 msgid "Ajouter un invité sur place"
 msgstr "Ajoute yon envite sou plas"
 
-#: templates/dashboard/checkin/event.html:65 templates/partials/_messages.html:11 templates/payments/_payment_modal.html:16
+#: templates/dashboard/checkin/event.html:65 templates/dashboard/seating/event.html:36 templates/dashboard/seating/event.html:50 templates/partials/_messages.html:11 templates/payments/_payment_modal.html:16
 msgid "Fermer"
 msgstr "Fèmen"
 
@@ -2805,7 +2913,7 @@ msgstr "Moun k ap akonpanye w"
 msgid "Téléphone (optionnel)"
 msgstr "Telefòn (opsyonèl)"
 
-#: templates/dashboard/checkin/event.html:75 templates/dashboard/confirm_delete.html:17
+#: templates/dashboard/checkin/event.html:75 templates/dashboard/confirm_delete.html:17 templates/dashboard/seating/event.html:41 templates/dashboard/seating/event.html:56
 msgid "Annuler"
 msgstr "Anile"
 
@@ -2821,7 +2929,7 @@ msgstr "Jou J, li kòd QR chak envite nan antre a. Chwazi evènman an."
 msgid "Aujourd'hui et à venir"
 msgstr "Jodi a ak pwochen yo"
 
-#: templates/dashboard/checkin/index.html:16 templates/dashboard/reminders/index.html:16 templates/events/organizer_portal.html:36
+#: templates/dashboard/checkin/index.html:16 templates/dashboard/reminders/index.html:16 templates/dashboard/seating/index.html:16 templates/events/organizer_portal.html:36
 msgid "Événements passés"
 msgstr "Evènman ki pase yo"
 
@@ -3307,7 +3415,7 @@ msgstr "evènman"
 msgid "%(n)s à venir"
 msgstr "%(n)s k ap vini"
 
-#: templates/dashboard/home.html:15 templates/events/organizer_event_detail.html:8 events/models.py:237
+#: templates/dashboard/home.html:15 templates/events/organizer_event_detail.html:8 events/models.py:268
 msgid "invités"
 msgstr "envite"
 
@@ -3487,7 +3595,7 @@ msgstr "%(n)s de fwa"
 msgid "%(n)s trois fois"
 msgstr "%(n)s twa fwa"
 
-#: templates/dashboard/reminders/_stats.html:6 events/models.py:281
+#: templates/dashboard/reminders/_stats.html:6 events/models.py:317
 msgid "automatique"
 msgstr "otomatik"
 
@@ -3499,7 +3607,7 @@ msgstr "w voye l ak men"
 msgid "j M"
 msgstr "j M"
 
-#: templates/dashboard/reminders/_stats.html:8
+#: templates/dashboard/reminders/_stats.html:8 templates/dashboard/seating/index.html:22
 msgid "Voir les invités"
 msgstr "Gade envite yo"
 
@@ -3669,9 +3777,223 @@ msgstr "Mesaj la ekri nan lang chak envite. Lyen an louvri paj repons lan, san k
 msgid "Relancez en un clic les invités qui n'ont pas répondu, par WhatsApp ou par e-mail. Choisissez l'événement."
 msgstr "Voye rapèl ak yon sèl klik bay envite ki poko reponn yo, pa WhatsApp oswa pa imèl. Chwazi evènman an."
 
-#: templates/dashboard/reminders/index.html:10
+#: templates/dashboard/reminders/index.html:10 templates/dashboard/seating/index.html:10
 msgid "À venir"
 msgstr "Ki ap vini"
+
+#: templates/dashboard/seating/_board.html:3 events/models.py:218
+msgid "tables"
+msgstr "tab"
+
+#: templates/dashboard/seating/_board.html:3
+msgid "%(n)s places chacune"
+msgstr "%(n)s plas chak"
+
+#: templates/dashboard/seating/_board.html:3
+msgid "de %(a)s à %(b)s places"
+msgstr "de %(a)s a %(b)s plas"
+
+#: templates/dashboard/seating/_board.html:4 events/models.py:211
+msgid "places"
+msgstr "plas"
+
+#: templates/dashboard/seating/_board.html:4
+msgid "dont %(n)s libres"
+msgstr "%(n)s lib"
+
+#: templates/dashboard/seating/_board.html:5
+msgid "placés"
+msgstr "ki plase"
+
+#: templates/dashboard/seating/_board.html:5
+msgid "%(n)s invités avec accompagnants"
+msgstr "%(n)s envite ak moun k ap akonpanye yo"
+
+#: templates/dashboard/seating/_board.html:6
+msgid "sans table"
+msgstr "san tab"
+
+#: templates/dashboard/seating/_board.html:6
+msgid "à placer avant le jour J"
+msgstr "pou plase anvan jou J"
+
+#: templates/dashboard/seating/_board.html:8
+msgid "Une table a plus de personnes que de places. Déplacez un invité ou augmentez ses places."
+msgstr "Gen yon tab ki gen plis moun pase plas. Deplase yon envite oswa ogmante plas yo."
+
+#: templates/dashboard/seating/_board.html:13
+msgid "Sans table"
+msgstr "San tab"
+
+#: templates/dashboard/seating/_board.html:13
+msgid "%(counter)s invité"
+msgid_plural "%(counter)s invités"
+msgstr[0] "%(counter)s envite"
+msgstr[1] "%(counter)s envite"
+
+#: templates/dashboard/seating/_board.html:24
+msgid "Placer %(name)s à une table"
+msgstr "Mete %(name)s nan yon tab"
+
+#: templates/dashboard/seating/_board.html:25
+msgid "Placer à..."
+msgstr "Mete nan..."
+
+#: templates/dashboard/seating/_board.html:26 templates/dashboard/seating/_board.html:51
+msgid "%(counter)s libre"
+msgid_plural "%(counter)s libres"
+msgstr[0] "%(counter)s lib"
+msgstr[1] "%(counter)s lib"
+
+#: templates/dashboard/seating/_board.html:34
+msgid "Tous les invités qui ont confirmé sont placés."
+msgstr "Tout envite ki konfime yo gen plas."
+
+#: templates/dashboard/seating/_board.html:34
+msgid "Aucun invité n'a encore confirmé sa présence."
+msgstr "Pa gen envite ki konfime prezans li ankò."
+
+#: templates/dashboard/seating/_board.html:36
+msgid "Glissez un invité sur une table. Un invité et ses accompagnants restent ensemble."
+msgstr "Glise yon envite sou yon tab. Yon envite ak moun k ap akonpanye l yo rete ansanm."
+
+#: templates/dashboard/seating/_board.html:41 templates/dashboard/seating/print.html:41
+msgid "Scène et piste de danse"
+msgstr "Sèn ak pis dans"
+
+#: templates/dashboard/seating/_board.html:49 templates/dashboard/seating/print.html:46
+msgid "Table %(n)s"
+msgstr "Tab %(n)s"
+
+#: templates/dashboard/seating/_board.html:50
+msgid "%(a)s / %(b)s places"
+msgstr "%(a)s / %(b)s plas"
+
+#: templates/dashboard/seating/_board.html:51
+msgid "Dépassée"
+msgstr "Twòp moun"
+
+#: templates/dashboard/seating/_board.html:51
+msgid "Complète"
+msgstr "Plen"
+
+#: templates/dashboard/seating/_board.html:52 templates/dashboard/seating/_board.html:52 templates/dashboard/seating/event.html:50
+msgid "Modifier la table"
+msgstr "Modifye tab la"
+
+#: templates/dashboard/seating/_board.html:60
+msgid "Retirer de la table"
+msgstr "Retire sou tab la"
+
+#: templates/dashboard/seating/_board.html:60
+msgid "Retirer %(name)s de la table"
+msgstr "Retire %(name)s sou tab la"
+
+#: templates/dashboard/seating/_board.html:63
+msgid "Déposez des invités ici"
+msgstr "Depoze envite isit la"
+
+#: templates/dashboard/seating/_board.html:73 templates/dashboard/seating/_event_card.html:9 templates/dashboard/seating/print.html:54
+msgid "Aucune table pour l'instant"
+msgstr "Poko gen tab"
+
+#: templates/dashboard/seating/_board.html:73
+msgid "Créez les tables de la salle, vous pourrez ensuite en ajouter, les renommer ou changer leurs places."
+msgstr "Kreye tab sal la, apre sa ou ka ajoute lòt, chanje non yo oswa chanje kantite plas yo."
+
+#: templates/dashboard/seating/_board.html:75
+msgid "Nombre de tables"
+msgstr "Kantite tab"
+
+#: templates/dashboard/seating/_board.html:76
+msgid "Places par table"
+msgstr "Plas pou chak tab"
+
+#: templates/dashboard/seating/_board.html:77
+msgid "Créer les tables"
+msgstr "Kreye tab yo"
+
+#: templates/dashboard/seating/_event_card.html:6
+msgid "Tout le monde est placé"
+msgstr "Tout moun gen plas"
+
+#: templates/dashboard/seating/_event_card.html:6
+msgid "%(n)s sans table"
+msgstr "%(n)s san tab"
+
+#: templates/dashboard/seating/_event_card.html:9
+msgid "%(t)s tables &middot; %(p)s personnes placées sur %(s)s places"
+msgstr "%(t)s tab &middot; %(p)s moun gen plas sou %(s)s plas"
+
+#: templates/dashboard/seating/_event_card.html:11
+msgid "Ouvrir le plan de table"
+msgstr "Louvri plan tab yo"
+
+#: templates/dashboard/seating/event.html:4 templates/dashboard/seating/print.html:6
+msgid "Plan de table - %(titre)s"
+msgstr "Plan tab yo - %(titre)s"
+
+#: templates/dashboard/seating/event.html:15
+msgid "Supprimer cette table ? Ses invités retourneront dans « Sans table »."
+msgstr "Siprime tab sa a ? Envite li yo ap tounen nan « San tab »."
+
+#: templates/dashboard/seating/event.html:20
+msgid "Salle de réception"
+msgstr "Sal resepsyon"
+
+#: templates/dashboard/seating/event.html:21
+msgid "Placer les invités"
+msgstr "Plase envite yo"
+
+#: templates/dashboard/seating/event.html:25
+msgid "Placement automatique"
+msgstr "Plasman otomatik"
+
+#: templates/dashboard/seating/event.html:26 templates/dashboard/seating/event.html:36
+msgid "Ajouter une table"
+msgstr "Ajoute yon tab"
+
+#: templates/dashboard/seating/event.html:27
+msgid "Imprimer le plan"
+msgstr "Enprime plan an"
+
+#: templates/dashboard/seating/event.html:38 templates/dashboard/seating/event.html:52
+msgid "Nom (optionnel)"
+msgstr "Non (si ou vle)"
+
+#: templates/dashboard/seating/event.html:38
+msgid "Famille de la mariée"
+msgstr "Fanmi lamarye a"
+
+#: templates/dashboard/seating/event.html:39 templates/dashboard/seating/event.html:53
+msgid "Places"
+msgstr "Plas"
+
+#: templates/dashboard/seating/event.html:41
+msgid "Ajouter"
+msgstr "Ajoute"
+
+#: templates/dashboard/seating/index.html:6
+msgid "Placez les invités qui ont confirmé à leur table, avec leurs accompagnants. Choisissez l'événement."
+msgstr "Plase envite ki konfime yo nan tab yo, ansanm ak moun k ap akonpanye yo. Chwazi evènman an."
+
+#: templates/dashboard/seating/index.html:22
+msgid "Aucun événement n'a encore d'invités qui ont confirmé leur présence."
+msgstr "Pa gen evènman ki gen envite ki konfime prezans yo ankò."
+
+#: templates/dashboard/seating/print.html:39
+msgid "Imprimer"
+msgstr "Enprime"
+
+#: templates/dashboard/seating/print.html:48
+msgid "Aucun invité"
+msgstr "Pa gen envite"
+
+#: templates/dashboard/seating/print.html:58
+msgid "Sans table : %(counter)s invité"
+msgid_plural "Sans table : %(counter)s invités"
+msgstr[0] "San tab : %(counter)s envite"
+msgstr[1] "San tab : %(counter)s envite"
 
 #: templates/errors/403.html:3
 msgid "Accès refusé"
@@ -3737,7 +4059,7 @@ msgstr "Konsè, gala, konferans : dekouvri sa k ap pase tou pre ou."
 msgid "Aucun événement public à venir pour le moment."
 msgstr "Pa gen okenn evènman piblik k ap vini pou kounye a."
 
-#: templates/events/organizer_event_detail.html:10 events/models.py:222
+#: templates/events/organizer_event_detail.html:10 events/models.py:250
 msgid "accompagnants"
 msgstr "moun k ap akonpanye w"
 
@@ -3895,7 +4217,7 @@ msgstr "Deja valide a %(time)s."
 msgid "Valider l'entrée"
 msgstr "Valide antre a"
 
-#: templates/invitation/entry_code.html:22 events/models.py:300
+#: templates/invitation/entry_code.html:22 events/models.py:336
 msgid "QR inconnu"
 msgstr "Kòd QR pa konnen"
 
@@ -4091,15 +4413,15 @@ msgstr "Biyè antre - %(titre)s"
 msgid "Votre billet d'entrée"
 msgstr "Biyè antre w la"
 
-#: templates/invitation/ticket.html:35
+#: templates/invitation/ticket.html:36
 msgid "Enregistrer dans mon téléphone"
 msgstr "Anrejistre l nan telefòn mwen"
 
-#: templates/invitation/ticket.html:36
+#: templates/invitation/ticket.html:37
 msgid "Envoyer sur mon WhatsApp"
 msgstr "Voye l sou WhatsApp mwen"
 
-#: templates/invitation/ticket.html:38
+#: templates/invitation/ticket.html:39
 msgid "Présentez ce code à l'entrée. Enregistrez-le dans votre téléphone pour l'avoir même sans réseau."
 msgstr "Montre kòd sa a nan antre a. Anrejistre l nan telefòn ou pou w gen li menm san rezo."
 

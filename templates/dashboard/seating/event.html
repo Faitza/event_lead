@@ -1,0 +1,62 @@
+{% extends "dashboard/base_dashboard.html" %}
+{% load static %}
+{% load i18n %}
+{% block title %}{% blocktranslate trimmed with titre=event.title %}Plan de table - {{ titre }}{% endblocktranslate %}{% endblock %}
+{% block dash_content %}
+<div id="seating"
+     data-live-url="{% url 'dashboard:seating_live' event.pk %}"
+     data-seat-url="{% url 'dashboard:seating_seat' event.pk %}"
+     data-auto-url="{% url 'dashboard:seating_auto' event.pk %}"
+     data-add-url="{% url 'dashboard:seating_table_add' event.pk %}"
+     data-bulk-url="{% url 'dashboard:seating_table_bulk' event.pk %}"
+     data-update-url="{% url 'dashboard:seating_table_update' event.pk 0 %}"
+     data-delete-url="{% url 'dashboard:seating_table_delete' event.pk 0 %}"
+     data-msg-error="{% trans 'Une erreur est survenue. Réessayez.' %}"
+     data-msg-confirm-delete="{% trans 'Supprimer cette table ? Ses invités retourneront dans « Sans table ».' %}"
+     data-msg-no-guest="{% trans 'Aucun invité trouvé.' %}">
+  {% csrf_token %}
+  <div class="page-head">
+    <div>
+      <span class="eyebrow-row"><span class="diamond"></span><span class="eyebrow">{% trans "Salle de réception" %}</span></span>
+      <h1>{% trans "Placer les invités" %}</h1>
+      <p>{{ event.title }} &middot; {{ event.date|date:_("l j F Y") }} &middot; {{ event.time|time:_("H\\hi") }}</p>
+    </div>
+    <div class="d-flex flex-wrap gap-2 align-items-center">
+      <button type="button" class="btn btn-light" id="auto-place"><i class="bi bi-magic me-2"></i>{% trans "Placement automatique" %}</button>
+      <button type="button" class="btn btn-light" data-bs-toggle="modal" data-bs-target="#add-table-modal"><i class="bi bi-plus-lg me-2"></i>{% trans "Ajouter une table" %}</button>
+      <a href="{% url 'dashboard:seating_print' event.pk %}" target="_blank" rel="noopener" class="btn btn-primary"><i class="bi bi-printer me-2"></i>{% trans "Imprimer le plan" %}</a>
+    </div>
+  </div>
+  <div class="notice notice-success mb-3" id="seat-flash" role="status" aria-live="polite" hidden></div>
+  <div id="board">{% include "dashboard/seating/_board.html" %}</div>
+
+  <div class="modal fade" id="add-table-modal" tabindex="-1" aria-labelledby="add-table-title" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered"><div class="modal-content">
+      <form id="add-table-form" novalidate>
+        <div class="modal-header border-0"><h2 class="modal-title h5" id="add-table-title">{% trans "Ajouter une table" %}</h2><button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="{% trans 'Fermer' %}"></button></div>
+        <div class="modal-body">
+          <div class="mb-3"><label class="form-label" for="add-name">{% trans "Nom (optionnel)" %}</label><input class="form-control" id="add-name" name="name" maxlength="60" placeholder="{% trans 'Famille de la mariée' %}"></div>
+          <div class="mb-1"><label class="form-label" for="add-capacity">{% trans "Places" %}</label><input class="form-control" id="add-capacity" name="capacity" type="number" min="1" max="{{ max_capacity }}" value="{{ default_capacity }}" required></div>
+        </div>
+        <div class="modal-footer border-0"><button type="button" class="btn btn-light" data-bs-dismiss="modal">{% trans "Annuler" %}</button><button type="submit" class="btn btn-primary"><i class="bi bi-check2 me-2"></i>{% trans "Ajouter" %}</button></div>
+      </form>
+    </div></div>
+  </div>
+
+  <div class="modal fade" id="edit-table-modal" tabindex="-1" aria-labelledby="edit-table-title" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered"><div class="modal-content">
+      <form id="edit-table-form" novalidate>
+        <input type="hidden" name="table" id="edit-id">
+        <div class="modal-header border-0"><h2 class="modal-title h5" id="edit-table-title">{% trans "Modifier la table" %}</h2><button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="{% trans 'Fermer' %}"></button></div>
+        <div class="modal-body">
+          <div class="mb-3"><label class="form-label" for="edit-name">{% trans "Nom (optionnel)" %}</label><input class="form-control" id="edit-name" name="name" maxlength="60"></div>
+          <div class="mb-1"><label class="form-label" for="edit-capacity">{% trans "Places" %}</label><input class="form-control" id="edit-capacity" name="capacity" type="number" min="1" max="{{ max_capacity }}" required></div>
+          <div class="notice notice-danger mt-3" id="edit-error" hidden></div>
+        </div>
+        <div class="modal-footer border-0 justify-content-between"><button type="button" class="btn btn-light text-danger" id="edit-delete"><i class="bi bi-trash3 me-2"></i>{% trans "Supprimer" %}</button><span><button type="button" class="btn btn-light me-2" data-bs-dismiss="modal">{% trans "Annuler" %}</button><button type="submit" class="btn btn-primary"><i class="bi bi-check2 me-2"></i>{% trans "Enregistrer" %}</button></span></div>
+      </form>
+    </div></div>
+  </div>
+</div>
+{% endblock %}
+{% block extra_js %}<script src="{% static 'js/seating.js' %}" defer></script>{% endblock %}

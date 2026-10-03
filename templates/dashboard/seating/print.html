@@ -1,0 +1,63 @@
+{% load static %}{% load i18n %}<!DOCTYPE html>
+<html lang="{{ LANGUAGE_CODE|default:'fr' }}">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% blocktranslate trimmed with titre=event.title %}Plan de table - {{ titre }}{% endblocktranslate %}</title>
+  <link rel="icon" type="image/png" href="{% static 'img/favicon.png' %}">
+  <style>
+    :root { --violet: #45065C; --night: #2C033B; --gold: #B8962A; --line: #D9CDE0; }
+    * { box-sizing: border-box; }
+    body { margin: 0; padding: 24px; font-family: Jost, "Segoe UI", Arial, sans-serif; color: #1F2937; background: #fff; }
+    h1 { font-family: "Bodoni Moda", Georgia, serif; font-weight: 500; color: var(--night); margin: 0 0 4px; font-size: 28px; }
+    .sub { color: #6B7280; margin: 0 0 20px; }
+    .bar { display: flex; gap: 12px; align-items: center; justify-content: space-between; margin-bottom: 18px; flex-wrap: wrap; }
+    .bar button { background: var(--violet); color: #fff; border: 0; border-radius: 999px; padding: 10px 22px; font-size: 15px; cursor: pointer; }
+    .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 14px; }
+    .tbl { border: 1px solid var(--line); border-radius: 12px; padding: 12px 14px; break-inside: avoid; }
+    .tbl h2 { display: flex; align-items: center; gap: 10px; font-size: 16px; margin: 0 0 8px; color: var(--night); }
+    .num { display: inline-flex; align-items: center; justify-content: center; width: 30px; height: 30px; border-radius: 50%; background: var(--violet); color: #fff; font-size: 14px; flex: none; }
+    .tbl .count { margin-left: auto; font-size: 12px; color: #6B7280; font-weight: 400; white-space: nowrap; }
+    ul { list-style: none; margin: 0; padding: 0; }
+    li { padding: 3px 0; border-bottom: 1px dotted var(--line); font-size: 14px; }
+    li:last-child { border-bottom: 0; }
+    .plus { color: var(--gold); font-weight: 600; }
+    .stage { text-align: center; border: 1px dashed var(--line); border-radius: 10px; padding: 8px; margin-bottom: 14px; color: #6B7280; letter-spacing: .12em; text-transform: uppercase; font-size: 12px; }
+    .none { margin-top: 22px; }
+    .none h2 { font-size: 16px; color: var(--night); }
+    .none ul { columns: 3 200px; }
+    .empty { color: #9CA3AF; font-size: 13px; }
+    @media print { body { padding: 0; } .bar button { display: none; } .grid { grid-template-columns: repeat(3, 1fr); } }
+  </style>
+</head>
+<body>
+  <div class="bar">
+    <div>
+      <h1>{% trans "Plan de table" %} &middot; {{ event.title }}</h1>
+      <p class="sub">{{ event.date|date:_("l j F Y") }} &middot; {{ event.time|time:_("H\\hi") }}{% if event.venue %} &middot; {{ event.venue }}{% endif %}</p>
+    </div>
+    <button type="button" onclick="window.print()">{% trans "Imprimer" %}</button>
+  </div>
+  <div class="stage">{% trans "Scène et piste de danse" %}</div>
+  {% if tables %}
+  <div class="grid">
+    {% for v in tables %}
+    <section class="tbl">
+      <h2><span class="num">{{ v.table.number }}</span><span>{% if v.table.name %}{{ v.table.name }}{% else %}{% blocktranslate trimmed with n=v.table.number %}Table {{ n }}{% endblocktranslate %}{% endif %}</span><span class="count">{{ v.taken }} / {{ v.table.capacity }}</span></h2>
+      <ul>
+        {% for g in v.guests %}<li>{{ g.name }}{% if g.companions %} <span class="plus">+{{ g.companions }}</span>{% endif %}</li>{% empty %}<li class="empty">{% trans "Aucun invité" %}</li>{% endfor %}
+      </ul>
+    </section>
+    {% endfor %}
+  </div>
+  {% else %}
+  <p class="empty">{% trans "Aucune table pour l'instant" %}</p>
+  {% endif %}
+  {% if unseated %}
+  <section class="none">
+    <h2>{% blocktranslate trimmed count counter=stats.unseated %}Sans table : {{ counter }} invité{% plural %}Sans table : {{ counter }} invités{% endblocktranslate %}</h2>
+    <ul>{% for g in unseated %}<li>{{ g.name }}{% if g.companions %} <span class="plus">+{{ g.companions }}</span>{% endif %}</li>{% endfor %}</ul>
+  </section>
+  {% endif %}
+</body>
+</html>

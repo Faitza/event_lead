@@ -14,7 +14,7 @@ from django.utils import timezone
 from accounts.models import CustomUser
 from ads.models import Ad
 from core.models import ContactMessage, HelpRequest, Review
-from events.models import Event, EventCategory, EventEvaluation, Guest, Reminder
+from events.models import Event, EventCategory, EventEvaluation, Guest, Reminder, Table
 from gifts.models import Gift, GiftClaim
 from payments.models import Payment
 
@@ -137,6 +137,12 @@ class Command(BaseCommand):
         # Quelques invités reçoivent leur invitation en anglais ou en créole
         Guest.objects.filter(event=wedding, name="Patrick Étienne").update(language="en")
         Guest.objects.filter(event=wedding, name="Junior Baptiste").update(language="ht")
+
+        # Plan de table : 12 tables de 12 places, quelques invités déjà placés
+        seat_tables = [Table(event=wedding, number=i, capacity=12, name="Table d'honneur" if i == 1 else "") for i in range(1, 13)]
+        Table.objects.bulk_create(seat_tables)
+        first = Table.objects.get(event=wedding, number=1)
+        Guest.objects.filter(pk__in=[guests["Nadège Louis"].pk, guests["Jonathan Pierre"].pk]).update(table=first)
 
         # Une relance déjà partie, pour montrer l'historique sur la page des relances
         Reminder.objects.create(guest=guests["Wilson Charles"], channel="whatsapp", sent_by=admin, sent_at=timezone.now() - timedelta(days=1))

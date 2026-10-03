@@ -199,6 +199,34 @@ def normalize_entry_code(raw):
     return (raw or "").strip().upper()
 
 
+class Table(models.Model):
+    """Table de la salle : son numéro reste fixe (il est imprimé sur les billets), même si d'autres tables sont supprimées."""
+
+    MAX_CAPACITY = 30
+
+    event = models.ForeignKey(Event, on_delete=models.CASCADE, related_name="tables", verbose_name=_("événement"))
+    number = models.PositiveIntegerField(_("numéro"))
+    name = models.CharField(_("nom"), max_length=60, blank=True)
+    capacity = models.PositiveSmallIntegerField(
+        _("places"), default=12, validators=[MinValueValidator(1), MaxValueValidator(MAX_CAPACITY)],
+    )
+
+    class Meta:
+        ordering = ["number"]
+        constraints = [models.UniqueConstraint(fields=["event", "number"], name="unique_table_number_per_event")]
+        verbose_name = _("table")
+        verbose_name_plural = _("tables")
+
+    def __str__(self):
+        return self.label
+
+    @property
+    def label(self):
+        """« Table 4 », ou « Table 4 · Famille de la mariée » quand la table porte un nom."""
+        base = gettext("Table %(n)d") % {"n": self.number}
+        return f"{base} · {self.name}" if self.name else base
+
+
 class Guest(models.Model):
     class Status(models.TextChoices):
         PENDING = "pending", _("En attente")
@@ -229,6 +257,9 @@ class Guest(models.Model):
     entry_code = models.CharField(_("code d'entrée"), max_length=14, unique=True, editable=False)
     checked_in_at = models.DateTimeField(_("arrivé le"), null=True, blank=True)
     added_on_site = models.BooleanField(_("ajouté sur place"), default=False)
+    table = models.ForeignKey(
+        Table, on_delete=models.SET_NULL, null=True, blank=True, related_name="guests", verbose_name=_("table"),
+    )
     created_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:
@@ -245,6 +276,11 @@ class Guest(models.Model):
             while Guest.objects.filter(entry_code=code).exists():
                 code = new_entry_code()
             self.entry_code = code
+        if self.table_id and (self.status != self.Status.CONFIRMED or self.table.event_id != self.event_id):
+            # Seuls les invités présents ont une place, à une table de leur événement : sinon la place se libère
+            self.table = None
+            if kwargs.get("update_fields") is not None and "table" not in kwargs["update_fields"]:
+                kwargs["update_fields"] = [*kwargs["update_fields"], "table"]
         super().save(*args, **kwargs)
 
     def get_invitation_url(self):

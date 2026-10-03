@@ -5,6 +5,7 @@ from ads import views_admin as ads_admin
 from events import views_admin as events_admin
 from events import views_checkin as checkin_admin
 from events import views_reminders as reminder_admin
+from events import views_seating as seating_admin
 from gifts import views_admin as gifts_admin
 from payments import views as payments_views
 
@@ -58,6 +59,17 @@ urlpatterns = [
     path("relances/<int:pk>/reglages/", reminder_admin.reminder_settings, name="reminder_settings"),
     path("relances/<int:pk>/envoyer/", reminder_admin.reminder_send_due, name="reminder_send_due"),
     path("relances/<int:pk>/<int:guest_pk>/envoyer/", reminder_admin.reminder_send_one, name="reminder_send_one"),
+    # Plan de table
+    path("plan-de-table/", seating_admin.seating_index, name="seating_index"),
+    path("plan-de-table/<int:pk>/", seating_admin.seating_event, name="seating_event"),
+    path("plan-de-table/<int:pk>/live/", seating_admin.seating_live, name="seating_live"),
+    path("plan-de-table/<int:pk>/imprimer/", seating_admin.seating_print, name="seating_print"),
+    path("plan-de-table/<int:pk>/placer/", seating_admin.seating_seat, name="seating_seat"),
+    path("plan-de-table/<int:pk>/auto/", seating_admin.seating_auto, name="seating_auto"),
+    path("plan-de-table/<int:pk>/tables/ajouter/", seating_admin.seating_table_add, name="seating_table_add"),
+    path("plan-de-table/<int:pk>/tables/creer/", seating_admin.seating_table_bulk, name="seating_table_bulk"),
+    path("plan-de-table/<int:pk>/tables/<int:table_pk>/modifier/", seating_admin.seating_table_update, name="seating_table_update"),
+    path("plan-de-table/<int:pk>/tables/<int:table_pk>/supprimer/", seating_admin.seating_table_delete, name="seating_table_delete"),
     # Cadeaux
     path("cadeaux/", gifts_admin.gift_list, name="gift_list"),
     path("cadeaux/nouveau/", gifts_admin.gift_create, name="gift_create"),

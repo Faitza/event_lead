@@ -768,6 +768,7 @@ h1 em, h2 em, h3 em, .disp em { color: var(--el-gold); font-style: italic; }
 .ticket-head .eyebrow { font-size: .625rem; color: #8A6D12; }
 .ticket-head h1 { font-size: clamp(1.7rem, 8vw, 2.1rem); line-height: 1.08; color: var(--el-primary-dark); margin: 0; }
 .ticket-meta { font-size: .8125rem; color: #6B7280; }
+.ticket-table { display: inline-block; margin-top: 6px; padding: 2px 14px; border-radius: 999px; background: var(--el-primary); color: #fff; font-size: .875rem; font-weight: 500; letter-spacing: .04em; }
 .ticket-tear { position: relative; align-self: stretch; border-top: 1px dashed #C9BED0; }
 .ticket-tear i { position: absolute; top: -11px; width: 22px; height: 22px; border-radius: 50%; background: var(--el-primary-dark); }
 .ticket-tear i:first-child { left: -11px; }
@@ -806,6 +807,7 @@ h1 em, h2 em, h3 em, .disp em { color: var(--el-gold); font-style: italic; }
 .scan-result-title { font-weight: 600; font-size: 1.05rem; }
 .scan-result-name { font-family: 'Bodoni Moda', Georgia, serif; font-size: 1.5rem; line-height: 1.15; color: var(--el-primary-dark); margin-top: 2px; }
 .scan-result-detail, .scan-result-note { font-size: .875rem; margin-top: 2px; }
+.scan-result-table { display: inline-block; margin-top: 6px; padding: 2px 12px; border-radius: 999px; background: var(--el-gold); color: var(--el-primary-dark); font-weight: 600; font-size: 1rem; }
 .scan-result.tone-success { background: rgba(16, 185, 129, .1); border-color: rgba(16, 185, 129, .35); color: #065F46; }
 .scan-result.tone-warning { background: rgba(245, 158, 11, .1); border-color: rgba(245, 158, 11, .35); color: #92400E; }
 .scan-result.tone-danger { background: rgba(239, 68, 68, .08); border-color: rgba(239, 68, 68, .35); color: #991B1B; }
@@ -834,4 +836,29 @@ h1 em, h2 em, h3 em, .disp em { color: var(--el-gold); font-style: italic; }
   .reminder-table .btn i { margin-right: 0 !important; }
 }
 .stat-card .value-date { font-size: clamp(1.25rem, 5vw, 1.9rem); line-height: 1.15; overflow-wrap: anywhere; }
-.reminders-stats .stat-card > div:last-child { min-width: 0; }
+.stat-card > div:last-child { min-width: 0; }
+
+/* Plan de table */
+.seat-stage { text-align: center; padding: 10px; margin-bottom: 16px; border: 1px dashed var(--el-tint-strong); border-radius: 12px; background: var(--el-bg-soft); color: var(--el-muted); font-size: .75rem; letter-spacing: .18em; text-transform: uppercase; }
+.seat-table { background: #fff; border: 1px solid var(--el-border); border-radius: 16px; padding: 14px; height: 100%; box-shadow: var(--el-shadow); transition: border-color var(--el-ease), box-shadow var(--el-ease); }
+.seat-table.is-full { border-color: rgba(16, 185, 129, .45); }
+.seat-table.is-over { border-color: rgba(239, 68, 68, .6); }
+.seat-table.drop-over, .seat-pool.drop-over { border-color: var(--el-gold); box-shadow: 0 0 0 3px rgba(212, 175, 55, .3); }
+.seat-table-head { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
+.seat-title { display: flex; flex-direction: column; min-width: 0; flex: 1; line-height: 1.25; }
+.seat-title strong { color: var(--el-primary-dark); overflow-wrap: anywhere; }
+.seat-pool .el-card-header h2 { white-space: nowrap; }
+.seat-number { flex: none; display: inline-flex; align-items: center; justify-content: center; width: 34px; height: 34px; border-radius: 50%; background: var(--el-primary); color: #fff; font-family: var(--font-display); font-size: 1rem; box-shadow: 0 0 0 3px var(--el-tint); }
+.seat-list { display: flex; flex-direction: column; gap: 6px; }
+.seat-members { margin-top: 12px; min-height: 44px; }
+.seat-guest { display: flex; align-items: center; gap: 6px; padding: 6px 8px; border-radius: 10px; background: var(--el-tint); cursor: grab; font-size: .875rem; }
+.seat-guest.is-dragging { opacity: .45; }
+.seat-grip { color: var(--el-muted); flex: none; }
+.seat-name { flex: 1; min-width: 0; overflow-wrap: anywhere; }
+.seat-plus { color: var(--el-gold-text); font-weight: 600; }
+.seat-pick { width: 100%; flex: 1 1 100%; }
+.seat-pool .seat-guest { flex-wrap: wrap; }
+.seat-remove { padding: 0 6px; color: var(--el-muted); line-height: 1.6; }
+.seat-remove:hover { color: var(--el-danger); }
+.seat-empty { padding: 8px; border: 1px dashed var(--el-tint-strong); border-radius: 10px; text-align: center; }
+.seat-pool .seat-list { max-height: 60vh; overflow-y: auto; }

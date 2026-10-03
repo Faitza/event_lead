@@ -27,6 +27,7 @@
         <div class="ticket-foot">
           <span class="disp ticket-name">{{ guest.name }}</span>
           <span class="ticket-meta">{{ party }}</span>
+          {% if guest.table %}<span class="ticket-table">{{ guest.table.label }}</span>{% endif %}
           <span class="ticket-code">{{ guest.entry_code }}</span>
         </div>
       </div>

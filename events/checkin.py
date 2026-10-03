@@ -155,5 +155,6 @@ def describe(outcome):
         "name": name,
         "detail": detail,
         "note": note,
+        "table": guest.table.label if guest is not None and guest.table_id and result in (Result.VALIDATED, Result.DUPLICATE) else "",
         "time": clock(outcome.check_in.created_at) if outcome.check_in else "",
     }

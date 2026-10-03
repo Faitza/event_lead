@@ -7,7 +7,7 @@
     <span class="icon-bubble lg mb-3"><i class="bi bi-qr-code-scan"></i></span>
     <h1 class="mb-2">{{ guest.name }}</h1>
     <p class="text-muted mb-1">{{ event.title }} &middot; {{ event.date|date:_("j F Y") }}</p>
-    <p class="mb-3"><span class="badge-el badge-{{ guest.status_badge }}">{{ guest.get_status_display }}</span> <span class="small text-muted ms-2">{{ guest.entry_code }}</span></p>
+    <p class="mb-3"><span class="badge-el badge-{{ guest.status_badge }}">{{ guest.get_status_display }}</span> <span class="small text-muted ms-2">{{ guest.entry_code }}</span>{% if guest.table %} <span class="badge-el badge-gold ms-2">{{ guest.table.label }}</span>{% endif %}</p>
     {% if result %}
       <div class="notice notice-{% if result.tone == 'success' %}success{% elif result.tone == 'warning' %}warning{% else %}danger{% endif %} text-start mb-3"><i class="bi bi-{% if result.tone == 'success' %}check-circle{% else %}exclamation-circle{% endif %}"></i><div><strong>{{ result.title }}</strong><div>{{ result.detail }}</div>{% if result.note %}<div class="small">{{ result.note }}</div>{% endif %}</div></div>
       <a href="{% url 'dashboard:checkin_event' event.pk %}" class="btn btn-primary">{% trans "Ouvrir le pointage" %}</a>

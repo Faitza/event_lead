@@ -84,19 +84,20 @@
     if (navigator.vibrate) navigator.vibrate(tone === "success" ? 60 : [120, 60, 120]);
   }
 
-  function showMessage(tone, title, name, detail, note, time) {
+  function showMessage(tone, title, name, detail, note, time, table) {
     resultBox.hidden = false;
     resultBox.className = "scan-result tone-" + tone;
     resultBox.textContent = "";
     var head = el("div", "scan-result-title", title + (time ? " · " + time : ""));
     resultBox.appendChild(head);
     if (name) resultBox.appendChild(el("div", "scan-result-name", name));
+    if (table) resultBox.appendChild(el("div", "scan-result-table", table));
     if (detail) resultBox.appendChild(el("div", "scan-result-detail", detail));
     if (note) resultBox.appendChild(el("div", "scan-result-note", note));
   }
 
   function show(r) {
-    showMessage(r.tone, r.title, r.name, r.detail, r.note, r.time);
+    showMessage(r.tone, r.title, r.name, r.detail, r.note, r.time, r.table);
     beep(r.tone);
   }
 

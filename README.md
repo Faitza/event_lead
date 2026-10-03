@@ -72,7 +72,7 @@ Sans ces valeurs, le bouton « Continuer avec Google » est affiché désactivé
 |---|---|
 | `/` | Accueil : défilé des publications, événements publics et billets, puis services, avis et contact |
 | `/connexion/`, `/inscription/`, `/inscription/organisateur/` | Authentification |
-| `/admin-dashboard/` (+ `evenements/`, `categories/`, `invites/`, `cadeaux/`, `publicites/`, `paiements/`, `messages/`, `aide/`, `pointage/`, `relances/`) | Administrateur |
+| `/admin-dashboard/` (+ `evenements/`, `categories/`, `invites/`, `cadeaux/`, `publicites/`, `paiements/`, `messages/`, `aide/`, `pointage/`, `relances/`, `plan-de-table/`) | Administrateur |
 | `/organisateur/` | Portail Organisateur VIP |
 | `/organisateur/devenir-vip/` | Paiement de l'accès VIP |
 | `/invitation/<uuid:token>/` | Flux invité (présence, cadeaux, récapitulatif, confirmation), sans compte ni connexion : le lien personnel suffit |
@@ -136,6 +136,17 @@ Le site existe en français (langue par défaut), en anglais et en créole haït
 - La lecture du QR code utilise `BarcodeDetector` quand le navigateur l'a, sinon la bibliothèque jsQR (chargée depuis jsDelivr). La génération du QR code utilise `segno` (nouvelle dépendance : `pip install -r requirements.txt`).
 - Après un `git pull` : `python manage.py migrate` (les invités déjà créés reçoivent leur code), puis `python manage.py seed_demo --reset` si vous voulez des données de démonstration neuves.
 
+## Plan de table
+
+- **Page « Plan de table »** (`/admin-dashboard/plan-de-table/`, lien dans le menu) : choisissez un événement. À gauche, les invités qui ont confirmé et n'ont pas encore de table (« Sans table ») ; à droite, les tables autour de la scène et de la piste de danse, avec « 9 / 12 places », « Complète » ou « 3 libres ». Chiffres en haut : tables, places (dont libres), personnes placées, invités sans table.
+- **Placer un invité** : glissez-le sur une table (ordinateur), ou choisissez une table dans la liste « Placer à... » (téléphone et tablette, où le glisser-déposer n'existe pas). Pour le déplacer, glissez-le vers une autre table ; la croix le remet dans « Sans table ». Un invité et ses accompagnants restent ensemble : il prend autant de places que de personnes, et une table n'accepte jamais plus de personnes que de places.
+- **Qui est placé** : seulement les invités qui ont confirmé. Un invité qui n'est plus « Présent » perd sa place automatiquement.
+- **Tables** : « Ajouter une table » (nom facultatif, de 1 à 30 places), crayon pour renommer ou changer les places (refusé si des personnes y sont déjà plus nombreuses que le nouveau nombre de places), suppression (ses invités retournent dans « Sans table »). Sans table, la page propose de créer d'un coup 12 tables de 12 places (nombre et places modifiables). Le numéro d'une table ne change jamais, même si d'autres tables sont supprimées, car il est imprimé sur les billets.
+- **Placement automatique** : place tous les invités sans table, sans déplacer ceux qui sont déjà placés. Les plus grands groupes d'abord, chacun à la table où il rentre le plus juste (les tables se remplissent donc l'une après l'autre) ; ceux qui ne trouvent pas de place sont comptés et il faut ajouter une table.
+- **Imprimer le plan** : page propre, sans menu, avec les tables et leurs invités puis la liste « Sans table ».
+- **Numéro de table sur le billet** : la page « Votre billet d'entrée » de l'invité affiche « Table 4 » (avec le nom de la table s'il y en a un), et l'écran de pointage de l'entrée l'affiche aussi après la lecture du QR code, pour guider l'invité jusqu'à sa table.
+- Après un `git pull` : `python manage.py migrate` (nouvelle table `Table`), puis `python manage.py seed_demo --reset` si vous voulez des données neuves (le mariage de démonstration a 12 tables de 12 places, deux invités déjà placés).
+
 ## Relances des invités sans réponse
 
 - **Page « Relances »** (`/admin-dashboard/relances/`, lien dans le menu) : choisissez un événement. On y voit combien d'invités n'ont pas répondu, combien n'ont jamais été relancés, combien l'ont été une, deux ou trois fois, la date de la prochaine relance, et la liste des invités sans réponse (canal, relances `n/3`, prochaine date, statut « À relancer », « Relancé N fois », « Jamais relancé »). Filtres par nombre de relances, mise à jour toute seule toutes les 5 secondes.
@@ -157,7 +168,7 @@ Chaque invité possède un `magic_token`. Dans `/admin-dashboard/invites/`, l'ad
 python manage.py test
 ```
 
-167 tests couvrent la règle « dernière unité », la transaction annulée en cas de conflit, le caractère définitif des réponses, le parcours invité complet jusqu'à la publicité puis l'accueil, le défilé de l'accueil, les redirections après connexion, les règles d'accès par rôle, le paiement VIP et l'affichage de chaque page principale, l'absence de connexion forcée sur le parcours invité et la page d'accueil publique, les catégories d'événements (gestion réservée à l'administrateur, filtre, badge, événements privés jamais exposés) l'espace d'aide (page, bouton WhatsApp, formulaire, statuts, export CSV, aides du parcours) le QR code d'entrée et le pointage (codes uniques, billet réservé aux présents, validation une seule fois, refus des codes inconnus ou d'un autre événement, ajout sur place, annulation, chiffres) les relances (qui est à relancer et quand, arrêt à la réponse, maximum de 3, e-mail dans la langue de l'invité, WhatsApp seulement noté, jamais de SMS, réglages, commande planifiée) et les trois langues (sélecteur, cookie, profil, `?lang=`, pages principales en anglais et en créole sans reste de français, message d'invitation par langue, catalogues complets).
+205 tests couvrent la règle « dernière unité », la transaction annulée en cas de conflit, le caractère définitif des réponses, le parcours invité complet jusqu'à la publicité puis l'accueil, le défilé de l'accueil, les redirections après connexion, les règles d'accès par rôle, le paiement VIP et l'affichage de chaque page principale, l'absence de connexion forcée sur le parcours invité et la page d'accueil publique, les catégories d'événements (gestion réservée à l'administrateur, filtre, badge, événements privés jamais exposés) l'espace d'aide (page, bouton WhatsApp, formulaire, statuts, export CSV, aides du parcours) le QR code d'entrée et le pointage (codes uniques, billet réservé aux présents, validation une seule fois, refus des codes inconnus ou d'un autre événement, ajout sur place, annulation, chiffres) les relances (qui est à relancer et quand, arrêt à la réponse, maximum de 3, e-mail dans la langue de l'invité, WhatsApp seulement noté, jamais de SMS, réglages, commande planifiée) le plan de table (places et accompagnants, déplacement, tables, placement automatique, numéro sur le billet et au pointage) et les trois langues (sélecteur, cookie, profil, `?lang=`, pages principales en anglais et en créole sans reste de français, message d'invitation par langue, catalogues complets).
 
 ## Production
 

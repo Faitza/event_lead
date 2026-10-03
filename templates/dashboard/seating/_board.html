@@ -1,0 +1,83 @@
+{% load i18n %}
+<div class="row g-3 mb-3">
+  <div class="col-6 col-xl-3"><div class="el-card stat-card"><span class="icon-bubble"><i class="bi bi-grid-3x3-gap"></i></span><div><div class="value">{{ stats.tables }}</div><div class="label">{% trans "tables" %}{% if stats.tables %} &middot; {% if stats.capacity_min == stats.capacity_max %}{% blocktranslate trimmed with n=stats.capacity_min %}{{ n }} places chacune{% endblocktranslate %}{% else %}{% blocktranslate trimmed with a=stats.capacity_min b=stats.capacity_max %}de {{ a }} à {{ b }} places{% endblocktranslate %}{% endif %}{% endif %}</div></div></div></div>
+  <div class="col-6 col-xl-3"><div class="el-card stat-card"><span class="icon-bubble warning"><i class="bi bi-people"></i></span><div><div class="value">{{ stats.seats }}</div><div class="label">{% trans "places" %}{% if stats.tables %} &middot; {% blocktranslate trimmed with n=stats.free %}dont {{ n }} libres{% endblocktranslate %}{% endif %}</div></div></div></div>
+  <div class="col-6 col-xl-3"><div class="el-card stat-card"><span class="icon-bubble success"><i class="bi bi-person-check"></i></span><div><div class="value">{{ stats.placed }}</div><div class="label">{% trans "placés" %} &middot; {% blocktranslate trimmed with n=stats.placed_guests %}{{ n }} invités avec accompagnants{% endblocktranslate %}</div></div></div></div>
+  <div class="col-6 col-xl-3"><div class="el-card stat-card"><span class="icon-bubble danger"><i class="bi bi-person-dash"></i></span><div><div class="value">{{ stats.unseated }}</div><div class="label">{% trans "sans table" %} &middot; {% trans "à placer avant le jour J" %}</div></div></div></div>
+</div>
+{% if stats.over %}<div class="notice notice-danger mb-3"><i class="bi bi-exclamation-circle"></i><div>{% trans "Une table a plus de personnes que de places. Déplacez un invité ou augmentez ses places." %}</div></div>{% endif %}
+
+<div class="row g-4">
+  <div class="col-xl-3">
+    <div class="el-card seat-pool" data-drop-table="">
+      <div class="el-card-header"><h2>{% trans "Sans table" %}</h2><span class="badge-el badge-{% if unseated %}warning{% else %}success{% endif %}">{% blocktranslate trimmed count counter=stats.unseated %}{{ counter }} invité{% plural %}{{ counter }} invités{% endblocktranslate %}</span></div>
+      <div class="el-card-body">
+        {% if unseated %}
+        <label class="visually-hidden" for="seat-search">{% trans "Chercher un invité" %}</label>
+        <input type="search" class="form-control form-control-sm mb-3" id="seat-search" placeholder="{% trans 'Chercher un invité' %}" autocomplete="off">
+        <ul class="list-unstyled seat-list mb-0" id="seat-pool-list">
+          {% for g in unseated %}
+          <li class="seat-guest" draggable="true" data-guest="{{ g.pk }}" data-name="{{ g.name|lower }}">
+            <span class="seat-grip" aria-hidden="true"><i class="bi bi-grip-vertical"></i></span>
+            <span class="seat-name">{{ g.name }}{% if g.companions %} <span class="seat-plus">+{{ g.companions }}</span>{% endif %}</span>
+            {% if tables %}
+            <select class="form-select form-select-sm seat-pick" data-pick="{{ g.pk }}" aria-label="{% blocktranslate trimmed with name=g.name %}Placer {{ name }} à une table{% endblocktranslate %}">
+              <option value="">{% trans "Placer à..." %}</option>
+              {% for v in tables %}{% if v.free >= g.party_size %}<option value="{{ v.table.pk }}">{{ v.table.label }} ({% blocktranslate trimmed count counter=v.free %}{{ counter }} libre{% plural %}{{ counter }} libres{% endblocktranslate %})</option>{% endif %}{% endfor %}
+            </select>
+            {% endif %}
+          </li>
+          {% endfor %}
+        </ul>
+        <p class="small text-muted mt-3 mb-0 seat-none" hidden>{% trans "Aucun invité trouvé." %}</p>
+        {% else %}
+        <p class="small text-muted mb-0">{% if stats.placed or tables %}{% trans "Tous les invités qui ont confirmé sont placés." %}{% else %}{% trans "Aucun invité n'a encore confirmé sa présence." %}{% endif %}</p>
+        {% endif %}
+        <p class="small text-muted mt-3 mb-0"><i class="bi bi-info-circle me-1"></i>{% trans "Glissez un invité sur une table. Un invité et ses accompagnants restent ensemble." %}</p>
+      </div>
+    </div>
+  </div>
+  <div class="col-xl-9">
+    <div class="seat-stage" aria-hidden="true">{% trans "Scène et piste de danse" %}</div>
+    {% if tables %}
+    <div class="row g-3">
+      {% for v in tables %}
+      <div class="col-sm-6 col-lg-4 col-xxl-3">
+        <div class="seat-table {% if v.taken > v.table.capacity %}is-over{% elif v.full %}is-full{% endif %}" data-drop-table="{{ v.table.pk }}">
+          <div class="seat-table-head">
+            <span class="seat-number">{{ v.table.number }}</span>
+            <div class="seat-title"><strong>{% if v.table.name %}{{ v.table.name }}{% else %}{% blocktranslate trimmed with n=v.table.number %}Table {{ n }}{% endblocktranslate %}{% endif %}</strong>
+              <span class="small text-muted">{% blocktranslate trimmed with a=v.taken b=v.table.capacity %}{{ a }} / {{ b }} places{% endblocktranslate %}</span>
+              <span class="small fw-semibold {% if v.taken > v.table.capacity %}text-danger{% elif v.full %}text-success{% else %}text-muted{% endif %}">{% if v.taken > v.table.capacity %}{% trans "Dépassée" %}{% elif v.full %}{% trans "Complète" %}{% else %}{% blocktranslate trimmed count counter=v.free %}{{ counter }} libre{% plural %}{{ counter }} libres{% endblocktranslate %}{% endif %}</span></div>
+            <button type="button" class="btn btn-sm btn-light" data-edit-table="{{ v.table.pk }}" data-name="{{ v.table.name }}" data-capacity="{{ v.table.capacity }}" data-number="{{ v.table.number }}" title="{% trans 'Modifier la table' %}"><i class="bi bi-pencil"></i><span class="visually-hidden">{% trans "Modifier la table" %}</span></button>
+          </div>
+          <div class="progress-el gold" aria-hidden="true"><span style="width:{{ v.percent }}%"></span></div>
+          <ul class="list-unstyled seat-list seat-members mb-0">
+            {% for g in v.guests %}
+            <li class="seat-guest" draggable="true" data-guest="{{ g.pk }}">
+              <span class="seat-grip" aria-hidden="true"><i class="bi bi-grip-vertical"></i></span>
+              <span class="seat-name">{{ g.name }}{% if g.companions %} <span class="seat-plus">+{{ g.companions }}</span>{% endif %}</span>
+              <button type="button" class="btn btn-sm seat-remove" data-unseat="{{ g.pk }}" title="{% trans 'Retirer de la table' %}"><i class="bi bi-x-lg"></i><span class="visually-hidden">{% blocktranslate trimmed with name=g.name %}Retirer {{ name }} de la table{% endblocktranslate %}</span></button>
+            </li>
+            {% empty %}
+            <li class="seat-empty small text-muted">{% trans "Déposez des invités ici" %}</li>
+            {% endfor %}
+          </ul>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+    {% else %}
+    <div class="el-card">
+      <div class="el-card-body">
+        <div class="text-center mb-3"><span class="icon-bubble lg mb-2"><i class="bi bi-grid-3x3-gap"></i></span><h2 class="h5 mb-1">{% trans "Aucune table pour l'instant" %}</h2><p class="text-muted small mb-0">{% trans "Créez les tables de la salle, vous pourrez ensuite en ajouter, les renommer ou changer leurs places." %}</p></div>
+        <form id="bulk-form" class="row g-3 justify-content-center align-items-end" novalidate>
+          <div class="col-6 col-md-3"><label class="form-label" for="bulk-count">{% trans "Nombre de tables" %}</label><input class="form-control" id="bulk-count" name="count" type="number" min="1" max="100" value="12" required></div>
+          <div class="col-6 col-md-3"><label class="form-label" for="bulk-capacity">{% trans "Places par table" %}</label><input class="form-control" id="bulk-capacity" name="capacity" type="number" min="1" max="30" value="12" required></div>
+          <div class="col-md-auto"><button class="btn btn-primary"><i class="bi bi-grid-3x3-gap me-2"></i>{% trans "Créer les tables" %}</button></div>
+        </form>
+      </div>
+    </div>
+    {% endif %}
+  </div>
+</div>
