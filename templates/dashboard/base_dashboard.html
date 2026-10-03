@@ -14,6 +14,7 @@
     <a class="side-link {% active '/admin-dashboard/categories/' %}" href="{% url 'dashboard:category_list' %}"><i class="bi bi-tags"></i>{% trans "Catégories" %}</a>
     <a class="side-link {% active '/admin-dashboard/invites/' %}" href="{% url 'dashboard:guest_list' %}"><i class="bi bi-people"></i>{% trans "Invités" %}</a>
     <a class="side-link {% active '/admin-dashboard/pointage/' %}" href="{% url 'dashboard:checkin_index' %}"><i class="bi bi-qr-code-scan"></i>{% trans "Pointage" %}</a>
+    <a class="side-link {% active '/admin-dashboard/relances/' %}" href="{% url 'dashboard:reminder_index' %}"><i class="bi bi-bell"></i>{% trans "Relances" %}</a>
     <a class="side-link {% active '/admin-dashboard/cadeaux/' %}" href="{% url 'dashboard:gift_list' %}"><i class="bi bi-gift"></i>{% trans "Cadeaux" %}</a>
     <div class="nav-section">{% trans "Revenus" %}</div>
     <a class="side-link {% active '/admin-dashboard/publicites/' %}" href="{% url 'dashboard:ad_list' %}"><i class="bi bi-megaphone"></i>{% trans "Publicités" %}</a>

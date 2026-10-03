@@ -72,7 +72,7 @@ Sans ces valeurs, le bouton « Continuer avec Google » est affiché désactivé
 |---|---|
 | `/` | Accueil : défilé des publications, événements publics et billets, puis services, avis et contact |
 | `/connexion/`, `/inscription/`, `/inscription/organisateur/` | Authentification |
-| `/admin-dashboard/` (+ `evenements/`, `categories/`, `invites/`, `cadeaux/`, `publicites/`, `paiements/`, `messages/`, `aide/`) | Administrateur |
+| `/admin-dashboard/` (+ `evenements/`, `categories/`, `invites/`, `cadeaux/`, `publicites/`, `paiements/`, `messages/`, `aide/`, `pointage/`, `relances/`) | Administrateur |
 | `/organisateur/` | Portail Organisateur VIP |
 | `/organisateur/devenir-vip/` | Paiement de l'accès VIP |
 | `/invitation/<uuid:token>/` | Flux invité (présence, cadeaux, récapitulatif, confirmation), sans compte ni connexion : le lien personnel suffit |
@@ -136,6 +136,17 @@ Le site existe en français (langue par défaut), en anglais et en créole haït
 - La lecture du QR code utilise `BarcodeDetector` quand le navigateur l'a, sinon la bibliothèque jsQR (chargée depuis jsDelivr). La génération du QR code utilise `segno` (nouvelle dépendance : `pip install -r requirements.txt`).
 - Après un `git pull` : `python manage.py migrate` (les invités déjà créés reçoivent leur code), puis `python manage.py seed_demo --reset` si vous voulez des données de démonstration neuves.
 
+## Relances des invités sans réponse
+
+- **Page « Relances »** (`/admin-dashboard/relances/`, lien dans le menu) : choisissez un événement. On y voit combien d'invités n'ont pas répondu, combien n'ont jamais été relancés, combien l'ont été une, deux ou trois fois, la date de la prochaine relance, et la liste des invités sans réponse (canal, relances `n/3`, prochaine date, statut « À relancer », « Relancé N fois », « Jamais relancé »). Filtres par nombre de relances, mise à jour toute seule toutes les 5 secondes.
+- **Règles** : seuls les invités dont l'invitation est envoyée et qui n'ont pas répondu sont relancés. Dès qu'un invité répond (présent, absent ou peut-être), il sort de la liste et n'est plus jamais relancé. Au plus **3 relances** par invité, même à la main. Pas de relance pour un événement passé, annulé ou en brouillon. Un second clic dans les 10 minutes sur le même invité est refusé (double clic).
+- **Canaux** : le même que l'invitation (WhatsApp ou e-mail), jamais de SMS ; si le contact manque, l'autre canal est utilisé, et sans aucun contact l'invité est signalé. Le message est écrit dans la langue de l'invité, avec son lien personnel (`?lang=`), qui ouvre la page de réponse sans connexion.
+- **En un clic** : « Relancer » sur une ligne. Pour un invité WhatsApp, WhatsApp s'ouvre avec le message prêt (le message part depuis le téléphone de l'administrateur) et la relance est notée dans le journal `Reminder` ; pour un invité e-mail, le serveur envoie l'e-mail (`reply_to` = `CONTACT_EMAIL`). « Envoyer maintenant · N » envoie tous les e-mails à échéance d'un coup et indique combien de relances WhatsApp restent à faire une par une (WhatsApp ne permet pas l'envoi automatique).
+- **Réglages par événement** : première relance 3, 7 ou 14 jours après l'invitation ; puis tous les 3, 7 ou 14 jours ; 1, 2 ou 3 relances au maximum ; heure d'envoi ; envoi automatique des e-mails (désactivé par défaut).
+- **Envoi automatique** : lancez `python manage.py send_reminders` une fois par heure (cron, tâche planifiée Windows, planificateur de l'hébergeur). La commande envoie les e-mails à échéance des événements qui ont activé l'envoi automatique, à partir de leur heure d'envoi. Options : `--dry-run` (affiche sans envoyer), `--event <numéro>`, `--any-hour`. Elle construit les liens avec `SITE_URL` (variable du `.env`, par exemple `https://eventlead.ht`).
+- **E-mails réels** : tant que `EMAIL_BACKEND` est celui par défaut (console), les e-mails s'affichent dans le terminal du serveur au lieu de partir, et la page l'indique. Configurez `EMAIL_*` dans le `.env` pour les envoyer vraiment.
+- Après un `git pull` : `python manage.py migrate`, puis `python manage.py seed_demo --reset` si vous voulez des données neuves (un invité du mariage y a déjà reçu une relance).
+
 ## Envoi des invitations (V1)
 
 Chaque invité possède un `magic_token`. Dans `/admin-dashboard/invites/`, l'admin ouvre WhatsApp (`wa.me`) ou son client e-mail (`mailto:`) avec un message prérempli, dans la langue de l'invité, contenant le lien, ou copie le lien, puis marque l'invitation comme envoyée.
@@ -146,7 +157,7 @@ Chaque invité possède un `magic_token`. Dans `/admin-dashboard/invites/`, l'ad
 python manage.py test
 ```
 
-130 tests couvrent la règle « dernière unité », la transaction annulée en cas de conflit, le caractère définitif des réponses, le parcours invité complet jusqu'à la publicité puis l'accueil, le défilé de l'accueil, les redirections après connexion, les règles d'accès par rôle, le paiement VIP et l'affichage de chaque page principale, l'absence de connexion forcée sur le parcours invité et la page d'accueil publique, les catégories d'événements (gestion réservée à l'administrateur, filtre, badge, événements privés jamais exposés) l'espace d'aide (page, bouton WhatsApp, formulaire, statuts, export CSV, aides du parcours) le QR code d'entrée et le pointage (codes uniques, billet réservé aux présents, validation une seule fois, refus des codes inconnus ou d'un autre événement, ajout sur place, annulation, chiffres) et les trois langues (sélecteur, cookie, profil, `?lang=`, pages principales en anglais et en créole sans reste de français, message d'invitation par langue, catalogues complets).
+167 tests couvrent la règle « dernière unité », la transaction annulée en cas de conflit, le caractère définitif des réponses, le parcours invité complet jusqu'à la publicité puis l'accueil, le défilé de l'accueil, les redirections après connexion, les règles d'accès par rôle, le paiement VIP et l'affichage de chaque page principale, l'absence de connexion forcée sur le parcours invité et la page d'accueil publique, les catégories d'événements (gestion réservée à l'administrateur, filtre, badge, événements privés jamais exposés) l'espace d'aide (page, bouton WhatsApp, formulaire, statuts, export CSV, aides du parcours) le QR code d'entrée et le pointage (codes uniques, billet réservé aux présents, validation une seule fois, refus des codes inconnus ou d'un autre événement, ajout sur place, annulation, chiffres) les relances (qui est à relancer et quand, arrêt à la réponse, maximum de 3, e-mail dans la langue de l'invité, WhatsApp seulement noté, jamais de SMS, réglages, commande planifiée) et les trois langues (sélecteur, cookie, profil, `?lang=`, pages principales en anglais et en créole sans reste de français, message d'invitation par langue, catalogues complets).
 
 ## Production
 

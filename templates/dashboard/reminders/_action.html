@@ -1,0 +1,4 @@
+{% load i18n %}
+{% if accepts %}
+<button type="button" class="btn btn-primary" id="send-due" {% if not stats.due %}disabled{% endif %} data-email="{{ stats.due_email }}"><i class="bi bi-send me-2"></i>{% blocktranslate trimmed with n=stats.due %}Envoyer maintenant · {{ n }}{% endblocktranslate %}</button>
+{% endif %}

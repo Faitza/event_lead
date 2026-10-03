@@ -99,6 +99,12 @@ class Event(models.Model):
     allow_companions = models.BooleanField(_("accompagnants autorisés"), default=False)
     max_companions = models.PositiveIntegerField(_("accompagnants maximum par invité"), default=0)
     evaluation_delay_days = models.PositiveIntegerField(_("délai d'évaluation (jours)"), default=3)
+    # Relances des invités sans réponse (WhatsApp ou e-mail, jamais SMS) : au plus 3 par invité
+    reminder_first_after_days = models.PositiveSmallIntegerField(_("première relance après (jours)"), default=3)
+    reminder_every_days = models.PositiveSmallIntegerField(_("puis tous les (jours)"), default=7)
+    reminder_max = models.PositiveSmallIntegerField(_("relances maximum par invité"), default=3)
+    reminder_hour = models.PositiveSmallIntegerField(_("heure d'envoi des relances"), default=10)
+    reminders_auto = models.BooleanField(_("envoi automatique des relances par e-mail"), default=False)
     description = models.TextField(_("description"), blank=True)
     cover_image = models.ImageField(_("photo de couverture"), upload_to="events/covers/", null=True, blank=True)
     cover_video = models.FileField(_("vidéo de couverture"), upload_to="events/videos/", null=True, blank=True)
@@ -265,6 +271,24 @@ class Guest(models.Model):
             self.Status.MAYBE: "warning",
             self.Status.PENDING: "muted",
         }[self.status]
+
+
+class Reminder(models.Model):
+    """Une relance envoyée à un invité qui n'a pas encore répondu (journal : quand, par quel canal, par qui)."""
+
+    guest = models.ForeignKey(Guest, on_delete=models.CASCADE, related_name="reminders", verbose_name=_("invité"))
+    channel = models.CharField(_("canal"), max_length=10, choices=Guest.Channel.choices)
+    automatic = models.BooleanField(_("automatique"), default=False)
+    sent_by = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, null=True, blank=True, related_name="+")
+    sent_at = models.DateTimeField(_("envoyée le"), default=timezone.now)
+
+    class Meta:
+        ordering = ["-sent_at", "-pk"]
+        verbose_name = _("relance")
+        verbose_name_plural = _("relances")
+
+    def __str__(self):
+        return f"{self.guest.name} : {self.sent_at:%d/%m/%Y}"
 
 
 class CheckIn(models.Model):

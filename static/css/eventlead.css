@@ -817,3 +817,21 @@ h1 em, h2 em, h3 em, .disp em { color: var(--el-gold); font-style: italic; }
 .checkin-table td:last-child, .checkin-table thead th:last-child { padding-right: 1rem; }
 .checkin-table .badge-el { white-space: nowrap; }
 @media (min-width: 576px) { .checkin-table td, .checkin-table thead th { padding: 1rem; } }
+
+/* Relances des invités sans réponse */
+.reminder-dots { display: inline-flex; gap: 4px; vertical-align: middle; }
+.reminder-dots i { width: 9px; height: 9px; border-radius: 50%; background: var(--el-tint); border: 1px solid var(--el-tint-strong); }
+.reminder-dots i.on { background: var(--el-gold); border-color: var(--el-gold); }
+.bubble-wa, .bubble-mail { white-space: pre-line; overflow-wrap: anywhere; font-size: .9375rem; line-height: 1.55; padding: 14px 16px; border-radius: 14px; }
+.bubble-wa { background: #DCF8C6; color: #1B2B13; border-top-left-radius: 4px; }
+.bubble-mail { background: var(--el-tint); color: var(--el-text); border: 1px solid var(--el-tint-strong); }
+.reminder-table td { vertical-align: middle; }
+@media (max-width: 767.98px) { .reminder-table .col-extra { display: none; } }
+@media (max-width: 575.98px) {
+  .reminder-table th, .reminder-table td { position: relative; padding: .75rem .5rem; }
+  .reminder-table .ch-label { display: none; }
+  .reminder-table .btn-label { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+  .reminder-table .btn i { margin-right: 0 !important; }
+}
+.stat-card .value-date { font-size: clamp(1.25rem, 5vw, 1.9rem); line-height: 1.15; overflow-wrap: anywhere; }
+.reminders-stats .stat-card > div:last-child { min-width: 0; }

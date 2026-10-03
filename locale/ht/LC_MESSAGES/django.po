@@ -73,7 +73,7 @@ msgstr "adrès imèl"
 msgid "rôle"
 msgstr "wòl"
 
-#: accounts/models.py:15 core/models.py:27 events/models.py:214
+#: accounts/models.py:15 core/models.py:27 events/models.py:220
 msgid "téléphone"
 msgstr "telefòn"
 
@@ -727,11 +727,11 @@ msgid_plural "This password is too short. It must contain at least %(min_length)
 msgstr[0] "Modpas sa a two kout. Li dwe gen omwen %(min_length)d karaktè."
 msgstr[1] "Modpas sa a two kout. Li dwe gen omwen %(min_length)d karaktè."
 
-#: core/models.py:9 core/models.py:25 core/models.py:57 events/models.py:52 events/models.py:212
+#: core/models.py:9 core/models.py:25 core/models.py:57 events/models.py:52 events/models.py:218
 msgid "nom"
 msgstr "non"
 
-#: core/models.py:10 events/models.py:314
+#: core/models.py:10 events/models.py:338
 msgid "note"
 msgstr "nòt"
 
@@ -743,7 +743,7 @@ msgstr "opinyon"
 msgid "publié"
 msgstr "pibliye"
 
-#: core/models.py:26 events/models.py:213
+#: core/models.py:26 events/models.py:219
 msgid "email"
 msgstr "imèl"
 
@@ -795,7 +795,7 @@ msgstr "imèl oswa telefòn"
 msgid "sujet"
 msgstr "sijè"
 
-#: core/models.py:61 events/models.py:92 events/models.py:215 payments/models.py:43
+#: core/models.py:61 events/models.py:92 events/models.py:221 payments/models.py:43
 msgid "statut"
 msgstr "estati"
 
@@ -1017,7 +1017,7 @@ msgstr "Ou bezwen yon nimewo pou voye sou WhatsApp."
 msgid "Cet événement a atteint son nombre maximum d'invités (%(max)d)."
 msgstr "Evènman sa a rive nan kantite maksimòm envite li yo (%(max)d)."
 
-#: events/forms.py:120 events/models.py:201
+#: events/forms.py:120 events/models.py:207
 msgid "Peut-être"
 msgstr "Petèt"
 
@@ -1053,17 +1053,37 @@ msgstr "Kòmantè"
 msgid "Qu'avez-vous pensé de l'événement ?"
 msgstr "Kisa w panse de evènman an ?"
 
-#: events/messaging.py:24
+#: events/messaging.py:31
 msgid "Invitation : %(title)s"
 msgstr "Envitasyon : %(title)s"
 
-#: events/messaging.py:25
+#: events/messaging.py:32
 msgid "Bonjour %(name)s, vous êtes invité(e) à « %(title)s » le %(date)s à %(time)s. Merci de confirmer votre présence ici : %(url)s"
 msgstr "Bonjou %(name)s, ou envite nan « %(title)s » nan dat %(date)s a %(time)s. Tanpri konfime si w pral prezan isit la : %(url)s"
 
-#: events/messaging.py:31
+#: events/messaging.py:38
 msgid "d/m/Y"
 msgstr "d/m/Y"
+
+#: events/messaging.py:61
+msgid "Rappel : %(title)s"
+msgstr "Rapèl : %(title)s"
+
+#: events/messaging.py:62
+msgid ""
+"Bonjour %(name)s, les hôtes de « %(title)s » attendent encore votre réponse. L'événement a lieu le %(date)s à %(time)s.\n"
+"\n"
+"Répondez en quelques secondes :\n"
+"%(url)s\n"
+"\n"
+"Le lien ouvre la page de réponse, sans connexion."
+msgstr ""
+"Bonjou %(name)s, òganizatè « %(title)s » yo ap tann repons ou toujou. Evènman an ap fèt %(date)s a %(time)s.\n"
+"\n"
+"Reponn nan kèk segonn :\n"
+"%(url)s\n"
+"\n"
+"Lyen an louvri paj repons lan, san koneksyon."
 
 #: events/models.py:44
 msgid "Anniversaire"
@@ -1137,165 +1157,233 @@ msgstr "maksimòm moun k ap akonpanye w pou chak envite"
 msgid "délai d'évaluation (jours)"
 msgstr "delè evalyasyon (jou)"
 
-#: events/models.py:102
+#: events/models.py:103
+msgid "première relance après (jours)"
+msgstr "premye rapèl apre (jou)"
+
+#: events/models.py:104
+msgid "puis tous les (jours)"
+msgstr "apre sa chak (jou)"
+
+#: events/models.py:105
+msgid "relances maximum par invité"
+msgstr "maksimòm rapèl pou chak envite"
+
+#: events/models.py:106
+msgid "heure d'envoi des relances"
+msgstr "lè pou voye rapèl yo"
+
+#: events/models.py:107
+msgid "envoi automatique des relances par e-mail"
+msgstr "voye rapèl pa imèl otomatikman"
+
+#: events/models.py:108
 msgid "description"
 msgstr "deskripsyon"
 
-#: events/models.py:103
+#: events/models.py:109
 msgid "photo de couverture"
 msgstr "foto kouvèti"
 
-#: events/models.py:104
+#: events/models.py:110
 msgid "vidéo de couverture"
 msgstr "videyo kouvèti"
 
-#: events/models.py:106
+#: events/models.py:112
 msgid "prix du billet (HTG)"
 msgstr "pri biyè a (HTG)"
 
-#: events/models.py:107
+#: events/models.py:113
 msgid "Laisser vide si l'événement est gratuit."
 msgstr "Kite l vid si evènman an gratis."
 
-#: events/models.py:111
+#: events/models.py:117
 msgid "catégorie"
 msgstr "kategori"
 
-#: events/models.py:115
+#: events/models.py:121
 msgid "créé par"
 msgstr "kreye pa"
 
-#: events/models.py:117 payments/models.py:48
+#: events/models.py:123 payments/models.py:48
 msgid "créé le"
 msgstr "dat kreyasyon"
 
-#: events/models.py:123 events/models.py:207 events/models.py:288 gifts/models.py:42 payments/models.py:30
+#: events/models.py:129 events/models.py:213 events/models.py:312 gifts/models.py:42 payments/models.py:30
 msgid "événement"
 msgstr "evènman"
 
-#: events/models.py:198 payments/models.py:20
+#: events/models.py:204 payments/models.py:20
 msgid "En attente"
 msgstr "Ap tann"
 
-#: events/models.py:199
+#: events/models.py:205
 msgid "Présent"
 msgstr "Prezan"
 
-#: events/models.py:200
+#: events/models.py:206
 msgid "Absent"
 msgstr "Absan"
 
-#: events/models.py:204
+#: events/models.py:210
 msgid "Email"
 msgstr "Imèl"
 
-#: events/models.py:210
+#: events/models.py:216
 msgid "compte lié"
 msgstr "kont ki lye"
 
-#: events/models.py:217
+#: events/models.py:223
 msgid "canal d'envoi"
 msgstr "chanèl pou voye"
 
-#: events/models.py:218
+#: events/models.py:224
 msgid "langue de l'invitation"
 msgstr "lang envitasyon an"
 
-#: events/models.py:219
+#: events/models.py:225
 msgid "lien magique"
 msgstr "lyen majik"
 
-#: events/models.py:220
+#: events/models.py:226
 msgid "invitation envoyée le"
 msgstr "dat envitasyon an te voye"
 
-#: events/models.py:221
+#: events/models.py:227
 msgid "répondu le"
 msgstr "dat repons"
 
-#: events/models.py:222
+#: events/models.py:228
 msgid "souhaite offrir un cadeau"
 msgstr "vle bay yon kado"
 
-#: events/models.py:223
+#: events/models.py:229
 msgid "code d'entrée"
 msgstr "kòd antre"
 
-#: events/models.py:224
+#: events/models.py:230
 msgid "arrivé le"
 msgstr "rive le"
 
-#: events/models.py:225
+#: events/models.py:231
 msgid "ajouté sur place"
 msgstr "ajoute sou plas"
 
-#: events/models.py:230 events/models.py:289 gifts/models.py:79 payments/models.py:33
+#: events/models.py:236 events/models.py:279 events/models.py:313 gifts/models.py:79 payments/models.py:33
 msgid "invité"
 msgstr "envite"
 
-#: events/models.py:274
+#: events/models.py:280
+msgid "canal"
+msgstr "chanèl"
+
+#: events/models.py:283
+msgid "envoyée le"
+msgstr "voye le"
+
+#: events/models.py:287
+msgid "relance"
+msgstr "rapèl"
+
+#: events/models.py:288
+msgid "relances"
+msgstr "rapèl"
+
+#: events/models.py:298
 msgid "Entrée validée"
 msgstr "Antre valide"
 
-#: events/models.py:275
+#: events/models.py:299
 msgid "QR déjà utilisé"
 msgstr "Kòd QR deja itilize"
 
-#: events/models.py:277
+#: events/models.py:301
 msgid "Autre événement"
 msgstr "Lòt evènman"
 
-#: events/models.py:278
+#: events/models.py:302
 msgid "Ajouté sur place"
 msgstr "Ajoute sou plas"
 
-#: events/models.py:279
+#: events/models.py:303
 msgid "Pointage annulé"
 msgstr "Kontwòl anile"
 
-#: events/models.py:282
+#: events/models.py:306
 msgid "QR code"
 msgstr "Kòd QR"
 
-#: events/models.py:283
+#: events/models.py:307
 msgid "Recherche"
 msgstr "Rechèch"
 
-#: events/models.py:284
+#: events/models.py:308
 msgid "Sur place"
 msgstr "Sou plas"
 
-#: events/models.py:290
+#: events/models.py:314
 msgid "code lu"
 msgstr "kòd ki li"
 
-#: events/models.py:291
+#: events/models.py:315
 msgid "résultat"
 msgstr "rezilta"
 
-#: events/models.py:292
+#: events/models.py:316
 msgid "origine"
 msgstr "orijin"
 
-#: events/models.py:298
+#: events/models.py:322
 msgid "pointage"
 msgstr "kontwòl antre"
 
-#: events/models.py:299
+#: events/models.py:323
 msgid "pointages"
 msgstr "kontwòl antre yo"
 
-#: events/models.py:315
+#: events/models.py:339
 msgid "commentaire"
 msgstr "kòmantè"
 
-#: events/models.py:320
+#: events/models.py:344
 msgid "évaluation"
 msgstr "evalyasyon"
 
-#: events/models.py:321
+#: events/models.py:345
 msgid "évaluations"
 msgstr "evalyasyon"
+
+#: events/reminders.py:153
+msgid "Cet événement n'accepte plus de relances."
+msgstr "Evènman sa a pa aksepte rapèl ankò."
+
+#: events/reminders.py:155
+msgid "%(name)s a déjà répondu : plus de relance."
+msgstr "%(name)s deja reponn : pa gen rapèl ankò."
+
+#: events/reminders.py:157
+msgid "L'invitation de %(name)s n'est pas encore envoyée."
+msgstr "Envitasyon %(name)s poko voye."
+
+#: events/reminders.py:160
+msgid "%(name)s a déjà reçu le maximum de relances."
+msgstr "%(name)s deja resevwa maksimòm rapèl."
+
+#: events/reminders.py:162
+msgid "%(name)s vient d'être relancé(e)."
+msgstr "%(name)s fenk resevwa yon rapèl."
+
+#: events/reminders.py:164
+msgid "%(name)s n'a ni e-mail ni numéro WhatsApp."
+msgstr "%(name)s pa gen imèl ni nimewo WhatsApp."
+
+#: events/reminders.py:189
+msgid "L'e-mail à %(name)s n'a pas pu partir. Réessayez plus tard."
+msgstr "Imèl pou %(name)s pa t kapab pati. Eseye ankò pita."
+
+#: events/reminders.py:235 events/reminders.py:228
+msgid "Réglages invalides."
+msgstr "Règleman yo pa valab."
 
 #: events/views.py:29
 msgid "Événement introuvable."
@@ -1434,6 +1522,36 @@ msgstr "Biyè antre mwen pou « %(title)s » : %(url)s"
 #: events/views_invitation.py:267
 msgid "QR code d'entrée de %(name)s"
 msgstr "Kòd QR antre pou %(name)s"
+
+#: events/views_reminders.py:70
+msgid "[lien personnel de l'invité]"
+msgstr "[lyen pèsonèl envite a]"
+
+#: events/views_reminders.py:99
+msgid "Réglages des relances enregistrés."
+msgstr "Règleman rapèl yo anrejistre."
+
+#: events/views_reminders.py:125
+msgid "%(n)d e-mail de relance envoyé."
+msgid_plural "%(n)d e-mails de relance envoyés."
+msgstr[0] "%(n)d imèl rapèl voye."
+msgstr[1] "%(n)d imèl rapèl voye."
+
+#: events/views_reminders.py:127
+msgid "%(n)d relance WhatsApp reste à envoyer : cliquez sur « Relancer » sur sa ligne."
+msgid_plural "%(n)d relances WhatsApp restent à envoyer : cliquez sur « Relancer » sur chaque ligne."
+msgstr[0] "%(n)d rapèl WhatsApp rete pou voye : klike sou « Voye rapèl » sou liy li a."
+msgstr[1] "%(n)d rapèl WhatsApp rete pou voye : klike sou « Voye rapèl » sou chak liy."
+
+#: events/views_reminders.py:132
+msgid "%(n)d e-mail n'a pas pu partir."
+msgid_plural "%(n)d e-mails n'ont pas pu partir."
+msgstr[0] "%(n)d imèl pa t kapab pati."
+msgstr[1] "%(n)d imèl pa t kapab pati."
+
+#: events/views_reminders.py:134
+msgid "Aucune relance à envoyer pour le moment."
+msgstr "Pa gen rapèl pou voye pou kounye a."
 
 #: gifts/forms.py:13
 msgid "Nom du cadeau"
@@ -1767,7 +1885,7 @@ msgstr "Dat"
 msgid "Ma réponse"
 msgstr "Repons mwen"
 
-#: templates/accounts/guest_space.html:20 templates/dashboard/checkin/_event_card.html:8 templates/dashboard/guests/export_pdf.html:15 templates/dashboard/help/list.html:29 templates/events/organizer_portal.html:16 templates/events/organizer_portal.html:41
+#: templates/accounts/guest_space.html:20 templates/dashboard/checkin/_event_card.html:8 templates/dashboard/guests/export_pdf.html:15 templates/dashboard/help/list.html:29 templates/dashboard/reminders/_event_card.html:8 templates/events/organizer_portal.html:16
 msgid "j F Y"
 msgstr "j F Y"
 
@@ -2225,7 +2343,7 @@ msgstr "Kite premye opinyon an."
 msgid "Laisser un avis"
 msgstr "Kite yon opinyon"
 
-#: templates/core/landing.html:223 templates/dashboard/checkin/event.html:68 templates/dashboard/events/detail.html:42 templates/dashboard/guests/export_pdf.html:17 core/views_admin.py:146 events/views_admin.py:300
+#: templates/core/landing.html:223 templates/dashboard/checkin/event.html:68 templates/dashboard/events/detail.html:43 templates/dashboard/guests/export_pdf.html:17 core/views_admin.py:146 events/views_admin.py:300
 msgid "Nom"
 msgstr "Non"
 
@@ -2309,7 +2427,7 @@ msgstr "Li parèt ak yon konte a rebou anvan envite a ka pase l."
 msgid "Retour"
 msgstr "Retounen"
 
-#: templates/dashboard/ads/list.html:4 templates/dashboard/base_dashboard.html:19
+#: templates/dashboard/ads/list.html:4 templates/dashboard/base_dashboard.html:20
 msgid "Publicités"
 msgstr "Piblisite"
 
@@ -2361,7 +2479,7 @@ msgstr "Aksyon"
 msgid "Oui"
 msgstr "Wi"
 
-#: templates/dashboard/ads/list.html:24 templates/dashboard/events/detail.html:48 templates/dashboard/events/detail.html:58 events/forms.py:119
+#: templates/dashboard/ads/list.html:24 templates/dashboard/events/detail.html:49 templates/dashboard/events/detail.html:59 events/forms.py:119
 msgid "Non"
 msgstr "Non"
 
@@ -2393,7 +2511,7 @@ msgstr "Evènman"
 msgid "Catégories"
 msgstr "Kategori"
 
-#: templates/dashboard/base_dashboard.html:15 templates/dashboard/events/detail.html:33 templates/dashboard/guests/list.html:3 templates/dashboard/guests/list.html:6 templates/dashboard/home.html:25
+#: templates/dashboard/base_dashboard.html:15 templates/dashboard/events/detail.html:34 templates/dashboard/guests/list.html:3 templates/dashboard/guests/list.html:6 templates/dashboard/home.html:25
 msgid "Invités"
 msgstr "Envite"
 
@@ -2401,55 +2519,59 @@ msgstr "Envite"
 msgid "Pointage"
 msgstr "Kontwòl antre"
 
-#: templates/dashboard/base_dashboard.html:17 templates/dashboard/events/list.html:25 templates/dashboard/gifts/list.html:4 templates/dashboard/guests/export_pdf.html:17 templates/dashboard/guests/list.html:28 templates/invitation/step_recap.html:13
+#: templates/dashboard/base_dashboard.html:17 templates/dashboard/events/detail.html:22 templates/dashboard/reminders/_table.html:13 templates/dashboard/reminders/index.html:3 templates/dashboard/reminders/index.html:6
+msgid "Relances"
+msgstr "Rapèl"
+
+#: templates/dashboard/base_dashboard.html:18 templates/dashboard/events/list.html:25 templates/dashboard/gifts/list.html:4 templates/dashboard/guests/export_pdf.html:17 templates/dashboard/guests/list.html:28 templates/invitation/step_recap.html:13
 msgid "Cadeaux"
 msgstr "Kado"
 
-#: templates/dashboard/base_dashboard.html:18
+#: templates/dashboard/base_dashboard.html:19
 msgid "Revenus"
 msgstr "Revni"
 
-#: templates/dashboard/base_dashboard.html:20 templates/dashboard/payments/history.html:4
+#: templates/dashboard/base_dashboard.html:21 templates/dashboard/payments/history.html:4
 msgid "Paiements"
 msgstr "Peman"
 
-#: templates/dashboard/base_dashboard.html:21
+#: templates/dashboard/base_dashboard.html:22
 msgid "Communauté"
 msgstr "Kominote"
 
-#: templates/dashboard/base_dashboard.html:22 templates/dashboard/inbox.html:3 templates/dashboard/inbox.html:5
+#: templates/dashboard/base_dashboard.html:23 templates/dashboard/inbox.html:3 templates/dashboard/inbox.html:5
 msgid "Messages et avis"
 msgstr "Mesaj ak opinyon"
 
-#: templates/dashboard/base_dashboard.html:23 templates/dashboard/help/list.html:3 templates/dashboard/help/list.html:6
+#: templates/dashboard/base_dashboard.html:24 templates/dashboard/help/list.html:3 templates/dashboard/help/list.html:6
 msgid "Demandes d'aide"
 msgstr "Demann èd"
 
-#: templates/dashboard/base_dashboard.html:23
+#: templates/dashboard/base_dashboard.html:24
 msgid "Demandes nouvelles"
 msgstr "Nouvo demann"
 
-#: templates/dashboard/base_dashboard.html:24
+#: templates/dashboard/base_dashboard.html:25
 msgid "Back-office Django"
 msgstr "Back-office Django"
 
-#: templates/dashboard/base_dashboard.html:25
+#: templates/dashboard/base_dashboard.html:26
 msgid "Voir le site"
 msgstr "Gade sit la"
 
-#: templates/dashboard/base_dashboard.html:27 templates/partials/_navbar.html:44
+#: templates/dashboard/base_dashboard.html:28 templates/partials/_navbar.html:44
 msgid "Se déconnecter"
 msgstr "Dekonekte"
 
-#: templates/dashboard/base_dashboard.html:33 templates/partials/_navbar.html:16
+#: templates/dashboard/base_dashboard.html:34 templates/partials/_navbar.html:16
 msgid "Menu"
 msgstr "Meni"
 
-#: templates/dashboard/base_dashboard.html:34 templates/dashboard/checkin/event.html:28 templates/dashboard/events/detail.html:17 templates/events/public_detail.html:14 templates/invitation/base_invitation.html:22 templates/invitation/ticket.html:22
+#: templates/dashboard/base_dashboard.html:35 templates/dashboard/checkin/event.html:28 templates/dashboard/events/detail.html:17 templates/dashboard/reminders/event.html:20 templates/events/public_detail.html:14 templates/invitation/base_invitation.html:22
 msgid "l j F Y"
 msgstr "l j F Y"
 
-#: templates/dashboard/base_dashboard.html:38 templates/dashboard/base_dashboard.html:38 templates/dashboard/base_dashboard.html:38 templates/dashboard/events/form.html:4 templates/dashboard/events/form.html:8 templates/dashboard/events/list.html:7
+#: templates/dashboard/base_dashboard.html:39 templates/dashboard/base_dashboard.html:39 templates/dashboard/base_dashboard.html:39 templates/dashboard/events/form.html:4 templates/dashboard/events/form.html:8 templates/dashboard/events/list.html:7
 msgid "Nouvel événement"
 msgstr "Nouvo evènman"
 
@@ -2481,7 +2603,7 @@ msgstr "Kategori"
 msgid "Ordre"
 msgstr "Lòd"
 
-#: templates/dashboard/categories/list.html:20 templates/dashboard/events/detail.html:22 templates/dashboard/events/list.html:41 templates/dashboard/gifts/list.html:42 templates/dashboard/guests/list.html:49
+#: templates/dashboard/categories/list.html:20 templates/dashboard/events/detail.html:23 templates/dashboard/events/list.html:41 templates/dashboard/gifts/list.html:42 templates/dashboard/guests/list.html:49
 msgid "Modifier"
 msgstr "Modifye"
 
@@ -2497,11 +2619,11 @@ msgstr "Pa gen kategori."
 msgid "Créer une catégorie"
 msgstr "Kreye yon kategori"
 
-#: templates/dashboard/checkin/_event_card.html:6
+#: templates/dashboard/checkin/_event_card.html:6 templates/dashboard/reminders/_stats.html:6 templates/dashboard/reminders/_table.html:20
 msgid "Aujourd'hui"
 msgstr "Jodi a"
 
-#: templates/dashboard/checkin/_event_card.html:8 templates/dashboard/checkin/_recent.html:17 templates/dashboard/checkin/event.html:28 templates/dashboard/events/detail.html:17 templates/dashboard/events/list.html:33 templates/events/public_detail.html:14
+#: templates/dashboard/checkin/_event_card.html:8 templates/dashboard/checkin/_recent.html:17 templates/dashboard/checkin/event.html:28 templates/dashboard/events/detail.html:17 templates/dashboard/events/list.html:33 templates/dashboard/reminders/_event_card.html:8
 msgid "H\\hi"
 msgstr "H\\hi"
 
@@ -2517,11 +2639,11 @@ msgstr "Louvri kontwòl la"
 msgid "Dernières arrivées"
 msgstr "Dènye moun ki rive"
 
-#: templates/dashboard/checkin/_recent.html:5
+#: templates/dashboard/checkin/_recent.html:5 templates/dashboard/reminders/_table.html:5
 msgid "Filtrer"
 msgstr "Filtre"
 
-#: templates/dashboard/checkin/_recent.html:6 templates/partials/_category_filter.html:4
+#: templates/dashboard/checkin/_recent.html:6 templates/dashboard/reminders/_table.html:6 templates/partials/_category_filter.html:4
 msgid "Tous"
 msgstr "Tout"
 
@@ -2537,7 +2659,7 @@ msgstr "Sou plas · %(n)s"
 msgid "Heure"
 msgstr "Lè"
 
-#: templates/dashboard/checkin/_recent.html:13 templates/dashboard/guests/list.html:28 accounts/models.py:11
+#: templates/dashboard/checkin/_recent.html:13 templates/dashboard/guests/list.html:28 templates/dashboard/reminders/_table.html:13 accounts/models.py:11
 msgid "Invité"
 msgstr "Envite"
 
@@ -2549,7 +2671,7 @@ msgstr "Rezilta"
 msgid "Annuler ce pointage"
 msgstr "Anile kontwòl sa a"
 
-#: templates/dashboard/checkin/_recent.html:25
+#: templates/dashboard/checkin/_recent.html:25 templates/dashboard/reminders/_table.html:35
 msgid "Rien à afficher pour ce filtre."
 msgstr "Pa gen anyen pou montre ak filtre sa a."
 
@@ -2611,7 +2733,7 @@ msgstr "Rive a"
 msgid "Pointer"
 msgstr "Valide"
 
-#: templates/dashboard/checkin/event.html:20
+#: templates/dashboard/checkin/event.html:20 templates/dashboard/reminders/event.html:13
 msgid "Une erreur est survenue. Réessayez."
 msgstr "Gen yon erè. Eseye ankò."
 
@@ -2639,7 +2761,7 @@ msgstr "Kontwòl la louvri"
 msgid "Plein écran"
 msgstr "Tout ekran"
 
-#: templates/dashboard/checkin/event.html:33 templates/dashboard/checkin/index.html:22 templates/dashboard/events/detail.html:20 templates/dashboard/events/detail.html:51 templates/dashboard/guests/form.html:3 templates/dashboard/guests/form.html:6
+#: templates/dashboard/checkin/event.html:33 templates/dashboard/checkin/index.html:22 templates/dashboard/events/detail.html:20 templates/dashboard/events/detail.html:52 templates/dashboard/guests/form.html:3 templates/dashboard/guests/form.html:6
 msgid "Ajouter un invité"
 msgstr "Ajoute yon envite"
 
@@ -2675,7 +2797,7 @@ msgstr "Fèmen"
 msgid "Pour une personne arrivée sans être sur la liste : elle est ajoutée comme présente et pointée tout de suite."
 msgstr "Pou yon moun ki rive san l pa sou lis la : li ajoute kòm prezan epi li valide touswit."
 
-#: templates/dashboard/checkin/event.html:70 templates/dashboard/events/detail.html:58 templates/invitation/step_presence.html:23 templates/invitation/step_recap.html:10 events/views_admin.py:300
+#: templates/dashboard/checkin/event.html:70 templates/dashboard/events/detail.html:59 templates/invitation/step_presence.html:23 templates/invitation/step_recap.html:10 events/views_admin.py:300
 msgid "Accompagnants"
 msgstr "Moun k ap akonpanye w"
 
@@ -2699,11 +2821,11 @@ msgstr "Jou J, li kòd QR chak envite nan antre a. Chwazi evènman an."
 msgid "Aujourd'hui et à venir"
 msgstr "Jodi a ak pwochen yo"
 
-#: templates/dashboard/checkin/index.html:16 templates/events/organizer_portal.html:36
+#: templates/dashboard/checkin/index.html:16 templates/dashboard/reminders/index.html:16 templates/events/organizer_portal.html:36
 msgid "Événements passés"
 msgstr "Evènman ki pase yo"
 
-#: templates/dashboard/checkin/index.html:22
+#: templates/dashboard/checkin/index.html:22 templates/dashboard/reminders/index.html:22
 msgid "Aucun événement n'a encore d'invités."
 msgstr "Pa gen evènman ki gen envite ankò."
 
@@ -2795,53 +2917,53 @@ msgstr "Poko gen repons."
 msgid "%(d)s à %(t)s"
 msgstr "%(d)s a %(t)s"
 
-#: templates/dashboard/events/detail.html:37
+#: templates/dashboard/events/detail.html:38
 msgid "Gérer et envoyer"
 msgstr "Jere ak voye"
 
-#: templates/dashboard/events/detail.html:42 templates/dashboard/guests/export_pdf.html:17 events/views_admin.py:300
+#: templates/dashboard/events/detail.html:43 templates/dashboard/guests/export_pdf.html:17 templates/dashboard/reminders/_table.html:13 templates/dashboard/reminders/event.html:61 events/views_admin.py:300
 msgid "Canal"
 msgstr "Chanèl"
 
-#: templates/dashboard/events/detail.html:42 templates/dashboard/events/list.html:25 templates/dashboard/guests/export_pdf.html:17 templates/dashboard/guests/form.html:45 templates/dashboard/guests/list.html:28 templates/dashboard/help/list.html:34
+#: templates/dashboard/events/detail.html:43 templates/dashboard/events/list.html:25 templates/dashboard/guests/export_pdf.html:17 templates/dashboard/guests/form.html:45 templates/dashboard/guests/list.html:28 templates/dashboard/help/list.html:34
 msgid "Statut"
 msgstr "Estati"
 
-#: templates/dashboard/events/detail.html:42 templates/dashboard/guests/export_pdf.html:17 templates/dashboard/guests/list.html:28
+#: templates/dashboard/events/detail.html:43 templates/dashboard/guests/export_pdf.html:17 templates/dashboard/guests/list.html:28
 msgid "Acc."
 msgstr "Akonp."
 
-#: templates/dashboard/events/detail.html:42
+#: templates/dashboard/events/detail.html:43
 msgid "Envoyée"
 msgstr "Voye"
 
-#: templates/dashboard/events/detail.html:51
+#: templates/dashboard/events/detail.html:52
 msgid "Aucun invité."
 msgstr "Pa gen envite."
 
-#: templates/dashboard/events/detail.html:56
+#: templates/dashboard/events/detail.html:57
 msgid "Paramètres"
 msgstr "Paramèt"
 
-#: templates/dashboard/events/detail.html:57
+#: templates/dashboard/events/detail.html:58
 msgid "Invités max."
 msgstr "Maks. envite"
 
-#: templates/dashboard/events/detail.html:58
+#: templates/dashboard/events/detail.html:59
 msgid "Oui, %(n)s max."
 msgstr "Wi, %(n)s maks."
 
-#: templates/dashboard/events/detail.html:59
+#: templates/dashboard/events/detail.html:60
 msgid "Évaluation après"
 msgstr "Evalyasyon apre"
 
-#: templates/dashboard/events/detail.html:59
+#: templates/dashboard/events/detail.html:60
 msgid "%(counter)s jour"
 msgid_plural "%(counter)s jours"
 msgstr[0] "%(counter)s jou"
 msgstr[1] "%(counter)s jou"
 
-#: templates/dashboard/events/detail.html:64
+#: templates/dashboard/events/detail.html:65
 msgid "Évaluations"
 msgstr "Evalyasyon"
 
@@ -3081,7 +3203,7 @@ msgstr "Chanèl pou voye"
 msgid "Lien d'invitation"
 msgstr "Lyen envitasyon an"
 
-#: templates/dashboard/guests/form.html:43 events/views_admin.py:300
+#: templates/dashboard/guests/form.html:43 templates/dashboard/reminders/_table.html:18 templates/dashboard/reminders/event.html:63 events/views_admin.py:300
 msgid "E-mail"
 msgstr "Imèl"
 
@@ -3177,7 +3299,7 @@ msgid_plural "%(counter)s demandes d'aide nouvelles"
 msgstr[0] "%(counter)s nouvo demann èd"
 msgstr[1] "%(counter)s nouvo demann èd"
 
-#: templates/dashboard/home.html:14 events/models.py:124
+#: templates/dashboard/home.html:14 events/models.py:130
 msgid "événements"
 msgstr "evènman"
 
@@ -3185,7 +3307,7 @@ msgstr "evènman"
 msgid "%(n)s à venir"
 msgstr "%(n)s k ap vini"
 
-#: templates/dashboard/home.html:15 templates/events/organizer_event_detail.html:8 events/models.py:231
+#: templates/dashboard/home.html:15 templates/events/organizer_event_detail.html:8 events/models.py:237
 msgid "invités"
 msgstr "envite"
 
@@ -3321,6 +3443,236 @@ msgstr "Kliyan"
 msgid "Aucune transaction."
 msgstr "Pa gen tranzaksyon."
 
+#: templates/dashboard/reminders/_action.html:3
+msgid "Envoyer maintenant · %(n)s"
+msgstr "Voye kounye a · %(n)s"
+
+#: templates/dashboard/reminders/_event_card.html:6
+msgid "%(n)s à relancer"
+msgstr "%(n)s pou rapèl"
+
+#: templates/dashboard/reminders/_event_card.html:9
+msgid "%(n)s sans réponse sur %(total)s invités"
+msgstr "%(n)s pa reponn sou %(total)s envite"
+
+#: templates/dashboard/reminders/_event_card.html:11
+msgid "Ouvrir les relances"
+msgstr "Louvri rapèl yo"
+
+#: templates/dashboard/reminders/_stats.html:3
+msgid "sans réponse sur %(total)s invités"
+msgstr "pa reponn sou %(total)s envite"
+
+#: templates/dashboard/reminders/_stats.html:4
+msgid "jamais relancés"
+msgstr "pa janm resevwa rapèl"
+
+#: templates/dashboard/reminders/_stats.html:4
+msgid "%(n)s à relancer aujourd'hui"
+msgstr "%(n)s pou rapèl jodi a"
+
+#: templates/dashboard/reminders/_stats.html:5
+msgid "déjà relancés"
+msgstr "ki resevwa rapèl deja"
+
+#: templates/dashboard/reminders/_stats.html:5
+msgid "%(n)s une fois"
+msgstr "%(n)s yon fwa"
+
+#: templates/dashboard/reminders/_stats.html:5
+msgid "%(n)s deux fois"
+msgstr "%(n)s de fwa"
+
+#: templates/dashboard/reminders/_stats.html:5
+msgid "%(n)s trois fois"
+msgstr "%(n)s twa fwa"
+
+#: templates/dashboard/reminders/_stats.html:6 events/models.py:281
+msgid "automatique"
+msgstr "otomatik"
+
+#: templates/dashboard/reminders/_stats.html:6
+msgid "envoi à la main"
+msgstr "w voye l ak men"
+
+#: templates/dashboard/reminders/_stats.html:6 templates/dashboard/reminders/_table.html:20
+msgid "j M"
+msgstr "j M"
+
+#: templates/dashboard/reminders/_stats.html:8
+msgid "Voir les invités"
+msgstr "Gade envite yo"
+
+#: templates/dashboard/reminders/_stats.html:8
+msgid "%(counter)s invité sans réponse n'a pas encore reçu son invitation : envoyez-la d'abord, il sera relancé ensuite."
+msgid_plural "%(counter)s invités sans réponse n'ont pas encore reçu leur invitation : envoyez-la d'abord, ils seront relancés ensuite."
+msgstr[0] "%(counter)s envite ki pa reponn poko resevwa envitasyon l : voye l anvan, apre sa l ap resevwa rapèl."
+msgstr[1] "%(counter)s envite ki pa reponn poko resevwa envitasyon yo : voye yo anvan, apre sa y ap resevwa rapèl."
+
+#: templates/dashboard/reminders/_stats.html:9
+msgid "%(counter)s invité n'a ni e-mail ni numéro WhatsApp : impossible de le relancer."
+msgid_plural "%(counter)s invités n'ont ni e-mail ni numéro WhatsApp : impossible de les relancer."
+msgstr[0] "%(counter)s envite pa gen imèl ni nimewo WhatsApp : pa gen mwayen pou voye l rapèl."
+msgstr[1] "%(counter)s envite pa gen imèl ni nimewo WhatsApp : pa gen mwayen pou voye yo rapèl."
+
+#: templates/dashboard/reminders/_table.html:4 templates/dashboard/reminders/event.html:18
+msgid "Invités sans réponse"
+msgstr "Envite ki pa reponn"
+
+#: templates/dashboard/reminders/_table.html:7
+msgid "Jamais relancés · %(n)s"
+msgstr "Pa janm resevwa rapèl · %(n)s"
+
+#: templates/dashboard/reminders/_table.html:8
+msgid "Relancés %(counter)s fois · %(k)s"
+msgid_plural "Relancés %(counter)s fois · %(k)s"
+msgstr[0] "Resevwa rapèl %(counter)s fwa · %(k)s"
+msgstr[1] "Resevwa rapèl %(counter)s fwa · %(k)s"
+
+#: templates/dashboard/reminders/_table.html:13
+msgid "Prochaine"
+msgstr "Pwochen"
+
+#: templates/dashboard/reminders/_table.html:17
+msgid "Invitation non envoyée"
+msgstr "Envitasyon an poko voye"
+
+#: templates/dashboard/reminders/_table.html:17
+msgid "Invité le %(d)s"
+msgstr "Envite %(d)s"
+
+#: templates/dashboard/reminders/_table.html:21
+msgid "À relancer"
+msgstr "Pou rapèl"
+
+#: templates/dashboard/reminders/_table.html:21
+msgid "Maximum atteint"
+msgstr "Limit la rive"
+
+#: templates/dashboard/reminders/_table.html:21
+msgid "Aucun contact"
+msgstr "Pa gen kontak"
+
+#: templates/dashboard/reminders/_table.html:21
+msgid "Pas invité"
+msgstr "Poko envite"
+
+#: templates/dashboard/reminders/_table.html:21
+msgid "Jamais relancé"
+msgstr "Pa janm resevwa rapèl"
+
+#: templates/dashboard/reminders/_table.html:21
+msgid "Relancé %(counter)s fois"
+msgid_plural "Relancé %(counter)s fois"
+msgstr[0] "Resevwa rapèl %(counter)s fwa"
+msgstr[1] "Resevwa rapèl %(counter)s fwa"
+
+#: templates/dashboard/reminders/_table.html:25 templates/dashboard/reminders/_table.html:25 templates/dashboard/reminders/_table.html:27 templates/dashboard/reminders/_table.html:27
+msgid "Relancer"
+msgstr "Voye rapèl"
+
+#: templates/dashboard/reminders/_table.html:37
+msgid "Tous les invités ont répondu : rien à relancer."
+msgstr "Tout envite yo reponn : pa gen anyen pou rapèl."
+
+#: templates/dashboard/reminders/event.html:4
+msgid "Relances - %(titre)s"
+msgstr "Rapèl - %(titre)s"
+
+#: templates/dashboard/reminders/event.html:10
+msgid "Envoi en cours..."
+msgstr "Ap voye..."
+
+#: templates/dashboard/reminders/event.html:11
+msgid "Relance envoyée par e-mail à"
+msgstr "Rapèl voye pa imèl bay"
+
+#: templates/dashboard/reminders/event.html:12
+msgid "Relance WhatsApp enregistrée pour"
+msgstr "Rapèl WhatsApp anrejistre pou"
+
+#: templates/dashboard/reminders/event.html:14
+msgid "Envoyer maintenant les relances par e-mail ? Les relances WhatsApp restent à envoyer depuis votre téléphone."
+msgstr "Voye rapèl pa imèl yo kounye a ? Rapèl WhatsApp yo rete pou w voye depi telefòn ou."
+
+#: templates/dashboard/reminders/event.html:19
+msgid "Relancer les invités"
+msgstr "Voye rapèl bay envite yo"
+
+#: templates/dashboard/reminders/event.html:26
+msgid "Cet événement est passé, annulé ou en brouillon : il n'accepte plus de relances."
+msgstr "Evènman sa a deja pase, li anile oswa se yon bwouyon : li pa aksepte rapèl ankò."
+
+#: templates/dashboard/reminders/event.html:27
+msgid "Mode démonstration : les e-mails de relance s'affichent dans la console du serveur au lieu de partir. Ils partent vraiment une fois la messagerie configurée (variables EMAIL_* du fichier .env)."
+msgstr "Mòd demonstrasyon : imèl rapèl yo parèt nan konsòl sèvè a olye yo pati. Yo pati vre lè w konfigire sèvis imèl la (varyab EMAIL_* nan dosye .env)."
+
+#: templates/dashboard/reminders/event.html:35
+msgid "Réglages"
+msgstr "Règleman"
+
+#: templates/dashboard/reminders/event.html:38
+msgid "Première relance"
+msgstr "Premye rapèl"
+
+#: templates/dashboard/reminders/event.html:39
+msgid "%(n)s jours après l'invitation"
+msgstr "%(n)s jou apre envitasyon an"
+
+#: templates/dashboard/reminders/event.html:40
+msgid "Fréquence"
+msgstr "Frekans"
+
+#: templates/dashboard/reminders/event.html:41
+msgid "Tous les %(n)s jours"
+msgstr "Chak %(n)s jou"
+
+#: templates/dashboard/reminders/event.html:42
+msgid "Maximum par invité"
+msgstr "Maksimòm pou chak envite"
+
+#: templates/dashboard/reminders/event.html:43
+msgid "%(counter)s relance"
+msgid_plural "%(counter)s relances"
+msgstr[0] "%(counter)s rapèl"
+msgstr[1] "%(counter)s rapèl"
+
+#: templates/dashboard/reminders/event.html:44
+msgid "Heure d'envoi"
+msgstr "Lè pou voye"
+
+#: templates/dashboard/reminders/event.html:49
+msgid "Envoi automatique des relances par e-mail"
+msgstr "Voye rapèl pa imèl otomatikman"
+
+#: templates/dashboard/reminders/event.html:50
+msgid "Les e-mails partent seuls à l'heure choisie. Les relances WhatsApp restent à envoyer en un clic depuis cette page."
+msgstr "Imèl yo pati poukont yo nan lè ou chwazi a. Rapèl WhatsApp yo rete pou w voye ak yon sèl klik depi paj sa a."
+
+#: templates/dashboard/reminders/event.html:52
+msgid "Une relance s'arrête dès que l'invité répond. Elle part par le même canal que l'invitation, WhatsApp ou e-mail, jamais par SMS."
+msgstr "Rapèl la sispann le envite a reponn. Li pati pa menm chanèl ak envitasyon an, WhatsApp oswa imèl, pa janm pa SMS."
+
+#: templates/dashboard/reminders/event.html:53
+msgid "Enregistrer les réglages"
+msgstr "Anrejistre règleman yo"
+
+#: templates/dashboard/reminders/event.html:60
+msgid "Message envoyé"
+msgstr "Mesaj ki voye a"
+
+#: templates/dashboard/reminders/event.html:69
+msgid "Le message s'écrit dans la langue de chaque invité. Le lien ouvre la page de réponse, sans connexion."
+msgstr "Mesaj la ekri nan lang chak envite. Lyen an louvri paj repons lan, san koneksyon."
+
+#: templates/dashboard/reminders/index.html:6
+msgid "Relancez en un clic les invités qui n'ont pas répondu, par WhatsApp ou par e-mail. Choisissez l'événement."
+msgstr "Voye rapèl ak yon sèl klik bay envite ki poko reponn yo, pa WhatsApp oswa pa imèl. Chwazi evènman an."
+
+#: templates/dashboard/reminders/index.html:10
+msgid "À venir"
+msgstr "Ki ap vini"
+
 #: templates/errors/403.html:3
 msgid "Accès refusé"
 msgstr "Aksè refize"
@@ -3385,7 +3737,7 @@ msgstr "Konsè, gala, konferans : dekouvri sa k ap pase tou pre ou."
 msgid "Aucun événement public à venir pour le moment."
 msgstr "Pa gen okenn evènman piblik k ap vini pou kounye a."
 
-#: templates/events/organizer_event_detail.html:10 events/models.py:216
+#: templates/events/organizer_event_detail.html:10 events/models.py:222
 msgid "accompagnants"
 msgstr "moun k ap akonpanye w"
 
@@ -3543,7 +3895,7 @@ msgstr "Deja valide a %(time)s."
 msgid "Valider l'entrée"
 msgstr "Valide antre a"
 
-#: templates/invitation/entry_code.html:22 events/models.py:276
+#: templates/invitation/entry_code.html:22 events/models.py:300
 msgid "QR inconnu"
 msgstr "Kòd QR pa konnen"
 

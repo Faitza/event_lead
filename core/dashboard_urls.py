@@ -4,6 +4,7 @@ from django.urls import path
 from ads import views_admin as ads_admin
 from events import views_admin as events_admin
 from events import views_checkin as checkin_admin
+from events import views_reminders as reminder_admin
 from gifts import views_admin as gifts_admin
 from payments import views as payments_views
 
@@ -50,6 +51,13 @@ urlpatterns = [
     path("pointage/<int:pk>/chercher/", checkin_admin.checkin_search, name="checkin_search"),
     path("pointage/<int:pk>/ajouter/", checkin_admin.checkin_walk_in, name="checkin_walk_in"),
     path("pointage/<int:pk>/<int:guest_pk>/annuler/", checkin_admin.checkin_cancel, name="checkin_cancel"),
+    # Relances des invités sans réponse
+    path("relances/", reminder_admin.reminder_index, name="reminder_index"),
+    path("relances/<int:pk>/", reminder_admin.reminder_event, name="reminder_event"),
+    path("relances/<int:pk>/live/", reminder_admin.reminder_live, name="reminder_live"),
+    path("relances/<int:pk>/reglages/", reminder_admin.reminder_settings, name="reminder_settings"),
+    path("relances/<int:pk>/envoyer/", reminder_admin.reminder_send_due, name="reminder_send_due"),
+    path("relances/<int:pk>/<int:guest_pk>/envoyer/", reminder_admin.reminder_send_one, name="reminder_send_one"),
     # Cadeaux
     path("cadeaux/", gifts_admin.gift_list, name="gift_list"),
     path("cadeaux/nouveau/", gifts_admin.gift_create, name="gift_create"),

@@ -170,6 +170,11 @@ STORAGES = {
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 EMAIL_BACKEND = env("EMAIL_BACKEND", default="django.core.mail.backends.console.EmailBackend")
+EMAIL_HOST = env("EMAIL_HOST", default="localhost")
+EMAIL_PORT = env.int("EMAIL_PORT", default=587)
+EMAIL_HOST_USER = env("EMAIL_HOST_USER", default="")
+EMAIL_HOST_PASSWORD = env("EMAIL_HOST_PASSWORD", default="")
+EMAIL_USE_TLS = env.bool("EMAIL_USE_TLS", default=True)
 DEFAULT_FROM_EMAIL = env("DEFAULT_FROM_EMAIL", default="EventLead <no-reply@eventlead.ht>")
 
 # ---------------------------------------------------------------------------
@@ -189,6 +194,8 @@ PAYPAL_CLIENT_SECRET = env("PAYPAL_CLIENT_SECRET", default="")
 GEOCODER_USER_AGENT = env("GEOCODER_USER_AGENT", default="eventlead-app")
 
 CONTACT_EMAIL = env("CONTACT_EMAIL", default="contact@eventlead.ht")
+# Adresse publique du site : sert aux liens des e-mails envoyés hors d'une page (commande send_reminders)
+SITE_URL = env("SITE_URL", default="http://localhost:8000")
 CONTACT_PHONE = env("CONTACT_PHONE", default="+509 3700 0000")
 CONTACT_WHATSAPP = env("CONTACT_WHATSAPP", default="50937000000")
 CONTACT_ADDRESS = env("CONTACT_ADDRESS", default="Petion-Ville, Port-au-Prince, Haiti")
