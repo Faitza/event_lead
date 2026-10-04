@@ -175,6 +175,11 @@ class Event(models.Model):
 
     class Meta:
         ordering = ["date", "time"]
+        indexes = [
+            # Liste publique (accueil, /evenements/) : public + actif + à venir, triés par date
+            models.Index(fields=["event_type", "status", "date"], name="event_public_upcoming_idx"),
+            models.Index(fields=["date"], name="event_date_idx"),
+        ]
         verbose_name = _("événement")
         verbose_name_plural = _("événements")
 
@@ -319,6 +324,12 @@ class Guest(models.Model):
 
     class Meta:
         ordering = ["name"]
+        indexes = [
+            models.Index(fields=["event", "status"], name="guest_event_status_idx"),
+            models.Index(fields=["event", "name"], name="guest_event_name_idx"),
+            models.Index(fields=["-replied_at"], name="guest_replied_idx"),
+            models.Index(fields=["email"], name="guest_email_idx"),
+        ]
         verbose_name = _("invité")
         verbose_name_plural = _("invités")
 
@@ -443,6 +454,7 @@ class CheckIn(models.Model):
 
     class Meta:
         ordering = ["-created_at", "-pk"]
+        indexes = [models.Index(fields=["event", "-created_at"], name="checkin_event_created_idx")]
         verbose_name = _("pointage")
         verbose_name_plural = _("pointages")
 

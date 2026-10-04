@@ -14,6 +14,7 @@
         <div class="col-12"><div class="el-card empty-state"><i class="bi bi-calendar2-heart"></i><p class="mt-2 mb-0">{% trans "Aucun événement public à venir pour le moment." %}</p></div></div>
       {% endfor %}
     </div>
+    {% include "partials/_pagination.html" with page=page_obj %}
     {% if ads %}
     <div class="eyebrow-row mt-5 mb-3"><span class="diamond"></span><span class="eyebrow">{% trans "Nos partenaires" %}</span></div>
     <div class="row g-3">

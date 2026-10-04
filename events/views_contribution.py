@@ -4,8 +4,10 @@ from django.contrib import messages
 from django.shortcuts import redirect, render
 from django.utils.translation import gettext as _
 
+from core.ratelimit import ratelimit
 from gifts.services import ResponseLockedError
 from payments import contributions
+from payments import idempotency
 from payments.forms import PaymentForm
 from payments.models import Payment
 
@@ -13,6 +15,7 @@ from .models import Guest
 from .views_invitation import _ctx, _get_state, _guard, _load_guest, _session_key
 
 
+@ratelimit("payment", 10, 600)
 def invitation_contribution(request, token):
     """À la place d'un cadeau : montant, MonCash ou NatCash, petit mot ; le paiement confirme la réponse."""
     guest = _load_guest(token)
@@ -42,7 +45,7 @@ def invitation_contribution(request, token):
             try:
                 payment, text = contributions.contribute(
                     guest, companions=state.get("companions", 0), amount=amount_value, method=form.cleaned_data["method"],
-                    cleaned=form.cleaned_data, message=message,
+                    cleaned=form.cleaned_data, message=message, key=idempotency.key_from(request),
                 )
             except ResponseLockedError:
                 return redirect("events:invitation", token=token)

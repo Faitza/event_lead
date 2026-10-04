@@ -21,6 +21,7 @@ class Ad(models.Model):
 
     class Meta:
         ordering = ["order", "-created_at"]
+        indexes = [models.Index(fields=["is_active", "order"], name="ad_active_order_idx")]
         verbose_name = _("publicité")
         verbose_name_plural = _("publicités")
 

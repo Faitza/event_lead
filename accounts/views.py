@@ -7,6 +7,8 @@ from django.utils.http import url_has_allowed_host_and_scheme
 from django.utils.translation import gettext as _
 from django.views.decorators.http import require_POST
 
+from core.ratelimit import ratelimit
+
 from core.middleware import set_language_cookie
 from events.models import Guest
 
@@ -43,6 +45,7 @@ def post_login_url_for(user):
     return reverse("core:landing")
 
 
+@ratelimit("login", 10, 300)
 def login_view(request):
     if request.user.is_authenticated:
         return redirect(post_login_url_for(request.user))
@@ -54,6 +57,7 @@ def login_view(request):
     return render(request, "accounts/login.html", {"form": form, "next": _safe_next(request) or ""})
 
 
+@ratelimit("register", 6, 3600)
 def register_view(request, organizer=False):
     if request.user.is_authenticated:
         return redirect(post_login_url_for(request.user))

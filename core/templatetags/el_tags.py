@@ -1,4 +1,5 @@
 import os
+import uuid
 
 from django import template
 from django.contrib.staticfiles import finders
@@ -23,6 +24,27 @@ def static_v(path):
         return "%s?v=%d" % (url, os.stat(found).st_mtime) if found else url
     except (OSError, TypeError):
         return url
+
+
+@register.simple_tag(takes_context=True)
+def page_url(context, number, param="page"):
+    """Adresse de la page `number` d'une liste, en gardant les filtres de l'adresse actuelle (?q=, ?statut=...)."""
+    query = context["request"].GET.copy()
+    query[param] = number
+    return "?" + query.urlencode()
+
+
+@register.simple_tag
+def page_numbers(page):
+    """Numéros à afficher sous une liste : 1 … 4 5 [6] 7 8 … 20 (None pour les points de suspension)."""
+    ellipsis = page.paginator.ELLIPSIS
+    return [None if n == ellipsis else n for n in page.paginator.get_elided_page_range(page.number, on_each_side=2, on_ends=1)]
+
+
+@register.simple_tag
+def new_idem_key():
+    """Numéro anti-doublon d'un formulaire de paiement : nouveau à chaque affichage (voir payments/idempotency.py)."""
+    return uuid.uuid4().hex
 
 
 @register.filter

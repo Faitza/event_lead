@@ -6,6 +6,7 @@ from django.utils.translation import gettext as _
 from django.views.decorators.http import require_POST
 
 from accounts.decorators import admin_required
+from core.paging import paginate
 
 from .forms import AdForm
 from .models import Ad
@@ -18,7 +19,8 @@ def ad_list(request):
     totals["views"] = totals["views"] or 0
     totals["clicks"] = totals["clicks"] or 0
     totals["ctr"] = round(totals["clicks"] * 100 / totals["views"], 1) if totals["views"] else 0
-    return render(request, "dashboard/ads/list.html", {"ads": ads, "totals": totals})
+    page = paginate(request, ads, 25)
+    return render(request, "dashboard/ads/list.html", {"ads": page.object_list, "page_obj": page, "totals": totals})
 
 
 @admin_required

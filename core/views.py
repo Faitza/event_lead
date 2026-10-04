@@ -15,9 +15,11 @@ from events.listing import public_events_by_category
 from events.models import Event, EventCategory
 
 from .forms import ContactForm, HelpRequestForm, ReviewForm
+from .content_cache import remember
 from .help import HELP_PROFILES
 from .middleware import set_language_cookie
 from .models import HelpRequest, Review
+from .ratelimit import ratelimit
 
 SERVICES = [
     ("bi-calendar2-heart", "svc-dashboard.jpg", gettext_lazy("Un tableau de bord pour tout piloter"), gettext_lazy("Mariage, gala, baptême ou conférence : créez l'événement, localisez le lieu sur une carte et gardez la main du début à la fin.")),
@@ -45,19 +47,33 @@ def build_parade(minimum=6):
     return items
 
 
+def _landing_content(slug):
+    """Partie de l'accueil lue dans la base : gardée quelques minutes en mémoire (core/content_cache.py)."""
+    public_events, categories, selected = public_events_by_category(slug)
+    return {
+        "reviews": list(Review.objects.filter(is_published=True)[:6]),
+        "public_events": list(public_events[:6]),
+        "categories": categories,
+        "selected": selected,
+        "parade": build_parade(),
+        "all_categories": list(EventCategory.objects.all()),
+    }
+
+
 def landing(request):
-    reviews = Review.objects.filter(is_published=True)[:6]
-    public_events, categories, selected = public_events_by_category(request.GET.get("categorie", ""))
+    slug = request.GET.get("categorie", "")[:80]
+    content = remember(f"landing:{slug}", lambda: _landing_content(slug))
+    reviews, categories, selected = content["reviews"], content["categories"], content["selected"]
     context = {
-        "public_events": public_events[:6],
+        "public_events": content["public_events"],
         "categories": categories,
         "selected_category": selected,
-        "parade": build_parade(),
+        "parade": content["parade"],
         "usd_rate": settings.HTG_TO_USD_RATE,
         "services": SERVICES,
         # Tuiles « Pour chaque occasion » : toutes les catégories ; un clic ouvre les événements à venir de la catégorie
         # s'il y en a, sinon le formulaire de contact.
-        "occasions": [(c, c in categories) for c in EventCategory.objects.all()],
+        "occasions": [(c, c in categories) for c in content["all_categories"]],
         "reviews": reviews,
         "review_form": ReviewForm(),
         "contact_form": ContactForm(),
@@ -66,6 +82,7 @@ def landing(request):
 
 
 @require_POST
+@ratelimit("review", 5, 600)
 def submit_review(request):
     form = ReviewForm(request.POST)
     if form.is_valid():
@@ -77,6 +94,7 @@ def submit_review(request):
 
 
 @require_POST
+@ratelimit("contact", 5, 600)
 def submit_contact(request):
     form = ContactForm(request.POST)
     if form.is_valid():
@@ -87,6 +105,7 @@ def submit_contact(request):
     return redirect(reverse("core:landing") + "#contact")
 
 
+@ratelimit("help", 5, 600)
 def help_page(request):
     """Questions fréquentes par profil, WhatsApp et formulaire « J'ai besoin d'aide »."""
     if request.method == "POST":

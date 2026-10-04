@@ -46,10 +46,17 @@ class Payment(models.Model):
         _("détail payeur"), max_length=120, blank=True,
         help_text=_("Numéro masqué ou e-mail du payeur (jamais de données de carte complètes)."),
     )
+    # Numéro unique envoyé avec le formulaire : un deuxième envoi du même formulaire (double clic, page
+    # rechargée, réseau qui renvoie) retrouve le premier paiement au lieu de débiter une deuxième fois.
+    idempotency_key = models.CharField(_("clé anti-doublon"), max_length=64, unique=True, null=True, blank=True, editable=False)
     created_at = models.DateTimeField(_("créé le"), auto_now_add=True)
 
     class Meta:
         ordering = ["-created_at"]
+        indexes = [
+            models.Index(fields=["status", "created_at"], name="payment_status_created_idx"),
+            models.Index(fields=["kind", "status"], name="payment_kind_status_idx"),
+        ]
         verbose_name = _("paiement")
         verbose_name_plural = _("paiements")
 

@@ -17,6 +17,7 @@
         <div class="small text-muted">{{ m.created_at|date:_("j F Y H:i") }}</div>
       </div>
       {% empty %}<div class="empty-state"><i class="bi bi-inbox"></i><p class="mt-2 mb-0">{% trans "Aucun message." %}</p></div>{% endfor %}
+      <div class="px-3 pb-3">{% include "partials/_pagination.html" with page=page_obj %}</div>
     </div>
   </div>
   <div class="col-xl-5">

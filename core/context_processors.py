@@ -3,11 +3,12 @@ from django.utils import timezone
 
 from events.models import Event
 
+from .content_cache import remember
 from .models import HelpRequest
 
 
 def _next_public_event():
-    return Event.objects.public_active().upcoming().first()
+    return remember("next-public-event", lambda: Event.objects.public_active().upcoming().first())
 
 
 def _new_help_requests():

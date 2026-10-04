@@ -1,11 +1,13 @@
 """Pages publiques d'événements et portail Organisateur VIP."""
 from django.contrib import messages
+from django.db.models import Prefetch
 from django.http import Http404
 from django.shortcuts import get_object_or_404, redirect, render
 from django.utils import timezone
 from django.utils.translation import gettext as _
 
 from accounts.decorators import vip_organizer_required
+from core.paging import paginate
 from ads.models import Ad
 
 from .forms import EvaluationForm
@@ -17,8 +19,9 @@ def explore(request):
     """Exploration des événements publics (fin du parcours invité)."""
     events, categories, selected = public_events_by_category(request.GET.get("categorie", ""))
     ads = Ad.objects.filter(is_active=True)[:3]
+    page = paginate(request, events, 12)
     return render(request, "events/explore.html", {
-        "events": events, "categories": categories, "selected_category": selected, "ads": ads,
+        "events": page.object_list, "page_obj": page, "categories": categories, "selected_category": selected, "ads": ads,
     })
 
 
@@ -33,10 +36,14 @@ def public_detail(request, pk):
     return render(request, "events/public_detail.html", {"event": event, "invitation": invitation})
 
 
-def _can_evaluate(event, user):
+def _can_evaluate(event, user, invitation=False):
+    """`invitation` : l'invitation de la personne si elle est déjà chargée (None si elle n'en a pas)."""
     if event.is_public:
         return False
-    if not event.guests.filter(user=user, status=Guest.Status.CONFIRMED).exists():
+    if invitation is not False:
+        if invitation is None or invitation.status != Guest.Status.CONFIRMED:
+            return False
+    elif not event.guests.filter(user=user, status=Guest.Status.CONFIRMED).exists():
         return False
     return timezone.localdate() >= event.evaluation_opens_on
 
@@ -44,13 +51,16 @@ def _can_evaluate(event, user):
 @vip_organizer_required
 def organizer_portal(request):
     user = request.user
-    events = Event.objects.visible_to(user).select_related("category").order_by("date")
+    # Invitation de la personne chargée en une seule requête pour tous les événements (pas une par événement)
+    events = Event.objects.visible_to(user).select_related("category").order_by("date").prefetch_related(
+        Prefetch("guests", queryset=Guest.objects.filter(user=user), to_attr="my_invitations")
+    )
     today = timezone.localdate()
     upcoming, past = [], []
     evaluated = set(EventEvaluation.objects.filter(user=user).values_list("event_id", flat=True))
     for event in events:
-        event.my_invitation = event.guests.filter(user=user).first()
-        event.can_evaluate = _can_evaluate(event, user) and event.pk not in evaluated
+        event.my_invitation = event.my_invitations[0] if event.my_invitations else None
+        event.can_evaluate = _can_evaluate(event, user, event.my_invitation) and event.pk not in evaluated
         event.already_evaluated = event.pk in evaluated
         (past if event.date < today else upcoming).append(event)
     ads = Ad.objects.filter(is_active=True)

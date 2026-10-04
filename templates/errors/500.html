@@ -1,0 +1,9 @@
+{% extends "errors/_standalone.html" %}{% load i18n %}
+{% block title %}{% trans "Un problème est survenu" %}{% endblock %}
+{% block content %}
+<h1>{% trans "Un problème est survenu" %}</h1>
+<p>{% trans "Nous n'avons pas pu afficher cette page. L'équipe EventLead a été prévenue automatiquement. Réessayez dans un instant : vos réponses déjà enregistrées ne sont pas perdues." %}</p>
+<a class="btn" href="javascript:location.reload()">{% trans "Réessayer" %}</a>
+<a class="btn light" href="/">{% trans "Retour à l'accueil" %}</a>
+{% if contact_whatsapp %}<small>{% trans "Besoin d'aide tout de suite ?" %} <a href="https://wa.me/{{ contact_whatsapp }}">WhatsApp</a></small>{% endif %}
+{% endblock %}

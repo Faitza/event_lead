@@ -1,0 +1,38 @@
+/* Solidité (docs/solidite.md) : barre de chargement, bouton en cours d'envoi, bandeau réseau. */
+
+/* 05. Fine barre dorée en haut de l'écran pendant le chargement de la page suivante */
+#el-loading {
+  position: fixed; top: 0; left: 0; right: 0; height: 3px; z-index: 2000; pointer-events: none;
+  opacity: 0; transition: opacity .2s ease; overflow: hidden;
+}
+#el-loading.on { opacity: 1; }
+#el-loading::before {
+  content: ""; position: absolute; top: 0; bottom: 0; left: -40%; width: 40%;
+  background: linear-gradient(90deg, transparent, var(--el-gold, #D4AF37), var(--el-primary-light, #602B74), transparent);
+  animation: el-loading 1.1s ease-in-out infinite;
+}
+@keyframes el-loading { from { left: -40%; } to { left: 100%; } }
+
+/* 09. Bouton déjà cliqué : il ne réagit plus et montre qu'il travaille */
+.is-sending { pointer-events: none; opacity: .75; cursor: progress; }
+
+/* 07 / 08. Bandeau quand une requête échoue ou que le réseau ne répond pas */
+#el-net {
+  position: fixed; left: 50%; bottom: 18px; transform: translate(-50%, 20px); z-index: 2001;
+  width: max-content; max-width: calc(100vw - 32px); padding: 12px 18px; border-radius: 14px; text-align: center;
+  background: var(--el-primary-dark, #2C033B); color: #fff; font-size: 15px; line-height: 1.4;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, .25); opacity: 0; pointer-events: none;
+  transition: opacity .25s ease, transform .25s ease;
+}
+#el-net.on { opacity: 1; transform: translate(-50%, 0); pointer-events: auto; }
+#el-net.ok { background: #1d6b3a; }
+
+@media (prefers-reduced-motion: reduce) {
+  #el-loading::before { animation-duration: 3s; }
+  #el-net { transition: none; }
+}
+
+/* 13. Pages d'une longue liste, aux couleurs du site */
+.pagination { --bs-pagination-color: var(--el-primary, #45065C); --bs-pagination-hover-color: var(--el-primary-dark, #2C033B);
+  --bs-pagination-active-bg: var(--el-primary, #45065C); --bs-pagination-active-border-color: var(--el-primary, #45065C);
+  --bs-pagination-focus-box-shadow: 0 0 0 .2rem rgba(69, 6, 92, .2); }

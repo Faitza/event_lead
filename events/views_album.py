@@ -7,6 +7,8 @@ from django.utils.translation import gettext as _
 from django.utils.translation import ngettext
 from django.views.decorators.http import require_GET
 
+from core.ratelimit import ratelimit
+
 from . import album, thanks
 from .models import AlbumPhoto
 from .views_invitation import _load_guest
@@ -19,6 +21,7 @@ def _closed(token):
     return redirect("events:invitation", token=token)
 
 
+@ratelimit("album-upload", 10, 600)
 def invitation_thanks(request, token):
     """Page « Merci » : message des hôtes, album, ajout de photos, merci personnel pour les cadeaux."""
     guest = _load_guest(token)

@@ -36,6 +36,14 @@ La commande affiche aussi un lien magique `/invitation/<uuid>/` d'un invité en 
 
 Le jeu de démonstration contient 6 catégories (Mariage, Gala, Anniversaire, Baptême, Conférence, Concert), 6 événements rangés dans ces catégories (4 publics, un mariage privé, un anniversaire passé pour tester l'évaluation et les remerciements avec album), 12 invités à différents statuts, 9 cadeaux (8 sur le mariage, dont 4 déjà choisis, et un sur l'anniversaire), 3 publicités actives (une seule, « Pâtisserie Kay Dous », est dans la séquence après réponse), 3 avis, 5 paiements (dont une contribution en argent) et 3 demandes d'aide (une nouvelle, une en cours, une résolue).
 
+## Solidité
+
+Limite de requêtes par visiteur, plafonds d'appels (carte, e-mails), pages d'erreur claires, anti double clic et anti
+double paiement, listes en pages, photos compressées, mémoire pour l'accueil, adresse de surveillance `/sante/`,
+journal `logs/eventlead.log`, test de charge `python tools/charge.py`, sauvegarde `python manage.py sauvegarder`
+et vérification `python manage.py verifier_sauvegarde`. Le détail des 20 points et les étapes à faire à la mise en
+ligne sont dans [`docs/solidite.md`](docs/solidite.md).
+
 ## Paiements en mode démo
 
 `PAYMENT_DEMO_MODE=True` (par défaut) : aucune API réelle n'est appelée.

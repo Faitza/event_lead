@@ -8,6 +8,8 @@ from django.utils import timezone
 from django.utils.translation import gettext as _
 from django.utils.translation import ngettext
 
+from core import quotas
+
 from . import reminders
 from .messaging import thanks_links
 from .models import Event, Guest
@@ -104,10 +106,12 @@ def send_thanks(event, guest, request=None):
         if channel == EMAIL:
             links = thanks_links(request, guest)
             try:
-                EmailMessage(
+                quotas.send_email(EmailMessage(
                     links["subject"], links["body"], settings.DEFAULT_FROM_EMAIL, [guest.email],
                     reply_to=[settings.CONTACT_EMAIL],
-                ).send(fail_silently=False)
+                ))
+            except quotas.QuotaExceeded as exc:
+                raise ThanksError(_("Plafond d'e-mails du jour atteint : le merci de %(name)s partira demain.") % {"name": guest.name}) from exc
             except Exception as exc:  # SMTP absent, refusé, etc. : rien n'est enregistré
                 raise ThanksError(_("L'e-mail à %(name)s n'a pas pu partir. Réessayez plus tard.") % {"name": guest.name}) from exc
         guest.thanks_sent_at = now

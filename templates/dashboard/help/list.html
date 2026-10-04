@@ -41,5 +41,6 @@
   {% empty %}
   <div class="empty-state"><i class="bi bi-life-preserver"></i><p class="mt-2 mb-0">{% if status %}{% trans "Aucune demande avec ce statut." %}{% else %}{% trans "Aucune demande d'aide pour le moment." %}{% endif %}</p></div>
   {% endfor %}
+  <div class="px-3 pb-3">{% include "partials/_pagination.html" with page=page_obj %}</div>
 </div>
 {% endblock %}

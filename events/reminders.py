@@ -8,6 +8,8 @@ from django.db import transaction
 from django.utils import timezone
 from django.utils.translation import gettext as _
 
+from core import quotas
+
 from .messaging import reminder_links
 from .models import Event, Guest, Reminder
 
@@ -169,7 +171,7 @@ def _send_email(request, guest):
     message = EmailMessage(
         links["subject"], links["body"], settings.DEFAULT_FROM_EMAIL, [guest.email], reply_to=[settings.CONTACT_EMAIL],
     )
-    message.send(fail_silently=False)
+    quotas.send_email(message)
 
 
 def remind_guest(event, guest, user=None, request=None, automatic=False):
@@ -185,6 +187,8 @@ def remind_guest(event, guest, user=None, request=None, automatic=False):
         if channel == EMAIL:
             try:
                 _send_email(request, guest)
+            except quotas.QuotaExceeded as exc:
+                raise ReminderError(_("Plafond d'e-mails du jour atteint : la relance de %(name)s partira demain.") % {"name": guest.name}) from exc
             except Exception as exc:  # SMTP absent, refusé, etc. : rien n'est enregistré
                 raise ReminderError(_("L'e-mail à %(name)s n'a pas pu partir. Réessayez plus tard.") % {"name": guest.name}) from exc
         Reminder.objects.create(guest=guest, channel=channel, automatic=automatic, sent_by=user, sent_at=now)

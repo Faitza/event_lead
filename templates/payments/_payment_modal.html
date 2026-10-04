@@ -1,5 +1,5 @@
 {# Modal de paiement commune (billetterie et accès VIP). #}
-{% load i18n %}
+{% load i18n el_tags %}
 {% trans "Choisissez votre mode de paiement" as t_choose %}
 {% trans "NOM DU TITULAIRE" as t_card_name %}
 {% trans "MM/AA" as t_card_exp %}
@@ -9,6 +9,7 @@
       <form method="post" id="payment-form" novalidate data-unit-htg="{{ amount_htg|stringformat:'s' }}" data-unit-usd="{{ amount_usd|stringformat:'s' }}" {% if form.errors %}data-reopen="{{ form.method.value }}"{% endif %}>
         {% csrf_token %}
         <input type="hidden" name="method" value="{{ form.method.value|default:'' }}">
+        <input type="hidden" name="idem" value="{% new_idem_key %}">
         <input type="hidden" name="quantity" value="{{ form.quantity.value|default:1 }}">
         {% if contribution %}<input type="hidden" name="amount" id="pay-amount" value="{{ amount }}"><input type="hidden" name="message" id="pay-message" value="{{ message }}">{% endif %}
         <div class="modal-header border-0 pb-0">

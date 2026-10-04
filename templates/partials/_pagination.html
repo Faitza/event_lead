@@ -1,0 +1,15 @@
+{% load i18n el_tags %}{# Pagination : {% include "partials/_pagination.html" with page=page_obj %} (param="..." si plusieurs listes) #}
+{% if page.has_other_pages %}{% page_numbers page as numbers %}
+<nav class="d-flex flex-wrap align-items-center justify-content-between gap-2 mt-3" aria-label="{% trans 'Pages' %}">
+  <span class="small text-muted">{% blocktranslate trimmed with start=page.start_index end=page.end_index total=page.paginator.count %}{{ start }} à {{ end }} sur {{ total }}{% endblocktranslate %}</span>
+  <ul class="pagination pagination-sm mb-0">
+    {% if page.has_previous %}<li class="page-item"><a class="page-link" href="{% page_url page.previous_page_number param|default:'page' %}" aria-label="{% trans 'Page précédente' %}"><i class="bi bi-chevron-left"></i></a></li>{% endif %}
+    {% for n in numbers %}
+      {% if n is None %}<li class="page-item disabled"><span class="page-link">&hellip;</span></li>
+      {% elif n == page.number %}<li class="page-item active" aria-current="page"><span class="page-link">{{ n }}</span></li>
+      {% else %}<li class="page-item"><a class="page-link" href="{% page_url n param|default:'page' %}">{{ n }}</a></li>{% endif %}
+    {% endfor %}
+    {% if page.has_next %}<li class="page-item"><a class="page-link" href="{% page_url page.next_page_number param|default:'page' %}" aria-label="{% trans 'Page suivante' %}"><i class="bi bi-chevron-right"></i></a></li>{% endif %}
+  </ul>
+</nav>
+{% endif %}

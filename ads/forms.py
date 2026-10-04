@@ -1,6 +1,8 @@
 from django import forms
 from django.utils.translation import gettext_lazy as _
 
+from core.uploads import compress_photo
+
 from .models import Ad
 
 AD_ICONS = [
@@ -23,6 +25,13 @@ class AdForm(forms.ModelForm):
             "image": forms.ClearableFileInput(attrs={"accept": "image/*"}),
             "sponsor_link": forms.URLInput(attrs={"placeholder": "https://"}),
         }
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields["image"].help_text = _("JPEG, PNG ou WebP, 12 Mo au plus. L'image est réduite et allégée automatiquement.")
+
+    def clean_image(self):
+        return compress_photo(self.cleaned_data.get("image"), max_side=1600)
 
     def clean_skip_after_seconds(self):
         value = self.cleaned_data["skip_after_seconds"]

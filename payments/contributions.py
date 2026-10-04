@@ -9,7 +9,7 @@ from django.utils.translation import gettext as _
 from events.models import Guest
 from gifts.services import ResponseLockedError, confirm_response
 
-from .gateways import charge
+from . import idempotency
 from .models import Contribution, Payment
 
 PRESET_AMOUNTS = (1000, 2500, 5000, 10000, 25000)
@@ -44,24 +44,29 @@ def clean_message(raw):
     return " ".join(str(raw or "").split())[: Contribution.MESSAGE_MAX]
 
 
-def contribute(guest, *, companions, amount, method, cleaned, message):
+def contribute(guest, *, companions, amount, method, cleaned, message, key=None):
     """Encaisse la contribution puis confirme la réponse de l'invité (présent, sans cadeau), en une seule étape.
 
     Renvoie (paiement, texte). Si le paiement est refusé, aucune contribution n'est créée et la réponse de l'invité
-    reste ouverte. Lève ResponseLockedError si l'invité a déjà répondu définitivement (rien n'est alors débité).
+    reste ouverte. Lève ResponseLockedError si l'invité a déjà répondu définitivement (rien n'est alors débité),
+    ou si ce même formulaire (`key`) a déjà été envoyé : un double clic ne débite jamais deux fois.
     """
     if method not in METHODS:
         raise ContributionError(_("Choisissez MonCash ou NatCash."))
     with transaction.atomic():
         locked = Guest.objects.select_for_update().select_related("event").get(pk=guest.pk)
-        if locked.is_locked:
+        if locked.is_locked or idempotency.existing(key):
             raise ResponseLockedError()
-        status, text = charge(method, cleaned, amount)
-        payment = Payment.objects.create(
-            kind=Payment.Kind.CONTRIBUTION, event=locked.event, guest=locked, user=None, method=method,
-            amount_htg=amount, reference=Payment.generate_reference(method), status=status,
+        payment, created = idempotency.reserve(
+            key, kind=Payment.Kind.CONTRIBUTION, event=locked.event, guest=locked, user=None, method=method,
+            amount_htg=amount, reference=Payment.generate_reference(method),
             payer_detail=cleaned.get("payer_detail", "")[:120],
         )
+        if not created:
+            raise ResponseLockedError()
+        status, text = idempotency.safe_charge(method, cleaned, amount)
+        payment.status = status
+        payment.save(update_fields=["status"])
         if status != Payment.Status.SUCCESS:
             return payment, text
         Contribution.objects.create(

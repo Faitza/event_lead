@@ -5,12 +5,16 @@ Toutes les valeurs sensibles (cle secrete, base de donnees, cles de paiement,
 identifiants Google) sont lues depuis les variables d'environnement ou un
 fichier .env (voir .env.example).
 """
+import sys
 from decimal import Decimal
 from pathlib import Path
 
 import environ
 
 BASE_DIR = Path(__file__).resolve().parent.parent
+# Vrai pendant `python manage.py test` : la limite de requêtes et le cache de contenu sont alors coupés
+# (les tests qui les vérifient les rallument eux-mêmes).
+TESTING = len(sys.argv) > 1 and sys.argv[1] == "test"
 
 env = environ.Env(
     DEBUG=(bool, True),
@@ -48,11 +52,15 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
+    # Fichiers statiques servis compressés (gzip / brotli) avec un long cache navigateur
+    "whitenoise.middleware.WhiteNoiseMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.locale.LocaleMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
+    # Limite de requêtes par visiteur (voir RATELIMIT_* plus bas) ; l'équipe connectée n'est pas limitée
+    "core.ratelimit.RateLimitMiddleware",
     "core.middleware.LanguagePreferenceMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
@@ -86,6 +94,17 @@ WSGI_APPLICATION = "eventlead.wsgi.application"
 DATABASES = {
     "default": env.db("DATABASE_URL", default=f"sqlite:///{BASE_DIR / 'db.sqlite3'}"),
 }
+if DATABASES["default"]["ENGINE"] == "django.db.backends.sqlite3":
+    # Plusieurs visiteurs en même temps : SQLite attend jusqu'à 20 s au lieu d'échouer (« database is locked »)
+    DATABASES["default"].setdefault("OPTIONS", {})["timeout"] = 20
+else:
+    # Connexions réutilisées entre deux requêtes (PostgreSQL / MySQL) ; vérifiées avant usage
+    DATABASES["default"]["CONN_MAX_AGE"] = env.int("CONN_MAX_AGE", default=60)
+    DATABASES["default"]["CONN_HEALTH_CHECKS"] = True
+
+# Cache : mémoire du serveur par défaut. En production avec plusieurs processus, utiliser un cache partagé,
+# par exemple la base de données : CACHE_URL=dbcache://eventlead_cache puis `python manage.py createcachetable`.
+CACHES = {"default": env.cache("CACHE_URL", default="locmemcache://eventlead")}
 
 AUTH_USER_MODEL = "accounts.CustomUser"
 
@@ -164,8 +183,18 @@ STORAGES = {
     "default": {
         "BACKEND": env("DEFAULT_FILE_STORAGE_BACKEND", default="django.core.files.storage.FileSystemStorage"),
     },
-    "staticfiles": {"BACKEND": "django.contrib.staticfiles.storage.StaticFilesStorage"},
+    # collectstatic écrit aussi une version .gz et .br de chaque fichier : le navigateur télécharge moins
+    "staticfiles": {"BACKEND": "whitenoise.storage.CompressedStaticFilesStorage"},
 }
+# Les CSS et JS portent un numéro de version (?v=...) : le navigateur peut les garder une journée
+WHITENOISE_MAX_AGE = 60 * 60 * 24
+
+# Poids des envois. Au-delà, Django refuse la requête (erreur 400) avant même de la lire en entier.
+# Fichiers : chaque formulaire vérifie aussi son propre plafond (photo 12 Mo, vidéo 40 Mo, album 20 photos).
+DATA_UPLOAD_MAX_MEMORY_SIZE = 5 * 1024 * 1024  # texte d'un formulaire (hors fichiers) : 5 Mo
+FILE_UPLOAD_MAX_MEMORY_SIZE = 5 * 1024 * 1024  # au-delà, le fichier passe par le disque au lieu de la mémoire
+DATA_UPLOAD_MAX_NUMBER_FILES = 25
+DATA_UPLOAD_MAX_NUMBER_FIELDS = 2000
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
@@ -176,6 +205,11 @@ EMAIL_HOST_USER = env("EMAIL_HOST_USER", default="")
 EMAIL_HOST_PASSWORD = env("EMAIL_HOST_PASSWORD", default="")
 EMAIL_USE_TLS = env.bool("EMAIL_USE_TLS", default=True)
 DEFAULT_FROM_EMAIL = env("DEFAULT_FROM_EMAIL", default="EventLead <no-reply@eventlead.ht>")
+# Un serveur d'e-mail qui ne répond pas bloque la page au plus 15 s
+EMAIL_TIMEOUT = env.int("EMAIL_TIMEOUT", default=15)
+SERVER_EMAIL = env("SERVER_EMAIL", default=DEFAULT_FROM_EMAIL)
+# Adresses prévenues par e-mail à chaque erreur du serveur (séparées par des virgules)
+ADMINS = [(email, email) for email in env.list("ADMINS", default=[])]
 
 # ---------------------------------------------------------------------------
 # Parametres metier EventLead
@@ -201,6 +235,60 @@ CONTACT_WHATSAPP = env("CONTACT_WHATSAPP", default="50937000000")
 CONTACT_ADDRESS = env("CONTACT_ADDRESS", default="Petion-Ville, Port-au-Prince, Haiti")
 
 GIFT_POLL_INTERVAL_MS = 5000
+
+# ---------------------------------------------------------------------------
+# Solidité : limites, plafonds, journal des erreurs (voir docs/solidite.md)
+# ---------------------------------------------------------------------------
+# 01. Limite de requêtes par visiteur (adresse IP), toutes pages confondues, par minute.
+RATELIMIT_ENABLED = env.bool("RATELIMIT_ENABLED", default=not TESTING)
+RATELIMIT_PER_MINUTE = env.int("RATELIMIT_PER_MINUTE", default=240)
+RATELIMIT_POSTS_PER_MINUTE = env.int("RATELIMIT_POSTS_PER_MINUTE", default=40)
+# Derrière un hébergeur qui transmet l'adresse du visiteur dans un en-tête (PythonAnywhere : X-Real-IP),
+# indiquer ici le nom de l'en-tête au format Django, par exemple HTTP_X_REAL_IP.
+REAL_IP_HEADER = env("REAL_IP_HEADER", default="")
+
+# 02. Plafonds d'appels aux services extérieurs, par jour (tout le site confondu)
+GEOCODER_DAILY_LIMIT = env.int("GEOCODER_DAILY_LIMIT", default=500)
+EMAIL_DAILY_LIMIT = env.int("EMAIL_DAILY_LIMIT", default=280)
+
+# 16. Contenu qui change rarement (catégories, défilé de l'accueil) gardé en mémoire, en secondes.
+# Il est effacé dès qu'un événement, une catégorie ou une publicité est modifié.
+CONTENT_CACHE_SECONDS = 0 if TESTING else env.int("CONTENT_CACHE_SECONDS", default=300)
+
+# 18. Journal des erreurs : logs/eventlead.log (gardé sur 5 fichiers de 2 Mo) + terminal + e-mail aux ADMINS
+LOG_DIR = Path(env("LOG_DIR", default=str(BASE_DIR / "logs")))
+LOG_DIR.mkdir(parents=True, exist_ok=True)
+LOGGING = {
+    "version": 1,
+    "disable_existing_loggers": False,
+    "formatters": {
+        "line": {"format": "{asctime} {levelname} {name} : {message}", "style": "{"},
+    },
+    "filters": {
+        "require_debug_false": {"()": "django.utils.log.RequireDebugFalse"},
+    },
+    "handlers": {
+        "console": {"class": "logging.StreamHandler", "formatter": "line", "level": "INFO"},
+        "file": {
+            "class": "logging.handlers.RotatingFileHandler", "filename": str(LOG_DIR / "eventlead.log"),
+            "maxBytes": 2 * 1024 * 1024, "backupCount": 5, "encoding": "utf-8", "formatter": "line",
+            "level": "WARNING", "delay": True,
+        },
+        "mail_admins": {
+            "class": "django.utils.log.AdminEmailHandler", "level": "ERROR", "filters": ["require_debug_false"],
+        },
+    },
+    "root": {"handlers": ["console", "file"], "level": "WARNING"},
+    "loggers": {
+        "django": {"handlers": ["console", "file"], "level": "INFO", "propagate": False},
+        "django.request": {"handlers": ["console", "file", "mail_admins"], "level": "WARNING", "propagate": False},
+        "django.server": {"handlers": ["console"], "level": "INFO", "propagate": False},
+        "eventlead": {"handlers": ["console", "file", "mail_admins"], "level": "INFO", "propagate": False},
+    },
+}
+if TESTING:  # les tests provoquent volontairement des erreurs : rien dans le terminal ni dans le fichier
+    LOGGING["handlers"]["console"]["level"] = "CRITICAL"
+    LOGGING["handlers"]["file"] = {"class": "logging.NullHandler"}
 
 if not DEBUG:
     SESSION_COOKIE_SECURE = True

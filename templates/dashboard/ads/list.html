@@ -31,6 +31,7 @@
     {% endfor %}
     </tbody>
   </table></div>
+  <div class="px-3 pb-3">{% include "partials/_pagination.html" with page=page_obj %}</div>
   {% else %}<div class="empty-state"><i class="bi bi-megaphone"></i><p class="mt-2">{% trans "Aucune publicité." %}</p></div>{% endif %}
 </div>
 {% endblock %}

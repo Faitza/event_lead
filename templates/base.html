@@ -14,8 +14,11 @@
   <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
   {% block extra_head %}{% endblock %}
   <link href="{% static_v 'css/eventlead.css' %}" rel="stylesheet">
+  <link href="{% static_v 'css/solidite.css' %}" rel="stylesheet">
 </head>
-<body class="{% block body_class %}{% endblock %}">
+<body class="{% block body_class %}{% endblock %}" data-msg-net-failed="{% trans "La connexion a échoué. Vérifiez votre réseau, la page réessaie toute seule." %}" data-msg-net-slow="{% trans "Le serveur met trop de temps à répondre. Réessayez dans un instant." %}" data-msg-net-busy="{% trans "Trop de demandes en peu de temps. Patientez une minute." %}" data-msg-net-back="{% trans "Connexion rétablie." %}" data-error-url="{% url 'browser_error' %}">
+  <div id="el-loading" aria-hidden="true"></div>
+  <div id="el-net" role="status" aria-live="polite"></div>
   {% include "partials/_messages.html" %}
   {% block body %}
     {% include "partials/_navbar.html" %}

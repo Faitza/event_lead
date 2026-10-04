@@ -11,6 +11,7 @@ from django.utils.translation import gettext_lazy, ngettext
 from django.views.decorators.http import require_GET
 
 from ads.models import Ad
+from core.ratelimit import ratelimit
 from gifts.models import GiftClaim
 from payments.models import Contribution
 from gifts.services import (
@@ -291,6 +292,7 @@ def invitation_ticket_png(request, token):
     return response
 
 
+@ratelimit("entry-code", 30, 600, methods=("GET", "POST"))
 def entry_code(request, code):
     """Adresse contenue dans le QR code. Public : rien sur l'invité. Équipe EventLead : validation de l'entrée."""
     code = normalize_entry_code(code)

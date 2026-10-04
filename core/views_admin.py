@@ -17,6 +17,7 @@ from gifts.models import Gift, GiftClaim
 from payments.models import Payment
 
 from .models import ContactMessage, HelpRequest, Review
+from .paging import paginate
 
 
 @admin_required
@@ -58,8 +59,9 @@ def home(request):
 
 @admin_required
 def inbox(request):
+    page = paginate(request, ContactMessage.objects.all(), 30)
     return render(request, "dashboard/inbox.html", {
-        "contact_messages": ContactMessage.objects.all()[:100],
+        "contact_messages": page.object_list, "page_obj": page,
         "reviews": Review.objects.all()[:100],
     })
 
@@ -110,8 +112,9 @@ def help_list(request):
     counts = dict(HelpRequest.objects.values_list("status").annotate(n=Count("id")))
     if status:
         requests_qs = requests_qs.filter(status=status)
+    page = paginate(request, requests_qs, 30)
     return render(request, "dashboard/help/list.html", {
-        "help_requests": requests_qs[:200], "status": status, "statuses": HelpRequest.Status.choices,
+        "help_requests": page.object_list, "page_obj": page, "status": status, "statuses": HelpRequest.Status.choices,
         "tabs": [(value, label, counts.get(value, 0)) for value, label in HelpRequest.Status.choices],
         "total": sum(counts.values()),
     })

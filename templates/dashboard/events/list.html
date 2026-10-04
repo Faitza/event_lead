@@ -45,6 +45,7 @@
     {% endfor %}
     </tbody>
   </table></div>
+  <div class="px-3 pb-3">{% include "partials/_pagination.html" with page=page_obj %}</div>
   {% else %}
   <div class="empty-state"><i class="bi bi-calendar-plus"></i><p class="mt-2">{% trans "Aucun événement trouvé." %}</p><a href="{% url 'dashboard:event_create' %}" class="btn btn-primary btn-sm">{% trans "Créer un événement" %}</a></div>
   {% endif %}

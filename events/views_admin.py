@@ -13,6 +13,7 @@ from django.utils.translation import ngettext
 from django.views.decorators.http import require_GET, require_POST
 
 from accounts.decorators import admin_required
+from core.paging import paginate
 from gifts.models import GiftClaim
 from payments.models import Contribution
 
@@ -111,8 +112,9 @@ def event_list(request):
         events = events.filter(event_type=etype)
     if category:
         events = events.filter(category=category)
+    page = paginate(request, events, 25)
     return render(request, "dashboard/events/list.html", {
-        "events": events, "q": q, "etype": etype, "categories": categories, "category": category,
+        "events": page.object_list, "page_obj": page, "q": q, "etype": etype, "categories": categories, "category": category,
     })
 
 
@@ -217,7 +219,7 @@ def geocode(request):
 @admin_required
 def guest_list(request):
     guests = Guest.objects.select_related("event").annotate(num_gifts=Count("gift_claims"))
-    events = Event.objects.order_by("-date")
+    events = Event.objects.order_by("-date").only("pk", "title", "date")
     event_id = request.GET.get("event", "")
     status = request.GET.get("status", "")
     q = request.GET.get("q", "").strip()
@@ -229,10 +231,11 @@ def guest_list(request):
         guests = guests.filter(status=status)
     if q:
         guests = guests.filter(Q(name__icontains=q) | Q(email__icontains=q) | Q(phone__icontains=q))
-    for g in guests:
+    page = paginate(request, guests.order_by("name", "pk"), 50)
+    for g in page.object_list:  # liens calculés pour les seuls invités affichés
         g.links = invitation_links(request, g)
     return render(request, "dashboard/guests/list.html", {
-        "guests": guests, "events": events, "current_event": current_event,
+        "guests": page.object_list, "page_obj": page, "events": events, "current_event": current_event,
         "status": status, "q": q, "statuses": Guest.Status.choices,
         "export_qs": request.GET.urlencode(),
     })

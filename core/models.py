@@ -14,6 +14,7 @@ class Review(models.Model):
 
     class Meta:
         ordering = ["-created_at"]
+        indexes = [models.Index(fields=["is_published", "-created_at"], name="review_published_idx")]
         verbose_name = _("avis")
         verbose_name_plural = _("avis")
 
@@ -31,6 +32,8 @@ class ContactMessage(models.Model):
 
     class Meta:
         ordering = ["-created_at"]
+        indexes = [models.Index(fields=["-created_at"], name="contact_created_idx"),
+                   models.Index(fields=["is_read"], name="contact_read_idx")]
         verbose_name = _("message de contact")
         verbose_name_plural = _("messages de contact")
 
@@ -63,6 +66,7 @@ class HelpRequest(models.Model):
 
     class Meta:
         ordering = ["-created_at"]
+        indexes = [models.Index(fields=["status", "-created_at"], name="help_status_created_idx")]
         verbose_name = _("demande d'aide")
         verbose_name_plural = _("demandes d'aide")
 

@@ -5,6 +5,8 @@ from django.core.files.base import ContentFile
 from django.core.files.uploadedfile import UploadedFile
 from django.utils.translation import gettext_lazy as _
 
+from core.uploads import check_video, compress_photo
+
 from .album import AlbumError, tile_photo
 from .models import Event, EventCategory, EventEvaluation, Guest
 
@@ -41,6 +43,14 @@ class EventForm(forms.ModelForm):
         super().__init__(*args, **kwargs)
         self.fields["category"].empty_label = _("Aucune catégorie")
         self.fields["category"].label_from_instance = lambda c: c.label
+        self.fields["cover_image"].help_text = _("JPEG, PNG ou WebP, 12 Mo au plus. La photo est réduite et allégée automatiquement.")
+        self.fields["cover_video"].help_text = _("MP4, WebM ou MOV, 40 Mo au plus.")
+
+    def clean_cover_image(self):
+        return compress_photo(self.cleaned_data.get("cover_image"))
+
+    def clean_cover_video(self):
+        return check_video(self.cleaned_data.get("cover_video"))
 
     def clean(self):
         cleaned = super().clean()

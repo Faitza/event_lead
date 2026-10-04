@@ -1,0 +1,8 @@
+{% extends "errors/_standalone.html" %}{% load i18n %}
+{% block title %}{% trans "Demande refusée" %}{% endblock %}
+{% block content %}
+<h1>{% trans "Demande refusée" %}</h1>
+<p>{% trans "Cette demande n'a pas pu être traitée. Si vous envoyiez un fichier, il est peut-être trop lourd : choisissez une photo plus légère puis réessayez." %}</p>
+<a class="btn" href="javascript:history.back()">{% trans "Revenir en arrière" %}</a>
+<a class="btn light" href="/">{% trans "Retour à l'accueil" %}</a>
+{% endblock %}

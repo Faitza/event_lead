@@ -4,6 +4,8 @@ from django.contrib.auth import authenticate, password_validation
 from django.utils.translation import gettext_lazy as _
 from django.utils.translation import pgettext_lazy
 
+from core.uploads import compress_photo
+
 from .models import CustomUser
 
 
@@ -81,3 +83,6 @@ class ProfileForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.fields["language"].choices = [("", _("Automatique (langue du navigateur)"))] + list(settings.LANGUAGES)
+
+    def clean_avatar(self):
+        return compress_photo(self.cleaned_data.get("avatar"), max_side=512)
