@@ -186,6 +186,14 @@ Le site existe en français (langue par défaut), en anglais et en créole haït
 - **Police** : Old Standard TT (Google Fonts, graisses 400 et 700) pour les titres et les chiffres, Jost pour le texte. Pour la changer, modifiez la variable `--font-display` en haut de `static/css/eventlead.css` **et** le lien Google Fonts de `templates/base.html` (`templates/dashboard/seating/print.html` nomme aussi la police du plan de table imprimé). Cette police n'a que deux graisses : les titres sont en 400, les chiffres et sceaux en 700, et `font-synthesis-weight: none` évite un faux gras.
 - Après un `git pull` : `python manage.py migrate` (`events.0009`, champ photo), puis cliquez sur **Ajouter les catégories par défaut** (ou `python manage.py seed_demo --reset` pour des données neuves).
 
+## Fond du site
+
+- Le fond (public et tableau de bord) est un lilas rosé en dégradé avec un halo clair, une trame de points dans les coins, une grande courbe violette en haut à droite, un cercle violet sur le bord gauche et un trait fin sur le bord droit. Tout est en CSS, aucune image.
+- **Un seul endroit à régler** : le bloc « Fond du site » à la fin de `static/css/eventlead.css`. Les variables `--page-*` donnent les couleurs (`--page-top`, `--page-bottom`, `--page-dots`, `--page-curve-a/b`, `--page-band`) et la taille des courbes (`--page-curve-w/h`, `--page-lens`). Les formes sont dans `body::before` (courbes, cercles, halos) et `body::after` (points). Ces deux calques sont fixes et passent derrière tout le contenu.
+- Garder le bas de page assez clair : le texte gris (`--el-muted`) et le texte doré des petits titres doivent rester à un contraste d'au moins 4,5 sur le lilas (calculé : OK jusqu'à `#F2D9EE`).
+- Les sections « blanches » de l'accueil sont des bandes claires translucides, les sections « douces » sont transparentes. Les cartes restent blanches. Le logo reste toujours sur fond blanc (barre blanche, badge du pied de page, badge de la page de connexion).
+- Les pages de l'invitation (parcours invité) gardent leur fond violet de gala.
+
 ## Envoi des invitations (V1)
 
 Chaque invité possède un `magic_token`. Dans `/admin-dashboard/invites/`, l'admin ouvre WhatsApp (`wa.me`) ou son client e-mail (`mailto:`) avec un message prérempli, dans la langue de l'invité, contenant le lien, ou copie le lien, puis marque l'invitation comme envoyée.
