@@ -16,7 +16,7 @@
   --el-gold: #D4AF37;
   --el-gold-dark: #B8962A;
   --el-gold-text: #6A500C;
-  --el-gold-strong: #A98A1E;
+  --el-gold-strong: #8A6D12;
   --el-gold-soft: #E9D28A;
   --el-text: #1F2937;
   --el-muted: #434B5A;
@@ -112,8 +112,8 @@ h1 em, h2 em, h3 em, .disp em { color: var(--el-gold); font-style: italic; }
 .btn-soft.text-success { color: #0F6B3F !important; }
 .btn-light { background: #fff; border: 1px solid #D9CCDF; color: var(--el-text); }
 .btn-light:hover { background: #FBF8FC; border-color: var(--el-primary-light); color: var(--el-primary-dark); }
-.btn-whatsapp { background: #10B981; border-color: #10B981; color: #053B2A; }
-.btn-whatsapp:hover { background: #0EA371; color: #053B2A; }
+.btn-whatsapp { background: #10B981; border-color: #10B981; color: #032B1E; }
+.btn-whatsapp:hover { background: #0EA371; color: #032B1E; }
 .ripple { position: absolute; border-radius: 50%; transform: scale(0); background: rgba(255, 255, 255, .45); animation: ripple .3s ease-out; pointer-events: none; }
 .btn-outline-primary .ripple, .btn-soft .ripple, .btn-light .ripple, .btn-gold .ripple, .btn-outline-gold .ripple { background: rgba(69, 6, 92, .18); }
 @keyframes ripple { to { transform: scale(2.6); opacity: 0; } }
@@ -151,7 +151,7 @@ h1 em, h2 em, h3 em, .disp em { color: var(--el-gold); font-style: italic; }
 .badge-gold { background: rgba(212, 175, 55, .18); color: var(--el-gold-text); }
 .badge-success { background: rgba(16, 185, 129, .14); color: #065F46; }
 .badge-warning { background: rgba(245, 158, 11, .16); color: #92400E; }
-.badge-danger { background: rgba(239, 68, 68, .14); color: #B91C1C; }
+.badge-danger { background: rgba(239, 68, 68, .14); color: #961414; }
 .badge-muted { background: #EEF0F3; color: var(--el-muted); }
 .badge-vip { background: linear-gradient(135deg, #E9CC6A, #D4AF37 55%, #B8962A); color: var(--el-primary-dark); font-weight: 700; letter-spacing: .1em; box-shadow: 0 2px 8px rgba(212, 175, 55, .4); }
 
@@ -462,6 +462,7 @@ h1 em, h2 em, h3 em, .disp em { color: var(--el-gold); font-style: italic; }
 .auth-card h1 { font-size: 2.4rem; text-align: center; margin-bottom: .25rem; }
 .btn-google { background: #fff; border: 1px solid #D1D5DB; color: var(--el-text); display: flex; align-items: center; justify-content: center; gap: .6rem; width: 100%; height: 54px; font-weight: 500; }
 .btn-google:hover { background: #FBF8FC; color: var(--el-text); }
+.btn-google:disabled, .btn-google.disabled { opacity: .85; }
 .divider { display: flex; align-items: center; gap: 14px; color: var(--el-muted); font-size: .8125rem; margin: 1.25rem 0; }
 .divider::before, .divider::after { content: ""; flex: 1; height: 1px; background: var(--el-border); }
 .vip-link { display: flex; align-items: center; justify-content: center; gap: 12px; padding: 14px; border-radius: 12px; border: 1px solid var(--el-gold); background: #FFFBEF; color: #6B5310; font-size: .875rem; font-weight: 600; }
@@ -719,9 +720,9 @@ h1 em, h2 em, h3 em, .disp em { color: var(--el-gold); font-style: italic; }
 }
 
 /* ===== Espace d'aide ===== */
-.fab-help { position: fixed; right: 18px; bottom: calc(18px + env(safe-area-inset-bottom, 0px)); z-index: 1030; display: inline-flex; align-items: center; justify-content: center; gap: .55rem; height: 54px; min-width: 54px; padding: 0 1.2rem 0 1.05rem; border-radius: 999px; background: #10B981; color: #053B2A; font-size: .9rem; font-weight: 600; text-decoration: none; box-shadow: 0 8px 24px rgba(5, 59, 42, .3); transition: background-color var(--el-ease), transform var(--el-ease); }
+.fab-help { position: fixed; right: 18px; bottom: calc(18px + env(safe-area-inset-bottom, 0px)); z-index: 1030; display: inline-flex; align-items: center; justify-content: center; gap: .55rem; height: 54px; min-width: 54px; padding: 0 1.2rem 0 1.05rem; border-radius: 999px; background: #10B981; color: #032B1E; font-size: .9rem; font-weight: 600; text-decoration: none; box-shadow: 0 8px 24px rgba(5, 59, 42, .3); transition: background-color var(--el-ease), transform var(--el-ease); }
 .fab-help i { font-size: 1.5rem; line-height: 1; }
-.fab-help:hover { background: #0EA371; color: #053B2A; transform: translateY(-2px); }
+.fab-help:hover { background: #0EA371; color: #032B1E; transform: translateY(-2px); }
 .fab-help:focus-visible { outline: 3px solid var(--el-gold); outline-offset: 3px; }
 @media (max-width: 767px) {
   .fab-help { width: 54px; padding: 0; }
@@ -1018,11 +1019,15 @@ h2.h6 { font-size: 1.15rem; }
 }
 body { background-image: linear-gradient(180deg, var(--page-top) 0%, var(--page-bottom) 100%); }
 body::before, body::after { content: ""; position: fixed; inset: 0; z-index: -1; pointer-events: none; }
+/* Courbe violette en haut à droite : posée en haut du document (elle défile avec la page), jamais sous un texte */
+html::before {
+  content: ""; position: absolute; z-index: -1; top: 0; left: 0; right: 0; height: calc(var(--page-curve-h) + 40px); pointer-events: none;
+  background:
+    radial-gradient(ellipse var(--page-curve-w) var(--page-curve-h) at 104% -3%, var(--page-curve-a) 0, var(--page-curve-b) 96%, transparent 96.4%),
+    radial-gradient(ellipse calc(var(--page-curve-w) + 20px) calc(var(--page-curve-h) + 20px) at 104% -3%, var(--page-halo) 0 96%, transparent 96.4%);
+}
 body::before {
   background:
-    /* courbe violette en haut à droite, avec son liseré clair */
-    radial-gradient(ellipse var(--page-curve-w) var(--page-curve-h) at 104% -3%, var(--page-curve-a) 0, var(--page-curve-b) 96%, transparent 96.4%),
-    radial-gradient(ellipse calc(var(--page-curve-w) + 20px) calc(var(--page-curve-h) + 20px) at 104% -3%, var(--page-halo) 0 96%, transparent 96.4%),
     /* grand cercle violet sur le bord gauche, avec liseré clair puis trait fin */
     radial-gradient(circle at calc(var(--page-reach) - var(--page-lens)) 78vh, var(--page-curve-a) 0, var(--page-curve-b) calc(var(--page-lens) - .4px), transparent var(--page-lens)),
     radial-gradient(circle at calc(var(--page-reach) - var(--page-lens)) 78vh, transparent calc(var(--page-lens) - .4px), var(--page-halo) var(--page-lens) calc(var(--page-lens) + 12px), transparent calc(var(--page-lens) + 12.4px)),
@@ -1040,11 +1045,13 @@ body::after {
   mask-image: radial-gradient(ellipse 16vw 22vh at 100% 7vh, #000 0, transparent 100%), radial-gradient(ellipse 12vw 26vh at 0 100%, #000 0, transparent 100%);
 }
 @media (max-width: 1099px) { :root { --page-line: transparent; } }          /* marges trop étroites : pas de traits fins qui frôlent le texte */
-@media (max-width: 767px) { :root { --page-curve-w: 30vw; --page-curve-h: 8vh; --page-lens: 200px; --page-reach: 14px; } }
-@media print { body::before, body::after { display: none; } }
+@media (max-width: 767px) { :root { --page-curve-w: 30vw; --page-curve-h: 8vh; --page-lens: 200px; --page-reach: 6px; } }
+@media print { html::before, body::before, body::after { display: none; } }
 /* Sections de l'accueil : les « douces » laissent voir le fond, les « blanches » deviennent des bandes à peine plus claires */
 .section-soft { background: transparent; }
 .section-white { background: var(--page-band); }
 .auth-wrap, .auth-panel { background: transparent; }
 /* Le logo reste toujours sur fond blanc : sur le fond lilas de la page de connexion il est dans un badge blanc */
 .auth-panel > a { background: #fff; border-radius: 18px; padding: 10px 28px 6px; box-shadow: var(--el-shadow); }
+/* Astérisque et textes d'erreur : rouge plus foncé pour rester lisible sur le fond lilas */
+.text-danger { --bs-danger-rgb: 160, 26, 20; }
