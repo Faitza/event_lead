@@ -876,3 +876,33 @@ h1 em, h2 em, h3 em, .disp em { color: var(--el-gold); font-style: italic; }
 .pay-choice:hover { border-color: var(--el-gold); }
 .pay-choice.active { border-color: var(--el-gold); background: #FFFBEF; box-shadow: 0 0 0 3px rgba(212, 175, 55, .2); }
 @media (max-width: 575.98px) { .amount-chip strong { font-size: 1.1rem; } .pay-choice { padding: .65rem; } }
+
+/* Album partagé (page « Merci » de l'invité) */
+.album-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: .5rem; }
+.album-tile { position: relative; aspect-ratio: 1 / 1; padding: 0; border: 0; border-radius: 10px; overflow: hidden; background: var(--el-primary-dark); cursor: pointer; }
+.album-tile[hidden] { display: none; }
+.album-tile img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; transition: transform var(--el-ease); }
+.album-tile:hover img { transform: scale(1.04); }
+.album-more { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; background: rgba(44, 3, 59, .72); color: #fff; font-size: 1.4rem; font-weight: 500; }
+.thanks-note { display: flex; align-items: center; gap: .75rem; background: #FFFBEF; border: 1px solid rgba(212, 175, 55, .6); border-radius: 12px; padding: .75rem .9rem; font-size: .93rem; line-height: 1.45; color: #4B3A0A; }
+.thanks-note i { font-size: 1.35rem; color: var(--el-gold-text); flex: none; }
+#upload-form.is-sending label { opacity: .7; pointer-events: none; }
+#upload-form input:focus-visible + label, #upload-form label:has(+ input:focus-visible) { outline: 2px solid var(--el-primary); outline-offset: 2px; }
+.lightbox { position: fixed; inset: 0; z-index: 1080; background: rgba(20, 2, 28, .92); display: flex; align-items: center; justify-content: center; padding: 3.5rem 1rem; }
+.lightbox[hidden] { display: none; }
+.lightbox img { max-width: 100%; max-height: 100%; object-fit: contain; border-radius: 6px; }
+.lightbox-btn { position: absolute; width: 44px; height: 44px; border-radius: 50%; border: 1px solid rgba(255, 255, 255, .35); background: rgba(255, 255, 255, .12); color: #fff; display: inline-flex; align-items: center; justify-content: center; font-size: 1.1rem; }
+.lightbox-btn:hover { background: rgba(255, 255, 255, .25); }
+.lightbox-close { top: .75rem; right: .75rem; }
+.lightbox-prev { left: .5rem; top: 50%; transform: translateY(-50%); }
+.lightbox-next { right: .5rem; top: 50%; transform: translateY(-50%); }
+
+/* Album côté équipe */
+.thanks-admin-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: .75rem; }
+.thanks-admin-photo { position: relative; margin: 0; border-radius: 10px; overflow: hidden; background: var(--el-primary-dark); aspect-ratio: 1 / 1; }
+.thanks-admin-photo img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+.thanks-admin-photo figcaption { position: absolute; left: .4rem; right: 2.6rem; bottom: .4rem; display: flex; }
+.thanks-admin-photo figcaption .badge-el { max-width: 100%; }
+.thanks-admin-del { position: absolute; right: .4rem; bottom: .4rem; width: 32px; height: 32px; border: 0; border-radius: 50%; background: rgba(255, 255, 255, .92); color: var(--el-danger); display: inline-flex; align-items: center; justify-content: center; }
+.thanks-admin-del:hover { background: #fff; box-shadow: 0 2px 8px rgba(0, 0, 0, .25); }
+.thanks-table th, .thanks-table td { position: relative; vertical-align: middle; }

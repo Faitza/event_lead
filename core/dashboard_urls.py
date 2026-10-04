@@ -6,6 +6,7 @@ from events import views_admin as events_admin
 from events import views_checkin as checkin_admin
 from events import views_reminders as reminder_admin
 from events import views_seating as seating_admin
+from events import views_thanks as thanks_admin
 from gifts import views_admin as gifts_admin
 from payments import views as payments_views
 
@@ -70,6 +71,15 @@ urlpatterns = [
     path("plan-de-table/<int:pk>/tables/creer/", seating_admin.seating_table_bulk, name="seating_table_bulk"),
     path("plan-de-table/<int:pk>/tables/<int:table_pk>/modifier/", seating_admin.seating_table_update, name="seating_table_update"),
     path("plan-de-table/<int:pk>/tables/<int:table_pk>/supprimer/", seating_admin.seating_table_delete, name="seating_table_delete"),
+    # Remerciements et album photo
+    path("remerciements/", thanks_admin.thanks_index, name="thanks_index"),
+    path("remerciements/<int:pk>/", thanks_admin.thanks_event, name="thanks_event"),
+    path("remerciements/<int:pk>/message/", thanks_admin.thanks_message, name="thanks_message"),
+    path("remerciements/<int:pk>/publication/", thanks_admin.thanks_publish, name="thanks_publish"),
+    path("remerciements/<int:pk>/photos/", thanks_admin.thanks_upload, name="thanks_upload"),
+    path("remerciements/<int:pk>/photos/<int:photo_pk>/supprimer/", thanks_admin.thanks_photo_delete, name="thanks_photo_delete"),
+    path("remerciements/<int:pk>/envoyer/", thanks_admin.thanks_send_all, name="thanks_send_all"),
+    path("remerciements/<int:pk>/<int:guest_pk>/envoyer/", thanks_admin.thanks_send_one, name="thanks_send_one"),
     # Cadeaux
     path("cadeaux/", gifts_admin.gift_list, name="gift_list"),
     path("cadeaux/nouveau/", gifts_admin.gift_create, name="gift_create"),

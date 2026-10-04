@@ -1,0 +1,144 @@
+{% extends "dashboard/base_dashboard.html" %}
+{% load static %}
+{% load i18n %}
+{% block title %}{% blocktranslate trimmed with titre=event.title %}Remerciements - {{ titre }}{% endblocktranslate %}{% endblock %}
+{% block dash_content %}
+{% trans "Supprimer cette photo de l'album ?" as t_delete %}
+<div id="thanks"
+     data-send-url="{% url 'dashboard:thanks_send_one' event.pk 0 %}"
+     data-msg-sending="{% trans 'Envoi en cours...' %}"
+     data-msg-sent-email="{% trans 'Remerciement envoyé par e-mail à' %}"
+     data-msg-sent-whatsapp="{% trans 'Remerciement WhatsApp enregistré pour' %}"
+     data-msg-error="{% trans 'Une erreur est survenue. Réessayez.' %}">
+  <div class="page-head">
+    <div>
+      <span class="eyebrow-row"><span class="diamond"></span><span class="eyebrow">{% trans "Après l'événement" %}</span></span>
+      <h1>{% trans "Remerciements et album" %}</h1>
+      <p>{{ event.title }} &middot; {{ event.date|date:_("l j F Y") }} &middot; {{ event.time|time:_("H\\hi") }}</p>
+    </div>
+    <form method="post" action="{% url 'dashboard:thanks_publish' event.pk %}" class="d-flex gap-2 align-items-center">
+      {% csrf_token %}
+      {% if stats.published %}
+      <input type="hidden" name="action" value="unpublish">
+      <button class="btn btn-light"><i class="bi bi-eye-slash me-2"></i>{% trans "Ne plus publier" %}</button>
+      {% else %}
+      <button class="btn btn-primary"><i class="bi bi-send-check me-2"></i>{% trans "Publier les remerciements" %}</button>
+      {% endif %}
+    </form>
+  </div>
+
+  <div class="notice notice-success mb-3" id="thanks-flash" role="status" aria-live="polite" hidden></div>
+  {% if stats.published %}
+  <div class="notice notice-success mb-3"><i class="bi bi-check-circle"></i><div>{% blocktranslate trimmed with d=event.thanks_published_at|date:_("j F Y à H:i") %}Publié le {{ d }}. Les invités présents ouvrent la page « Merci » et l'album avec leur lien personnel.{% endblocktranslate %}</div></div>
+  {% else %}
+  <div class="notice notice-info mb-3"><i class="bi bi-info-circle"></i><div>{% trans "Pas encore publié : les invités ne voient rien. Écrivez votre message, ajoutez des photos, puis publiez." %}</div></div>
+  {% endif %}
+  {% if email_demo %}<div class="notice notice-warning mb-3"><i class="bi bi-info-circle"></i><div>{% trans "Mode démonstration : les e-mails de remerciement s'affichent dans la console du serveur au lieu de partir. Ils partent vraiment une fois la messagerie configurée (variables EMAIL_* du fichier .env)." %}</div></div>{% endif %}
+
+  <div class="row g-3 mb-3">
+    <div class="col-6 col-xl-3"><div class="el-card stat-card"><span class="icon-bubble"><i class="bi bi-images"></i></span><div><div class="value">{{ stats.photos }}</div><div class="label">{% trans "photos dans l'album" %}{% if stats.photos_by_guests %} &middot; {% blocktranslate trimmed with n=stats.photos_by_guests %}{{ n }} ajoutées par des invités{% endblocktranslate %}{% endif %}</div></div></div></div>
+    <div class="col-6 col-xl-3"><div class="el-card stat-card"><span class="icon-bubble success"><i class="bi bi-people"></i></span><div><div class="value">{{ stats.present }}</div><div class="label">{% trans "invités présents" %}</div></div></div></div>
+    <div class="col-6 col-xl-3"><div class="el-card stat-card"><span class="icon-bubble"><i class="bi bi-envelope-heart"></i></span><div><div class="value">{{ stats.sent }}</div><div class="label">{% blocktranslate trimmed with n=stats.present %}remerciements envoyés sur {{ n }}{% endblocktranslate %}</div></div></div></div>
+    <div class="col-6 col-xl-3"><div class="el-card stat-card"><span class="icon-bubble {% if stats.published %}success{% else %}warning{% endif %}"><i class="bi bi-eye"></i></span><div><div class="value value-date">{% if stats.published %}{% trans "Publié" %}{% else %}{% trans "Pas publié" %}{% endif %}</div><div class="label">{% trans "visible par les invités présents" %}</div></div></div></div>
+  </div>
+
+  <div class="row g-4 mb-4">
+    <div class="col-xl-6">
+      <form method="post" action="{% url 'dashboard:thanks_message' event.pk %}" class="el-card h-100">
+        {% csrf_token %}
+        <div class="el-card-header"><h2><i class="bi bi-chat-heart me-2"></i>{% trans "Votre message" %}</h2></div>
+        <div class="el-card-body">
+          <label class="form-label" for="thanks-message">{% trans "Message de remerciement" %}</label>
+          <textarea class="form-control" id="thanks-message" name="message" rows="5" maxlength="{{ message_max }}" placeholder="{{ default_message }}">{{ message }}</textarea>
+          <div class="form-text">{% blocktranslate trimmed with n=message_max %}Affiché en haut de la page « Merci » ({{ n }} signes au plus). Laissé vide, le texte ci-dessus s'affiche à la place.{% endblocktranslate %}</div>
+          <button class="btn btn-primary mt-3"><i class="bi bi-check2 me-2"></i>{% trans "Enregistrer le message" %}</button>
+        </div>
+      </form>
+    </div>
+    <div class="col-xl-6">
+      <div class="el-card h-100">
+        <div class="el-card-header flex-wrap gap-2">
+          <h2><i class="bi bi-send me-2"></i>{% trans "Message envoyé" %}</h2>
+          <div class="chip-tabs" role="group" aria-label="{% trans 'Canal' %}">
+            <button type="button" class="active" data-preview="whatsapp">WhatsApp</button>
+            <button type="button" data-preview="email">{% trans "E-mail" %}</button>
+          </div>
+        </div>
+        <div class="el-card-body">
+          <div class="reminder-preview" data-pane="whatsapp"><div class="bubble-wa">{{ preview_body }}</div></div>
+          <div class="reminder-preview" data-pane="email" hidden><div class="fw-semibold mb-2">{{ preview_subject }}</div><div class="bubble-mail">{{ preview_body }}</div></div>
+          <p class="small text-muted mt-3 mb-0">{% trans "Le message s'écrit dans la langue de chaque invité. Le lien ouvre la page « Merci » et l'album, sans connexion. Jamais de SMS." %}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="el-card mb-4">
+    <div class="el-card-header flex-wrap gap-2">
+      <h2><i class="bi bi-images me-2"></i>{% trans "Album" %} ({{ stats.photos }})</h2>
+      <form method="post" action="{% url 'dashboard:thanks_upload' event.pk %}" enctype="multipart/form-data" class="d-flex flex-wrap gap-2 align-items-center">
+        {% csrf_token %}
+        <label class="visually-hidden" for="admin-photos">{% trans "Photos à ajouter" %}</label>
+        <input type="file" class="form-control form-control-sm" style="max-width:260px" id="admin-photos" name="photos" accept="image/jpeg,image/png,image/webp" multiple required>
+        <button class="btn btn-sm btn-primary"><i class="bi bi-plus-lg me-1"></i>{% trans "Ajouter des photos" %}</button>
+      </form>
+    </div>
+    <div class="el-card-body">
+      {% if photos %}
+      <div class="thanks-admin-grid">
+        {% for p in photos %}
+        <figure class="thanks-admin-photo">
+          <a href="{{ p.image.url }}" target="_blank" rel="noopener"><img src="{{ p.thumb.url }}" alt="" loading="lazy"></a>
+          <figcaption>{% if p.guest %}<span class="badge-el badge-primary text-truncate">{{ p.guest.name }}</span>{% else %}<span class="badge-el badge-muted">{% trans "Hôtes" %}</span>{% endif %}</figcaption>
+          <form method="post" action="{% url 'dashboard:thanks_photo_delete' event.pk p.pk %}" onsubmit="return confirm('{{ t_delete|escapejs }}')">
+            {% csrf_token %}
+            <button class="thanks-admin-del" aria-label="{{ t_delete }}" title="{% trans 'Supprimer' %}"><i class="bi bi-trash"></i></button>
+          </form>
+        </figure>
+        {% endfor %}
+      </div>
+      {% else %}
+      <div class="empty-state small"><i class="bi bi-images"></i><p class="mt-2 mb-0">{% trans "L'album est vide. Ajoutez des photos : les invités présents pourront aussi y ajouter les leurs." %}</p></div>
+      {% endif %}
+      <p class="small text-muted mt-3 mb-0">{% blocktranslate trimmed with up=max_per_upload total=max_per_event %}Photos JPEG, PNG ou WebP, 12 Mo au plus chacune, {{ up }} à la fois, {{ total }} dans l'album. Les photos sont réduites et leurs données de position sont retirées.{% endblocktranslate %}</p>
+    </div>
+  </div>
+
+  <div class="el-card">
+    <div class="el-card-header flex-wrap gap-2">
+      <h2><i class="bi bi-people me-2"></i>{% trans "Invités présents" %} ({{ rows|length }})</h2>
+      <form method="post" action="{% url 'dashboard:thanks_send_all' event.pk %}">
+        {% csrf_token %}
+        <button class="btn btn-sm btn-primary" {% if not stats.published or not to_email %}disabled{% endif %}><i class="bi bi-envelope me-1"></i>{% blocktranslate trimmed with n=to_email %}Envoyer par e-mail · {{ n }}{% endblocktranslate %}</button>
+      </form>
+    </div>
+    {% if not stats.published and rows %}<p class="small text-muted px-4 pt-3 mb-0">{% trans "Publiez d'abord les remerciements pour pouvoir les envoyer." %}</p>{% endif %}
+    {% if rows %}
+    <div class="table-wrap"><table class="table table-el thanks-table">
+      <thead><tr><th>{% trans "Invité" %}</th><th>{% trans "Canal" %}</th><th>{% trans "Remerciement" %}</th><th class="text-end"><span class="visually-hidden">{% trans "Actions" %}</span></th></tr></thead>
+      <tbody>
+      {% for r in rows %}
+        <tr>
+          <td><div class="fw-semibold">{{ r.guest.name }}</div><div class="small text-muted">{% if r.guest.album_photos.count %}{% blocktranslate trimmed count counter=r.guest.album_photos.count %}{{ counter }} photo ajoutée{% plural %}{{ counter }} photos ajoutées{% endblocktranslate %}{% else %}{% trans "Aucune photo ajoutée" %}{% endif %}</div></td>
+          <td>{% if r.channel == 'whatsapp' %}<span class="badge-el badge-success"><i class="bi bi-whatsapp me-1"></i>WhatsApp</span>{% elif r.channel == 'email' %}<span class="badge-el badge-primary"><i class="bi bi-envelope me-1"></i>{% trans "E-mail" %}</span>{% else %}<span class="badge-el badge-danger">{% trans "Aucun contact" %}</span>{% endif %}</td>
+          <td>{% if r.guest.thanks_sent_at %}<span class="badge-el badge-success">{% blocktranslate trimmed with d=r.guest.thanks_sent_at|date:_("j M") %}Envoyé le {{ d }}{% endblocktranslate %}</span>{% else %}<span class="badge-el badge-muted">{% trans "Pas encore envoyé" %}</span>{% endif %}</td>
+          <td class="text-end text-nowrap">
+            {% if stats.published and r.channel %}
+              {% if r.channel == 'whatsapp' %}
+              <a href="{{ r.links.whatsapp }}" target="_blank" rel="noopener" class="btn btn-sm btn-whatsapp" data-thanks="{{ r.guest.pk }}"><i class="bi bi-whatsapp me-1"></i>{% if r.guest.thanks_sent_at %}{% trans "Renvoyer" %}{% else %}{% trans "Envoyer" %}{% endif %}</a>
+              {% else %}
+              <button type="button" class="btn btn-sm {% if r.guest.thanks_sent_at %}btn-soft{% else %}btn-primary{% endif %}" data-thanks="{{ r.guest.pk }}"><i class="bi bi-envelope me-1"></i>{% if r.guest.thanks_sent_at %}{% trans "Renvoyer" %}{% else %}{% trans "Envoyer" %}{% endif %}</button>
+              {% endif %}
+            {% endif %}
+          </td>
+        </tr>
+      {% endfor %}
+      </tbody>
+    </table></div>
+    {% else %}
+    <div class="empty-state small"><i class="bi bi-people"></i><p class="mt-2 mb-0">{% trans "Aucun invité n'a confirmé sa présence." %}</p></div>
+    {% endif %}
+  </div>
+</div>
+{% endblock %}
+{% block extra_js %}<script src="{% static 'js/thanks.js' %}" defer></script>{% endblock %}

@@ -2,6 +2,7 @@
 from urllib.parse import quote, urlencode
 
 from django.conf import settings
+from django.urls import reverse
 from django.utils import dateformat, translation
 from django.utils.translation import gettext as _
 
@@ -77,6 +78,37 @@ def reminder_texts(request, guest):
 def reminder_links(request, guest):
     """Liens de la relance : WhatsApp avec le message déjà écrit, ou e-mail (jamais de SMS)."""
     url, subject, body = reminder_texts(request, guest)
+    phone = "".join(c for c in guest.phone if c.isdigit())
+    return {
+        "url": url,
+        "subject": subject,
+        "body": body,
+        "whatsapp": f"https://wa.me/{phone}?text={quote(body)}" if phone else f"https://wa.me/?text={quote(body)}",
+    }
+
+
+def thanks_url(request, guest):
+    """Lien personnel vers la page de remerciements et l'album, dans la langue de l'invité."""
+    base = absolute_url(request, reverse("events:invitation_thanks", args=[guest.magic_token]))
+    return f"{base}?{urlencode({'lang': supported_language(guest.language)})}"
+
+
+def thanks_texts(request, guest):
+    """(lien, objet, texte) du remerciement, dans la langue de l'invité."""
+    url = thanks_url(request, guest)
+    event = guest.event
+    with translation.override(supported_language(guest.language)):
+        subject = _("Merci d'avoir été là : %(title)s") % {"title": event.title}
+        body = _(
+            "Bonjour %(name)s, merci d'avoir partagé « %(title)s » avec nous.\n\n"
+            "Retrouvez les photos et ajoutez les vôtres ici :\n%(url)s"
+        ) % {"name": guest.name, "title": event.title, "url": url}
+    return url, subject, body
+
+
+def thanks_links(request, guest):
+    """Liens du remerciement : WhatsApp avec le message déjà écrit, ou e-mail (jamais de SMS)."""
+    url, subject, body = thanks_texts(request, guest)
     phone = "".join(c for c in guest.phone if c.isdigit())
     return {
         "url": url,

@@ -21,6 +21,7 @@
     <div class="fw-semibold"><i class="bi bi-cash-coin text-primary me-2"></i>{{ contribution.amount_htg|htg }} HTG &middot; {{ contribution.payment.get_method_display }}</div>
   </div>
   {% endif %}
+  {% if thanks_ready %}<a href="{% url 'events:invitation_thanks' guest.magic_token %}" class="btn btn-gold w-100"><i class="bi bi-images me-2"></i>{% trans "Voir les remerciements et l'album" %}</a>{% endif %}
   {% if guest.status == 'confirmed' %}<a href="{{ guest.get_ticket_url }}" class="btn btn-primary w-100"><i class="bi bi-qr-code me-2"></i>{% trans "Voir mon QR code d'entrée" %}</a>{% endif %}
   <a href="{% url 'core:landing' %}#affiche" class="btn btn-outline-primary">{% trans "Découvrir les événements publics" %}</a>
 </div>

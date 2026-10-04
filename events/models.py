@@ -1,3 +1,4 @@
+import os
 import secrets
 import uuid
 from datetime import timedelta
@@ -6,6 +7,8 @@ from django.conf import settings
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
 from django.db.models import Q
+from django.db.models.signals import post_delete
+from django.dispatch import receiver
 from django.templatetags.static import static
 from django.urls import reverse
 from django.utils import timezone
@@ -109,6 +112,8 @@ class Event(models.Model):
         _("accepter les contributions en argent"), default=False,
         help_text=_("Les invités peuvent contribuer en argent (MonCash ou NatCash) à la place d'un cadeau."),
     )
+    thanks_message = models.TextField(_("message de remerciement"), blank=True)
+    thanks_published_at = models.DateTimeField(_("remerciements publiés le"), null=True, blank=True)
     description = models.TextField(_("description"), blank=True)
     cover_image = models.ImageField(_("photo de couverture"), upload_to="events/covers/", null=True, blank=True)
     cover_video = models.FileField(_("vidéo de couverture"), upload_to="events/videos/", null=True, blank=True)
@@ -265,6 +270,7 @@ class Guest(models.Model):
     wants_gift = models.BooleanField(_("souhaite offrir un cadeau"), null=True, blank=True)
     entry_code = models.CharField(_("code d'entrée"), max_length=14, unique=True, editable=False)
     checked_in_at = models.DateTimeField(_("arrivé le"), null=True, blank=True)
+    thanks_sent_at = models.DateTimeField(_("remerciement envoyé le"), null=True, blank=True)
     added_on_site = models.BooleanField(_("ajouté sur place"), default=False)
     table = models.ForeignKey(
         Table, on_delete=models.SET_NULL, null=True, blank=True, related_name="guests", verbose_name=_("table"),
@@ -334,6 +340,39 @@ class Reminder(models.Model):
 
     def __str__(self):
         return f"{self.guest.name} : {self.sent_at:%d/%m/%Y}"
+
+
+def album_path(instance, filename):
+    """Nom de fichier tiré au hasard : l'adresse d'une photo ne se devine pas."""
+    return f"albums/{instance.event_id}/{uuid.uuid4().hex}{os.path.splitext(filename)[1].lower()}"
+
+
+class AlbumPhoto(models.Model):
+    """Photo de l'album partagé de l'événement : ajoutée par l'équipe ou par un invité présent."""
+
+    event = models.ForeignKey(Event, on_delete=models.CASCADE, related_name="photos", verbose_name=_("événement"))
+    guest = models.ForeignKey(
+        Guest, on_delete=models.SET_NULL, null=True, blank=True, related_name="album_photos", verbose_name=_("ajoutée par"),
+    )
+    image = models.ImageField(_("photo"), upload_to=album_path)
+    thumb = models.ImageField(_("miniature"), upload_to=album_path)
+    created_at = models.DateTimeField(_("ajoutée le"), auto_now_add=True)
+
+    class Meta:
+        ordering = ["created_at", "pk"]
+        verbose_name = _("photo de l'album")
+        verbose_name_plural = _("photos de l'album")
+
+    def __str__(self):
+        return f"{self.event} : photo {self.pk}"
+
+
+@receiver(post_delete, sender=AlbumPhoto)
+def delete_album_files(sender, instance, **kwargs):
+    """Une photo supprimée (ou son événement) ne laisse pas de fichier derrière elle."""
+    for field in (instance.image, instance.thumb):
+        if field:
+            field.delete(save=False)
 
 
 class CheckIn(models.Model):

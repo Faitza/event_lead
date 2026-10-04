@@ -14,6 +14,7 @@ from django.utils import timezone
 from accounts.models import CustomUser
 from ads.models import Ad
 from core.models import ContactMessage, HelpRequest, Review
+from events import album
 from events.models import Event, EventCategory, EventEvaluation, Guest, Reminder, Table
 from gifts.models import Gift, GiftClaim
 from payments.models import Contribution, Payment
@@ -184,8 +185,25 @@ class Command(BaseCommand):
         # Événement passé : l'organisateur VIP peut l'évaluer (délai écoulé)
         Guest.objects.create(event=anniversary, name="Jonathan Pierre", email="organisateur@eventlead.ht",
                              user=vip, sent_via="email", status="confirmed", replied_at=timezone.now() - timedelta(days=12))
-        Guest.objects.create(event=anniversary, name="Nadège Louis", email="invite@eventlead.ht",
-                             user=guest_user, sent_via="email", status="confirmed", replied_at=timezone.now() - timedelta(days=11))
+        nadege = Guest.objects.create(event=anniversary, name="Nadège Louis", email="invite@eventlead.ht",
+                                      user=guest_user, sent_via="email", status="confirmed", replied_at=timezone.now() - timedelta(days=11))
+        # Remerciements publiés avec un petit album (photos du site), dont deux ajoutées par Nadège
+        basket = Gift.objects.create(event=anniversary, name="Panier de fruits", icon_name="bi-basket", quantity=1)
+        GiftClaim.objects.create(gift=basket, guest=nadege)
+        anniversary.thanks_message = (
+            "Merci d'avoir fêté mes 60 ans avec moi. Votre présence m'a profondément touchée. "
+            "Voici quelques photos de la journée : ajoutez aussi les vôtres !"
+        )
+        anniversary.thanks_published_at = timezone.now() - timedelta(days=2)
+        anniversary.save(update_fields=["thanks_message", "thanks_published_at"])
+        demo_photos = ["event-gala", "event-kompa", "event-salon", "event-chorale", "about", "login", "hero-bg", "ad-patisserie"]
+        for number, name in enumerate(demo_photos):
+            source = settings.BASE_DIR / "static" / "img" / "photos" / f"{name}.jpg"
+            if source.exists():
+                with source.open("rb") as handle:
+                    uploaded = ContentFile(handle.read(), name=f"{name}.jpg")
+                    uploaded.size = len(uploaded)
+                    album.add_photos(anniversary, [uploaded], nadege if number in (2, 5) else None)
         Guest.objects.create(event=gala, name="Nadège Louis", email="invite@eventlead.ht", user=guest_user,
                              sent_via="email", status="pending")
 

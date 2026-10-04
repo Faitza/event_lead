@@ -21,7 +21,7 @@ from gifts.services import (
     gifts_for_guest,
 )
 
-from . import checkin
+from . import checkin, thanks
 from .forms import GiftSelectionForm, GiftWishForm, PresenceForm
 from .messaging import supported_language
 from .models import Event, Guest, normalize_entry_code
@@ -78,7 +78,9 @@ def _guard(request, guest):
     if guest.is_locked:
         claims = GiftClaim.objects.filter(guest=guest).select_related("gift")
         contribution = Contribution.objects.filter(guest=guest).first()
-        return render(request, "invitation/already_answered.html", _ctx(guest, "confirmation", claims=claims, contribution=contribution))
+        return render(request, "invitation/already_answered.html", _ctx(
+            guest, "confirmation", claims=claims, contribution=contribution, thanks_ready=thanks.can_view(guest),
+        ))
     if event.status != Event.Status.ACTIVE or event.is_past:
         return render(request, "invitation/closed.html", _ctx(guest, "presence"))
     return None

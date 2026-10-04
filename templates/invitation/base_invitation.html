@@ -17,7 +17,7 @@
       <img src="{{ event.cover_url }}" alt="" onerror="this.style.visibility='hidden'">
       <div class="veil"></div><div class="sunburst" aria-hidden="true"></div><div class="rule" aria-hidden="true"></div>
       <div class="inner">
-        <span class="eyebrow">{% trans "Vous êtes invité(e) à" %}</span>
+        <span class="eyebrow">{% block hero_eyebrow %}{% trans "Vous êtes invité(e) à" %}{% endblock %}</span>
         <h1 class="disp">{{ event.title }}</h1>
         <span class="when">{{ event.date|date:_("l j F Y")|capfirst }} &middot; {{ event.time|time:_("H\\hi") }}</span>
       </div>

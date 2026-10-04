@@ -1,6 +1,6 @@
 from django.urls import path
 
-from . import views, views_contribution as contribution, views_invitation as inv
+from . import views, views_album as album_views, views_contribution as contribution, views_invitation as inv
 
 app_name = "events"
 
@@ -16,6 +16,8 @@ urlpatterns = [
     path("invitation/<uuid:token>/cadeaux/liste/", inv.invitation_gift_list, name="invitation_gift_list"),
     path("invitation/<uuid:token>/cadeaux/disponibilites/", inv.invitation_gift_availability, name="invitation_gift_availability"),
     path("invitation/<uuid:token>/contribution/", contribution.invitation_contribution, name="invitation_contribution"),
+    path("invitation/<uuid:token>/remerciements/", album_views.invitation_thanks, name="invitation_thanks"),
+    path("invitation/<uuid:token>/album.zip", album_views.invitation_album_zip, name="invitation_album_zip"),
     path("invitation/<uuid:token>/recapitulatif/", inv.invitation_recap, name="invitation_recap"),
     path("invitation/<uuid:token>/confirmation/", inv.invitation_done, name="invitation_done"),
     path("invitation/<uuid:token>/publicite/<int:ad_id>/", inv.invitation_ad, name="invitation_ad"),

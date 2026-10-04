@@ -1,0 +1,61 @@
+{% extends "invitation/base_invitation.html" %}
+{% load static %}
+{% load i18n %}
+{% block hero_eyebrow %}{% trans "Souvenirs de" %}{% endblock %}
+{% block inv_content %}
+<div id="album" class="d-flex flex-column gap-3" data-label-close="{% trans 'Fermer' %}" data-label-prev="{% trans 'Photo précédente' %}" data-label-next="{% trans 'Photo suivante' %}" data-label-sending="{% trans 'Envoi en cours...' %}">
+  <div class="text-center">
+    <span class="icon-bubble gold lg mb-3"><i class="bi bi-heart"></i></span>
+    <h1>{% blocktranslate trimmed %}Merci d'avoir été <em style="color:inherit">là</em>{% endblocktranslate %}</h1>
+    <p class="text-muted mb-0">{{ message|linebreaksbr }}</p>
+  </div>
+
+  <div class="d-flex align-items-baseline justify-content-between gap-3">
+    <h2 class="h4 mb-0">{% blocktranslate trimmed %}L'album <em>de l'événement</em>{% endblocktranslate %}</h2>
+    <span class="small text-muted text-nowrap">{% blocktranslate trimmed count counter=photo_count %}{{ counter }} photo{% plural %}{{ counter }} photos{% endblocktranslate %}</span>
+  </div>
+
+  {% if photos %}
+  <div class="album-grid" id="album-grid">
+    {% for p in photos %}
+    {% if forloop.counter0 >= preview_count %}
+    <button type="button" class="album-tile" data-full="{{ p.image.url }}" data-extra hidden aria-label="{% blocktranslate trimmed with n=forloop.counter %}Photo {{ n }}{% endblocktranslate %}"><img src="{{ p.thumb.url }}" alt="" loading="lazy"></button>
+    {% else %}
+    <button type="button" class="album-tile" data-full="{{ p.image.url }}" aria-label="{% blocktranslate trimmed with n=forloop.counter %}Photo {{ n }}{% endblocktranslate %}"><img src="{{ p.thumb.url }}" alt="" loading="lazy">{% if forloop.counter == preview_count and extra_count %}<span class="album-more" data-more aria-hidden="true">+{{ extra_count }}</span>{% endif %}</button>
+    {% endif %}
+    {% endfor %}
+  </div>
+  {% else %}
+  <div class="inv-pane text-center text-muted"><i class="bi bi-images d-block fs-3 mb-2"></i>{% trans "L'album est encore vide. Soyez le premier à ajouter une photo." %}</div>
+  {% endif %}
+
+  {% if personal_line %}
+  <div class="thanks-note"><i class="bi bi-gift"></i><span>{{ personal_line }}</span></div>
+  {% endif %}
+
+  <div class="d-flex flex-column gap-2">
+    {% if photos %}<a class="btn btn-primary btn-lg" href="{% url 'events:invitation_album_zip' guest.magic_token %}"><i class="bi bi-download me-2"></i>{% trans "Télécharger l'album" %}</a>{% endif %}
+    {% if can_add %}
+    <form method="post" enctype="multipart/form-data" id="upload-form">
+      {% csrf_token %}
+      <label class="btn btn-outline-gold btn-lg w-100" for="photo-input"><i class="bi bi-plus-lg me-2"></i><span id="upload-label">{% trans "Ajouter mes photos" %}</span></label>
+      <input type="file" name="photos" id="photo-input" class="visually-hidden" accept="image/jpeg,image/png,image/webp" multiple>
+      <noscript><button class="btn btn-primary w-100 mt-2">{% trans "Envoyer" %}</button></noscript>
+    </form>
+    <p class="small text-muted text-center mb-0"><i class="bi bi-lock me-1"></i>{% trans "Photos JPEG, PNG ou WebP, 12 Mo au plus chacune. Elles sont visibles par les invités présents et par les hôtes." %}</p>
+    {% else %}
+    <p class="small text-muted text-center mb-0">{% trans "Vous avez atteint le nombre de photos que vous pouvez ajouter." %}</p>
+    {% endif %}
+  </div>
+
+  <p class="text-center text-muted mb-0">{% trans "Avec toute notre gratitude," %} <span class="disp fst-italic" style="color:var(--el-primary-dark)">{{ event.title }}</span></p>
+  <div class="text-center"><a href="{% url 'events:invitation' guest.magic_token %}" class="btn btn-light"><i class="bi bi-arrow-left me-1"></i>{% trans "Retour" %}</a></div>
+</div>
+<div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-label="{% trans 'Photo' %}" hidden>
+  <button type="button" class="lightbox-btn lightbox-close" data-lb="close" aria-label="{% trans 'Fermer' %}"><i class="bi bi-x-lg"></i></button>
+  <button type="button" class="lightbox-btn lightbox-prev" data-lb="prev" aria-label="{% trans 'Photo précédente' %}"><i class="bi bi-chevron-left"></i></button>
+  <img src="" alt="">
+  <button type="button" class="lightbox-btn lightbox-next" data-lb="next" aria-label="{% trans 'Photo suivante' %}"><i class="bi bi-chevron-right"></i></button>
+</div>
+{% endblock %}
+{% block extra_js %}<script src="{% static 'js/album.js' %}"></script>{% endblock %}
