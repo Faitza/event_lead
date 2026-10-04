@@ -1,6 +1,28 @@
+import os
+
 from django import template
+from django.contrib.staticfiles import finders
+from django.templatetags.static import static
 
 register = template.Library()
+
+
+@register.simple_tag
+def static_v(path):
+    """Adresse d'un fichier statique avec sa date de modification (?v=...).
+
+    Le navigateur garde le CSS et le JS en cache : sans ce numéro, une modification du site
+    (fond, couleurs, menu) peut rester invisible tant qu'on n'a pas vidé le cache. Le numéro
+    change dès que le fichier change, donc le navigateur recharge tout seul.
+    """
+    url = static(path)
+    found = finders.find(path)
+    if isinstance(found, (list, tuple)):
+        found = found[0] if found else None
+    try:
+        return "%s?v=%d" % (url, os.stat(found).st_mtime) if found else url
+    except (OSError, TypeError):
+        return url
 
 
 @register.filter

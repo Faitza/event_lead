@@ -1,6 +1,7 @@
 """Tests des tuiles « Pour chaque occasion » de l'accueil : une tuile par catégorie, photo modifiable par l'équipe."""
 import os
 from datetime import timedelta
+from unittest import mock
 
 from django.core.files.uploadedfile import SimpleUploadedFile
 from django.test import TestCase, override_settings
@@ -18,6 +19,10 @@ class OccasionTileTests(TestCase):
     def setUp(self):
         translation.activate("fr")
         self.addCleanup(translation.deactivate)
+        # Les tests ne dépendent pas des photos par défaut réellement présentes dans static/img/categories/
+        patcher = mock.patch("events.models.finders.find", return_value=None)
+        patcher.start()
+        self.addCleanup(patcher.stop)
         self.birthday = EventCategory.objects.create(name="Anniversaire", icon_name="bi-balloon", order=1)
         self.baby = EventCategory.objects.create(name="Baby shower", icon_name="bi-balloon-heart", order=2)
         self.gala = EventCategory.objects.create(name="Gala", icon_name="bi-stars", order=3)
@@ -41,6 +46,29 @@ class OccasionTileTests(TestCase):
         self.assertIn('class="occasion-ph"', tile)
         self.assertIn("bi-balloon-heart", tile)
         self.assertNotIn("<img", tile)
+
+    def test_tile_uses_the_site_default_photo_when_the_team_added_none(self):
+        with mock.patch("events.models.finders.find", return_value="/x/img/categories/baby-shower.jpg"):
+            tile = self.tiles(self.client.get(reverse("core:landing")).content.decode())[1]
+        self.assertIn("img/categories/baby-shower.jpg", tile)
+        self.assertNotIn('class="occasion-ph"', tile)
+
+    def test_team_photo_wins_over_the_site_default_photo(self):
+        self.client.login(username="adm@x.ht", password=PASSWORD)
+        self.client.post(reverse("dashboard:category_edit", args=[self.baby.pk]), {
+            "name": "Baby shower", "icon_name": "bi-balloon-heart", "order": 2, "image": image_file(size=(1200, 900)),
+        })
+        self.baby.refresh_from_db()
+        with mock.patch("events.models.finders.find", return_value="/x/img/categories/baby-shower.jpg"):
+            tile = self.tiles(self.client.get(reverse("core:landing")).content.decode())[1]
+        self.assertIn(self.baby.image.url, tile)
+        self.assertNotIn("img/categories/baby-shower.jpg", tile)
+
+    def test_default_photo_is_looked_up_by_the_category_identifier(self):
+        looked_up = []
+        with mock.patch("events.models.finders.find", side_effect=lambda path: looked_up.append(path)):
+            self.assertEqual(self.baby.tile_url, "")
+        self.assertEqual(looked_up, ["img/categories/baby-shower.jpg"])
 
     def test_tile_links_to_events_only_when_the_category_has_upcoming_ones(self):
         tiles = self.tiles(self.client.get(reverse("core:landing")).content.decode())
@@ -144,3 +172,47 @@ class DefaultCategoriesTests(TestCase):
 
     def test_button_is_post_only(self):
         self.assertEqual(self.client.get(reverse("dashboard:category_add_defaults")).status_code, 405)
+
+
+class NavbarMoreMenuTests(TestCase):
+    """Le haut de page garde les liens essentiels visibles et regroupe les autres dans « Plus »."""
+
+    def setUp(self):
+        translation.activate("fr")
+        self.addCleanup(translation.deactivate)
+
+    def header(self, url):
+        html = self.client.get(url).content.decode()
+        return html.split('<header class="el-nav')[1].split("</header>")[0]
+
+    def test_essential_links_stay_visible_and_the_others_are_in_the_menu(self):
+        header = self.header(reverse("core:landing"))
+        menu = header.split('class="dropdown-menu nav-more"')[1].split("</ul>")[0]
+        for label in ("À propos", "Contact", "Aide"):
+            self.assertIn(label, menu)
+        visible = header.split('class="nav-item dropdown"')[0]
+        for label in ("Accueil", "Événements", "Billetterie", "Services"):
+            self.assertIn(label, visible)
+        for label in ("À propos", "Contact", "Aide"):
+            self.assertNotIn(">%s<" % label, visible)
+
+    def test_menu_is_marked_active_on_the_help_page(self):
+        header = self.header(reverse("core:help"))
+        self.assertIn('dropdown-toggle active', header)
+        self.assertIn('dropdown-item active', header)
+
+    def test_menu_label_is_translated(self):
+        for lang, label in (("en", "More"), ("ht", "Plis")):
+            html = self.client.get(reverse("core:landing"), HTTP_ACCEPT_LANGUAGE=lang).content.decode()
+            self.assertIn(">%s</button>" % label, html.split('<header class="el-nav')[1])
+
+
+class StaticVersionTests(TestCase):
+    def test_stylesheet_and_script_urls_carry_a_version_number(self):
+        html = self.client.get(reverse("core:landing")).content.decode()
+        self.assertRegex(html, r'css/eventlead\.css\?v=\d+')
+        self.assertRegex(html, r'js/eventlead\.js\?v=\d+')
+
+    def test_unknown_file_gives_a_plain_url(self):
+        from core.templatetags.el_tags import static_v
+        self.assertNotIn("?v=", static_v("css/n-existe-pas.css"))

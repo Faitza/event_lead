@@ -20,7 +20,7 @@
     {% for c in categories %}
       <tr>
         <td><div class="d-flex align-items-center gap-3"><span class="icon-bubble" style="width:40px;height:40px;font-size:1.1rem"><i class="bi {{ c.icon_name }}"></i></span><strong>{{ c.label }}</strong></div></td>
-        <td>{% if c.image %}<img src="{{ c.image.url }}" alt="" class="occasion-thumb" width="64" height="48">{% else %}<span class="text-muted small">{% trans "Aucune" %}</span>{% endif %}</td>
+        <td>{% if c.tile_url %}<img src="{{ c.tile_url }}" alt="" class="occasion-thumb" width="64" height="48">{% if not c.image %} <span class="text-muted small">{% trans "photo du site" %}</span>{% endif %}{% else %}<span class="text-muted small">{% trans "Aucune" %}</span>{% endif %}</td>
         <td>{{ c.order }}</td>
         <td>{% if c.num_events %}<a href="{% url 'dashboard:event_list' %}?categorie={{ c.slug }}">{{ c.num_events }}</a>{% else %}0{% endif %}</td>
         <td class="text-end text-nowrap">

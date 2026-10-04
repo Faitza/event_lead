@@ -4,6 +4,7 @@ import uuid
 from datetime import timedelta
 
 from django.conf import settings
+from django.contrib.staticfiles import finders
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
 from django.db.models import Q
@@ -15,6 +16,10 @@ from django.utils import timezone
 from django.utils.text import slugify
 from django.utils.translation import gettext, gettext_noop
 from django.utils.translation import gettext_lazy as _
+
+# Photos par défaut des tuiles de l'accueil : static/img/categories/<identifiant>.jpg (ex. mariage.jpg, baby-shower.jpg).
+# Une photo téléversée dans Admin > Catégories passe avant ; sans aucune photo, la tuile garde son décor violet.
+DEFAULT_TILE_DIR = "img/categories"
 
 PLACEHOLDER_COVERS = [
     "img/photos/event-gala.jpg",
@@ -73,6 +78,20 @@ class EventCategory(models.Model):
     def label(self):
         """Nom affiché : traduit pour les catégories par défaut, tel quel pour celles créées par l'équipe."""
         return gettext(self.name)
+
+    @property
+    def default_tile_path(self):
+        """Chemin statique de la photo par défaut de cette catégorie, ou chaîne vide si le fichier n'existe pas."""
+        path = "%s/%s.jpg" % (DEFAULT_TILE_DIR, self.slug)
+        return path if self.slug and finders.find(path) else ""
+
+    @property
+    def tile_url(self):
+        """Adresse de la photo de la tuile : celle de l'équipe, sinon la photo par défaut du site, sinon vide."""
+        if self.image:
+            return self.image.url
+        default = self.default_tile_path
+        return static(default) if default else ""
 
     @classmethod
     def missing_defaults(cls):

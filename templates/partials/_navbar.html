@@ -22,9 +22,14 @@
         <a class="nav-link {% if request.resolver_match.url_name == 'explore' %}active{% endif %}" href="{% url 'events:explore' %}">{% trans "Événements" %}</a>
         <a class="nav-link {% if request.resolver_match.url_name == 'ticketing' %}active{% endif %}" href="{% url 'payments:ticketing' %}">{% trans "Billetterie" %}</a>
         <a class="nav-link" href="{% url 'core:landing' %}#services">{% trans "Services" %}</a>
-        <a class="nav-link" href="{% url 'core:landing' %}#a-propos">{% trans "À propos" %}</a>
-        <a class="nav-link" href="{% url 'core:landing' %}#contact">{% trans "Contact" %}</a>
-        <a class="nav-link {% if request.resolver_match.url_name == 'help' %}active{% endif %}" href="{% url 'core:help' %}">{% trans "Aide" %}</a>
+        <div class="nav-item dropdown">
+          <button class="nav-link dropdown-toggle {% if request.resolver_match.url_name == 'help' %}active{% endif %}" type="button" data-bs-toggle="dropdown" aria-expanded="false">{% trans "Plus" %}</button>
+          <ul class="dropdown-menu nav-more">
+            <li><a class="dropdown-item" href="{% url 'core:landing' %}#a-propos">{% trans "À propos" %}</a></li>
+            <li><a class="dropdown-item" href="{% url 'core:landing' %}#contact">{% trans "Contact" %}</a></li>
+            <li><a class="dropdown-item {% if request.resolver_match.url_name == 'help' %}active{% endif %}" href="{% url 'core:help' %}">{% trans "Aide" %}</a></li>
+          </ul>
+        </div>
       </nav>
       <div class="d-flex align-items-center gap-2 mt-3 mt-xl-0 flex-wrap">
         <div class="d-none d-xl-block">{% include "partials/_language_switcher.html" with variant="menu" %}</div>

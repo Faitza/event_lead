@@ -15,6 +15,10 @@
         {% include "partials/_icon_picker.html" with field=form.icon_name %}
         <div class="mb-4">
           <label class="form-label" for="{{ form.image.id_for_label }}">{{ form.image.label }}</label>
+          {% if category and category.tile_url and not category.image %}
+          <div class="occasion-preview mb-3"><img src="{{ category.tile_url }}" alt="" width="240" height="180"></div>
+          <p class="form-text mb-3">{% trans "Photo du site, utilisée tant que vous n'en ajoutez pas une autre." %}</p>
+          {% endif %}
           {% if category and category.image %}
           <div class="occasion-preview mb-3"><img src="{{ category.image.url }}" alt="" width="240" height="180"></div>
           <div class="form-check mb-3">{{ form.remove_image }} <label class="form-check-label" for="{{ form.remove_image.id_for_label }}">{{ form.remove_image.label }}</label></div>

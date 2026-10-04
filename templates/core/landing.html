@@ -152,7 +152,7 @@
         {% for c, has_events in occasions %}
         <a class="occasion" href="{% if has_events %}{% url 'events:explore' %}?categorie={{ c.slug }}{% else %}#contact{% endif %}">
           <span class="occasion-photo">
-            {% if c.image %}<img src="{{ c.image.url }}" alt="" width="960" height="720" loading="lazy">
+            {% if c.tile_url %}<img src="{{ c.tile_url }}" alt="" width="960" height="720" loading="lazy">
             {% else %}<span class="occasion-ph"><i class="bi {{ c.icon_name }}"></i></span>{% endif %}
           </span>
           <span class="occasion-bar">{{ c.label }}</span>
