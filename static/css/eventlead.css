@@ -61,9 +61,9 @@ a:hover { color: var(--el-primary-dark); }
 .fw-semibold { font-weight: 600; }
 @media (min-width: 1200px) { .container { max-width: 1200px; } }
 
-/* Titres : Bodoni Moda, graisse unique (la hiérarchie vient de la taille) */
+/* Titres : Bodoni Moda, graisse unique 500 (la hiérarchie vient de la taille) */
 h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6, .disp {
-  font-family: var(--font-display); font-weight: 400 !important; letter-spacing: 0; color: var(--el-primary-dark);
+  font-family: var(--font-display); font-weight: 500 !important; letter-spacing: 0; color: var(--el-primary-dark);
 }
 h1 em, h2 em, h3 em, .disp em { color: var(--el-gold); font-style: italic; }
 .em-on-light em { color: var(--el-gold-strong); }
@@ -941,3 +941,13 @@ html { font-variation-settings: "opsz" 18; }
 
 /* Titres des cartes d'administration et des fenêtres : un peu plus de graisse */
 .el-card-header h2, .el-card-header h3, .modal-title { font-weight: 600 !important; }
+
+/* Accueil : petits textes un cran plus grands, chiffres et sceau en trait plus épais */
+.eyebrow, .chip, .key-figure .label, .p-event .date .m, .event-arch .date .m, .testi-main figcaption { font-size: .8125rem; font-weight: 600; }
+.how-step .num, .vip-seal > span { font-weight: 600; }
+.how-step p { font-size: 1rem; color: #4B5563; }
+.hero-points, .parade-toggle, .p-ad .go, .p-event .where, .ticket .top .when, .ticket .price .usd, .el-announce .msg { font-size: .875rem; }
+.event-arch .when, .testi figcaption { font-size: .9375rem; }
+.el-footer a, .el-footer li, .el-footer p.small { font-size: .9375rem; }
+h5, h6, .h5, .h6 { font-weight: 600 !important; }   /* petits titres Bodoni : plus de graisse */
+h2.h6 { font-size: 1.15rem; }
