@@ -1,6 +1,6 @@
 /* ==========================================================================
    EventLead - Design system "carton d'invitation de gala"
-   Violet #45065C + or #D4AF37 (palette du logo), Bodoni Moda + Jost,
+   Violet #45065C + or #D4AF37 (palette du logo), Playfair Display + Jost,
    filets et losanges dorés, photos en arche, billets perforés.
    ========================================================================== */
 
@@ -32,7 +32,7 @@
   --el-shadow-lg: 0 14px 36px rgba(44, 3, 59, .16);
   --el-gradient: linear-gradient(135deg, #2C033B 0%, #45065C 100%);
   --el-ease: .2s ease;
-  --font-display: "Bodoni Moda", "Didot", "Bodoni 72", Georgia, serif;
+  --font-display: "Playfair Display", Georgia, "Times New Roman", serif;   /* police des titres et des chiffres : à changer ici et dans templates/base.html */
   --font-body: "Jost", system-ui, -apple-system, "Segoe UI", sans-serif;
 
   /* Surcharge des variables Bootstrap */
@@ -61,7 +61,7 @@ a:hover { color: var(--el-primary-dark); }
 .fw-semibold { font-weight: 600; }
 @media (min-width: 1200px) { .container { max-width: 1200px; } }
 
-/* Titres : Bodoni Moda, graisse unique 500 (la hiérarchie vient de la taille) */
+/* Titres : police d'affichage (--font-display), graisse unique 500 (la hiérarchie vient de la taille) */
 h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6, .disp {
   font-family: var(--font-display); font-weight: 500 !important; letter-spacing: 0; color: var(--el-primary-dark);
 }
@@ -820,7 +820,7 @@ h1 em, h2 em, h3 em, .disp em { color: var(--el-gold); font-style: italic; }
 .scan-hint { position: relative; margin: 0 0 12px; padding: 4px 12px; border-radius: 999px; background: rgba(44, 3, 59, .7); color: #fff; font-size: .8rem; text-align: center; }
 .scan-result { margin-top: 14px; padding: 14px 16px; border-radius: 12px; border: 1px solid transparent; }
 .scan-result-title { font-weight: 600; font-size: 1.05rem; }
-.scan-result-name { font-family: 'Bodoni Moda', Georgia, serif; font-size: 1.5rem; line-height: 1.15; color: var(--el-primary-dark); margin-top: 2px; }
+.scan-result-name { font-family: var(--font-display); font-size: 1.5rem; line-height: 1.15; color: var(--el-primary-dark); margin-top: 2px; }
 .scan-result-detail, .scan-result-note { font-size: .875rem; margin-top: 2px; }
 .scan-result-table { display: inline-block; margin-top: 6px; padding: 2px 12px; border-radius: 999px; background: var(--el-gold); color: var(--el-primary-dark); font-weight: 600; font-size: 1rem; }
 .scan-result.tone-success { background: rgba(16, 185, 129, .1); border-color: rgba(16, 185, 129, .35); color: #065F46; }
@@ -923,13 +923,12 @@ h1 em, h2 em, h3 em, .disp em { color: var(--el-gold); font-style: italic; }
 .thanks-table th, .thanks-table td { position: relative; vertical-align: middle; }
 
 /* ==========================================================================
-   Lisibilité de Bodoni Moda
-   Google Fonts livre l'axe « corps optique » : plus le texte est grand, plus les
-   traits fins deviennent minces, jusqu'à disparaître (le H de « 5 000 HTG » à 28 px).
-   On fixe donc le corps optique à 18 pour tout le site : les « e » et les « W » des
-   grands titres restent lisibles, le dessin Bodoni reste le même.
+   Lisibilité de la police d'affichage
+   Playfair Display affiche par défaut des chiffres « elzévir » (« 5 000 » avec des
+   chiffres qui montent et descendent) : « lnum » les aligne sur la ligne de base.
+   Le texte courant reste en Jost.
    ========================================================================== */
-html { font-variation-settings: "opsz" 18; }
+html { font-feature-settings: "lnum" 1; }
 
 /* Chiffres et montants : trait plus épais, chiffres alignés sur la ligne, milliers bien séparés */
 .fig, .stat-card .value, .key-figure .value, .price-tag, .ticket .price .htg, .ticket-row .t-buy .htg,
@@ -943,11 +942,12 @@ html { font-variation-settings: "opsz" 18; }
 .el-card-header h2, .el-card-header h3, .modal-title { font-weight: 600 !important; }
 
 /* Accueil : petits textes un cran plus grands, chiffres et sceau en trait plus épais */
-.eyebrow, .chip, .key-figure .label, .p-event .date .m, .event-arch .date .m, .testi-main figcaption { font-size: .8125rem; font-weight: 600; }
+.eyebrow, .chip, .p-event .date .m, .event-arch .date .m, .testi-main figcaption { font-size: .8125rem; font-weight: 600; }
+.key-figure .label { font-size: .8125rem; font-weight: 500; letter-spacing: .08em; }
 .how-step .num, .vip-seal > span { font-weight: 600; }
 .how-step p { font-size: 1rem; color: #4B5563; }
 .hero-points, .parade-toggle, .p-ad .go, .p-event .where, .ticket .top .when, .ticket .price .usd, .el-announce .msg { font-size: .875rem; }
 .event-arch .when, .testi figcaption { font-size: .9375rem; }
 .el-footer a, .el-footer li, .el-footer p.small { font-size: .9375rem; }
-h5, h6, .h5, .h6 { font-weight: 600 !important; }   /* petits titres Bodoni : plus de graisse */
+h5, h6, .h5, .h6 { font-weight: 600 !important; }   /* petits titres : plus de graisse */
 h2.h6 { font-size: 1.15rem; }
