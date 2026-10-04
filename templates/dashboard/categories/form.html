@@ -3,16 +3,26 @@
 {% block title %}{% if is_new %}{% trans "Nouvelle catégorie" %}{% else %}{% trans "Modifier la catégorie" %}{% endif %}{% endblock %}
 {% block dash_content %}
 <div class="page-head">
-  <div><h1>{% if is_new %}{% trans "Nouvelle catégorie" %}{% else %}{{ category.name }}{% endif %}</h1><p>{% trans "Le nom et l'icône s'affichent sur les cartes d'événements et dans les filtres du site." %}</p></div>
+  <div><h1>{% if is_new %}{% trans "Nouvelle catégorie" %}{% else %}{{ category.name }}{% endif %}</h1><p>{% trans "Le nom et l'icône s'affichent sur les cartes d'événements et dans les filtres du site ; la photo, sur la tuile de l'accueil." %}</p></div>
   <a href="{% url 'dashboard:category_list' %}" class="btn btn-light"><i class="bi bi-arrow-left me-2"></i>{% trans "Retour" %}</a>
 </div>
-<form method="post" novalidate>
+<form method="post" enctype="multipart/form-data" novalidate>
   {% csrf_token %}
   <div class="row g-4">
     <div class="col-xl-8">
       <div class="el-card el-card-body">
         {% include "partials/_field.html" with field=form.name %}
         {% include "partials/_icon_picker.html" with field=form.icon_name %}
+        <div class="mb-4">
+          <label class="form-label" for="{{ form.image.id_for_label }}">{{ form.image.label }}</label>
+          {% if category and category.image %}
+          <div class="occasion-preview mb-3"><img src="{{ category.image.url }}" alt="" width="240" height="180"></div>
+          <div class="form-check mb-3">{{ form.remove_image }} <label class="form-check-label" for="{{ form.remove_image.id_for_label }}">{{ form.remove_image.label }}</label></div>
+          {% endif %}
+          <input type="file" name="{{ form.image.html_name }}" id="{{ form.image.id_for_label }}" class="form-control{% if form.image.errors %} is-invalid{% endif %}" accept="image/jpeg,image/png,image/webp">
+          {% for error in form.image.errors %}<div class="invalid-feedback d-block">{{ error }}</div>{% endfor %}
+          <div class="form-text">{{ form.image.help_text }}</div>
+        </div>
         {% include "partials/_field.html" with field=form.order %}
         <button class="btn btn-primary btn-lg"><i class="bi bi-check2 me-2"></i>{% trans "Enregistrer" %}</button>
       </div>

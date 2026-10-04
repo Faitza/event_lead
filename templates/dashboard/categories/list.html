@@ -6,14 +6,21 @@
   <div><h1>{% trans "Catégories d'événements" %}</h1><p>{% trans "Mariage, gala, concert : les visiteurs filtrent les événements publics par catégorie." %}</p></div>
   <a href="{% url 'dashboard:category_create' %}" class="btn btn-primary"><i class="bi bi-plus-lg me-2"></i>{% trans "Nouvelle catégorie" %}</a>
 </div>
+{% if missing_defaults %}
+<div class="el-card el-card-body d-flex flex-wrap align-items-center justify-content-between gap-3 mb-4">
+  <p class="mb-0">{% trans "Catégories proposées qui n'existent pas encore :" %} <strong>{% for name, icon in missing_defaults %}{% trans name %}{% if not forloop.last %}, {% endif %}{% endfor %}</strong></p>
+  <form method="post" action="{% url 'dashboard:category_add_defaults' %}">{% csrf_token %}<button class="btn btn-light"><i class="bi bi-plus-circle me-2"></i>{% trans "Ajouter les catégories par défaut" %}</button></form>
+</div>
+{% endif %}
 <div class="el-card">
   {% if categories %}
   <div class="table-wrap"><table class="table table-el">
-    <thead><tr><th>{% trans "Catégorie" %}</th><th>{% trans "Ordre" %}</th><th>{% trans "Événements" %}</th><th class="text-end">{% trans "Actions" %}</th></tr></thead>
+    <thead><tr><th>{% trans "Catégorie" %}</th><th>{% trans "Photo" %}</th><th>{% trans "Ordre" %}</th><th>{% trans "Événements" %}</th><th class="text-end">{% trans "Actions" %}</th></tr></thead>
     <tbody>
     {% for c in categories %}
       <tr>
         <td><div class="d-flex align-items-center gap-3"><span class="icon-bubble" style="width:40px;height:40px;font-size:1.1rem"><i class="bi {{ c.icon_name }}"></i></span><strong>{{ c.label }}</strong></div></td>
+        <td>{% if c.image %}<img src="{{ c.image.url }}" alt="" class="occasion-thumb" width="64" height="48">{% else %}<span class="text-muted small">{% trans "Aucune" %}</span>{% endif %}</td>
         <td>{{ c.order }}</td>
         <td>{% if c.num_events %}<a href="{% url 'dashboard:event_list' %}?categorie={{ c.slug }}">{{ c.num_events }}</a>{% else %}0{% endif %}</td>
         <td class="text-end text-nowrap">

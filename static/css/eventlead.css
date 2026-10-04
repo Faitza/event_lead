@@ -1,6 +1,6 @@
 /* ==========================================================================
    EventLead - Design system "carton d'invitation de gala"
-   Violet #45065C + or #D4AF37 (palette du logo), Playfair Display + Jost,
+   Violet #45065C + or #D4AF37 (palette du logo), Old Standard TT + Jost,
    filets et losanges dorés, photos en arche, billets perforés.
    ========================================================================== */
 
@@ -32,7 +32,7 @@
   --el-shadow-lg: 0 14px 36px rgba(44, 3, 59, .16);
   --el-gradient: linear-gradient(135deg, #2C033B 0%, #45065C 100%);
   --el-ease: .2s ease;
-  --font-display: "Playfair Display", Georgia, "Times New Roman", serif;   /* police des titres et des chiffres : à changer ici et dans templates/base.html */
+  --font-display: "Old Standard TT", Georgia, "Times New Roman", serif;   /* police des titres et des chiffres : à changer ici et dans templates/base.html */
   --font-body: "Jost", system-ui, -apple-system, "Segoe UI", sans-serif;
 
   /* Surcharge des variables Bootstrap */
@@ -924,11 +924,12 @@ h1 em, h2 em, h3 em, .disp em { color: var(--el-gold); font-style: italic; }
 
 /* ==========================================================================
    Lisibilité de la police d'affichage
-   Playfair Display affiche par défaut des chiffres « elzévir » (« 5 000 » avec des
-   chiffres qui montent et descendent) : « lnum » les aligne sur la ligne de base.
+   Old Standard TT n'a que deux graisses (400 et 700) : 500 s'affiche en 400 et 600 en 700.
+   « lnum » garde des chiffres alignés sur la ligne de base si la police propose des chiffres
+   elzévir, et « font-synthesis-weight » empêche le navigateur de fabriquer un faux gras.
    Le texte courant reste en Jost.
    ========================================================================== */
-html { font-feature-settings: "lnum" 1; }
+html { font-feature-settings: "lnum" 1; font-synthesis-weight: none; }
 
 /* Chiffres et montants : trait plus épais, chiffres alignés sur la ligne, milliers bien séparés */
 .fig, .stat-card .value, .key-figure .value, .price-tag, .ticket .price .htg, .ticket-row .t-buy .htg,
@@ -944,10 +945,39 @@ html { font-feature-settings: "lnum" 1; }
 /* Accueil : petits textes un cran plus grands, chiffres et sceau en trait plus épais */
 .eyebrow, .chip, .p-event .date .m, .event-arch .date .m, .testi-main figcaption { font-size: .8125rem; font-weight: 600; }
 .key-figure .label { font-size: .8125rem; font-weight: 500; letter-spacing: .08em; }
-.how-step .num, .vip-seal > span { font-weight: 600; }
+.vip-seal > span { font-weight: 600; }
 .how-step p { font-size: 1rem; color: #4B5563; }
 .hero-points, .parade-toggle, .p-ad .go, .p-event .where, .ticket .top .when, .ticket .price .usd, .el-announce .msg { font-size: .875rem; }
 .event-arch .when, .testi figcaption { font-size: .9375rem; }
 .el-footer a, .el-footer li, .el-footer p.small { font-size: .9375rem; }
 h5, h6, .h5, .h6 { font-weight: 600 !important; }   /* petits titres : plus de graisse */
 h2.h6 { font-size: 1.15rem; }
+
+/* Services : tuiles « Pour chaque occasion » (photo dans un cadre violet, nom sur une barre) */
+.occasion-block { margin-bottom: 56px; }
+.occasion-title { text-align: center; font-size: 1.6rem; margin: 0 0 24px; }
+.occasion-grid { display: flex; flex-wrap: wrap; justify-content: center; gap: 20px; }
+.occasion { flex: 0 1 270px; min-width: 0; display: block; border: 3px solid var(--el-primary); border-radius: 18px; overflow: hidden; background: var(--el-primary); color: #fff; text-decoration: none; box-shadow: 0 8px 22px rgba(44, 3, 59, .14); transition: transform var(--el-ease), box-shadow var(--el-ease); }
+.occasion:hover, .occasion:focus-visible { color: #fff; transform: translateY(-4px); box-shadow: 0 14px 30px rgba(44, 3, 59, .24); }
+.occasion-photo { display: block; position: relative; aspect-ratio: 4 / 3; overflow: hidden; border-bottom: 2px solid var(--el-gold); }
+.occasion-photo img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform .4s ease; }
+.occasion:hover .occasion-photo img { transform: scale(1.04); }
+/* Rendu en attendant une vraie photo : décor violet avec reflets dorés et l'icône de la catégorie */
+.occasion-ph { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center;
+  background:
+    radial-gradient(circle at 18% 24%, rgba(233, 207, 115, .5) 0, rgba(233, 207, 115, 0) 11%),
+    radial-gradient(circle at 80% 18%, rgba(255, 255, 255, .32) 0, rgba(255, 255, 255, 0) 9%),
+    radial-gradient(circle at 72% 78%, rgba(233, 207, 115, .38) 0, rgba(233, 207, 115, 0) 13%),
+    radial-gradient(circle at 28% 80%, rgba(255, 255, 255, .24) 0, rgba(255, 255, 255, 0) 10%),
+    linear-gradient(135deg, #2C033B, #5A0B78); }
+.occasion-ph i { width: 72px; height: 72px; border-radius: 50%; border: 1px solid var(--el-gold); background: rgba(212, 175, 55, .1); display: grid; place-items: center; font-size: 1.9rem; color: var(--el-gold-soft); }
+.occasion-bar { display: block; padding: 13px 10px; text-align: center; font-family: var(--font-body); font-size: .9375rem; font-weight: 600; letter-spacing: .16em; text-transform: uppercase; }
+@media (max-width: 575px) {
+  .occasion-grid { gap: 14px; }
+  .occasion { flex-basis: calc(50% - 7px); border-radius: 14px; }
+  .occasion-ph i { width: 56px; height: 56px; font-size: 1.5rem; }
+  .occasion-bar { padding: 10px 6px; font-size: .8125rem; letter-spacing: .1em; }
+}
+@media (prefers-reduced-motion: reduce) { .occasion, .occasion-photo img { transition: none; } .occasion:hover, .occasion:hover .occasion-photo img { transform: none; } }
+.occasion-thumb { width: 64px; height: 48px; object-fit: cover; border-radius: 8px; border: 1px solid var(--el-line); }
+.occasion-preview img { width: 240px; max-width: 100%; height: auto; aspect-ratio: 4 / 3; object-fit: cover; border-radius: 12px; border: 1px solid var(--el-line); }

@@ -1,12 +1,16 @@
 from django import forms
 from django.conf import settings
 from django.contrib.auth import get_user_model
+from django.core.files.base import ContentFile
+from django.core.files.uploadedfile import UploadedFile
 from django.utils.translation import gettext_lazy as _
 
+from .album import AlbumError, tile_photo
 from .models import Event, EventCategory, EventEvaluation, Guest
 
 CATEGORY_ICONS = [
-    ("bi-heart", _("Mariage")), ("bi-stars", _("Gala")), ("bi-balloon", _("Fête")), ("bi-droplet", _("Baptême")),
+    ("bi-heart", _("Mariage")), ("bi-stars", _("Gala")), ("bi-balloon", _("Fête")), ("bi-balloon-heart", _("Baby shower")),
+    ("bi-droplet", _("Baptême")),
     ("bi-mic", _("Conférence")), ("bi-music-note-beamed", _("Musique")), ("bi-cup-straw", _("Soirée")),
     ("bi-trophy", _("Sport")), ("bi-mortarboard", _("Diplômes")), ("bi-briefcase", _("Affaires")),
     ("bi-palette", _("Art")), ("bi-film", _("Cinéma")), ("bi-flower1", _("Cérémonie")), ("bi-gift", _("Cadeaux")),
@@ -54,12 +58,22 @@ class EventForm(forms.ModelForm):
 
 class EventCategoryForm(forms.ModelForm):
     icon_name = forms.ChoiceField(label=_("Icône"), choices=CATEGORY_ICONS, widget=forms.RadioSelect)
+    image = forms.ImageField(
+        label=_("Photo de la tuile"), required=False,
+        widget=forms.FileInput(attrs={"accept": "image/jpeg,image/png,image/webp"}),
+        help_text=_("Affichée sur l'accueil, recadrée en 4/3 (au moins 480 x 360 pixels). Sans photo, un décor violet avec l'icône s'affiche."),
+    )
+    remove_image = forms.BooleanField(label=_("Retirer la photo actuelle"), required=False)
 
     class Meta:
         model = EventCategory
-        fields = ["name", "icon_name", "order"]
+        fields = ["name", "icon_name", "order", "image"]
         widgets = {"name": forms.TextInput(attrs={"placeholder": _("Ex : Mariage")})}
         help_texts = {"order": _("Les petits numéros s'affichent en premier.")}
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self._old_image = self.instance.image.name if self.instance.pk and self.instance.image else ""
 
     def clean_name(self):
         name = " ".join(self.cleaned_data["name"].split())
@@ -67,6 +81,25 @@ class EventCategoryForm(forms.ModelForm):
         if clash.exists():
             raise forms.ValidationError(_("Une catégorie porte déjà ce nom."))
         return name
+
+    def clean_image(self):
+        uploaded = self.cleaned_data.get("image")
+        if isinstance(uploaded, UploadedFile):
+            try:
+                return tile_photo(uploaded)
+            except AlbumError as error:
+                raise forms.ValidationError(str(error))
+        return uploaded
+
+    def save(self, commit=True):
+        category = super().save(commit=False)
+        if self.cleaned_data.get("remove_image") and not isinstance(self.cleaned_data.get("image"), ContentFile):
+            category.image = ""
+        if commit:
+            category.save()
+            if self._old_image and self._old_image != (category.image.name if category.image else ""):
+                category.image.storage.delete(self._old_image)  # l'ancienne photo ne reste pas sur le disque
+        return category
 
 
 class GuestForm(forms.ModelForm):

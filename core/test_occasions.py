@@ -1,0 +1,146 @@
+"""Tests des tuiles « Pour chaque occasion » de l'accueil : une tuile par catégorie, photo modifiable par l'équipe."""
+import os
+from datetime import timedelta
+
+from django.core.files.uploadedfile import SimpleUploadedFile
+from django.test import TestCase, override_settings
+from django.urls import reverse
+from django.utils import timezone, translation
+from PIL import Image
+
+from core.test_thanks import MEDIA, PASSWORD, image_file, make_event, make_user
+from events import album
+from events.models import DEFAULT_CATEGORIES, EventCategory
+
+
+@override_settings(MEDIA_ROOT=MEDIA)
+class OccasionTileTests(TestCase):
+    def setUp(self):
+        translation.activate("fr")
+        self.addCleanup(translation.deactivate)
+        self.birthday = EventCategory.objects.create(name="Anniversaire", icon_name="bi-balloon", order=1)
+        self.baby = EventCategory.objects.create(name="Baby shower", icon_name="bi-balloon-heart", order=2)
+        self.gala = EventCategory.objects.create(name="Gala", icon_name="bi-stars", order=3)
+        make_event(title="Grand gala", event_type="public", category=self.gala, date=timezone.localdate() + timedelta(days=20))
+        self.admin = make_user("adm@x.ht", role="admin")
+
+    def tiles(self, html):
+        block = html.split('class="occasion-grid"')[1].split('class="service-grid"')[0]
+        return block.split('class="occasion"')[1:]
+
+    def test_one_tile_per_category_in_order(self):
+        html = self.client.get(reverse("core:landing")).content.decode()
+        tiles = self.tiles(html)
+        self.assertEqual(len(tiles), 3)
+        self.assertIn("Anniversaire", tiles[0])
+        self.assertIn("Baby shower", tiles[1])
+        self.assertIn("Gala", tiles[2])
+
+    def test_tile_without_photo_shows_the_placeholder_with_the_icon(self):
+        tile = self.tiles(self.client.get(reverse("core:landing")).content.decode())[1]
+        self.assertIn('class="occasion-ph"', tile)
+        self.assertIn("bi-balloon-heart", tile)
+        self.assertNotIn("<img", tile)
+
+    def test_tile_links_to_events_only_when_the_category_has_upcoming_ones(self):
+        tiles = self.tiles(self.client.get(reverse("core:landing")).content.decode())
+        self.assertIn('href="#contact"', tiles[0])
+        self.assertIn('href="%s?categorie=gala"' % reverse("events:explore"), tiles[2])
+
+    def test_no_categories_no_block(self):
+        EventCategory.objects.all().delete()
+        html = self.client.get(reverse("core:landing")).content.decode()
+        self.assertNotIn("occasion-grid", html)
+
+    def test_tile_shows_the_photo_once_uploaded(self):
+        self.client.login(username="adm@x.ht", password=PASSWORD)
+        r = self.client.post(reverse("dashboard:category_edit", args=[self.baby.pk]), {
+            "name": "Baby shower", "icon_name": "bi-balloon-heart", "order": 2, "image": image_file(size=(1600, 900)),
+        })
+        self.assertRedirects(r, reverse("dashboard:category_list"))
+        self.baby.refresh_from_db()
+        self.assertTrue(self.baby.image)
+        tile = self.tiles(self.client.get(reverse("core:landing")).content.decode())[1]
+        self.assertIn(self.baby.image.url, tile)
+        self.assertNotIn('class="occasion-ph"', tile)
+
+    def test_uploaded_photo_is_cropped_to_4_3_jpeg(self):
+        tile = album.tile_photo(image_file(size=(2000, 800), fmt="PNG"))
+        with Image.open(tile) as image:
+            self.assertEqual(image.size, album.TILE_SIZE)
+            self.assertEqual(image.format, "JPEG")
+
+    def test_too_small_or_invalid_photo_is_refused_with_a_message(self):
+        self.client.login(username="adm@x.ht", password=PASSWORD)
+        url = reverse("dashboard:category_edit", args=[self.baby.pk])
+        data = {"name": "Baby shower", "icon_name": "bi-balloon-heart", "order": 2}
+        small = self.client.post(url, {**data, "image": image_file(size=(200, 100))})
+        self.assertContains(small, "trop petite")
+        fake = self.client.post(url, {**data, "image": SimpleUploadedFile("x.jpg", b"pas une image", content_type="image/jpeg")})
+        self.assertEqual(fake.status_code, 200)
+        self.baby.refresh_from_db()
+        self.assertFalse(self.baby.image)
+
+    def test_replacing_or_removing_the_photo_deletes_the_old_file(self):
+        self.client.login(username="adm@x.ht", password=PASSWORD)
+        url = reverse("dashboard:category_edit", args=[self.baby.pk])
+        data = {"name": "Baby shower", "icon_name": "bi-balloon-heart", "order": 2}
+        self.client.post(url, {**data, "image": image_file(size=(1200, 900))})
+        self.baby.refresh_from_db()
+        first = self.baby.image.path
+        self.assertTrue(os.path.exists(first))
+        self.client.post(url, {**data, "image": image_file(size=(1200, 900))})
+        self.baby.refresh_from_db()
+        second = self.baby.image.path
+        self.assertNotEqual(first, second)
+        self.assertFalse(os.path.exists(first))
+        self.client.post(url, {**data, "remove_image": "on"})
+        self.baby.refresh_from_db()
+        self.assertFalse(self.baby.image)
+        self.assertFalse(os.path.exists(second))
+
+    def test_saving_without_a_new_file_keeps_the_photo(self):
+        self.client.login(username="adm@x.ht", password=PASSWORD)
+        url = reverse("dashboard:category_edit", args=[self.baby.pk])
+        data = {"name": "Baby shower", "icon_name": "bi-balloon-heart", "order": 2}
+        self.client.post(url, {**data, "image": image_file(size=(1200, 900))})
+        self.baby.refresh_from_db()
+        name = self.baby.image.name
+        self.client.post(url, {**{**data, "order": 5}})
+        self.baby.refresh_from_db()
+        self.assertEqual(self.baby.image.name, name)
+        self.assertEqual(self.baby.order, 5)
+
+    def test_only_admins_can_change_a_photo(self):
+        make_user("guest@x.ht")
+        self.client.login(username="guest@x.ht", password=PASSWORD)
+        r = self.client.post(reverse("dashboard:category_edit", args=[self.baby.pk]), {
+            "name": "Baby shower", "icon_name": "bi-balloon-heart", "order": 2, "image": image_file(size=(1200, 900)),
+        })
+        self.assertEqual(r.status_code, 403)
+
+
+class DefaultCategoriesTests(TestCase):
+    def setUp(self):
+        translation.activate("fr")
+        self.addCleanup(translation.deactivate)
+        self.admin = make_user("adm@x.ht", role="admin")
+        self.client.login(username="adm@x.ht", password=PASSWORD)
+
+    def test_defaults_include_baby_shower_and_start_with_birthday_wedding(self):
+        names = [name for name, icon in DEFAULT_CATEGORIES]
+        self.assertEqual(names[:3], ["Anniversaire", "Mariage", "Baby shower"])
+
+    def test_button_adds_only_the_missing_defaults_after_the_existing_ones(self):
+        EventCategory.objects.create(name="Mariage", icon_name="bi-heart", order=4)
+        page = self.client.get(reverse("dashboard:category_list"))
+        self.assertContains(page, "Ajouter les catégories par défaut")
+        self.client.post(reverse("dashboard:category_add_defaults"))
+        names = list(EventCategory.objects.order_by("order").values_list("name", flat=True))
+        self.assertEqual(names[0], "Mariage")
+        self.assertEqual(sorted(names), sorted(name for name, icon in DEFAULT_CATEGORIES))
+        self.assertEqual(EventCategory.objects.filter(name__iexact="mariage").count(), 1)
+        self.assertNotContains(self.client.get(reverse("dashboard:category_list")), "Ajouter les catégories par défaut")
+
+    def test_button_is_post_only(self):
+        self.assertEqual(self.client.get(reverse("dashboard:category_add_defaults")).status_code, 405)

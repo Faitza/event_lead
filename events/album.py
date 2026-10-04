@@ -26,22 +26,27 @@ class AlbumError(Exception):
     """Une photo refusée : le message est écrit pour la personne qui l'envoie."""
 
 
+def _flatten(image):
+    """Image en RGB ; une transparence est posée sur fond blanc."""
+    if image.mode == "RGB":
+        return image
+    rgba = image.convert("RGBA")
+    background = Image.new("RGB", rgba.size, (255, 255, 255))
+    background.paste(rgba, mask=rgba.split()[-1])
+    return background
+
+
 def _encode(image, side, quality):
     """Image réduite à `side` pixels au plus, en JPEG sans métadonnées (donc sans position GPS)."""
-    copy = image.copy()
+    copy = _flatten(image.copy())
     copy.thumbnail((side, side), Image.LANCZOS)
-    if copy.mode != "RGB":
-        background = Image.new("RGB", copy.size, (255, 255, 255))
-        rgba = copy.convert("RGBA")
-        background.paste(rgba, mask=rgba.split()[-1])
-        copy = background
     buffer = io.BytesIO()
     copy.save(buffer, "JPEG", quality=quality, optimize=True)
     return ContentFile(buffer.getvalue(), name="photo.jpg")
 
 
-def prepare(uploaded):
-    """Vérifie une photo envoyée et renvoie (grande version, miniature). Lève AlbumError si elle est refusée."""
+def _load_checked(uploaded):
+    """Ouvre une photo envoyée après vérification (poids, format, taille). Lève AlbumError si elle est refusée."""
     name = getattr(uploaded, "name", "") or ""
     if uploaded.size > MAX_FILE_BYTES:
         raise AlbumError(_("« %(name)s » est trop lourde (12 Mo au plus).") % {"name": name})
@@ -59,7 +64,28 @@ def prepare(uploaded):
         image.load()
     except (UnidentifiedImageError, OSError, ValueError, SyntaxError, Image.DecompressionBombError):
         raise AlbumError(invalid)
+    return image
+
+
+def prepare(uploaded):
+    """Vérifie une photo envoyée et renvoie (grande version, miniature). Lève AlbumError si elle est refusée."""
+    image = _load_checked(uploaded)
     return _encode(image, FULL_SIDE, 86), _encode(image, THUMB_SIDE, 80)
+
+
+TILE_SIZE = (960, 720)  # tuiles « Pour chaque occasion » de l'accueil : 4/3
+TILE_MIN = (480, 360)
+
+
+def tile_photo(uploaded):
+    """Photo d'une tuile de l'accueil : vérifiée, recadrée au centre en 4/3, en JPEG sans métadonnées."""
+    image = _load_checked(uploaded)
+    if image.width < TILE_MIN[0] or image.height < TILE_MIN[1]:
+        raise AlbumError(_("Cette photo est trop petite : %(w)d x %(h)d pixels au moins.") % {"w": TILE_MIN[0], "h": TILE_MIN[1]})
+    fitted = ImageOps.fit(_flatten(image), TILE_SIZE, Image.LANCZOS, centering=(0.5, 0.4))
+    buffer = io.BytesIO()
+    fitted.save(buffer, "JPEG", quality=86, optimize=True)
+    return ContentFile(buffer.getvalue(), name="tuile.jpg")
 
 
 def add_photos(event, files, guest=None):

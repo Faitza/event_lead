@@ -42,10 +42,13 @@ class EventQuerySet(models.QuerySet):
         ).exclude(status=Event.Status.DRAFT).distinct()
 
 
-# Noms des catégories créées par défaut : listés ici pour être traduits (le site les affiche avec `label`).
-DEFAULT_CATEGORY_NAMES = [
-    gettext_noop("Mariage"), gettext_noop("Gala"), gettext_noop("Anniversaire"),
-    gettext_noop("Baptême"), gettext_noop("Conférence"), gettext_noop("Concert"),
+# Catégories proposées par défaut (nom, icône) : les noms sont listés ici pour être traduits (le site affiche `label`).
+# Elles forment les tuiles « Pour chaque occasion » de l'accueil, dans cet ordre.
+DEFAULT_CATEGORIES = [
+    (gettext_noop("Anniversaire"), "bi-balloon"), (gettext_noop("Mariage"), "bi-heart"),
+    (gettext_noop("Baby shower"), "bi-balloon-heart"), (gettext_noop("Baptême"), "bi-droplet"),
+    (gettext_noop("Gala"), "bi-stars"), (gettext_noop("Conférence"), "bi-mic"),
+    (gettext_noop("Concert"), "bi-music-note-beamed"),
 ]
 
 
@@ -56,6 +59,7 @@ class EventCategory(models.Model):
     slug = models.SlugField(_("identifiant dans l'adresse"), max_length=70, unique=True, blank=True)
     icon_name = models.CharField(_("icône"), max_length=50, default="bi-calendar2-event")
     order = models.PositiveSmallIntegerField(_("ordre d'affichage"), default=0)
+    image = models.ImageField(_("photo de la tuile"), upload_to="categories/", blank=True)
 
     class Meta:
         ordering = ["order", "name"]
@@ -69,6 +73,23 @@ class EventCategory(models.Model):
     def label(self):
         """Nom affiché : traduit pour les catégories par défaut, tel quel pour celles créées par l'équipe."""
         return gettext(self.name)
+
+    @classmethod
+    def missing_defaults(cls):
+        """Catégories par défaut qui n'existent pas encore (liste de (nom, icône))."""
+        existing = {name.lower() for name in cls.objects.values_list("name", flat=True)}
+        return [(name, icon) for name, icon in DEFAULT_CATEGORIES if name.lower() not in existing]
+
+    @classmethod
+    def add_missing_defaults(cls):
+        """Crée les catégories par défaut absentes, à la suite des autres. Renvoie le nombre créé."""
+        last = cls.objects.order_by("-order").values_list("order", flat=True).first() or 0
+        created = 0
+        for name, icon in cls.missing_defaults():
+            last += 1
+            cls.objects.create(name=name, icon_name=icon, order=last)
+            created += 1
+        return created
 
     def save(self, *args, **kwargs):
         if not self.slug:

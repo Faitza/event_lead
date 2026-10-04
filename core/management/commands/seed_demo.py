@@ -15,7 +15,7 @@ from accounts.models import CustomUser
 from ads.models import Ad
 from core.models import ContactMessage, HelpRequest, Review
 from events import album
-from events.models import Event, EventCategory, EventEvaluation, Guest, Reminder, Table
+from events.models import DEFAULT_CATEGORIES, Event, EventCategory, EventEvaluation, Guest, Reminder, Table
 from gifts.models import Gift, GiftClaim
 from payments.models import Contribution, Payment
 
@@ -61,10 +61,7 @@ class Command(BaseCommand):
         guest_user = user("invite@eventlead.ht", "Nadège", "Louis", "guest", phone="+509 4011 2233")
 
         # ------------------------------------------------------------------ Catégories
-        category_specs = [
-            ("Mariage", "bi-heart"), ("Gala", "bi-stars"), ("Anniversaire", "bi-balloon"),
-            ("Baptême", "bi-droplet"), ("Conférence", "bi-mic"), ("Concert", "bi-music-note-beamed"),
-        ]
+        category_specs = DEFAULT_CATEGORIES
         cat = {
             name: EventCategory.objects.update_or_create(name=name, defaults={"icon_name": icon, "order": i})[0]
             for i, (name, icon) in enumerate(category_specs, start=1)

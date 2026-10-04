@@ -73,7 +73,7 @@ msgstr "e-mail address"
 msgid "rôle"
 msgstr "role"
 
-#: accounts/models.py:15 core/models.py:27 events/models.py:262
+#: accounts/models.py:15 core/models.py:27 events/models.py:283
 msgid "téléphone"
 msgstr "phone"
 
@@ -133,7 +133,7 @@ msgstr "Shop"
 msgid "Boissons"
 msgstr "Drinks"
 
-#: ads/forms.py:8 events/forms.py:10 gifts/models.py:29
+#: ads/forms.py:8 events/forms.py:14 gifts/models.py:29
 msgid "Musique"
 msgstr "Music"
 
@@ -173,7 +173,7 @@ msgstr "Pastries"
 msgid "Beauté"
 msgstr "Beauty"
 
-#: ads/forms.py:15 events/forms.py:56 gifts/forms.py:8
+#: ads/forms.py:15 events/forms.py:60 gifts/forms.py:8
 msgid "Icône"
 msgstr "Icon"
 
@@ -181,11 +181,11 @@ msgstr "Icon"
 msgid "30 secondes maximum."
 msgstr "30 seconds maximum."
 
-#: ads/models.py:6 events/models.py:93
+#: ads/models.py:6 events/models.py:114
 msgid "titre"
 msgstr "title"
 
-#: ads/models.py:7 events/models.py:57 gifts/models.py:44
+#: ads/models.py:7 events/models.py:60 gifts/models.py:44
 msgid "icône"
 msgstr "icon"
 
@@ -217,7 +217,7 @@ msgstr "show after a guest's reply"
 msgid "Si coché, la publicité fait partie de la séquence affichée après une réponse."
 msgstr "If checked, the ad is part of the sequence shown after a reply."
 
-#: ads/models.py:19 events/models.py:58
+#: ads/models.py:19 events/models.py:61
 msgid "ordre d'affichage"
 msgstr "display order"
 
@@ -723,11 +723,11 @@ msgid_plural "This password is too short. It must contain at least %(min_length)
 msgstr[0] "This password is too short. It must contain at least %(min_length)d character."
 msgstr[1] "This password is too short. It must contain at least %(min_length)d characters."
 
-#: core/models.py:9 core/models.py:25 core/models.py:57 events/models.py:55 events/models.py:223 events/models.py:260
+#: core/models.py:9 core/models.py:25 core/models.py:57 events/models.py:58 events/models.py:244 events/models.py:281
 msgid "nom"
 msgstr "name"
 
-#: core/models.py:10 events/models.py:422
+#: core/models.py:10 events/models.py:443
 msgid "note"
 msgstr "rating"
 
@@ -739,7 +739,7 @@ msgstr "review"
 msgid "publié"
 msgstr "published"
 
-#: core/models.py:26 events/models.py:261
+#: core/models.py:26 events/models.py:282
 msgid "email"
 msgstr "email"
 
@@ -791,7 +791,7 @@ msgstr "e-mail or phone"
 msgid "sujet"
 msgstr "topic"
 
-#: core/models.py:61 events/models.py:95 events/models.py:263 payments/models.py:44
+#: core/models.py:61 events/models.py:116 events/models.py:284 payments/models.py:44
 msgid "statut"
 msgstr "status"
 
@@ -851,19 +851,19 @@ msgstr "A showcase for your partners"
 msgid "Traiteurs, fleuristes, photographes : leur publicité s'affiche après chaque réponse, et vous suivez les vues et les clics."
 msgstr "Caterers, florists, photographers: their ad appears after each reply, and you follow the views and clicks."
 
-#: core/views.py:70
+#: core/views.py:73
 msgid "Merci pour votre avis."
 msgstr "Thank you for your review."
 
-#: core/views.py:72
+#: core/views.py:75
 msgid "Votre avis n'a pas pu être enregistré. Vérifiez les champs."
 msgstr "Your review could not be saved. Check the fields."
 
-#: core/views.py:81
+#: core/views.py:84
 msgid "Message envoyé. Notre équipe vous répondra rapidement."
 msgstr "Message sent. Our team will reply to you shortly."
 
-#: core/views.py:83
+#: core/views.py:86
 msgid "Le message n'a pas pu être envoyé. Vérifiez les champs."
 msgstr "The message could not be sent. Check the fields."
 
@@ -891,33 +891,37 @@ msgstr "Received on"
 msgid "E-mail ou téléphone"
 msgstr "Email or phone"
 
-#: events/album.py:47
+#: events/album.py:52
 msgid "« %(name)s » est trop lourde (12 Mo au plus)."
 msgstr "“%(name)s” is too heavy (12 MB at most)."
 
-#: events/album.py:48
+#: events/album.py:53
 msgid "« %(name)s » n'est pas une photo valide (JPEG, PNG ou WebP)."
 msgstr "“%(name)s” is not a valid photo (JPEG, PNG or WebP)."
 
-#: events/album.py:57
+#: events/album.py:62
 msgid "« %(name)s » est trop grande (50 millions de pixels au plus)."
 msgstr "“%(name)s” is too large (50 million pixels at most)."
 
-#: events/album.py:70
+#: events/album.py:84
+msgid "Cette photo est trop petite : %(w)d x %(h)d pixels au moins."
+msgstr "This photo is too small: at least %(w)d x %(h)d pixels."
+
+#: events/album.py:96
 msgid "Choisissez au moins une photo."
 msgstr "Choose at least one photo."
 
-#: events/album.py:73
+#: events/album.py:99
 msgid "%(n)d photo à la fois au plus."
 msgid_plural "%(n)d photos à la fois au plus."
 msgstr[0] "Up to %(n)d photo at a time."
 msgstr[1] "Up to %(n)d photos at a time."
 
-#: events/album.py:78
+#: events/album.py:104
 msgid "L'album est complet."
 msgstr "The album is full."
 
-#: events/album.py:82
+#: events/album.py:108
 msgid "Vous pouvez ajouter %(n)d photo au plus."
 msgid_plural "Vous pouvez ajouter %(n)d photos au plus."
 msgstr[0] "You can add up to %(n)d photo."
@@ -941,143 +945,159 @@ msgstr "Guest's answer: %(status)s."
 msgid "Ce billet est pour « %(title)s »."
 msgstr "This ticket is for “%(title)s”."
 
-#: events/forms.py:9 events/models.py:47
+#: events/forms.py:12 events/models.py:48
 msgid "Mariage"
 msgstr "Wedding"
 
-#: events/forms.py:9 events/models.py:47
+#: events/forms.py:12 events/models.py:50
 msgid "Gala"
 msgstr "Gala"
 
-#: events/forms.py:9
+#: events/forms.py:12
 msgid "Fête"
 msgstr "Party"
 
-#: events/forms.py:9 events/models.py:48
+#: events/forms.py:12 events/models.py:49
+msgid "Baby shower"
+msgstr "Baby shower"
+
+#: events/forms.py:13 events/models.py:49
 msgid "Baptême"
 msgstr "Baptism"
 
-#: events/forms.py:10 events/models.py:48
+#: events/forms.py:14 events/models.py:50
 msgid "Conférence"
 msgstr "Conference"
 
-#: events/forms.py:10
+#: events/forms.py:14
 msgid "Soirée"
 msgstr "Evening party"
 
-#: events/forms.py:11
+#: events/forms.py:15
 msgid "Sport"
 msgstr "Sports"
 
-#: events/forms.py:11
+#: events/forms.py:15
 msgid "Diplômes"
 msgstr "Graduations"
 
-#: events/forms.py:11
+#: events/forms.py:15
 msgid "Affaires"
 msgstr "Business"
 
-#: events/forms.py:12
+#: events/forms.py:16
 msgid "Art"
 msgstr "Art"
 
-#: events/forms.py:12
+#: events/forms.py:16
 msgid "Cinéma"
 msgstr "Cinema"
 
-#: events/forms.py:12
+#: events/forms.py:16
 msgid "Cérémonie"
 msgstr "Ceremony"
 
-#: events/forms.py:13
+#: events/forms.py:17
 msgid "Rencontre"
 msgstr "Meetup"
 
-#: events/forms.py:13
+#: events/forms.py:17
 msgid "Autre"
 msgstr "Other"
 
-#: events/forms.py:31
+#: events/forms.py:35
 msgid "Ex : Hôtel Montana, Pétion-Ville"
 msgstr "E.g. Hôtel Montana, Pétion-Ville"
 
-#: events/forms.py:38
+#: events/forms.py:42
 msgid "Aucune catégorie"
 msgstr "No category"
 
-#: events/forms.py:46
+#: events/forms.py:50
 msgid "Indiquez le nombre maximum d'accompagnants."
 msgstr "Enter the maximum number of companions."
 
-#: events/forms.py:49
+#: events/forms.py:53
 msgid "Latitude invalide."
 msgstr "Invalid latitude."
 
-#: events/forms.py:51
+#: events/forms.py:55
 msgid "Longitude invalide."
 msgstr "Invalid longitude."
 
-#: events/forms.py:61
+#: events/forms.py:62
+msgid "Photo de la tuile"
+msgstr "Tile photo"
+
+#: events/forms.py:64
+msgid "Affichée sur l'accueil, recadrée en 4/3 (au moins 480 x 360 pixels). Sans photo, un décor violet avec l'icône s'affiche."
+msgstr "Shown on the home page, cropped to 4:3 (at least 480 x 360 pixels). Without a photo, a purple backdrop with the icon is shown."
+
+#: events/forms.py:66
+msgid "Retirer la photo actuelle"
+msgstr "Remove the current photo"
+
+#: events/forms.py:71
 msgid "Ex : Mariage"
 msgstr "E.g. Wedding"
 
-#: events/forms.py:62
+#: events/forms.py:72
 msgid "Les petits numéros s'affichent en premier."
 msgstr "Lower numbers are shown first."
 
-#: events/forms.py:68
+#: events/forms.py:82
 msgid "Une catégorie porte déjà ce nom."
 msgstr "A category with this name already exists."
 
-#: events/forms.py:92
+#: events/forms.py:125
 msgid "Renseignez au moins un e-mail ou un numéro de téléphone."
 msgstr "Please enter at least an email or a phone number."
 
-#: events/forms.py:94
+#: events/forms.py:127
 msgid "Un e-mail est nécessaire pour un envoi par e-mail."
 msgstr "An email is needed to send by email."
 
-#: events/forms.py:96
+#: events/forms.py:129
 msgid "Un numéro est nécessaire pour un envoi par WhatsApp."
 msgstr "A phone number is needed to send via WhatsApp."
 
-#: events/forms.py:100
+#: events/forms.py:133
 msgid "Cet événement a atteint son nombre maximum d'invités (%(max)d)."
 msgstr "This event has reached its maximum number of guests (%(max)d)."
 
-#: events/forms.py:120 events/models.py:249
+#: events/forms.py:153 events/models.py:270
 msgid "Peut-être"
 msgstr "Maybe"
 
-#: events/forms.py:123
+#: events/forms.py:156
 msgid "Indiquez si vous serez présent."
 msgstr "Please tell us whether you will attend."
 
-#: events/forms.py:125
+#: events/forms.py:158
 msgid "Nombre d'accompagnants"
 msgstr "Number of companions"
 
-#: events/forms.py:139
+#: events/forms.py:172
 msgid "Maximum %(max)d accompagnant(s)."
 msgstr "Maximum %(max)d companion(s)."
 
-#: events/forms.py:153
+#: events/forms.py:186
 msgid "Oui, je veux"
 msgstr "Yes, I do"
 
-#: events/forms.py:153
+#: events/forms.py:186
 msgid "Non merci"
 msgstr "No thanks"
 
-#: events/forms.py:163
+#: events/forms.py:196
 msgid "Sélectionnez au moins un cadeau, ou revenez en arrière pour choisir « Non merci »."
 msgstr "Select at least one gift, or go back and choose “No thanks”."
 
-#: events/forms.py:179
+#: events/forms.py:212
 msgid "Commentaire"
 msgstr "Comment"
 
-#: events/forms.py:180
+#: events/forms.py:213
 msgid "Qu'avez-vous pensé de l'événement ?"
 msgstr "What did you think of the event?"
 
@@ -1129,327 +1149,331 @@ msgstr ""
 "Find the photos and add yours here:\n"
 "%(url)s"
 
-#: events/models.py:47
+#: events/models.py:48
 msgid "Anniversaire"
 msgstr "Birthday"
 
-#: events/models.py:48
+#: events/models.py:51
 msgid "Concert"
 msgstr "Concert"
 
-#: events/models.py:56
+#: events/models.py:59
 msgid "identifiant dans l'adresse"
 msgstr "identifier in the web address"
 
 #: events/models.py:62
+msgid "photo de la tuile"
+msgstr "tile photo"
+
+#: events/models.py:66
 msgid "catégorie d'événements"
 msgstr "event category"
 
-#: events/models.py:63
+#: events/models.py:67
 msgid "catégories d'événements"
 msgstr "event categories"
 
-#: events/models.py:89
+#: events/models.py:110
 msgid "Actif"
 msgstr "Active"
 
-#: events/models.py:90
+#: events/models.py:111
 msgid "Brouillon"
 msgstr "Draft"
 
-#: events/models.py:91
+#: events/models.py:112
 msgid "Annulé"
 msgstr "Cancelled"
 
-#: events/models.py:94 payments/models.py:29
+#: events/models.py:115 payments/models.py:29
 msgid "type"
 msgstr "type"
 
-#: events/models.py:96
+#: events/models.py:117
 msgid "date"
 msgstr "date"
 
-#: events/models.py:97
+#: events/models.py:118
 msgid "heure"
 msgstr "time"
 
-#: events/models.py:98
+#: events/models.py:119
 msgid "lieu (adresse)"
 msgstr "venue (address)"
 
-#: events/models.py:99
+#: events/models.py:120
 msgid "latitude"
 msgstr "latitude"
 
-#: events/models.py:100
+#: events/models.py:121
 msgid "longitude"
 msgstr "longitude"
 
-#: events/models.py:101
+#: events/models.py:122
 msgid "nombre maximum d'invités"
 msgstr "maximum number of guests"
 
-#: events/models.py:102
+#: events/models.py:123
 msgid "accompagnants autorisés"
 msgstr "companions allowed"
 
-#: events/models.py:103
+#: events/models.py:124
 msgid "accompagnants maximum par invité"
 msgstr "maximum companions per guest"
 
-#: events/models.py:104
+#: events/models.py:125
 msgid "délai d'évaluation (jours)"
 msgstr "evaluation delay (days)"
 
-#: events/models.py:106
+#: events/models.py:127
 msgid "première relance après (jours)"
 msgstr "first reminder after (days)"
 
-#: events/models.py:107
+#: events/models.py:128
 msgid "puis tous les (jours)"
 msgstr "then every (days)"
 
-#: events/models.py:108
+#: events/models.py:129
 msgid "relances maximum par invité"
 msgstr "maximum reminders per guest"
 
-#: events/models.py:109
+#: events/models.py:130
 msgid "heure d'envoi des relances"
 msgstr "reminder sending time"
 
-#: events/models.py:110
+#: events/models.py:131
 msgid "envoi automatique des relances par e-mail"
 msgstr "automatic reminders by e-mail"
 
-#: events/models.py:112
+#: events/models.py:133
 msgid "accepter les contributions en argent"
 msgstr "accept cash contributions"
 
-#: events/models.py:113
+#: events/models.py:134
 msgid "Les invités peuvent contribuer en argent (MonCash ou NatCash) à la place d'un cadeau."
 msgstr "Guests can contribute money (MonCash or NatCash) instead of a gift."
 
-#: events/models.py:115
+#: events/models.py:136
 msgid "message de remerciement"
 msgstr "thank-you message"
 
-#: events/models.py:116
+#: events/models.py:137
 msgid "remerciements publiés le"
 msgstr "thank-yous published on"
 
-#: events/models.py:117
+#: events/models.py:138
 msgid "description"
 msgstr "description"
 
-#: events/models.py:118
+#: events/models.py:139
 msgid "photo de couverture"
 msgstr "cover photo"
 
-#: events/models.py:119
+#: events/models.py:140
 msgid "vidéo de couverture"
 msgstr "cover video"
 
-#: events/models.py:121
+#: events/models.py:142
 msgid "prix du billet (HTG)"
 msgstr "ticket price (HTG)"
 
-#: events/models.py:122
+#: events/models.py:143
 msgid "Laisser vide si l'événement est gratuit."
 msgstr "Leave empty if the event is free."
 
-#: events/models.py:126
+#: events/models.py:147
 msgid "catégorie"
 msgstr "category"
 
-#: events/models.py:130
+#: events/models.py:151
 msgid "créé par"
 msgstr "created by"
 
-#: events/models.py:132 payments/models.py:49
+#: events/models.py:153 payments/models.py:49
 msgid "créé le"
 msgstr "created on"
 
-#: events/models.py:138 events/models.py:221 events/models.py:255 events/models.py:353 events/models.py:396 gifts/models.py:42
+#: events/models.py:159 events/models.py:242 events/models.py:276 events/models.py:374 events/models.py:417 gifts/models.py:42
 msgid "événement"
 msgstr "event"
 
-#: events/models.py:222
+#: events/models.py:243
 msgid "numéro"
 msgstr "number"
 
-#: events/models.py:231 events/models.py:276
+#: events/models.py:252 events/models.py:297
 msgid "table"
 msgstr "table"
 
-#: events/models.py:240
+#: events/models.py:261
 msgid "Table %(n)d"
 msgstr "Table %(n)d"
 
-#: events/models.py:246 payments/models.py:20
+#: events/models.py:267 payments/models.py:20
 msgid "En attente"
 msgstr "Pending"
 
-#: events/models.py:247
+#: events/models.py:268
 msgid "Présent"
 msgstr "Attending"
 
-#: events/models.py:248
+#: events/models.py:269
 msgid "Absent"
 msgstr "Not attending"
 
-#: events/models.py:252
+#: events/models.py:273
 msgid "Email"
 msgstr "Email"
 
-#: events/models.py:258
+#: events/models.py:279
 msgid "compte lié"
 msgstr "linked account"
 
-#: events/models.py:265
+#: events/models.py:286
 msgid "canal d'envoi"
 msgstr "sending channel"
 
-#: events/models.py:266
+#: events/models.py:287
 msgid "langue de l'invitation"
 msgstr "invitation language"
 
-#: events/models.py:267
+#: events/models.py:288
 msgid "lien magique"
 msgstr "magic link"
 
-#: events/models.py:268
+#: events/models.py:289
 msgid "invitation envoyée le"
 msgstr "invitation sent on"
 
-#: events/models.py:269
+#: events/models.py:290
 msgid "répondu le"
 msgstr "replied on"
 
-#: events/models.py:270
+#: events/models.py:291
 msgid "souhaite offrir un cadeau"
 msgstr "wants to give a gift"
 
-#: events/models.py:271
+#: events/models.py:292
 msgid "code d'entrée"
 msgstr "entry code"
 
-#: events/models.py:272
+#: events/models.py:293
 msgid "arrivé le"
 msgstr "arrived on"
 
-#: events/models.py:273
+#: events/models.py:294
 msgid "remerciement envoyé le"
 msgstr "thank-you sent on"
 
-#: events/models.py:274
+#: events/models.py:295
 msgid "ajouté sur place"
 msgstr "added on site"
 
-#: events/models.py:282 events/models.py:330 events/models.py:397 gifts/models.py:79 payments/models.py:34 payments/models.py:78
+#: events/models.py:303 events/models.py:351 events/models.py:418 gifts/models.py:79 payments/models.py:34 payments/models.py:78
 msgid "invité"
 msgstr "guest"
 
-#: events/models.py:331
+#: events/models.py:352
 msgid "canal"
 msgstr "channel"
 
-#: events/models.py:334
+#: events/models.py:355
 msgid "envoyée le"
 msgstr "sent on"
 
-#: events/models.py:338
+#: events/models.py:359
 msgid "relance"
 msgstr "reminder"
 
-#: events/models.py:339
+#: events/models.py:360
 msgid "relances"
 msgstr "reminders"
 
-#: events/models.py:355
+#: events/models.py:376
 msgid "ajoutée par"
 msgstr "added by"
 
-#: events/models.py:357
+#: events/models.py:378
 msgid "photo"
 msgstr "photo"
 
-#: events/models.py:358
+#: events/models.py:379
 msgid "miniature"
 msgstr "thumbnail"
 
-#: events/models.py:359
+#: events/models.py:380
 msgid "ajoutée le"
 msgstr "added on"
 
-#: events/models.py:363
+#: events/models.py:384
 msgid "photo de l'album"
 msgstr "album photo"
 
-#: events/models.py:364
+#: events/models.py:385
 msgid "photos de l'album"
 msgstr "album photos"
 
-#: events/models.py:382
+#: events/models.py:403
 msgid "Entrée validée"
 msgstr "Entry validated"
 
-#: events/models.py:383
+#: events/models.py:404
 msgid "QR déjà utilisé"
 msgstr "QR already used"
 
-#: events/models.py:385
+#: events/models.py:406
 msgid "Autre événement"
 msgstr "Other event"
 
-#: events/models.py:386
+#: events/models.py:407
 msgid "Ajouté sur place"
 msgstr "Added on site"
 
-#: events/models.py:387
+#: events/models.py:408
 msgid "Pointage annulé"
 msgstr "Check-in cancelled"
 
-#: events/models.py:390
+#: events/models.py:411
 msgid "QR code"
 msgstr "QR code"
 
-#: events/models.py:391
+#: events/models.py:412
 msgid "Recherche"
 msgstr "Search"
 
-#: events/models.py:392
+#: events/models.py:413
 msgid "Sur place"
 msgstr "On site"
 
-#: events/models.py:398
+#: events/models.py:419
 msgid "code lu"
 msgstr "code read"
 
-#: events/models.py:399
+#: events/models.py:420
 msgid "résultat"
 msgstr "result"
 
-#: events/models.py:400
+#: events/models.py:421
 msgid "origine"
 msgstr "source"
 
-#: events/models.py:406
+#: events/models.py:427
 msgid "pointage"
 msgstr "check-in"
 
-#: events/models.py:407
+#: events/models.py:428
 msgid "pointages"
 msgstr "check-ins"
 
-#: events/models.py:423
+#: events/models.py:444
 msgid "commentaire"
 msgstr "comment"
 
-#: events/models.py:428
+#: events/models.py:449
 msgid "évaluation"
 msgstr "evaluation"
 
-#: events/models.py:429
+#: events/models.py:450
 msgid "évaluations"
 msgstr "evaluations"
 
@@ -1572,84 +1596,94 @@ msgid "Merci pour votre évaluation."
 msgstr "Thank you for your review."
 
 #: events/views_admin.py:42
+msgid "%(n)d catégorie ajoutée."
+msgid_plural "%(n)d catégories ajoutées."
+msgstr[0] "%(n)d category added."
+msgstr[1] "%(n)d categories added."
+
+#: events/views_admin.py:44
+msgid "Toutes les catégories par défaut existent déjà."
+msgstr "All the default categories already exist."
+
+#: events/views_admin.py:55
 msgid "Catégorie créée."
 msgstr "Category created."
 
-#: events/views_admin.py:53
+#: events/views_admin.py:66
 msgid "Catégorie mise à jour."
 msgstr "Category updated."
 
-#: events/views_admin.py:63
+#: events/views_admin.py:76
 msgid "Catégorie supprimée. Ses événements sont conservés."
 msgstr "Category deleted. Its events have been kept."
 
-#: events/views_admin.py:68
+#: events/views_admin.py:81
 msgid "Les %(n)d événement de cette catégorie ne sont pas supprimés : ils n'auront simplement plus de catégorie."
 msgid_plural "Les %(n)d événements de cette catégorie ne sont pas supprimés : ils n'auront simplement plus de catégorie."
 msgstr[0] "%(n)d event in this category is not deleted: it will simply no longer have a category."
 msgstr[1] "%(n)d events in this category are not deleted: they will simply no longer have a category."
 
-#: events/views_admin.py:74
+#: events/views_admin.py:87
 msgid "la catégorie"
 msgstr "the category"
 
-#: events/views_admin.py:116
+#: events/views_admin.py:129
 msgid "Adresse non localisée automatiquement. Placez le repère sur la carte si besoin."
 msgstr "Address could not be located automatically. Place the marker on the map if needed."
 
-#: events/views_admin.py:126
+#: events/views_admin.py:139
 msgid "Événement créé. Ajoutez maintenant vos invités et votre liste de cadeaux."
 msgstr "Event created. Now add your guests and your gift list."
 
-#: events/views_admin.py:137
+#: events/views_admin.py:150
 msgid "Événement mis à jour."
 msgstr "Event updated."
 
-#: events/views_admin.py:148
+#: events/views_admin.py:161
 msgid "Impossible de supprimer : des invités ont déjà choisi des cadeaux ou fait une contribution. Annulez plutôt l'événement."
 msgstr "Cannot delete: guests have already chosen gifts or made a contribution. Cancel the event instead."
 
-#: events/views_admin.py:151
+#: events/views_admin.py:164
 msgid "Événement supprimé."
 msgstr "Event deleted."
 
-#: events/views_admin.py:154
+#: events/views_admin.py:167
 msgid "l'événement"
 msgstr "the event"
 
-#: events/views_admin.py:237
+#: events/views_admin.py:250
 msgid "%(name)s a été ajouté(e). Son lien d'invitation est prêt à être envoyé."
 msgstr "%(name)s has been added. Their invitation link is ready to send."
 
-#: events/views_admin.py:251
+#: events/views_admin.py:264
 msgid "Invité mis à jour."
 msgstr "Guest updated."
 
-#: events/views_admin.py:265
+#: events/views_admin.py:278
 msgid "Cet invité a choisi des cadeaux ou fait une contribution : sa réponse est définitive et ne peut pas être supprimée."
 msgstr "This guest chose gifts or made a contribution: their response is final and cannot be deleted."
 
-#: events/views_admin.py:268
+#: events/views_admin.py:281
 msgid "Invité supprimé."
 msgstr "Guest deleted."
 
-#: events/views_admin.py:271
+#: events/views_admin.py:284
 msgid "l'invité"
 msgstr "the guest"
 
-#: events/views_admin.py:284
+#: events/views_admin.py:297
 msgid "Invitation de %(name)s marquée comme envoyée."
 msgstr "%(name)s's invitation marked as sent."
 
-#: events/views_admin.py:300 events/views_admin.py:327
+#: events/views_admin.py:313 events/views_admin.py:340
 msgid "invites-eventlead"
 msgstr "guests-eventlead"
 
-#: events/views_admin.py:304
+#: events/views_admin.py:317
 msgid "Cadeaux choisis"
 msgstr "Chosen gifts"
 
-#: events/views_admin.py:330
+#: events/views_admin.py:343
 msgid "Erreur lors de la génération du PDF."
 msgstr "Error while generating the PDF."
 
@@ -2135,7 +2169,7 @@ msgstr "Received an invitation? Just open the link you got by WhatsApp or e-mail
 msgid "EventLead, retour à l'accueil"
 msgstr "EventLead, back to home"
 
-#: templates/accounts/become_organizer.html:3 templates/accounts/guest_space.html:33 templates/accounts/login.html:18 templates/core/landing.html:169 templates/partials/_footer.html:21 templates/payments/vip.html:4
+#: templates/accounts/become_organizer.html:3 templates/accounts/guest_space.html:33 templates/accounts/login.html:18 templates/core/landing.html:188 templates/partials/_footer.html:21 templates/payments/vip.html:4
 msgid "Devenir Organisateur VIP"
 msgstr "Become a VIP Organizer"
 
@@ -2231,7 +2265,7 @@ msgstr "Create an account"
 msgid "Mon profil"
 msgstr "My profile"
 
-#: templates/accounts/profile.html:18 templates/dashboard/ads/form.html:29 templates/dashboard/categories/form.html:17 templates/dashboard/gifts/form.html:19 templates/dashboard/guests/form.html:30 templates/dashboard/help/list.html:38
+#: templates/accounts/profile.html:18 templates/dashboard/ads/form.html:29 templates/dashboard/categories/form.html:27 templates/dashboard/gifts/form.html:19 templates/dashboard/guests/form.html:30 templates/dashboard/help/list.html:38
 msgid "Enregistrer"
 msgstr "Save"
 
@@ -2379,7 +2413,7 @@ msgstr "Write to the team"
 msgid "Une question qui n'est pas ici ? Écrivez-nous sur WhatsApp, ou remplissez le formulaire plus bas. Nous répondons par WhatsApp ou par e-mail."
 msgstr "A question that isn't here? Write to us on WhatsApp, or fill in the form below. We reply by WhatsApp or by e-mail."
 
-#: templates/core/help.html:33 templates/core/landing.html:250 templates/invitation/base_invitation.html:34
+#: templates/core/help.html:33 templates/core/landing.html:269 templates/invitation/base_invitation.html:34
 msgid "Écrire sur WhatsApp"
 msgstr "Write on WhatsApp"
 
@@ -2591,121 +2625,125 @@ msgstr "Services"
 msgid "Tout ce qu'il faut pour une fête réussie, au même endroit"
 msgstr "Everything you need for a successful celebration, in one place"
 
-#: templates/core/landing.html:166
+#: templates/core/landing.html:150
+msgid "Pour chaque occasion"
+msgstr "For every occasion"
+
+#: templates/core/landing.html:185
 msgid "Rejoignez les Organisateurs VIP"
 msgstr "Join the VIP Organizers"
 
-#: templates/core/landing.html:167
+#: templates/core/landing.html:186
 msgid "Un accès privilégié&nbsp;: le détail de tous les événements publics, les soirées privées où l'on vous invite et l'évaluation de chaque fête une fois terminée."
 msgstr "Privileged access: the details of every public event, the private parties you are invited to, and a rating of each celebration once it is over."
 
-#: templates/core/landing.html:178
+#: templates/core/landing.html:197
 msgid "Décoration de réception"
 msgstr "Reception decoration"
 
-#: templates/core/landing.html:181 templates/partials/_navbar.html:25
+#: templates/core/landing.html:200 templates/partials/_navbar.html:25
 msgid "À propos"
 msgstr "About"
 
-#: templates/core/landing.html:182
+#: templates/core/landing.html:201
 msgid "Fini les listes sur WhatsApp et les cadeaux en double"
 msgstr "No more WhatsApp lists and duplicate gifts"
 
-#: templates/core/landing.html:183
+#: templates/core/landing.html:202
 msgid "EventLead réunit invités, réponses, cadeaux et paiements au même endroit. Pensé pour le mobile et pour les familles dispersées entre Port-au-Prince, Miami et Montréal&nbsp;: un seul lien, et chacun répond d'où il est."
 msgstr "EventLead brings guests, replies, gifts and payments together in one place. Designed for mobile and for families spread across Port-au-Prince, Miami and Montreal: one link, and everyone replies from wherever they are."
 
-#: templates/core/landing.html:185
+#: templates/core/landing.html:204
 msgid "modes de paiement"
 msgstr "payment methods"
 
-#: templates/core/landing.html:186
+#: templates/core/landing.html:205
 msgid "lien par invité"
 msgstr "link per guest"
 
-#: templates/core/landing.html:187
+#: templates/core/landing.html:206
 msgid "cadeau en double"
 msgstr "duplicate gifts"
 
-#: templates/core/landing.html:197 templates/core/landing.html:208
+#: templates/core/landing.html:216 templates/core/landing.html:227
 msgid "%(counter)s étoile sur 5"
 msgid_plural "%(counter)s étoiles sur 5"
 msgstr[0] "%(counter)s star out of 5"
 msgstr[1] "%(counter)s stars out of 5"
 
-#: templates/core/landing.html:216
+#: templates/core/landing.html:235
 msgid "Soyez le premier à laisser un avis."
 msgstr "Be the first to leave a review."
 
-#: templates/core/landing.html:222
+#: templates/core/landing.html:241
 msgid "Laisser un avis"
 msgstr "Leave a review"
 
-#: templates/core/landing.html:223 templates/dashboard/checkin/event.html:68 templates/dashboard/events/detail.html:44 templates/dashboard/guests/export_pdf.html:17 core/views_admin.py:146 events/views_admin.py:303
+#: templates/core/landing.html:242 templates/dashboard/checkin/event.html:68 templates/dashboard/events/detail.html:44 templates/dashboard/guests/export_pdf.html:17 core/views_admin.py:146 events/views_admin.py:316
 msgid "Nom"
 msgstr "Name"
 
-#: templates/core/landing.html:225
+#: templates/core/landing.html:244
 msgid "Note"
 msgstr "Rating"
 
-#: templates/core/landing.html:227
+#: templates/core/landing.html:246
 msgid "%(n)s sur 5"
 msgstr "%(n)s out of 5"
 
-#: templates/core/landing.html:230 core/forms.py:20
+#: templates/core/landing.html:249 core/forms.py:20
 msgid "Votre avis"
 msgstr "Your review"
 
-#: templates/core/landing.html:230 core/forms.py:21
+#: templates/core/landing.html:249 core/forms.py:21
 msgid "Partagez votre expérience avec EventLead"
 msgstr "Share your experience with EventLead"
 
-#: templates/core/landing.html:231
+#: templates/core/landing.html:250
 msgid "Publier mon avis"
 msgstr "Post my review"
 
-#: templates/core/landing.html:244 templates/dashboard/guests/export_pdf.html:17 templates/partials/_footer.html:26 templates/partials/_navbar.html:26
+#: templates/core/landing.html:263 templates/dashboard/guests/export_pdf.html:17 templates/partials/_footer.html:26 templates/partials/_navbar.html:26
 msgid "Contact"
 msgstr "Contact"
 
-#: templates/core/landing.html:245
+#: templates/core/landing.html:264
 msgid "Votre mariage, votre gala, votre anniversaire&nbsp;: parlons-en"
 msgstr "Your wedding, your gala, your birthday: let's talk"
 
-#: templates/core/landing.html:246
+#: templates/core/landing.html:265
 msgid "Racontez-nous votre projet. Nous vous répondons par WhatsApp ou par e-mail."
 msgstr "Tell us about your project. We reply by WhatsApp or e-mail."
 
-#: templates/core/landing.html:250
+#: templates/core/landing.html:269
 msgid "Bonjour EventLead, je souhaite organiser un événement."
 msgstr "Hello EventLead, I would like to organize an event."
 
-#: templates/core/landing.html:256
+#: templates/core/landing.html:275
 msgid "Écrivez-nous"
 msgstr "Write to us"
 
-#: templates/core/landing.html:257 core/forms.py:28
+#: templates/core/landing.html:276 core/forms.py:28
 msgid "Nom complet"
 msgstr "Full name"
 
-#: templates/core/landing.html:258 accounts/forms.py:77 core/forms.py:28 events/views_admin.py:303
+#: templates/core/landing.html:277 accounts/forms.py:77 core/forms.py:28 events/views_admin.py:316
 msgid "Téléphone"
 msgstr "Phone"
 
-#: templates/core/landing.html:259 accounts/forms.py:11 accounts/forms.py:36 core/forms.py:28
+#: templates/core/landing.html:278 accounts/forms.py:11 accounts/forms.py:36 core/forms.py:28
 msgid "Adresse e-mail"
 msgstr "E-mail address"
 
-#: templates/core/landing.html:260 core/forms.py:28 core/views_admin.py:146
+#: templates/core/landing.html:279 core/forms.py:28 core/views_admin.py:146
 msgid "Message"
 msgstr "Message"
 
-#: templates/core/landing.html:260 core/forms.py:29
+#: templates/core/landing.html:279 core/forms.py:29
 msgid "Parlez-nous de votre événement"
 msgstr "Tell us about your event"
 
-#: templates/core/landing.html:261
+#: templates/core/landing.html:280
 msgid "Envoyer le message"
 msgstr "Send message"
 
@@ -2769,15 +2807,15 @@ msgstr "After reply"
 msgid "Active"
 msgstr "Active"
 
-#: templates/dashboard/ads/list.html:18 templates/dashboard/categories/list.html:12 templates/dashboard/checkin/_recent.html:13 templates/dashboard/events/list.html:25 templates/dashboard/gifts/list.html:30 templates/dashboard/guests/list.html:28
+#: templates/dashboard/ads/list.html:18 templates/dashboard/categories/list.html:18 templates/dashboard/checkin/_recent.html:13 templates/dashboard/events/list.html:25 templates/dashboard/gifts/list.html:30 templates/dashboard/guests/list.html:28
 msgid "Actions"
 msgstr "Actions"
 
-#: templates/dashboard/ads/list.html:24 events/forms.py:118
+#: templates/dashboard/ads/list.html:24 events/forms.py:151
 msgid "Oui"
 msgstr "Yes"
 
-#: templates/dashboard/ads/list.html:24 templates/dashboard/events/detail.html:50 templates/dashboard/events/detail.html:60 events/forms.py:119
+#: templates/dashboard/ads/list.html:24 templates/dashboard/events/detail.html:50 templates/dashboard/events/detail.html:60 events/forms.py:152
 msgid "Non"
 msgstr "No"
 
@@ -2801,7 +2839,7 @@ msgstr "Management"
 msgid "Tableau de bord"
 msgstr "Dashboard"
 
-#: templates/dashboard/base_dashboard.html:13 templates/dashboard/categories/list.html:12 templates/dashboard/events/list.html:3 templates/dashboard/events/list.html:6 templates/partials/_navbar.html:22
+#: templates/dashboard/base_dashboard.html:13 templates/dashboard/categories/list.html:18 templates/dashboard/events/list.html:3 templates/dashboard/events/list.html:6 templates/partials/_navbar.html:22
 msgid "Événements"
 msgstr "Events"
 
@@ -2890,8 +2928,8 @@ msgid "Modifier la catégorie"
 msgstr "Edit category"
 
 #: templates/dashboard/categories/form.html:6
-msgid "Le nom et l'icône s'affichent sur les cartes d'événements et dans les filtres du site."
-msgstr "The name and icon appear on event cards and in the site filters."
+msgid "Le nom et l'icône s'affichent sur les cartes d'événements et dans les filtres du site ; la photo, sur la tuile de l'accueil."
+msgstr "The name and icon appear on event cards and in the site filters; the photo appears on the home page tile."
 
 #: templates/dashboard/categories/list.html:6
 msgid "Catégories d'événements"
@@ -2901,27 +2939,43 @@ msgstr "Event categories"
 msgid "Mariage, gala, concert : les visiteurs filtrent les événements publics par catégorie."
 msgstr "Wedding, gala, concert: visitors filter public events by category."
 
-#: templates/dashboard/categories/list.html:12 templates/dashboard/events/list.html:25
+#: templates/dashboard/categories/list.html:11
+msgid "Catégories proposées qui n'existent pas encore :"
+msgstr "Suggested categories that do not exist yet:"
+
+#: templates/dashboard/categories/list.html:12
+msgid "Ajouter les catégories par défaut"
+msgstr "Add the default categories"
+
+#: templates/dashboard/categories/list.html:18 templates/dashboard/events/list.html:25
 msgid "Catégorie"
 msgstr "Category"
 
-#: templates/dashboard/categories/list.html:12
+#: templates/dashboard/categories/list.html:18 templates/invitation/step_thanks.html:54 ads/forms.py:7
+msgid "Photo"
+msgstr "Photo"
+
+#: templates/dashboard/categories/list.html:18
 msgid "Ordre"
 msgstr "Order"
 
-#: templates/dashboard/categories/list.html:20 templates/dashboard/events/detail.html:24 templates/dashboard/events/list.html:41 templates/dashboard/gifts/list.html:42 templates/dashboard/guests/list.html:49
+#: templates/dashboard/categories/list.html:23 templates/dashboard/events/list.html:34
+msgid "Aucune"
+msgstr "None"
+
+#: templates/dashboard/categories/list.html:27 templates/dashboard/events/detail.html:24 templates/dashboard/events/list.html:41 templates/dashboard/gifts/list.html:42 templates/dashboard/guests/list.html:49
 msgid "Modifier"
 msgstr "Edit"
 
-#: templates/dashboard/categories/list.html:21 templates/dashboard/confirm_delete.html:18 templates/dashboard/events/list.html:42 templates/dashboard/gifts/list.html:46 templates/dashboard/guests/list.html:50 templates/dashboard/seating/event.html:56
+#: templates/dashboard/categories/list.html:28 templates/dashboard/confirm_delete.html:18 templates/dashboard/events/list.html:42 templates/dashboard/gifts/list.html:46 templates/dashboard/guests/list.html:50 templates/dashboard/seating/event.html:56
 msgid "Supprimer"
 msgstr "Delete"
 
-#: templates/dashboard/categories/list.html:27
+#: templates/dashboard/categories/list.html:34
 msgid "Aucune catégorie."
 msgstr "No categories."
 
-#: templates/dashboard/categories/list.html:27
+#: templates/dashboard/categories/list.html:34
 msgid "Créer une catégorie"
 msgstr "Create a category"
 
@@ -3103,7 +3157,7 @@ msgstr "Close"
 msgid "Pour une personne arrivée sans être sur la liste : elle est ajoutée comme présente et pointée tout de suite."
 msgstr "For someone who arrived without being on the list: they are added as attending and checked in right away."
 
-#: templates/dashboard/checkin/event.html:70 templates/dashboard/events/detail.html:60 templates/invitation/step_presence.html:23 templates/invitation/step_recap.html:10 events/views_admin.py:303
+#: templates/dashboard/checkin/event.html:70 templates/dashboard/events/detail.html:60 templates/invitation/step_presence.html:23 templates/invitation/step_recap.html:10 events/views_admin.py:316
 msgid "Accompagnants"
 msgstr "Companions"
 
@@ -3383,11 +3437,11 @@ msgstr "Search by title or venue"
 msgid "Tous les types"
 msgstr "All types"
 
-#: templates/dashboard/events/list.html:13 templates/partials/_event_card.html:9 templates/partials/_parade_card.html:17 events/models.py:85
+#: templates/dashboard/events/list.html:13 templates/partials/_event_card.html:9 templates/partials/_parade_card.html:17 events/models.py:106
 msgid "Public"
 msgstr "Public"
 
-#: templates/dashboard/events/list.html:14 templates/partials/_event_card.html:9 events/models.py:86
+#: templates/dashboard/events/list.html:14 templates/partials/_event_card.html:9 events/models.py:107
 msgid "Privé"
 msgstr "Private"
 
@@ -3402,10 +3456,6 @@ msgstr "Type"
 #: templates/dashboard/events/list.html:25
 msgid "Présents"
 msgstr "Attending"
-
-#: templates/dashboard/events/list.html:34
-msgid "Aucune"
-msgstr "None"
 
 #: templates/dashboard/events/list.html:40 templates/dashboard/home.html:30
 msgid "Suivi"
@@ -3535,15 +3585,15 @@ msgstr "The unique invitation link is generated automatically."
 msgid "Canal d'envoi"
 msgstr "Sending channel"
 
-#: templates/dashboard/guests/form.html:39 events/views_admin.py:304
+#: templates/dashboard/guests/form.html:39 events/views_admin.py:317
 msgid "Lien d'invitation"
 msgstr "Invitation link"
 
-#: templates/dashboard/guests/form.html:43 templates/dashboard/reminders/_table.html:18 templates/dashboard/reminders/event.html:63 templates/dashboard/thanks/event.html:64 templates/dashboard/thanks/event.html:123 events/views_admin.py:303
+#: templates/dashboard/guests/form.html:43 templates/dashboard/reminders/_table.html:18 templates/dashboard/reminders/event.html:63 templates/dashboard/thanks/event.html:64 templates/dashboard/thanks/event.html:123 events/views_admin.py:316
 msgid "E-mail"
 msgstr "Email"
 
-#: templates/dashboard/guests/form.html:46 events/views_admin.py:304
+#: templates/dashboard/guests/form.html:46 events/views_admin.py:317
 msgid "Répondu le"
 msgstr "Replied on"
 
@@ -3635,7 +3685,7 @@ msgid_plural "%(counter)s demandes d'aide nouvelles"
 msgstr[0] "%(counter)s new help request"
 msgstr[1] "%(counter)s new help requests"
 
-#: templates/dashboard/home.html:14 events/models.py:139
+#: templates/dashboard/home.html:14 events/models.py:160
 msgid "événements"
 msgstr "events"
 
@@ -3643,7 +3693,7 @@ msgstr "events"
 msgid "%(n)s à venir"
 msgstr "%(n)s upcoming"
 
-#: templates/dashboard/home.html:15 templates/events/organizer_event_detail.html:8 events/models.py:283
+#: templates/dashboard/home.html:15 templates/events/organizer_event_detail.html:8 events/models.py:304
 msgid "invités"
 msgstr "guests"
 
@@ -3815,7 +3865,7 @@ msgstr "%(n)s twice"
 msgid "%(n)s trois fois"
 msgstr "%(n)s three times"
 
-#: templates/dashboard/reminders/_stats.html:6 events/models.py:332
+#: templates/dashboard/reminders/_stats.html:6 events/models.py:353
 msgid "automatique"
 msgstr "automatic"
 
@@ -4001,7 +4051,7 @@ msgstr "Remind guests who have not replied in one click, by WhatsApp or e-mail. 
 msgid "À venir"
 msgstr "Upcoming"
 
-#: templates/dashboard/seating/_board.html:3 events/models.py:232
+#: templates/dashboard/seating/_board.html:3 events/models.py:253
 msgid "tables"
 msgstr "tables"
 
@@ -4013,7 +4063,7 @@ msgstr "%(n)s seats each"
 msgid "de %(a)s à %(b)s places"
 msgstr "from %(a)s to %(b)s seats"
 
-#: templates/dashboard/seating/_board.html:4 events/models.py:225
+#: templates/dashboard/seating/_board.html:4 events/models.py:246
 msgid "places"
 msgstr "seats"
 
@@ -4443,7 +4493,7 @@ msgstr "How was “%(titre)s”?"
 msgid "Votre évaluation est transmise à l'équipe EventLead."
 msgstr "Your review is sent to the EventLead team."
 
-#: templates/events/evaluate.html:13 core/forms.py:13 events/forms.py:173
+#: templates/events/evaluate.html:13 core/forms.py:13 events/forms.py:206
 msgid "Votre note"
 msgstr "Your rating"
 
@@ -4471,7 +4521,7 @@ msgstr "Concerts, galas, conferences: discover what is happening near you."
 msgid "Aucun événement public à venir pour le moment."
 msgstr "No upcoming public events at the moment."
 
-#: templates/events/organizer_event_detail.html:10 events/models.py:264
+#: templates/events/organizer_event_detail.html:10 events/models.py:285
 msgid "accompagnants"
 msgstr "companions"
 
@@ -4637,7 +4687,7 @@ msgstr "Already checked in at %(time)s."
 msgid "Valider l'entrée"
 msgstr "Validate entry"
 
-#: templates/invitation/entry_code.html:22 events/models.py:384
+#: templates/invitation/entry_code.html:22 events/models.py:405
 msgid "QR inconnu"
 msgstr "QR unknown"
 
@@ -4958,10 +5008,6 @@ msgstr "You have reached the number of photos you can add."
 #: templates/invitation/step_thanks.html:51
 msgid "Avec toute notre gratitude,"
 msgstr "With all our gratitude,"
-
-#: templates/invitation/step_thanks.html:54 ads/forms.py:7
-msgid "Photo"
-msgstr "Photo"
 
 #: templates/invitation/ticket.html:3
 msgid "Billet d'entrée - %(titre)s"

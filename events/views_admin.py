@@ -29,14 +29,27 @@ from .models import Event, EventCategory, Guest
 @admin_required
 def category_list(request):
     categories = EventCategory.objects.annotate(num_events=Count("events")).order_by("order", "name")
-    return render(request, "dashboard/categories/list.html", {"categories": categories})
+    return render(request, "dashboard/categories/list.html", {
+        "categories": categories, "missing_defaults": EventCategory.missing_defaults(),
+    })
+
+
+@admin_required
+@require_POST
+def category_add_defaults(request):
+    created = EventCategory.add_missing_defaults()
+    if created:
+        messages.success(request, ngettext("%(n)d catégorie ajoutée.", "%(n)d catégories ajoutées.", created) % {"n": created})
+    else:
+        messages.info(request, _("Toutes les catégories par défaut existent déjà."))
+    return redirect("dashboard:category_list")
 
 
 @admin_required
 def category_create(request):
     last = EventCategory.objects.order_by("-order").first()
     initial = {"icon_name": "bi-calendar2-event", "order": (last.order + 1) if last else 1}
-    form = EventCategoryForm(request.POST or None, initial=initial)
+    form = EventCategoryForm(request.POST or None, request.FILES or None, initial=initial)
     if request.method == "POST" and form.is_valid():
         form.save()
         messages.success(request, _("Catégorie créée."))
@@ -47,7 +60,7 @@ def category_create(request):
 @admin_required
 def category_edit(request, pk):
     category = get_object_or_404(EventCategory, pk=pk)
-    form = EventCategoryForm(request.POST or None, instance=category)
+    form = EventCategoryForm(request.POST or None, request.FILES or None, instance=category)
     if request.method == "POST" and form.is_valid():
         form.save()
         messages.success(request, _("Catégorie mise à jour."))

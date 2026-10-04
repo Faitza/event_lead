@@ -34,6 +34,7 @@ urlpatterns = [
     # Catégories d'événements
     path("categories/", events_admin.category_list, name="category_list"),
     path("categories/nouvelle/", events_admin.category_create, name="category_create"),
+    path("categories/par-defaut/", events_admin.category_add_defaults, name="category_add_defaults"),
     path("categories/<int:pk>/modifier/", events_admin.category_edit, name="category_edit"),
     path("categories/<int:pk>/supprimer/", events_admin.category_delete, name="category_delete"),
     # Invités

@@ -12,7 +12,7 @@ from django.views.decorators.http import require_POST
 
 from ads.models import Ad
 from events.listing import public_events_by_category
-from events.models import Event
+from events.models import Event, EventCategory
 
 from .forms import ContactForm, HelpRequestForm, ReviewForm
 from .help import HELP_PROFILES
@@ -55,6 +55,9 @@ def landing(request):
         "parade": build_parade(),
         "usd_rate": settings.HTG_TO_USD_RATE,
         "services": SERVICES,
+        # Tuiles « Pour chaque occasion » : toutes les catégories ; un clic ouvre les événements à venir de la catégorie
+        # s'il y en a, sinon le formulaire de contact.
+        "occasions": [(c, c in categories) for c in EventCategory.objects.all()],
         "reviews": reviews,
         "review_form": ReviewForm(),
         "contact_form": ContactForm(),

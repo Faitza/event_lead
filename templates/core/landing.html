@@ -145,6 +145,22 @@
       <span class="eyebrow">{% trans "Services" %}</span>
       <h2 class="section-title mb-0" style="max-width:15em">{% trans "Tout ce qu'il faut pour une fête réussie, au même endroit" %}</h2>
     </div>
+    {% if occasions %}
+    <div class="occasion-block reveal">
+      <h3 class="occasion-title">{% trans "Pour chaque occasion" %}</h3>
+      <div class="occasion-grid">
+        {% for c, has_events in occasions %}
+        <a class="occasion" href="{% if has_events %}{% url 'events:explore' %}?categorie={{ c.slug }}{% else %}#contact{% endif %}">
+          <span class="occasion-photo">
+            {% if c.image %}<img src="{{ c.image.url }}" alt="" width="960" height="720" loading="lazy">
+            {% else %}<span class="occasion-ph"><i class="bi {{ c.icon_name }}"></i></span>{% endif %}
+          </span>
+          <span class="occasion-bar">{{ c.label }}</span>
+        </a>
+        {% endfor %}
+      </div>
+    </div>
+    {% endif %}
     <div class="service-grid">
       {% for icon, photo, title, text in services %}
       <div class="service-cell reveal">
