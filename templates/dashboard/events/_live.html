@@ -31,7 +31,7 @@
       <div class="el-card-body pt-3">
       {% for g in recent %}
         <div class="d-flex align-items-center gap-2 mb-3">
-          <span class="avatar" style="width:30px;height:30px;font-size:.7rem">{{ g.name|slice:":1"|upper }}</span>
+          <span class="avatar" style="width:30px;height:30px;font-size:.75rem">{{ g.name|slice:":1"|upper }}</span>
           <div class="flex-grow-1 small"><strong>{{ g.name }}</strong>{% if g.companions %} <span class="text-muted">+{{ g.companions }}</span>{% endif %}<div class="text-muted">{{ g.replied_at|timesince }}</div></div>
           <span class="badge-el badge-{{ g.status_badge }}">{{ g.get_status_display }}</span>
         </div>

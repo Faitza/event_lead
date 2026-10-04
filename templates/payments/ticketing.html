@@ -15,7 +15,7 @@
       <article class="ticket-row reveal">
         <div class="t-img"><img src="{{ event.cover_url }}" alt="" loading="lazy" onerror="this.style.visibility='hidden'"></div>
         <div class="t-main">
-          <span class="eyebrow" style="font-size:.6875rem">{{ event.date|date:_("l j F Y")|capfirst }}</span>
+          <span class="eyebrow" style="font-size:.75rem">{{ event.date|date:_("l j F Y")|capfirst }}</span>
           <h2 class="disp"><a href="{{ event.get_absolute_url }}" style="color:inherit">{{ event.title }}</a></h2>
           <span class="small text-muted"><i class="bi bi-geo-alt me-1" style="color:var(--el-gold-text)"></i>{{ event.venue|truncatechars:56 }}</span>
         </div>

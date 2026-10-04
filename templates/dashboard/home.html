@@ -59,7 +59,7 @@
       <h2 class="h6 fw-bold text-primary mb-3"><span class="live-dot me-2"></span>{% trans "Dernières réponses" %}</h2>
       {% for g in recent_replies %}
       <div class="d-flex align-items-center gap-2 mb-3">
-        <span class="avatar" style="width:30px;height:30px;font-size:.7rem">{{ g.name|slice:":1"|upper }}</span>
+        <span class="avatar" style="width:30px;height:30px;font-size:.75rem">{{ g.name|slice:":1"|upper }}</span>
         <div class="flex-grow-1 small"><strong>{{ g.name }}</strong><div class="text-muted">{{ g.event.title|truncatechars:28 }} &middot; {{ g.replied_at|naturaltime }}</div></div>
         <span class="badge-el badge-{{ g.status_badge }}">{{ g.get_status_display }}</span>
       </div>

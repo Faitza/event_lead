@@ -70,7 +70,7 @@ Sans ces valeurs, le bouton « Continuer avec Google » est affiché désactivé
 
 | URL | Rôle |
 |---|---|
-| `/` | Accueil : défilé des publications, événements publics et billets, puis services, avis et contact |
+| `/` | Accueil : défilé des publications, événements publics et billets, puis services (une photo par service, `static/img/photos/svc-*.jpg`), avis et contact |
 | `/connexion/`, `/inscription/`, `/inscription/organisateur/` | Authentification |
 | `/admin-dashboard/` (+ `evenements/`, `categories/`, `invites/`, `cadeaux/`, `publicites/`, `paiements/`, `messages/`, `aide/`, `pointage/`, `relances/`, `plan-de-table/`, `remerciements/`) | Administrateur |
 | `/organisateur/` | Portail Organisateur VIP |

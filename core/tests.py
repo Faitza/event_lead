@@ -688,3 +688,18 @@ class SmokeTests(TestCase):
         event = Event.objects.filter(price_htg__gt=0).first()
         self.assertEqual(self.client.get(reverse("payments:checkout", args=[event.pk])).status_code, 200)
         self.assertEqual(self.client.get(reverse("payments:vip")).status_code, 200)
+
+
+class LandingServicesTests(TestCase):
+    """Chaque service de l'accueil montre sa photo, et le fichier existe."""
+
+    def test_each_service_has_an_existing_photo(self):
+        from django.contrib.staticfiles import finders
+
+        from core.views import SERVICES
+
+        html = self.client.get(reverse("core:landing")).content.decode()
+        self.assertEqual(html.count('class="service-photo"'), len(SERVICES))
+        for _icon, photo, _title, _text in SERVICES:
+            self.assertTrue(finders.find(f"img/photos/{photo}"), photo)
+            self.assertIn(f"img/photos/{photo}", html)

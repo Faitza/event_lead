@@ -5,7 +5,7 @@
 <section class="section">
   <div class="container">
     <div class="page-head">
-      <div><div class="eyebrow-row mb-3"><span class="diamond"></span><span class="eyebrow">{% trans "Mon espace" %}</span></div><h1>{% blocktranslate trimmed with name=user.display_name %}Bonjour <em>{{ name }}</em>{% endblocktranslate %}</h1><p>{% trans "Vos invitations et les événements à découvrir." %}</p></div>
+      <div><div class="eyebrow-row mb-3"><span class="diamond"></span><span class="eyebrow">{% trans "Mon espace" %}</span></div><h1 class="em-on-light">{% blocktranslate trimmed with name=user.display_name %}Bonjour <em>{{ name }}</em>{% endblocktranslate %}</h1><p>{% trans "Vos invitations et les événements à découvrir." %}</p></div>
       <a href="{% url 'core:landing' %}#affiche" class="btn btn-primary"><i class="bi bi-compass me-2"></i>{% trans "Explorer les événements" %}</a>
     </div>
     <div class="el-card mb-4">

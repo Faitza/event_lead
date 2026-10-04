@@ -20,12 +20,12 @@ from .middleware import set_language_cookie
 from .models import HelpRequest, Review
 
 SERVICES = [
-    ("bi-calendar2-heart", gettext_lazy("Un tableau de bord pour tout piloter"), gettext_lazy("Mariage, gala, baptême ou conférence : créez l'événement, localisez le lieu sur une carte et gardez la main du début à la fin.")),
-    ("bi-whatsapp", gettext_lazy("Invitations WhatsApp et e-mail"), gettext_lazy("Chaque invité reçoit un lien personnel, sans mot de passe, sur le canal qu'il utilise vraiment.")),
-    ("bi-activity", gettext_lazy("Qui vient, avec qui"), gettext_lazy("Présences, accompagnants et cadeaux se mettent à jour à chaque réponse : sachez exactement combien de chaises préparer.")),
-    ("bi-gift", gettext_lazy("Cadeaux sans doublon"), gettext_lazy("Un cadeau choisi est aussitôt verrouillé pour les autres. La liste reste juste jusqu'au jour J.")),
-    ("bi-ticket-perforated", gettext_lazy("Billetterie et paiements locaux"), gettext_lazy("Vendez vos billets et encaissez avec MonCash, NatCash, carte ou PayPal, avec les prix en gourdes et en dollars.")),
-    ("bi-megaphone", gettext_lazy("Une vitrine pour vos partenaires"), gettext_lazy("Traiteurs, fleuristes, photographes : leur publicité s'affiche après chaque réponse, et vous suivez les vues et les clics.")),
+    ("bi-calendar2-heart", "svc-dashboard.jpg", gettext_lazy("Un tableau de bord pour tout piloter"), gettext_lazy("Mariage, gala, baptême ou conférence : créez l'événement, localisez le lieu sur une carte et gardez la main du début à la fin.")),
+    ("bi-whatsapp", "svc-invitations.jpg", gettext_lazy("Invitations WhatsApp et e-mail"), gettext_lazy("Chaque invité reçoit un lien personnel, sans mot de passe, sur le canal qu'il utilise vraiment.")),
+    ("bi-activity", "svc-presence.jpg", gettext_lazy("Qui vient, avec qui"), gettext_lazy("Présences, accompagnants et cadeaux se mettent à jour à chaque réponse : sachez exactement combien de chaises préparer.")),
+    ("bi-gift", "svc-gifts.jpg", gettext_lazy("Cadeaux sans doublon"), gettext_lazy("Un cadeau choisi est aussitôt verrouillé pour les autres. La liste reste juste jusqu'au jour J.")),
+    ("bi-ticket-perforated", "svc-tickets.jpg", gettext_lazy("Billetterie et paiements locaux"), gettext_lazy("Vendez vos billets et encaissez avec MonCash, NatCash, carte ou PayPal, avec les prix en gourdes et en dollars.")),
+    ("bi-megaphone", "svc-partners.jpg", gettext_lazy("Une vitrine pour vos partenaires"), gettext_lazy("Traiteurs, fleuristes, photographes : leur publicité s'affiche après chaque réponse, et vous suivez les vues et les clics.")),
 ]
 
 

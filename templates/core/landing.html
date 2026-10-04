@@ -146,11 +146,14 @@
       <h2 class="section-title mb-0" style="max-width:15em">{% trans "Tout ce qu'il faut pour une fête réussie, au même endroit" %}</h2>
     </div>
     <div class="service-grid reveal">
-      {% for icon, title, text in services %}
+      {% for icon, photo, title, text in services %}
       <div class="service-cell">
-        <span class="icon-bubble"><i class="bi {{ icon }}"></i></span>
-        <h3>{{ title }}</h3>
-        <p>{{ text }}</p>
+        <div class="service-photo"><img src="{% static 'img/photos/'|add:photo %}" alt="" width="720" height="480" loading="lazy"></div>
+        <div class="service-body">
+          <span class="icon-bubble"><i class="bi {{ icon }}"></i></span>
+          <h3>{{ title }}</h3>
+          <p>{{ text }}</p>
+        </div>
       </div>
       {% endfor %}
     </div>
