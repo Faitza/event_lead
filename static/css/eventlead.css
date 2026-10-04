@@ -11,7 +11,7 @@
   --el-tint: #F3ECF6;
   --el-tint-strong: #E3D9E6;
   --el-bg-soft: #F8F5F9;
-  --el-bg: #F8F5F9;
+  --el-bg: #F6E1F1;                    /* couleur plate de repli du fond : voir le bloc « Fond du site » en fin de fichier */
   --el-card: #FFFFFF;
   --el-gold: #D4AF37;
   --el-gold-dark: #B8962A;
@@ -19,7 +19,7 @@
   --el-gold-strong: #A98A1E;
   --el-gold-soft: #E9D28A;
   --el-text: #1F2937;
-  --el-muted: #5B6472;
+  --el-muted: #535B69;
   --el-success: #10B981;
   --el-warning: #F59E0B;
   --el-danger: #EF4444;
@@ -42,7 +42,7 @@
   --bs-link-color-rgb: 69, 6, 92;
   --bs-link-hover-color: #2C033B;
   --bs-body-color: #1F2937;
-  --bs-body-bg: #F8F5F9;
+  --bs-body-bg: #F6E1F1;
   --bs-body-font-family: var(--font-body);
   --bs-border-radius: 12px;
   --bs-border-radius-lg: 16px;
@@ -981,3 +981,60 @@ h2.h6 { font-size: 1.15rem; }
 @media (prefers-reduced-motion: reduce) { .occasion, .occasion-photo img { transition: none; } .occasion:hover, .occasion:hover .occasion-photo img { transform: none; } }
 .occasion-thumb { width: 64px; height: 48px; object-fit: cover; border-radius: 8px; border: 1px solid var(--el-line); }
 .occasion-preview img { width: 240px; max-width: 100%; height: auto; aspect-ratio: 4 / 3; object-fit: cover; border-radius: 12px; border: 1px solid var(--el-line); }
+
+/* ==========================================================================
+   Fond du site : lilas rosé en dégradé, trame de points, grandes courbes violettes.
+   Inspiré de l'affiche de référence, entièrement en CSS (aucune image copiée).
+   TOUT SE RÈGLE ICI : couleurs ci-dessous, formes dans body::before / body::after.
+   Les deux calques sont fixes (ils restent en place quand on fait défiler) et passent
+   derrière tout le contenu ; les cartes blanches, les bandeaux violets et la barre
+   blanche du logo restent par-dessus. Les courbes et les points restent dans les
+   marges pour ne jamais gêner la lecture.
+   ========================================================================== */
+:root {
+  --page-top: #F9E6F4;                      /* couleur du haut de page */
+  --page-bottom: #F3DAEF;                   /* couleur du bas de page (ne pas assombrir : le texte gris doit rester lisible) */
+  --page-glow: rgba(255, 255, 255, .72);    /* halo clair */
+  --page-patch: rgba(196, 150, 190, .22);   /* taches plus foncées, comme sur l'affiche */
+  --page-dots: rgba(95, 14, 125, .30);      /* trame de points */
+  --page-curve-a: #7A0AA0;                  /* courbes violettes : clair */
+  --page-curve-b: #45065C;                  /* courbes violettes : foncé */
+  --page-halo: rgba(255, 255, 255, .88);    /* liseré clair autour des courbes */
+  --page-line: rgba(100, 14, 135, .55);     /* trait fin des arcs */
+  --page-band: rgba(255, 255, 255, .34);    /* bandes claires des sections « blanches » */
+  --page-curve-w: 36vw;                     /* grande courbe du haut à droite */
+  --page-curve-h: 15vh;
+  --page-lens: 17vw;                        /* rayon des cercles sur les bords (seuls ~3vw dépassent dans l'écran) */
+}
+body { background-image: linear-gradient(180deg, var(--page-top) 0%, var(--page-bottom) 100%); }
+body::before, body::after { content: ""; position: fixed; inset: 0; z-index: -1; pointer-events: none; }
+body::before {
+  background:
+    /* courbe violette en haut à droite, avec son liseré clair */
+    radial-gradient(ellipse var(--page-curve-w) var(--page-curve-h) at 104% -3%, var(--page-curve-a) 0, var(--page-curve-b) 96%, transparent 96.4%),
+    radial-gradient(ellipse calc(var(--page-curve-w) + 20px) calc(var(--page-curve-h) + 20px) at 104% -3%, var(--page-halo) 0 96%, transparent 96.4%),
+    /* grand cercle violet sur le bord gauche, avec liseré clair puis trait fin */
+    radial-gradient(circle at calc(var(--page-lens) * -.82) 78vh, var(--page-curve-a) 0, var(--page-curve-b) calc(var(--page-lens) - .4px), transparent var(--page-lens)),
+    radial-gradient(circle at calc(var(--page-lens) * -.82) 78vh, transparent calc(var(--page-lens) - .4px), var(--page-halo) var(--page-lens) calc(var(--page-lens) + 12px), transparent calc(var(--page-lens) + 12.4px)),
+    radial-gradient(circle at calc(var(--page-lens) * -.82) 78vh, transparent calc(var(--page-lens) + 21px), var(--page-line) calc(var(--page-lens) + 21px) calc(var(--page-lens) + 24px), transparent calc(var(--page-lens) + 24.6px)),
+    /* trait fin sur le bord droit */
+    radial-gradient(circle at calc(100% + var(--page-lens) * .82) 48vh, transparent calc(var(--page-lens) - 3px), var(--page-line) calc(var(--page-lens) - 3px) var(--page-lens), transparent calc(var(--page-lens) + .8px)),
+    /* halo clair et taches plus foncées */
+    radial-gradient(ellipse 56vw 40vh at 62% 30%, var(--page-glow), transparent 70%),
+    radial-gradient(ellipse 40vw 34vh at 6% 74%, var(--page-patch), transparent 72%),
+    radial-gradient(ellipse 36vw 30vh at 94% 88%, var(--page-patch), transparent 72%);
+}
+body::after {
+  background: radial-gradient(circle, var(--page-dots) 1.25px, transparent 1.9px) 0 0 / 8px 8px;
+  -webkit-mask-image: radial-gradient(ellipse 15vw 20vh at 100% 7vh, #000 0, transparent 100%), radial-gradient(ellipse 10vw 24vh at 0 100%, #000 0, transparent 100%);
+  mask-image: radial-gradient(ellipse 15vw 20vh at 100% 7vh, #000 0, transparent 100%), radial-gradient(ellipse 10vw 24vh at 0 100%, #000 0, transparent 100%);
+}
+@media (max-width: 1099px) { :root { --page-line: transparent; } }          /* marges trop étroites : pas de traits fins qui frôlent le texte */
+@media (max-width: 767px) { :root { --page-curve-w: 30vw; --page-curve-h: 8vh; --page-lens: 18vw; } }
+@media print { body::before, body::after { display: none; } }
+/* Sections de l'accueil : les « douces » laissent voir le fond, les « blanches » deviennent des bandes claires */
+.section-soft { background: transparent; }
+.section-white { background: var(--page-band); }
+.auth-wrap, .auth-panel { background: transparent; }
+/* Le logo reste toujours sur fond blanc : sur le fond lilas de la page de connexion il est dans un badge blanc */
+.auth-panel > a { background: #fff; border-radius: 18px; padding: 10px 28px 6px; box-shadow: var(--el-shadow); }
