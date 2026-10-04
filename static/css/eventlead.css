@@ -98,7 +98,7 @@ h1 em, h2 em, h3 em, .disp em { color: var(--el-gold); font-style: italic; }
 .btn-lg { padding: .9rem 1.8rem; border-radius: var(--el-radius); font-size: 1rem; }
 .btn-primary { background: var(--el-primary); border-color: var(--el-primary); color: #fff; }
 .btn-primary:hover, .btn-primary:focus { background: var(--el-primary-dark); border-color: var(--el-primary-dark); color: #fff; }
-.btn-primary:disabled { background: var(--el-primary-light); border-color: var(--el-primary-light); opacity: .55; }
+.btn-primary:disabled { background: #7C5A8C; border-color: #7C5A8C; opacity: 1; }
 .btn-outline-primary { color: var(--el-primary); border: 1.5px solid var(--el-primary); }
 .btn-outline-primary:hover { background: var(--el-primary); border-color: var(--el-primary); color: #fff; }
 .btn-gold { background: var(--el-gold); border-color: var(--el-gold); color: var(--el-primary-dark); }
@@ -375,7 +375,7 @@ h1 em, h2 em, h3 em, .disp em { color: var(--el-gold); font-style: italic; }
 }
 
 /* Services : grille à filets 1px */
-.service-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 1px; background: var(--el-border); border: 1px solid var(--el-border); border-radius: 16px; overflow: hidden; }
+.service-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 320px), 1fr)); gap: 1px; background: var(--el-border); border: 1px solid var(--el-border); border-radius: 16px; overflow: hidden; }
 .service-cell { background: #fff; display: flex; flex-direction: column; transition: background-color var(--el-ease); }
 .service-cell:hover { background: #FBF8FC; }
 .service-photo { aspect-ratio: 3 / 2; overflow: hidden; background: var(--el-tint); }
@@ -384,8 +384,8 @@ h1 em, h2 em, h3 em, .disp em { color: var(--el-gold); font-style: italic; }
 .service-body { position: relative; padding: 0 40px 44px; display: flex; flex-direction: column; gap: 16px; }
 .service-body .icon-bubble { margin-top: -26px; box-shadow: 0 0 0 5px #fff; }
 .service-cell:hover .service-body .icon-bubble { box-shadow: 0 0 0 5px #FBF8FC; }
-.service-cell h3 { font-size: 1.6rem; line-height: 1.15; margin: 0; }
-.service-cell p { margin: 0; font-size: 1.0625rem; line-height: 1.7; color: #4B5563; }
+.service-cell h3 { font-size: 1.6rem; line-height: 1.15; margin: 0; text-wrap: balance; }
+.service-cell p { margin: 0; font-size: 1.0625rem; line-height: 1.7; color: #4B5563; text-wrap: pretty; }
 @media (prefers-reduced-motion: reduce) { .service-photo img { transition: none; } .service-cell:hover .service-photo img { transform: none; } }
 
 /* Bandeau VIP */
@@ -550,8 +550,7 @@ h1 em, h2 em, h3 em, .disp em { color: var(--el-gold); font-style: italic; }
 .inv-shell { min-height: 100vh; background: var(--el-primary-dark); display: flex; flex-direction: column; }
 .inv-topbar { background: #fff; padding: 10px 0; position: sticky; top: 0; z-index: 1020; }
 .inv-topbar .small { font-size: .75rem !important; letter-spacing: .2em; text-transform: uppercase; color: var(--el-primary) !important; font-weight: 500; }
-.inv-topbar .small { min-width: 0; padding: 0 6px; text-align: center; line-height: 1.25; }
-@media (max-width: 575px) { .inv-topbar .small { letter-spacing: .04em; padding: 0 4px; } .inv-topbar .lang-group button { padding: 7px 5px; } }
+.inv-topbar .small { padding: 0 6px; text-align: center; line-height: 1.25; }
 .inv-container { max-width: 620px; width: 100%; margin: 0 auto; padding: 0 1rem; }
 .inv-card { position: relative; overflow: hidden; margin: 16px 0 18px; border-radius: 16px; background: var(--el-primary-dark); color: #fff; text-align: center; }
 .inv-card > img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
@@ -624,10 +623,11 @@ h1 em, h2 em, h3 em, .disp em { color: var(--el-gold); font-style: italic; }
 .gift-item.is-mine { border-color: var(--el-success); background: rgba(16, 185, 129, .07); cursor: default; }
 .gift-item.is-mine .check { background: var(--el-success); border-color: var(--el-success); }
 .gift-item.is-mine .check i { transform: scale(1); }
-.gift-item.is-taken { cursor: not-allowed; background: #F5F5F7; border-color: #EBEBEF; opacity: .62; }
+.gift-item.is-taken { cursor: not-allowed; background: #F5F5F7; border-color: #EBEBEF; }
 .gift-item.is-taken:hover { transform: none; border-color: #EBEBEF; }
 .gift-item.is-taken .gift-icon { background: #E9E9ED; color: #9CA3AF; border-color: #DADADF; }
 .gift-item.is-taken .gift-name { text-decoration: line-through; color: var(--el-muted); }
+.gift-item.is-taken .gift-qty { color: var(--el-muted); }
 .gift-item.just-locked { animation: shake .3s ease; }
 @keyframes shake { 25% { transform: translateX(-4px); } 75% { transform: translateX(4px); } }
 
@@ -671,7 +671,7 @@ h1 em, h2 em, h3 em, .disp em { color: var(--el-gold); font-style: italic; }
 .pay-method:hover { border-color: var(--el-gold); transform: translateY(-2px); box-shadow: var(--el-shadow); }
 .pay-method .pm-logo { width: 44px; height: 44px; border-radius: 12px; display: flex; align-items: center; justify-content: center; color: #fff; font-weight: 700; font-size: .8rem; flex-shrink: 0; }
 .pm-moncash { background: #E30613; }
-.pm-natcash { background: #F7941D; }
+.pm-natcash { background: #F7941D; color: var(--el-primary-dark); }
 .pm-stripe { background: #635BFF; }
 .pm-paypal { background: #003087; }
 .pay-step { display: none; }
@@ -758,6 +758,8 @@ h1 em, h2 em, h3 em, .disp em { color: var(--el-gold); font-style: italic; }
 .auth-panel { position: relative; }
 .auth-lang { position: absolute; top: 20px; right: 20px; }
 .inv-topbar .lang-group button { padding: 7px 6px; font-size: .75rem; letter-spacing: .02em; }
+@media (max-width: 575px) { .inv-topbar .small { letter-spacing: .04em; padding: 0 4px; } .inv-topbar .lang-group button { padding: 7px 5px; } }
+@media (max-width: 359px) { .inv-topbar .brand-mark { height: 56px; } .inv-topbar .brand-name { font-size: .9rem; } .inv-topbar .small { letter-spacing: 0; } }
 
 /* Barre du haut : le nom de la personne connectée ne s'affiche que s'il reste de la place (menu replié ou très grand écran) */
 .el-nav .user-pill .user-name{display:none}
@@ -919,3 +921,23 @@ h1 em, h2 em, h3 em, .disp em { color: var(--el-gold); font-style: italic; }
 .thanks-admin-del { position: absolute; right: .4rem; bottom: .4rem; width: 32px; height: 32px; border: 0; border-radius: 50%; background: rgba(255, 255, 255, .92); color: var(--el-danger); display: inline-flex; align-items: center; justify-content: center; }
 .thanks-admin-del:hover { background: #fff; box-shadow: 0 2px 8px rgba(0, 0, 0, .25); }
 .thanks-table th, .thanks-table td { position: relative; vertical-align: middle; }
+
+/* ==========================================================================
+   Lisibilité de Bodoni Moda
+   Google Fonts livre l'axe « corps optique » : plus le texte est grand, plus les
+   traits fins deviennent minces, jusqu'à disparaître (le H de « 5 000 HTG » à 28 px).
+   On fixe donc le corps optique à 18 pour tout le site : les « e » et les « W » des
+   grands titres restent lisibles, le dessin Bodoni reste le même.
+   ========================================================================== */
+html { font-variation-settings: "opsz" 18; }
+
+/* Chiffres et montants : trait plus épais, chiffres alignés sur la ligne, milliers bien séparés */
+.fig, .stat-card .value, .key-figure .value, .price-tag, .ticket .price .htg, .ticket-row .t-buy .htg,
+.event-arch .foot .price, .p-event .date .d, .event-arch .date .d, .counter input, .amount-chip strong, .seat-number {
+  font-weight: 600; font-variant-numeric: lining-nums tabular-nums; word-spacing: .12em;
+}
+.fig, .price-tag, .htg, .event-arch .foot .price, .amount-chip strong { white-space: nowrap; }
+.disp.fig { font-weight: 600 !important; }
+
+/* Titres des cartes d'administration et des fenêtres : un peu plus de graisse */
+.el-card-header h2, .el-card-header h3, .modal-title { font-weight: 600 !important; }

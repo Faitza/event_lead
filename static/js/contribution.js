@@ -22,7 +22,7 @@
     return /^\d+$/.test(digits) ? parseInt(digits, 10) : NaN;
   }
   function fmt(n, digits) {
-    return n.toLocaleString(numLocale, { minimumFractionDigits: digits || 0, maximumFractionDigits: digits || 0 });
+    return n.toLocaleString(numLocale, { minimumFractionDigits: digits || 0, maximumFractionDigits: digits || 0 }).replace(/\u202f/g, "\u00a0");
   }
   function render() {
     if (isNaN(amount) || amount <= 0) { hint.textContent = ""; label.textContent = d.labelPay.replace("{amount}", "..."); return; }

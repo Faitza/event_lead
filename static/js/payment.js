@@ -41,10 +41,10 @@
     var htg = parseFloat(form.dataset.unitHtg) * n;
     var usd = parseFloat(form.dataset.unitUsd) * n;
     document.querySelectorAll("[data-amount-htg]").forEach(function (el) {
-      el.textContent = htg.toLocaleString(numLocale, { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + " HTG";
+      el.textContent = htg.toLocaleString(numLocale, { minimumFractionDigits: 2, maximumFractionDigits: 2 }).replace(/\u202f/g, "\u00a0") + " HTG";
     });
     document.querySelectorAll("[data-amount-usd]").forEach(function (el) {
-      el.textContent = usd.toLocaleString(numLocale, { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + " USD";
+      el.textContent = usd.toLocaleString(numLocale, { minimumFractionDigits: 2, maximumFractionDigits: 2 }).replace(/\u202f/g, "\u00a0") + " USD";
     });
   }
   if (qty) qty.addEventListener("input", syncAmount);

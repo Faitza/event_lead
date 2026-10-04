@@ -60,7 +60,7 @@ def _grouped(value, decimals=0):
     text = f"{number:,.{decimals}f}"  # 25,000.50
     if english:
         return text
-    return text.replace(",", " ").replace(".", ",")
+    return text.replace(",", " ").replace(".", ",")
 
 
 @register.filter

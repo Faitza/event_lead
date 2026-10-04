@@ -409,11 +409,11 @@ class MoneyFormatTests(TestCase):
         from core.templatetags.el_tags import htg, usd
 
         for lang, expected_htg, expected_usd in (
-            ("fr", "25 000", "187,50"), ("ht", "25 000", "187,50"), ("en", "25,000", "187.50"),
+            ("fr", "25 000", "187,50"), ("ht", "25 000", "187,50"), ("en", "25,000", "187.50"),
         ):
             with translation.override(lang):
                 self.assertEqual(htg(Decimal("25000.00")), expected_htg, lang)
                 self.assertEqual(usd(Decimal("187.5")), expected_usd, lang)
         with translation.override("fr"):
             self.assertEqual(htg(500), "500")
-            self.assertEqual(htg(1234567), "1 234 567")
+            self.assertEqual(htg(1234567), "1 234 567")
