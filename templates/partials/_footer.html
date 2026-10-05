@@ -33,5 +33,9 @@
     </div>
     <hr class="border-secondary opacity-25 my-4">
     <p class="small mb-0 text-center">&copy; {% now "Y" %} EventLead. {% trans "Tous droits réservés." %}</p>
+    <nav class="legal-links small" aria-label="{% trans 'Informations légales' %}">
+      <a href="{% url 'core:privacy' %}">{% trans "Confidentialité" %}</a>
+      <a href="{% url 'core:terms' %}">{% trans "Conditions d'utilisation" %}</a>
+    </nav>
   </div>
 </footer>

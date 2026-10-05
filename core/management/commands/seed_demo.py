@@ -225,9 +225,9 @@ class Command(BaseCommand):
         )
 
         # ------------------------------------------------------------------ Avis
-        Review.objects.create(name="Roseline A.", stars=5, text="Nos invités ont répondu en quelques minutes depuis WhatsApp. La liste de cadeaux sans doublon, c'est génial !")
-        Review.objects.create(name="Patrick É.", stars=5, text="Tableau de bord clair, suivi en direct des présences : l'organisation de notre gala a été un jeu d'enfant.")
-        Review.objects.create(name="Claudine J.", stars=4, text="Très pratique de pouvoir payer avec MonCash. Interface élégante et simple.")
+        # Avis d'exemple pour tester la validation dans le tableau de bord : jamais publiés, ce ne sont pas de vrais clients.
+        Review.objects.create(name="Exemple (avis de test)", stars=5, is_published=False,
+                              text="Avis de démonstration : à valider ou à supprimer dans le tableau de bord, page Messages et avis.")
 
         # ------------------------------------------------------------------ Paiements
         Payment.objects.create(kind="organizer_access", user=vip, method="moncash", amount_htg=Decimal("5000"),

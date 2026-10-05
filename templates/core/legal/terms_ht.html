@@ -1,0 +1,50 @@
+{% extends "core/legal/_layout.html" %}
+{% comment %}Bouyon an kreyòl : yon moun ki pale kreyòl natifnatal dwe relize l.{% endcomment %}
+{% block title %}Kondisyon itilizasyon{% endblock %}
+{% block meta_description %}Règ pou itilize EventLead, pou òganizatè yo, envite yo ak moun k ap achte tikè.{% endblock %}
+{% block content %}{% with eyebrow="Règ sit la" page_title="Kondisyon itilizasyon" intro="Règ ki aplike lè w ap sèvi ak EventLead." updated_label="Dènye chanjman :" %}{{ block.super }}{% endwith %}{% endblock %}
+{% block legal_body %}
+<h2>1. Sèvis la</h2>
+<p>EventLead se yon sit FAYaFATech pibliye, {{ CONTACT_ADDRESS }}. Li pèmèt ou voye envitasyon, swiv repons yo, jere yon lis kado, vann tikè epi resevwa kontribisyon pou yon evènman. Lè w sèvi ak sit la, ou aksepte kondisyon sa yo.</p>
+
+<h2>2. Kont ou</h2>
+<ul>
+  <li>Enfòmasyon ki nan kont ou dwe kòrèk.</li>
+  <li>Se ou ki responsab modpas ou. Si w panse yon lòt moun ap sèvi ak li, chanje l epi prevni nou.</li>
+  <li>Yon envite pa bezwen kont : li reponn ak lyen pèsonèl li. Li pa dwe pataje lyen sa a.</li>
+</ul>
+
+<h2>3. Òganizatè yo</h2>
+<ul>
+  <li>Òganizatè a ajoute sèlman envite li konnen epi ki dakò resevwa envitasyon li pa WhatsApp oswa pa imèl.</li>
+  <li>Se li ki responsab sa li pibliye : tèks, foto, pri, kote ak dat evènman an.</li>
+  <li>Li entèdi pou pibliye bagay ki ilegal, ki twonpe moun, ki gen rayisman oswa ki touche dwa yon lòt moun, oswa pou sèvi ak sit la pou voye mesaj moun pa mande.</li>
+</ul>
+
+<h2>4. Pri ak peman</h2>
+<ul>
+  <li>Pri yon envitasyon, yon tikè oswa aksè Òganizatè VIP la parèt anvan ou peye.</li>
+  <li>Peman yo pase pa MonCash, NatCash, Stripe (kat) oswa PayPal. Chak peman gen yon referans ou jwenn nan espas ou.</li>
+  <li>Se òganizatè evènman an ki fikse kondisyon pou yo renmèt lajan yon tikè. Si yo anile yon evènman, ekri nou epi n ap wè sa ak òganizatè a pou renmèt lajan an.</li>
+  <li>Yon kontribisyon an lajan se yon kado pou òganizatè a : yo pa renmèt li, sof si te gen yon erè nan peman an.</li>
+</ul>
+
+<h2>5. Kado, foto ak avi</h2>
+<ul>
+  <li>Yon kado ou rezève sou lis la se yon angajman ou pran ak òganizatè a. EventLead pa vann kado yo epi li pa livre yo.</li>
+  <li>Lè w mete yon foto nan albòm yon evènman, ou di ou gen dwa pataje l. Òganizatè a ak ekip EventLead la ka retire l.</li>
+  <li>Ekip la li avi yo anvan yo pibliye. Yon avi ki fo, ki joure moun oswa ki fè piblisite p ap pibliye.</li>
+</ul>
+
+<h2>6. Disponiblite</h2>
+<p>Nou fè tout sa nou kapab pou sit la toujou disponib epi pou done ou yo sovgade regilyèman. Men sit la ka kanpe pou yon antretyen oswa yon pann. EventLead pa responsab jan evènman an li menm pase, se òganizatè a ki responsab sa.</p>
+
+<h2>7. Sispansyon</h2>
+<p>Nou ka sispann yon kont oswa retire yon bagay ki pa respekte kondisyon sa yo, apre nou fin prevni moun nan lè sa posib.</p>
+
+<h2>8. Done pèsonèl</h2>
+<p>Jan nou sèvi ak done ou yo eksplike nan <a href="{% url 'core:privacy' %}">règ sou done pèsonèl</a> yo.</p>
+
+<h2>9. Chanjman ak lwa ki aplike</h2>
+<p>Si kondisyon sa yo chanje, dat ki anlè paj la ap chanje tou. Se lwa ayisyen ki aplike pou kondisyon sa yo. Pou nenpòt kesyon oswa plent, ekri nan <a href="mailto:{{ CONTACT_EMAIL }}">{{ CONTACT_EMAIL }}</a>.</p>
+{% endblock %}

@@ -1,0 +1,60 @@
+{% extends "core/legal/_layout.html" %}
+{% comment %}Bouyon an kreyòl : yon moun ki pale kreyòl natifnatal dwe relize l.{% endcomment %}
+{% block title %}Règ sou done pèsonèl{% endblock %}
+{% block meta_description %}Ki done EventLead kenbe sou òganizatè yo ak envite yo, poukisa, ak ki moun li pataje yo, epi kijan pou w fè korije oswa efase yo.{% endblock %}
+{% block content %}{% with eyebrow="Done ou yo" page_title="Règ sou done pèsonèl" intro="Sa nou kenbe, poukisa, ak kijan pou w fè korije oswa efase yo." updated_label="Dènye chanjman :" %}{{ block.super }}{% endwith %}{% endblock %}
+{% block legal_body %}
+<h2>1. Kiyès ki responsab</h2>
+<p>Se FAYaFATech ki pibliye sit EventLead la, {{ CONTACT_ADDRESS }}. Pou nenpòt kesyon sou done ou yo, ekri nan <a href="mailto:{{ CONTACT_EMAIL }}">{{ CONTACT_EMAIL }}</a> oswa sou WhatsApp nan {{ CONTACT_PHONE }}.</p>
+
+<h2>2. Done nou kenbe</h2>
+<ul>
+  <li><strong>Kont ou</strong> : prenon, non, adrès imèl, telefòn ak modpas (li anrejistre an kachèt, nou pa janm wè l). Si w konekte ak Google, nou resevwa sèlman non ou ak adrès imèl ou.</li>
+  <li><strong>Envite yon evènman</strong>, òganizatè a ki ajoute yo : non, telefòn oswa imèl, repons, konbyen moun k ap akonpaye yo, kado yo chwazi, tab, lè yo rive jou a.</li>
+  <li><strong>Peman ak kontribisyon</strong> : fason yo peye, kantite lajan, referans tranzaksyon an ak yon nimewo kache (pa egzanp +509 **** 4455). Nimewo kat la an antye pa janm rive kote nou : se sou paj sèvis peman an yo tape l.</li>
+  <li><strong>Foto nan albòm nan</strong> envite yo voye. Nou retire pozisyon GPS chak foto anvan nou anrejistre l.</li>
+  <li><strong>Mesaj ou yo</strong> : fòmilè kontak, demann èd ak avi.</li>
+  <li><strong>Done teknik</strong> : adrès IP, nou sèvi ak li pou bloke moun k ap voye menm bagay la twòp fwa, ak nan jounal erè sit la.</li>
+</ul>
+
+<h2>3. Poukisa nou sèvi ak yo</h2>
+<ul>
+  <li>Pou sèvis la mache : voye envitasyon, rapèl ak remèsiman, anrejistre repons yo, rezève kado yo, prepare plan tab yo ak kontwòl antre a.</li>
+  <li>Pou resevwa peman tikè, aksè Òganizatè VIP ak kontribisyon, epi kenbe yon tras chak peman.</li>
+  <li>Pou reponn mesaj ou ak demann èd ou.</li>
+  <li>Pou pwoteje sit la kont abi epi korije erè.</li>
+</ul>
+<p>Nou pa vann done ou yo epi nou pa fè piblisite ki vize w. Piblisite patnè yo ki parèt sou sit la pa resevwa okenn done pèsonèl : yo wè sèlman konbyen moun ki wè yo ak konbyen klik yo fè.</p>
+
+<h2>4. Kiyès ki ka wè yo</h2>
+<ul>
+  <li>Òganizatè yon evènman wè envite yo, repons yo, kado yo ak kontribisyon evènman pa l la.</li>
+  <li>Ekip EventLead la, pou fè sit la mache ak pou reponn demann èd.</li>
+  <li>Sèvis sit la bezwen, chak pou pa yo : sèvis ki ebèje sit la, MonCash, NatCash, Stripe (kat) ak PayPal pou peman, Google pou koneksyon ak kont Google ak pou karaktè ekriti yo, OpenStreetMap pou kat kote evènman an ap fèt, jsDelivr pou fichye afichaj yo, WhatsApp ak sèvis imèl la pou voye envitasyon yo.</li>
+</ul>
+<p>Gen nan sèvis sa yo ki pa an Ayiti, sitou Ozetazini.</p>
+
+<h2>5. Cookies</h2>
+<p>Sit la sèvi sèlman ak cookies li bezwen pou l mache : sesyon an (pou w rete konekte), pwoteksyon fòmilè yo ak lang ou chwazi a (nou kenbe l pandan yon ane). Pa gen cookies pou mezire odyans ni pou piblisite.</p>
+
+<h2>6. Pou konbyen tan</h2>
+<ul>
+  <li>Nou kenbe kont ou toutotan li egziste. Ou ka mande pou yo efase l nenpòt ki lè.</li>
+  <li>Nou kenbe envite, repons, kado ak foto yon evènman toutotan òganizatè a kenbe evènman an. Si li efase evènman an, yo efase tou.</li>
+  <li>Nou kenbe peman yo kòm papye kontablite, menm apre yo efase yon kont.</li>
+  <li>Sovgad sit la kenbe yon kopi done yo pandan kèk semèn, apre sa yo ranplase yo.</li>
+</ul>
+
+<h2>7. Dwa ou</h2>
+<p>Ou ka mande pou w wè done ou yo, pou yo korije yo, pou yo efase yo, pou w resevwa yon kopi, oswa ou ka refize pou nou sèvi ak yo. Ekri nan <a href="mailto:{{ CONTACT_EMAIL }}">{{ CONTACT_EMAIL }}</a> ak non ou ak adrès imèl oswa nimewo ou te itilize sou sit la. Nou reponn nan yon mwa.</p>
+<p>Si w se envite nan yon evènman, ou ka ekri tou dirèkteman bay òganizatè ki te ajoute w la.</p>
+<p>Si w ap viv nan Inyon Ewopeyen, ou ka ekri tou bay otorite ki pwoteje done pèsonèl nan peyi w.</p>
+
+<h2>8. Sekirite</h2>
+<p>Sit la mache an HTTPS. Modpas yo kache. Pèsonn pa ka devine lyen pèsonèl chak envite, ni adrès foto ki nan albòm yo.</p>
+
+<h2>9. Chanjman</h2>
+<p>Si règ sa yo chanje, dat ki anlè paj la ap chanje tou. Si se yon gwo chanjman, n ap prevni òganizatè yo pa imèl.</p>
+
+<p class="mt-4 mb-0">Gade tou : <a href="{% url 'core:terms' %}">Kondisyon itilizasyon</a>.</p>
+{% endblock %}

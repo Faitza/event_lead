@@ -10,4 +10,6 @@ urlpatterns = [
     path("contact/", views.submit_contact, name="submit_contact"),
     path("aide/", views.help_page, name="help"),
     path("langue/", views.set_language, name="set_language"),
+    path("confidentialite/", views.privacy, name="privacy"),
+    path("conditions-utilisation/", views.terms, name="terms"),
 ]

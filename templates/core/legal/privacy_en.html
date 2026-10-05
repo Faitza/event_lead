@@ -1,0 +1,59 @@
+{% extends "core/legal/_layout.html" %}
+{% block title %}Privacy policy{% endblock %}
+{% block meta_description %}What data EventLead keeps about organizers and guests, why, who it is shared with, and how to have it corrected or deleted.{% endblock %}
+{% block content %}{% with eyebrow="Your data" page_title="Privacy policy" intro="What we keep, why, and how to have it corrected or deleted." updated_label="Last updated:" %}{{ block.super }}{% endwith %}{% endblock %}
+{% block legal_body %}
+<h2>1. Who is responsible</h2>
+<p>The EventLead website is published by FAYaFATech, {{ CONTACT_ADDRESS }}. For any question about your data, write to <a href="mailto:{{ CONTACT_EMAIL }}">{{ CONTACT_EMAIL }}</a> or on WhatsApp at {{ CONTACT_PHONE }}.</p>
+
+<h2>2. The data we keep</h2>
+<ul>
+  <li><strong>Your account</strong>: first name, last name, email address, phone number and password (stored encrypted, we never see it). With Google sign-in, we only receive your name and email address.</li>
+  <li><strong>Guests of an event</strong>, added by the organizer: name, phone or email, answer, number of companions, chosen gift, table, arrival time on the day.</li>
+  <li><strong>Payments and contributions</strong>: payment method, amount, transaction reference and masked number (for example +509 **** 4455). The full card number never reaches us: it is entered on the payment provider's page.</li>
+  <li><strong>Album photos</strong> sent by guests. We remove the GPS location from each photo before saving it.</li>
+  <li><strong>Your messages</strong>: contact form, help requests and reviews.</li>
+  <li><strong>Technical data</strong>: IP address, used to block repeated submissions and in the site's error log.</li>
+</ul>
+
+<h2>3. Why we use it</h2>
+<ul>
+  <li>To run the service: send invitations, reminders and thank-you messages, record answers, reserve gifts, prepare the seating plan and the check-in at the door.</li>
+  <li>To collect payment for tickets, VIP Organizer access and contributions, and keep a record of each payment.</li>
+  <li>To answer your messages and help requests.</li>
+  <li>To protect the site against abuse and fix errors.</li>
+</ul>
+<p>We do not sell your data and we do not do targeted advertising. Partner ads shown on the site receive no personal data: they only see the number of views and clicks.</p>
+
+<h2>4. Who can see it</h2>
+<ul>
+  <li>The organizer of an event sees the guests, answers, gifts and contributions of that event.</li>
+  <li>The EventLead team, to run the site and answer help requests.</li>
+  <li>The providers the site needs, each for its own part: the site's host, MonCash, NatCash, Stripe (card) and PayPal for payments, Google for Google sign-in and fonts, OpenStreetMap for the venue map, jsDelivr for display files, WhatsApp and the email service for sending invitations.</li>
+</ul>
+<p>Some of these providers are located outside Haiti, in particular in the United States.</p>
+
+<h2>5. Cookies</h2>
+<p>The site only uses the cookies it needs to work: the session (to stay signed in), form protection and your chosen language (kept for one year). There are no analytics or advertising cookies.</p>
+
+<h2>6. How long</h2>
+<ul>
+  <li>Your account is kept as long as it exists. You can ask for it to be deleted at any time.</li>
+  <li>The guests, answers, gifts and photos of an event are kept as long as the organizer keeps the event. Deleting the event deletes them too.</li>
+  <li>Payments are kept as accounting records, even after an account is deleted.</li>
+  <li>Site backups keep a copy of the data for a few weeks, then they are replaced.</li>
+</ul>
+
+<h2>7. Your rights</h2>
+<p>You can ask to see your data, have it corrected or deleted, receive a copy, or object to its use. Write to <a href="mailto:{{ CONTACT_EMAIL }}">{{ CONTACT_EMAIL }}</a> with your name and the email address or phone number used on the site. We answer within one month.</p>
+<p>If you are a guest at an event, you can also contact the organizer who added you.</p>
+<p>If you live in the European Union, you can also contact your country's data protection authority.</p>
+
+<h2>8. Security</h2>
+<p>The site runs over HTTPS. Passwords are encrypted. Each guest's personal link cannot be guessed, and neither can the addresses of album photos.</p>
+
+<h2>9. Changes</h2>
+<p>If this policy changes, the date at the top of the page changes too. For an important change, we notify organizers by email.</p>
+
+<p class="mt-4 mb-0">See also: <a href="{% url 'core:terms' %}">Terms of use</a>.</p>
+{% endblock %}

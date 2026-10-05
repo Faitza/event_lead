@@ -28,5 +28,7 @@
   {% include "partials/_field.html" with field=form.password2 %}
   <button class="btn btn-primary w-100 btn-lg mt-2">{% if organizer %}{% trans "Continuer vers le paiement VIP" %}<i class="bi bi-arrow-right ms-2"></i>{% else %}{% trans "Créer mon compte" %}{% endif %}</button>
 </form>
+{% url 'core:terms' as terms_url %}{% url 'core:privacy' as privacy_url %}
+<p class="legal-note">{% blocktranslate trimmed %}En créant un compte, vous acceptez les <a href="{{ terms_url }}">conditions d'utilisation</a> et la <a href="{{ privacy_url }}">politique de confidentialité</a>.{% endblocktranslate %}</p>
 <p class="text-center text-muted small mt-4 mb-0">{% trans "Déjà inscrit ?" %} <a href="{% url 'accounts:login' %}" class="fw-semibold">{% trans "Se connecter" %}</a></p>
 {% endblock %}

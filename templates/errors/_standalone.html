@@ -5,7 +5,10 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>{% block title %}{% endblock %} | EventLead</title>
-  <link rel="icon" type="image/png" href="{% static 'img/favicon.png' %}">
+  <link rel="icon" href="{% static 'favicon.ico' %}" sizes="48x48">
+  <link rel="icon" type="image/png" sizes="32x32" href="{% static 'img/favicon-32.png' %}">
+  <link rel="icon" type="image/png" sizes="64x64" href="{% static 'img/favicon.png' %}">
+  <link rel="apple-touch-icon" href="{% static 'img/apple-touch-icon.png' %}">
   <style>
     body { margin: 0; min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 24px;
       background: #f6eef7; color: #2a1433; font-family: "Jost", "Segoe UI", Arial, sans-serif; }
@@ -16,7 +19,7 @@
     h1 { font: 700 26px "Old Standard TT", Georgia, serif; color: #45065C; margin: 0 0 12px; }
     p { font-size: 17px; line-height: 1.55; margin: 0 0 22px; color: #3d2547; }
     a.btn { display: inline-block; background: #45065C; color: #fff; text-decoration: none; padding: 12px 22px;
-      border-radius: 999px; font-weight: 600; margin: 4px; }
+      border-radius: 12px; font-weight: 600; margin: 4px; }
     a.btn.light { background: #fff; color: #45065C; border: 1px solid #45065C; }
     small { display: block; margin-top: 18px; color: #6b5573; font-size: 14px; }
     small a { color: #45065C; font-weight: 600; }

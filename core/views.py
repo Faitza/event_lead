@@ -1,3 +1,4 @@
+from datetime import date
 from itertools import zip_longest
 from urllib.parse import parse_qsl, urlencode, urlsplit, urlunsplit
 
@@ -6,6 +7,7 @@ from django.contrib import messages
 from django.shortcuts import redirect, render
 from django.urls import reverse
 from django.utils.http import url_has_allowed_host_and_scheme
+from django.utils.translation import get_language
 from django.utils.translation import gettext as _
 from django.utils.translation import gettext_lazy
 from django.views.decorators.http import require_POST
@@ -87,7 +89,7 @@ def submit_review(request):
     form = ReviewForm(request.POST)
     if form.is_valid():
         form.save()
-        messages.success(request, _("Merci pour votre avis."))
+        messages.success(request, _("Merci pour votre avis. Il sera publié après relecture par l'équipe."))
     else:
         messages.error(request, _("Votre avis n'a pas pu être enregistré. Vérifiez les champs."))
     return redirect(reverse("core:landing") + "#a-propos")
@@ -144,3 +146,24 @@ def set_language(request):
             request.user.language = code
             request.user.save(update_fields=["language"])
     return response
+
+
+# Pages légales : un gabarit complet par langue (texte long, plus simple à relire et à faire valider qu'en .po).
+LEGAL_UPDATED = date(2026, 10, 5)
+
+
+def _legal(request, page):
+    lang = (get_language() or "fr")[:2]
+    if lang not in ("fr", "en", "ht"):
+        lang = "fr"
+    return render(request, f"core/legal/{page}_{lang}.html", {"legal_updated": LEGAL_UPDATED})
+
+
+def privacy(request):
+    """Politique de confidentialité (données personnelles)."""
+    return _legal(request, "privacy")
+
+
+def terms(request):
+    """Conditions générales d'utilisation."""
+    return _legal(request, "terms")

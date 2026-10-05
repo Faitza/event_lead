@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% comment %}
+Mise en page commune des pages légales. Chaque langue a son propre gabarit (privacy_fr.html, terms_en.html, ...).
+Pour changer un texte : modifier les trois langues, puis LEGAL_UPDATED dans core/views.py.
+{% endcomment %}
+{% block content %}
+{% include "partials/_banner.html" with eyebrow=eyebrow title=page_title text=intro %}
+<section class="section pt-5">
+  <div class="container">
+    <article class="legal el-card">
+      <p class="legal-date">{{ updated_label }} {{ legal_updated|date:"j F Y" }}</p>
+      {% block legal_body %}{% endblock %}
+    </article>
+  </div>
+</section>
+{% endblock %}

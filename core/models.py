@@ -9,7 +9,7 @@ class Review(models.Model):
     name = models.CharField(_("nom"), max_length=100)
     stars = models.PositiveIntegerField(_("note"), validators=[MinValueValidator(1), MaxValueValidator(5)])
     text = models.TextField(_("avis"))
-    is_published = models.BooleanField(_("publié"), default=True)
+    is_published = models.BooleanField(_("publié"), default=False, help_text=_("Un avis envoyé depuis le site attend la validation de l'équipe avant d'apparaître sur l'accueil."))
     created_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:

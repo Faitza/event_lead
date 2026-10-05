@@ -1,6 +1,8 @@
 from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib import admin
+from django.shortcuts import redirect
+from django.templatetags.static import static as static_url
 from django.urls import include, path
 
 from core import views_errors
@@ -10,6 +12,8 @@ admin.site.site_title = "EventLead"
 admin.site.index_title = "Administration"
 
 urlpatterns = [
+    # Les navigateurs demandent /favicon.ico tout seuls : on renvoie vers l'icône tirée du logo original.
+    path("favicon.ico", lambda request: redirect(static_url("favicon.ico"), permanent=True)),
     path("sante/", views_errors.health, name="health"),
     path("journal/erreur-navigateur/", views_errors.browser_error, name="browser_error"),
     path("django-admin/", admin.site.urls),

@@ -1,0 +1,49 @@
+{% extends "core/legal/_layout.html" %}
+{% block title %}Terms of use{% endblock %}
+{% block meta_description %}The rules for using EventLead, for organizers, guests and ticket buyers.{% endblock %}
+{% block content %}{% with eyebrow="Site rules" page_title="Terms of use" intro="The rules that apply when you use EventLead." updated_label="Last updated:" %}{{ block.super }}{% endwith %}{% endblock %}
+{% block legal_body %}
+<h2>1. The service</h2>
+<p>EventLead is a website published by FAYaFATech, {{ CONTACT_ADDRESS }}. It lets you send invitations, follow answers, manage a gift list, sell tickets and receive contributions for an event. By using the site, you accept these terms.</p>
+
+<h2>2. Your account</h2>
+<ul>
+  <li>The information in your account must be accurate.</li>
+  <li>You are responsible for your password. If you think someone else is using it, change it and let us know.</li>
+  <li>A guest does not need an account: they answer with their personal link. This link must not be shared.</li>
+</ul>
+
+<h2>3. Organizers</h2>
+<ul>
+  <li>Organizers only add guests they know and who agree to receive their invitation by WhatsApp or email.</li>
+  <li>Organizers are responsible for what they publish: texts, photos, prices, venue and date of the event.</li>
+  <li>Publishing illegal, misleading or hateful content, or content that infringes someone else's rights, is forbidden, as is using the site to send unsolicited messages.</li>
+</ul>
+
+<h2>4. Prices and payments</h2>
+<ul>
+  <li>The price of an invitation, a ticket or VIP Organizer access is shown before payment.</li>
+  <li>Payments go through MonCash, NatCash, Stripe (card) or PayPal. Each payment gets a reference that you can find in your space.</li>
+  <li>Ticket refund conditions are set by the event organizer. If an event is cancelled, write to us and we will arrange the refund with the organizer.</li>
+  <li>A cash contribution is a gift to the organizer: it is not refundable, except in case of a payment error.</li>
+</ul>
+
+<h2>5. Gifts, photos and reviews</h2>
+<ul>
+  <li>A gift reserved on the list is a commitment to the organizer. EventLead does not sell or deliver gifts.</li>
+  <li>By adding a photo to an event album, you confirm you have the right to share it. The organizer and the EventLead team can remove it.</li>
+  <li>Reviews are read by the team before they are published. A fake, insulting or promotional review is not published.</li>
+</ul>
+
+<h2>6. Availability</h2>
+<p>We do our best to keep the site available and to back up your data regularly. The site may still be interrupted for maintenance or an outage. EventLead is not responsible for how the event itself goes, which remains the organizer's responsibility.</p>
+
+<h2>7. Suspension</h2>
+<p>We may suspend an account or remove content that does not follow these terms, after notifying the person when possible.</p>
+
+<h2>8. Personal data</h2>
+<p>How we use your data is explained in the <a href="{% url 'core:privacy' %}">privacy policy</a>.</p>
+
+<h2>9. Changes and applicable law</h2>
+<p>If these terms change, the date at the top of the page changes too. These terms are governed by Haitian law. For any question or complaint, write to <a href="mailto:{{ CONTACT_EMAIL }}">{{ CONTACT_EMAIL }}</a>.</p>
+{% endblock %}

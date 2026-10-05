@@ -1,0 +1,49 @@
+{% extends "core/legal/_layout.html" %}
+{% block title %}Conditions d'utilisation{% endblock %}
+{% block meta_description %}Les règles d'utilisation d'EventLead pour les organisateurs, les invités et les acheteurs de billets.{% endblock %}
+{% block content %}{% with eyebrow="Règles du site" page_title="Conditions d'utilisation" intro="Les règles qui s'appliquent quand vous utilisez EventLead." updated_label="Dernière mise à jour :" %}{{ block.super }}{% endwith %}{% endblock %}
+{% block legal_body %}
+<h2>1. Le service</h2>
+<p>EventLead est un site édité par FAYaFATech, {{ CONTACT_ADDRESS }}. Il permet d'envoyer des invitations, de suivre les réponses, de gérer une liste de cadeaux, de vendre des billets et de recevoir des contributions pour un événement. En utilisant le site, vous acceptez ces conditions.</p>
+
+<h2>2. Votre compte</h2>
+<ul>
+  <li>Les informations de votre compte doivent être exactes.</li>
+  <li>Vous êtes responsable de votre mot de passe. Si vous pensez qu'une autre personne l'utilise, changez-le et prévenez-nous.</li>
+  <li>Un invité n'a pas besoin de compte : il répond avec son lien personnel. Ce lien ne doit pas être partagé.</li>
+</ul>
+
+<h2>3. Les organisateurs</h2>
+<ul>
+  <li>L'organisateur n'ajoute que des invités qu'il connaît et qui acceptent de recevoir son invitation par WhatsApp ou par e-mail.</li>
+  <li>Il est responsable de ce qu'il publie : textes, photos, prix, lieu et date de l'événement.</li>
+  <li>Il est interdit de publier un contenu illégal, trompeur, haineux ou qui porte atteinte aux droits d'une autre personne, et d'utiliser le site pour envoyer des messages non sollicités.</li>
+</ul>
+
+<h2>4. Prix et paiements</h2>
+<ul>
+  <li>Le prix d'une invitation, d'un billet ou de l'accès Organisateur VIP est indiqué avant le paiement.</li>
+  <li>Les paiements passent par MonCash, NatCash, Stripe (carte) ou PayPal. Chaque paiement reçoit une référence que vous retrouvez dans votre espace.</li>
+  <li>Les conditions de remboursement d'un billet sont celles de l'organisateur de l'événement. Si un événement est annulé, écrivez-nous et nous voyons le remboursement avec l'organisateur.</li>
+  <li>Une contribution en argent est un don à l'organisateur : elle n'est pas remboursable, sauf erreur de paiement.</li>
+</ul>
+
+<h2>5. Cadeaux, photos et avis</h2>
+<ul>
+  <li>Un cadeau réservé sur la liste est un engagement envers l'organisateur. EventLead ne vend pas les cadeaux et ne les livre pas.</li>
+  <li>En ajoutant une photo à l'album d'un événement, vous confirmez avoir le droit de la partager. L'organisateur et l'équipe EventLead peuvent la retirer.</li>
+  <li>Les avis sont lus par l'équipe avant d'être publiés. Un avis faux, injurieux ou publicitaire n'est pas publié.</li>
+</ul>
+
+<h2>6. Disponibilité</h2>
+<p>Nous faisons notre possible pour que le site reste disponible et que vos données soient sauvegardées régulièrement. Le site peut toutefois être interrompu pour une maintenance ou une panne. EventLead n'est pas responsable du déroulement de l'événement lui-même, qui reste sous la responsabilité de l'organisateur.</p>
+
+<h2>7. Suspension</h2>
+<p>Nous pouvons suspendre un compte ou retirer un contenu qui ne respecte pas ces conditions, après avoir prévenu la personne quand c'est possible.</p>
+
+<h2>8. Données personnelles</h2>
+<p>La façon dont nous utilisons vos données est expliquée dans la <a href="{% url 'core:privacy' %}">politique de confidentialité</a>.</p>
+
+<h2>9. Modifications et droit applicable</h2>
+<p>Si ces conditions changent, la date en haut de la page change aussi. Ces conditions sont soumises au droit haïtien. Pour toute question ou réclamation, écrivez à <a href="mailto:{{ CONTACT_EMAIL }}">{{ CONTACT_EMAIL }}</a>.</p>
+{% endblock %}

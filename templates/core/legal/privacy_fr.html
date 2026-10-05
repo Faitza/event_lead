@@ -1,0 +1,59 @@
+{% extends "core/legal/_layout.html" %}
+{% block title %}Politique de confidentialité{% endblock %}
+{% block meta_description %}Quelles données EventLead garde sur les organisateurs et les invités, pourquoi, avec qui elles sont partagées et comment les faire corriger ou supprimer.{% endblock %}
+{% block content %}{% with eyebrow="Vos données" page_title="Politique de confidentialité" intro="Ce que nous gardons, pourquoi, et comment le faire corriger ou supprimer." updated_label="Dernière mise à jour :" %}{{ block.super }}{% endwith %}{% endblock %}
+{% block legal_body %}
+<h2>1. Qui est responsable</h2>
+<p>Le site EventLead est édité par FAYaFATech, {{ CONTACT_ADDRESS }}. Pour toute question sur vos données, écrivez à <a href="mailto:{{ CONTACT_EMAIL }}">{{ CONTACT_EMAIL }}</a> ou sur WhatsApp au {{ CONTACT_PHONE }}.</p>
+
+<h2>2. Les données que nous gardons</h2>
+<ul>
+  <li><strong>Votre compte</strong> : prénom, nom, adresse e-mail, téléphone et mot de passe (enregistré chiffré, nous ne le voyons jamais). Avec la connexion Google, nous recevons seulement votre nom et votre adresse e-mail.</li>
+  <li><strong>Les invités d'un événement</strong>, ajoutés par l'organisateur : nom, téléphone ou e-mail, réponse, nombre d'accompagnants, cadeau choisi, table, heure d'arrivée le jour J.</li>
+  <li><strong>Les paiements et contributions</strong> : mode de paiement, montant, référence de la transaction et numéro masqué (par exemple +509 **** 4455). Le numéro complet de carte n'arrive jamais chez nous : il est saisi chez le prestataire de paiement.</li>
+  <li><strong>Les photos de l'album</strong> envoyées par les invités. Nous retirons la position GPS de chaque photo avant de l'enregistrer.</li>
+  <li><strong>Vos messages</strong> : formulaire de contact, demandes d'aide et avis.</li>
+  <li><strong>Des données techniques</strong> : adresse IP, utilisée pour bloquer les envois répétés et pour le journal des erreurs du site.</li>
+</ul>
+
+<h2>3. Pourquoi nous les utilisons</h2>
+<ul>
+  <li>Faire fonctionner le service : envoyer les invitations, les relances et les remerciements, enregistrer les réponses, réserver les cadeaux, préparer le plan de table et le pointage à l'entrée.</li>
+  <li>Encaisser les billets, l'accès Organisateur VIP et les contributions, et garder une trace de chaque paiement.</li>
+  <li>Répondre à vos messages et à vos demandes d'aide.</li>
+  <li>Protéger le site contre les abus et corriger les erreurs.</li>
+</ul>
+<p>Nous ne vendons pas vos données et nous ne faisons pas de publicité ciblée. Les publicités de partenaires affichées sur le site ne reçoivent aucune donnée personnelle : elles voient seulement le nombre de vues et de clics.</p>
+
+<h2>4. Qui peut les voir</h2>
+<ul>
+  <li>L'organisateur d'un événement voit les invités, les réponses, les cadeaux et les contributions de son événement.</li>
+  <li>L'équipe EventLead, pour faire fonctionner le site et répondre aux demandes d'aide.</li>
+  <li>Les prestataires dont le site a besoin, chacun pour sa partie : l'hébergeur du site, MonCash, NatCash, Stripe (carte) et PayPal pour les paiements, Google pour la connexion avec un compte Google et pour les polices d'écriture, OpenStreetMap pour la carte du lieu, jsDelivr pour les fichiers d'affichage, WhatsApp et le service d'e-mail pour l'envoi des invitations.</li>
+</ul>
+<p>Certains de ces prestataires sont situés hors d'Haïti, notamment aux États-Unis.</p>
+
+<h2>5. Cookies</h2>
+<p>Le site utilise seulement les cookies nécessaires à son fonctionnement : la session (pour rester connecté), la protection des formulaires et la langue choisie (gardée un an). Il n'y a pas de cookie de mesure d'audience ni de publicité.</p>
+
+<h2>6. Combien de temps</h2>
+<ul>
+  <li>Votre compte est gardé tant qu'il existe. Vous pouvez demander sa suppression à tout moment.</li>
+  <li>Les invités, réponses, cadeaux et photos d'un événement sont gardés tant que l'organisateur garde l'événement. Supprimer l'événement les supprime aussi.</li>
+  <li>Les paiements sont gardés comme pièces comptables, même après la suppression d'un compte.</li>
+  <li>Les sauvegardes du site gardent une copie des données pendant quelques semaines, puis elles sont remplacées.</li>
+</ul>
+
+<h2>7. Vos droits</h2>
+<p>Vous pouvez demander à voir vos données, à les faire corriger, à les faire supprimer, à en recevoir une copie, ou vous opposer à leur utilisation. Écrivez à <a href="mailto:{{ CONTACT_EMAIL }}">{{ CONTACT_EMAIL }}</a> en précisant votre nom et l'adresse e-mail ou le numéro utilisé sur le site. Nous répondons dans un délai d'un mois.</p>
+<p>Si vous êtes invité à un événement, vous pouvez aussi vous adresser directement à l'organisateur qui vous a ajouté.</p>
+<p>Si vous vivez dans l'Union européenne, vous pouvez aussi saisir l'autorité de protection des données de votre pays (en France, la CNIL).</p>
+
+<h2>8. Sécurité</h2>
+<p>Le site fonctionne en HTTPS. Les mots de passe sont chiffrés. Le lien personnel de chaque invité est impossible à deviner, et les adresses des photos de l'album aussi.</p>
+
+<h2>9. Modifications</h2>
+<p>Si cette politique change, la date en haut de la page change aussi. En cas de changement important, nous prévenons les organisateurs par e-mail.</p>
+
+<p class="mt-4 mb-0">Voir aussi : <a href="{% url 'core:terms' %}">Conditions d'utilisation</a>.</p>
+{% endblock %}

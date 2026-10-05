@@ -743,6 +743,10 @@ msgstr "review"
 msgid "publié"
 msgstr "published"
 
+#: core/models.py:12
+msgid "Un avis envoyé depuis le site attend la validation de l'équipe avant d'apparaître sur l'accueil."
+msgstr "A review sent from the site waits for the team's approval before it appears on the home page."
+
 #: core/models.py:27 events/models.py:306
 msgid "email"
 msgstr "email"
@@ -823,63 +827,63 @@ msgstr "Video refused: choose an MP4, WebM or MOV file."
 msgid "Vidéo trop lourde (40 Mo au plus). Raccourcissez-la ou compressez-la avant de l'envoyer."
 msgstr "Video too large (40 MB at most). Shorten or compress it before sending."
 
-#: core/views.py:25
+#: core/views.py:26
 msgid "Un tableau de bord pour tout piloter"
 msgstr "A dashboard to manage everything"
 
-#: core/views.py:25
+#: core/views.py:26
 msgid "Mariage, gala, baptême ou conférence : créez l'événement, localisez le lieu sur une carte et gardez la main du début à la fin."
 msgstr "Wedding, gala, christening or conference: create the event, locate the venue on a map and stay in control from start to finish."
 
-#: core/views.py:26
+#: core/views.py:27
 msgid "Invitations WhatsApp et e-mail"
 msgstr "WhatsApp and e-mail invitations"
 
-#: core/views.py:26
+#: core/views.py:27
 msgid "Chaque invité reçoit un lien personnel, sans mot de passe, sur le canal qu'il utilise vraiment."
 msgstr "Each guest receives a personal link, with no password, on the channel they really use."
 
-#: core/views.py:27
+#: core/views.py:28
 msgid "Qui vient, avec qui"
 msgstr "Who is coming, and with whom"
 
-#: core/views.py:27
+#: core/views.py:28
 msgid "Présences, accompagnants et cadeaux se mettent à jour à chaque réponse : sachez exactement combien de chaises préparer."
 msgstr "Attendance, companions and gifts update with every reply: know exactly how many chairs to prepare."
 
-#: core/views.py:28
+#: core/views.py:29
 msgid "Un cadeau choisi est aussitôt verrouillé pour les autres. La liste reste juste jusqu'au jour J."
 msgstr "Once a gift is chosen, it is immediately locked for everyone else. The list stays accurate until the big day."
 
-#: core/views.py:29
+#: core/views.py:30
 msgid "Billetterie et paiements locaux"
 msgstr "Ticketing and local payments"
 
-#: core/views.py:29
+#: core/views.py:30
 msgid "Vendez vos billets et encaissez avec MonCash, NatCash, carte ou PayPal, avec les prix en gourdes et en dollars."
 msgstr "Sell your tickets and collect payments with MonCash, NatCash, card or PayPal, with prices in gourdes and dollars."
 
-#: core/views.py:30
+#: core/views.py:31
 msgid "Une vitrine pour vos partenaires"
 msgstr "A showcase for your partners"
 
-#: core/views.py:30
+#: core/views.py:31
 msgid "Traiteurs, fleuristes, photographes : leur publicité s'affiche après chaque réponse, et vous suivez les vues et les clics."
 msgstr "Caterers, florists, photographers: their ad appears after each reply, and you follow the views and clicks."
 
-#: core/views.py:90
-msgid "Merci pour votre avis."
-msgstr "Thank you for your review."
+#: core/views.py:91
+msgid "Merci pour votre avis. Il sera publié après relecture par l'équipe."
+msgstr "Thank you for your review. It will be published once the team has read it."
 
-#: core/views.py:92
+#: core/views.py:93
 msgid "Votre avis n'a pas pu être enregistré. Vérifiez les champs."
 msgstr "Your review could not be saved. Check the fields."
 
-#: core/views.py:102
+#: core/views.py:103
 msgid "Message envoyé. Notre équipe vous répondra rapidement."
 msgstr "Message sent. Our team will reply to you shortly."
 
-#: core/views.py:104
+#: core/views.py:105
 msgid "Le message n'a pas pu être envoyé. Vérifiez les champs."
 msgstr "The message could not be sent. Check the fields."
 
@@ -2305,7 +2309,7 @@ msgstr "Log in"
 msgid "Administrateur, Organisateur ou invité inscrit"
 msgstr "Administrator, Organizer or registered guest"
 
-#: templates/accounts/login.html:15 templates/accounts/register.html:31
+#: templates/accounts/login.html:15 templates/accounts/register.html:33
 msgid "Se connecter"
 msgstr "Log in"
 
@@ -2369,7 +2373,11 @@ msgstr "Continue to VIP payment"
 msgid "Créer mon compte"
 msgstr "Create my account"
 
-#: templates/accounts/register.html:31
+#: templates/accounts/register.html:32
+msgid "En créant un compte, vous acceptez les <a href=\"%(terms_url)s\">conditions d'utilisation</a> et la <a href=\"%(privacy_url)s\">politique de confidentialité</a>."
+msgstr "By creating an account, you accept the <a href=\"%(terms_url)s\">terms of use</a> and the <a href=\"%(privacy_url)s\">privacy policy</a>."
+
+#: templates/accounts/register.html:33
 msgid "Déjà inscrit ?"
 msgstr "Already registered?"
 
@@ -2437,19 +2445,19 @@ msgstr "No offers at the moment."
 msgid "EventLead, la plateforme de gestion d'événements pour Haïti et la Caraïbe : invitations WhatsApp et e-mail, liste de cadeaux, suivi en temps réel."
 msgstr "EventLead, the event management platform for Haiti and the Caribbean: WhatsApp and e-mail invitations, gift list, real-time tracking."
 
-#: templates/base.html:19
+#: templates/base.html:22
 msgid "La connexion a échoué. Vérifiez votre réseau, la page réessaie toute seule."
 msgstr "The connection failed. Check your network; the page will try again on its own."
 
-#: templates/base.html:19
+#: templates/base.html:22
 msgid "Le serveur met trop de temps à répondre. Réessayez dans un instant."
 msgstr "The server is taking too long to answer. Try again in a moment."
 
-#: templates/base.html:19
+#: templates/base.html:22
 msgid "Trop de demandes en peu de temps. Patientez une minute."
 msgstr "Too many requests in a short time. Please wait a minute."
 
-#: templates/base.html:19
+#: templates/base.html:22
 msgid "Connexion rétablie."
 msgstr "Connection restored."
 
@@ -2577,7 +2585,7 @@ msgstr "EventLead highlights"
 msgid "Sans compte pour l'invité"
 msgstr "No account needed for guests"
 
-#: templates/core/landing.html:43 core/views.py:28
+#: templates/core/landing.html:43 core/views.py:29
 msgid "Cadeaux sans doublon"
 msgstr "No duplicate gifts"
 
@@ -2931,7 +2939,7 @@ msgstr "Check-in"
 msgid "Relances"
 msgstr "Reminders"
 
-#: templates/dashboard/base_dashboard.html:18 templates/dashboard/seating/index.html:3 templates/dashboard/seating/index.html:6 templates/dashboard/seating/print.html:36
+#: templates/dashboard/base_dashboard.html:18 templates/dashboard/seating/index.html:3 templates/dashboard/seating/index.html:6 templates/dashboard/seating/print.html:39
 msgid "Plan de table"
 msgstr "Seating plan"
 
@@ -2983,7 +2991,7 @@ msgstr "Log out"
 msgid "Menu"
 msgstr "Menu"
 
-#: templates/dashboard/base_dashboard.html:37 templates/dashboard/checkin/event.html:28 templates/dashboard/events/detail.html:17 templates/dashboard/reminders/event.html:20 templates/dashboard/seating/event.html:22 templates/dashboard/seating/print.html:37
+#: templates/dashboard/base_dashboard.html:37 templates/dashboard/checkin/event.html:28 templates/dashboard/events/detail.html:17 templates/dashboard/reminders/event.html:20 templates/dashboard/seating/event.html:22 templates/dashboard/seating/print.html:40
 msgid "l j F Y"
 msgstr "l, F j, Y"
 
@@ -3838,8 +3846,8 @@ msgstr[0] "%(counter)s VIP organizer"
 msgstr[1] "%(counter)s VIP organizers"
 
 #: templates/dashboard/inbox.html:5
-msgid "Formulaire de contact et avis publiés sur la page d'accueil."
-msgstr "Contact form messages and reviews published on the home page."
+msgid "Formulaire de contact et avis. Un avis n'apparaît sur la page d'accueil qu'après avoir cliqué sur Publier."
+msgstr "Contact form and reviews. A review only appears on the home page after you click Publish."
 
 #: templates/dashboard/inbox.html:9
 msgid "Messages de contact"
@@ -3860,6 +3868,10 @@ msgstr "No messages."
 #: templates/dashboard/inbox.html:25
 msgid "Avis"
 msgstr "Reviews"
+
+#: templates/dashboard/inbox.html:29
+msgid "En attente de validation"
+msgstr "Awaiting approval"
 
 #: templates/dashboard/inbox.html:30
 msgid "Masquer"
@@ -4207,11 +4219,11 @@ msgstr "No guest has confirmed their attendance yet."
 msgid "Glissez un invité sur une table. Un invité et ses accompagnants restent ensemble."
 msgstr "Drag a guest onto a table. A guest and their companions stay together."
 
-#: templates/dashboard/seating/_board.html:41 templates/dashboard/seating/print.html:41
+#: templates/dashboard/seating/_board.html:41 templates/dashboard/seating/print.html:44
 msgid "Scène et piste de danse"
 msgstr "Stage and dance floor"
 
-#: templates/dashboard/seating/_board.html:49 templates/dashboard/seating/print.html:46
+#: templates/dashboard/seating/_board.html:49 templates/dashboard/seating/print.html:49
 msgid "Table %(n)s"
 msgstr "Table %(n)s"
 
@@ -4243,7 +4255,7 @@ msgstr "Remove %(name)s from the table"
 msgid "Déposez des invités ici"
 msgstr "Drop guests here"
 
-#: templates/dashboard/seating/_board.html:73 templates/dashboard/seating/_event_card.html:9 templates/dashboard/seating/print.html:54
+#: templates/dashboard/seating/_board.html:73 templates/dashboard/seating/_event_card.html:9 templates/dashboard/seating/print.html:57
 msgid "Aucune table pour l'instant"
 msgstr "No tables yet"
 
@@ -4331,15 +4343,15 @@ msgstr "Seat the guests who confirmed at their table, with their companions. Cho
 msgid "Aucun événement n'a encore d'invités qui ont confirmé leur présence."
 msgstr "No event has guests who confirmed their attendance yet."
 
-#: templates/dashboard/seating/print.html:39
+#: templates/dashboard/seating/print.html:42
 msgid "Imprimer"
 msgstr "Print"
 
-#: templates/dashboard/seating/print.html:48
+#: templates/dashboard/seating/print.html:51
 msgid "Aucun invité"
 msgstr "No guests"
 
-#: templates/dashboard/seating/print.html:58
+#: templates/dashboard/seating/print.html:61
 msgid "Sans table : %(counter)s invité"
 msgid_plural "Sans table : %(counter)s invités"
 msgstr[0] "No table: %(counter)s guest"
@@ -5164,6 +5176,18 @@ msgstr "Pro area"
 #: templates/partials/_footer.html:35
 msgid "Tous droits réservés."
 msgstr "All rights reserved."
+
+#: templates/partials/_footer.html:36
+msgid "Informations légales"
+msgstr "Legal information"
+
+#: templates/partials/_footer.html:37
+msgid "Confidentialité"
+msgstr "Privacy"
+
+#: templates/partials/_footer.html:38
+msgid "Conditions d'utilisation"
+msgstr "Terms of use"
 
 #: templates/partials/_google_button.html:4 templates/partials/_google_button.html:6
 msgid "Continuer avec Google"

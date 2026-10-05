@@ -743,6 +743,10 @@ msgstr "opinyon"
 msgid "publié"
 msgstr "pibliye"
 
+#: core/models.py:12
+msgid "Un avis envoyé depuis le site attend la validation de l'équipe avant d'apparaître sur l'accueil."
+msgstr "Yon avi ki soti sou sit la ap tann ekip la valide l anvan li parèt sou paj akèy la."
+
 #: core/models.py:27 events/models.py:306
 msgid "email"
 msgstr "imèl"
@@ -823,63 +827,63 @@ msgstr "Videyo a refize : chwazi yon fichye MP4, WebM oswa MOV."
 msgid "Vidéo trop lourde (40 Mo au plus). Raccourcissez-la ou compressez-la avant de l'envoyer."
 msgstr "Videyo a twò lou (40 Mo pou pi plis). Fè l pi kout oswa konprese l anvan w voye l."
 
-#: core/views.py:25
+#: core/views.py:26
 msgid "Un tableau de bord pour tout piloter"
 msgstr "Yon tablo bò pou jere tout bagay"
 
-#: core/views.py:25
+#: core/views.py:26
 msgid "Mariage, gala, baptême ou conférence : créez l'événement, localisez le lieu sur une carte et gardez la main du début à la fin."
 msgstr "Maryaj, gala, batèm oswa konferans : kreye evènman an, make kote l ap fèt la sou yon kat epi rete responsab depi nan kòmansman jiska lafen."
 
-#: core/views.py:26
+#: core/views.py:27
 msgid "Invitations WhatsApp et e-mail"
 msgstr "Envitasyon WhatsApp ak imèl"
 
-#: core/views.py:26
+#: core/views.py:27
 msgid "Chaque invité reçoit un lien personnel, sans mot de passe, sur le canal qu'il utilise vraiment."
 msgstr "Chak envite resevwa yon lyen pèsonèl, san modpas, sou kanal li itilize vre a."
 
-#: core/views.py:27
+#: core/views.py:28
 msgid "Qui vient, avec qui"
 msgstr "Kiyès k ap vini, ak ki moun"
 
-#: core/views.py:27
+#: core/views.py:28
 msgid "Présences, accompagnants et cadeaux se mettent à jour à chaque réponse : sachez exactement combien de chaises préparer."
 msgstr "Prezans, moun k ap akonpanye yo ak kado yo mete ajou a chak repons : konnen egzakteman konbyen chèz pou prepare."
 
-#: core/views.py:28
+#: core/views.py:29
 msgid "Un cadeau choisi est aussitôt verrouillé pour les autres. La liste reste juste jusqu'au jour J."
 msgstr "Le yon kado chwazi, li bloke touswit pou lòt yo. Lis la rete jis jiska jou J a."
 
-#: core/views.py:29
+#: core/views.py:30
 msgid "Billetterie et paiements locaux"
 msgstr "Biyè ak peman lokal"
 
-#: core/views.py:29
+#: core/views.py:30
 msgid "Vendez vos billets et encaissez avec MonCash, NatCash, carte ou PayPal, avec les prix en gourdes et en dollars."
 msgstr "Vann biyè ou yo epi ankese ak MonCash, NatCash, kat bankè oswa PayPal, ak pri an goud ak an dola."
 
-#: core/views.py:30
+#: core/views.py:31
 msgid "Une vitrine pour vos partenaires"
 msgstr "Yon vitrin pou patnè ou yo"
 
-#: core/views.py:30
+#: core/views.py:31
 msgid "Traiteurs, fleuristes, photographes : leur publicité s'affiche après chaque réponse, et vous suivez les vues et les clics."
 msgstr "Tretè, machann flè, fotograf : piblisite yo parèt apre chak repons, epi ou swiv kantite vi ak klik yo."
 
-#: core/views.py:90
-msgid "Merci pour votre avis."
-msgstr "Mèsi pou opinyon ou."
+#: core/views.py:91
+msgid "Merci pour votre avis. Il sera publié après relecture par l'équipe."
+msgstr "Mèsi pou opinyon ou. N ap pibliye l lè ekip la fin li l."
 
-#: core/views.py:92
+#: core/views.py:93
 msgid "Votre avis n'a pas pu être enregistré. Vérifiez les champs."
 msgstr "Opinyon ou pa t ka anrejistre. Verifye chan yo."
 
-#: core/views.py:102
+#: core/views.py:103
 msgid "Message envoyé. Notre équipe vous répondra rapidement."
 msgstr "Mesaj la voye. Ekip nou an ap reponn ou byento."
 
-#: core/views.py:104
+#: core/views.py:105
 msgid "Le message n'a pas pu être envoyé. Vérifiez les champs."
 msgstr "Mesaj la pa t ka voye. Verifye chan yo."
 
@@ -2305,7 +2309,7 @@ msgstr "Konekte"
 msgid "Administrateur, Organisateur ou invité inscrit"
 msgstr "Administratè, Òganizatè oswa envite ki enskri"
 
-#: templates/accounts/login.html:15 templates/accounts/register.html:31
+#: templates/accounts/login.html:15 templates/accounts/register.html:33
 msgid "Se connecter"
 msgstr "Konekte"
 
@@ -2369,7 +2373,11 @@ msgstr "Kontinye pou peman VIP la"
 msgid "Créer mon compte"
 msgstr "Kreye kont mwen"
 
-#: templates/accounts/register.html:31
+#: templates/accounts/register.html:32
+msgid "En créant un compte, vous acceptez les <a href=\"%(terms_url)s\">conditions d'utilisation</a> et la <a href=\"%(privacy_url)s\">politique de confidentialité</a>."
+msgstr "Lè w kreye yon kont, ou aksepte <a href=\"%(terms_url)s\">kondisyon itilizasyon</a> yo ak <a href=\"%(privacy_url)s\">règ sou done pèsonèl</a> yo."
+
+#: templates/accounts/register.html:33
 msgid "Déjà inscrit ?"
 msgstr "Ou deja enskri ?"
 
@@ -2437,19 +2445,19 @@ msgstr "Pa gen okenn òf pou kounye a."
 msgid "EventLead, la plateforme de gestion d'événements pour Haïti et la Caraïbe : invitations WhatsApp et e-mail, liste de cadeaux, suivi en temps réel."
 msgstr "EventLead, platfòm pou jere evènman an Ayiti ak nan Karayib la : envitasyon sou WhatsApp ak imèl, lis kado, swivi an tan reyèl."
 
-#: templates/base.html:19
+#: templates/base.html:22
 msgid "La connexion a échoué. Vérifiez votre réseau, la page réessaie toute seule."
 msgstr "Koneksyon an pa pase. Tcheke rezo w la, paj la ap eseye ankò poukont li."
 
-#: templates/base.html:19
+#: templates/base.html:22
 msgid "Le serveur met trop de temps à répondre. Réessayez dans un instant."
 msgstr "Sèvè a pran twòp tan pou l reponn. Eseye ankò nan yon ti moman."
 
-#: templates/base.html:19
+#: templates/base.html:22
 msgid "Trop de demandes en peu de temps. Patientez une minute."
 msgstr "Twòp demann nan yon ti tan. Tann yon minit."
 
-#: templates/base.html:19
+#: templates/base.html:22
 msgid "Connexion rétablie."
 msgstr "Koneksyon an tounen."
 
@@ -2577,7 +2585,7 @@ msgstr "Pwen fò EventLead yo"
 msgid "Sans compte pour l'invité"
 msgstr "San kont pou envite a"
 
-#: templates/core/landing.html:43 core/views.py:28
+#: templates/core/landing.html:43 core/views.py:29
 msgid "Cadeaux sans doublon"
 msgstr "Kado san doub"
 
@@ -2931,7 +2939,7 @@ msgstr "Kontwòl antre"
 msgid "Relances"
 msgstr "Rapèl"
 
-#: templates/dashboard/base_dashboard.html:18 templates/dashboard/seating/index.html:3 templates/dashboard/seating/index.html:6 templates/dashboard/seating/print.html:36
+#: templates/dashboard/base_dashboard.html:18 templates/dashboard/seating/index.html:3 templates/dashboard/seating/index.html:6 templates/dashboard/seating/print.html:39
 msgid "Plan de table"
 msgstr "Plan tab yo"
 
@@ -2983,7 +2991,7 @@ msgstr "Dekonekte"
 msgid "Menu"
 msgstr "Meni"
 
-#: templates/dashboard/base_dashboard.html:37 templates/dashboard/checkin/event.html:28 templates/dashboard/events/detail.html:17 templates/dashboard/reminders/event.html:20 templates/dashboard/seating/event.html:22 templates/dashboard/seating/print.html:37
+#: templates/dashboard/base_dashboard.html:37 templates/dashboard/checkin/event.html:28 templates/dashboard/events/detail.html:17 templates/dashboard/reminders/event.html:20 templates/dashboard/seating/event.html:22 templates/dashboard/seating/print.html:40
 msgid "l j F Y"
 msgstr "l j F Y"
 
@@ -3838,8 +3846,8 @@ msgstr[0] "%(counter)s Òganizatè VIP"
 msgstr[1] "%(counter)s Òganizatè VIP"
 
 #: templates/dashboard/inbox.html:5
-msgid "Formulaire de contact et avis publiés sur la page d'accueil."
-msgstr "Mesaj fòm kontak la ak opinyon ki pibliye sou paj akèy la."
+msgid "Formulaire de contact et avis. Un avis n'apparaît sur la page d'accueil qu'après avoir cliqué sur Publier."
+msgstr "Fòmilè kontak ak avi. Yon avi parèt sou paj akèy la sèlman apre ou klike sou Pibliye."
 
 #: templates/dashboard/inbox.html:9
 msgid "Messages de contact"
@@ -3860,6 +3868,10 @@ msgstr "Pa gen mesaj."
 #: templates/dashboard/inbox.html:25
 msgid "Avis"
 msgstr "Opinyon"
+
+#: templates/dashboard/inbox.html:29
+msgid "En attente de validation"
+msgstr "Ap tann validasyon"
 
 #: templates/dashboard/inbox.html:30
 msgid "Masquer"
@@ -4207,11 +4219,11 @@ msgstr "Pa gen envite ki konfime prezans li ankò."
 msgid "Glissez un invité sur une table. Un invité et ses accompagnants restent ensemble."
 msgstr "Glise yon envite sou yon tab. Yon envite ak moun k ap akonpanye l yo rete ansanm."
 
-#: templates/dashboard/seating/_board.html:41 templates/dashboard/seating/print.html:41
+#: templates/dashboard/seating/_board.html:41 templates/dashboard/seating/print.html:44
 msgid "Scène et piste de danse"
 msgstr "Sèn ak pis dans"
 
-#: templates/dashboard/seating/_board.html:49 templates/dashboard/seating/print.html:46
+#: templates/dashboard/seating/_board.html:49 templates/dashboard/seating/print.html:49
 msgid "Table %(n)s"
 msgstr "Tab %(n)s"
 
@@ -4243,7 +4255,7 @@ msgstr "Retire %(name)s sou tab la"
 msgid "Déposez des invités ici"
 msgstr "Depoze envite isit la"
 
-#: templates/dashboard/seating/_board.html:73 templates/dashboard/seating/_event_card.html:9 templates/dashboard/seating/print.html:54
+#: templates/dashboard/seating/_board.html:73 templates/dashboard/seating/_event_card.html:9 templates/dashboard/seating/print.html:57
 msgid "Aucune table pour l'instant"
 msgstr "Poko gen tab"
 
@@ -4331,15 +4343,15 @@ msgstr "Plase envite ki konfime yo nan tab yo, ansanm ak moun k ap akonpanye yo.
 msgid "Aucun événement n'a encore d'invités qui ont confirmé leur présence."
 msgstr "Pa gen evènman ki gen envite ki konfime prezans yo ankò."
 
-#: templates/dashboard/seating/print.html:39
+#: templates/dashboard/seating/print.html:42
 msgid "Imprimer"
 msgstr "Enprime"
 
-#: templates/dashboard/seating/print.html:48
+#: templates/dashboard/seating/print.html:51
 msgid "Aucun invité"
 msgstr "Pa gen envite"
 
-#: templates/dashboard/seating/print.html:58
+#: templates/dashboard/seating/print.html:61
 msgid "Sans table : %(counter)s invité"
 msgid_plural "Sans table : %(counter)s invités"
 msgstr[0] "San tab : %(counter)s envite"
@@ -5164,6 +5176,18 @@ msgstr "Espas pwofesyonèl"
 #: templates/partials/_footer.html:35
 msgid "Tous droits réservés."
 msgstr "Tout dwa rezève."
+
+#: templates/partials/_footer.html:36
+msgid "Informations légales"
+msgstr "Enfòmasyon legal"
+
+#: templates/partials/_footer.html:37
+msgid "Confidentialité"
+msgstr "Done pèsonèl"
+
+#: templates/partials/_footer.html:38
+msgid "Conditions d'utilisation"
+msgstr "Kondisyon itilizasyon"
 
 #: templates/partials/_google_button.html:4 templates/partials/_google_button.html:6
 msgid "Continuer avec Google"

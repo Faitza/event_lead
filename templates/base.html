@@ -6,7 +6,10 @@
   <title>{% block title %}EventLead{% endblock %} | EventLead</title>
   <meta name="description" content="{% block meta_description %}{% trans "EventLead, la plateforme de gestion d'événements pour Haïti et la Caraïbe : invitations WhatsApp et e-mail, liste de cadeaux, suivi en temps réel." %}{% endblock %}">
   <meta name="theme-color" content="#45065C">
-  <link rel="icon" type="image/png" href="{% static 'img/favicon.png' %}">
+  <link rel="icon" href="{% static 'favicon.ico' %}" sizes="48x48">
+  <link rel="icon" type="image/png" sizes="32x32" href="{% static 'img/favicon-32.png' %}">
+  <link rel="icon" type="image/png" sizes="64x64" href="{% static 'img/favicon.png' %}">
+  <link rel="apple-touch-icon" href="{% static 'img/apple-touch-icon.png' %}">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Old+Standard+TT:ital,wght@0,400;0,700;1,400&family=Jost:wght@400..600&display=swap" rel="stylesheet">

@@ -4,7 +4,10 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>{% blocktranslate trimmed with titre=event.title %}Plan de table - {{ titre }}{% endblocktranslate %}</title>
-  <link rel="icon" type="image/png" href="{% static 'img/favicon.png' %}">
+  <link rel="icon" href="{% static 'favicon.ico' %}" sizes="48x48">
+  <link rel="icon" type="image/png" sizes="32x32" href="{% static 'img/favicon-32.png' %}">
+  <link rel="icon" type="image/png" sizes="64x64" href="{% static 'img/favicon.png' %}">
+  <link rel="apple-touch-icon" href="{% static 'img/apple-touch-icon.png' %}">
   <style>
     :root { --violet: #45065C; --night: #2C033B; --gold: #B8962A; --line: #D9CDE0; }
     * { box-sizing: border-box; }
@@ -12,7 +15,7 @@
     h1 { font-family: "Old Standard TT", Georgia, serif; font-weight: 500; color: var(--night); margin: 0 0 4px; font-size: 28px; }
     .sub { color: #6B7280; margin: 0 0 20px; }
     .bar { display: flex; gap: 12px; align-items: center; justify-content: space-between; margin-bottom: 18px; flex-wrap: wrap; }
-    .bar button { background: var(--violet); color: #fff; border: 0; border-radius: 999px; padding: 10px 22px; font-size: 15px; cursor: pointer; }
+    .bar button { background: var(--violet); color: #fff; border: 0; border-radius: 12px; padding: 10px 22px; font-size: 15px; cursor: pointer; }
     .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 14px; }
     .tbl { border: 1px solid var(--line); border-radius: 12px; padding: 12px 14px; break-inside: avoid; }
     .tbl h2 { display: flex; align-items: center; gap: 10px; font-size: 16px; margin: 0 0 8px; color: var(--night); }
