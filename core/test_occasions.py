@@ -1,10 +1,17 @@
 """Tests des tuiles « Pour chaque occasion » de l'accueil : une tuile par catégorie, photo modifiable par l'équipe."""
+import importlib.util
 import os
+import sys
+import tempfile
 from datetime import timedelta
+from pathlib import Path
 from unittest import mock
 
+from django.conf import settings
+from django.contrib.staticfiles import finders
 from django.core.files.uploadedfile import SimpleUploadedFile
-from django.test import TestCase, override_settings
+from django.template.defaultfilters import slugify
+from django.test import SimpleTestCase, TestCase, override_settings
 from django.urls import reverse
 from django.utils import timezone, translation
 from PIL import Image
@@ -172,6 +179,99 @@ class DefaultCategoriesTests(TestCase):
 
     def test_button_is_post_only(self):
         self.assertEqual(self.client.get(reverse("dashboard:category_add_defaults")).status_code, 405)
+
+
+class DeliveredTilePhotosTests(TestCase):
+    """Chaque catégorie par défaut a sa photo livrée avec le site (static/img/categories/<identifiant>.jpg)."""
+
+    def test_every_default_category_has_a_4_3_photo_of_a_readable_size(self):
+        for name, icon in DEFAULT_CATEGORIES:
+            slug = slugify(name)
+            path = finders.find("img/categories/%s.jpg" % slug)
+            self.assertTrue(path, "photo manquante pour %s (static/img/categories/%s.jpg)" % (name, slug))
+            with Image.open(path) as photo:
+                self.assertEqual(photo.format, "JPEG", slug)
+                self.assertGreaterEqual(photo.width, 480, slug)
+                self.assertGreaterEqual(photo.height, 360, slug)
+                self.assertAlmostEqual(photo.width / photo.height, 4 / 3, delta=0.01, msg=slug)
+
+    def test_every_delivered_photo_is_noted_in_the_credits_file(self):
+        credits = (Path(settings.BASE_DIR) / "docs" / "credits-photos.md").read_text(encoding="utf-8")
+        for name, icon in DEFAULT_CATEGORIES:
+            self.assertIn("static/img/categories/%s.jpg" % slugify(name), credits)
+
+    def test_a_default_category_created_without_photo_gets_the_delivered_one_on_the_landing(self):
+        translation.activate("fr")
+        self.addCleanup(translation.deactivate)
+        for order, (name, icon) in enumerate(DEFAULT_CATEGORIES, start=1):
+            EventCategory.objects.create(name=name, icon_name=icon, order=order)
+        html = self.client.get(reverse("core:landing")).content.decode()
+        self.assertNotIn('class="occasion-ph"', html)
+        for name, icon in DEFAULT_CATEGORIES:
+            self.assertIn("img/categories/%s.jpg" % slugify(name), html)
+
+
+class CategoryPhotoToolTests(SimpleTestCase):
+    """tools/set_category_photo.py : cadre 4:3 autour du point à garder, jamais d'agrandissement."""
+
+    @classmethod
+    def setUpClass(cls):
+        super().setUpClass()
+        spec = importlib.util.spec_from_file_location("set_category_photo", Path(settings.BASE_DIR) / "tools" / "set_category_photo.py")
+        cls.tool = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(cls.tool)
+
+    def run_tool(self, source_size, *extra, color=(200, 30, 30)):
+        tmp = tempfile.mkdtemp()
+        self.addCleanup(lambda: __import__("shutil").rmtree(tmp, ignore_errors=True))
+        source = Path(tmp) / "source.png"
+        Image.new("RGB", source_size, color).save(source)
+        out, credits = Path(tmp) / "out", Path(tmp) / "credits.md"
+        argv = ["set_category_photo.py", "mariage", str(source), "--licence", "Photo du client", *extra]
+        with mock.patch.object(self.tool, "ROOT", Path(tmp)), mock.patch.object(self.tool, "OUT_DIR", out), \
+                mock.patch.object(self.tool, "CREDITS", credits), mock.patch.object(sys, "argv", argv), mock.patch("builtins.print"):
+            self.tool.main()
+        with Image.open(out / "mariage.jpg") as result:
+            return result.size, credits.read_text(encoding="utf-8")
+
+    def test_big_photo_is_reduced_to_960_by_720(self):
+        size, _ = self.run_tool((2400, 3000))
+        self.assertEqual(size, (960, 720))
+
+    def test_small_photo_is_not_enlarged(self):
+        size, _ = self.run_tool((563, 658))
+        self.assertEqual(size, (563, 422))
+
+    def test_zoom_gives_a_tighter_frame_without_enlarging(self):
+        size, _ = self.run_tool((960, 1280), "--zoom", "1.5")
+        self.assertEqual(size, (640, 480))
+
+    def test_too_small_after_framing_is_refused(self):
+        with self.assertRaises(SystemExit):
+            self.run_tool((960, 1280), "--zoom", "2.5")
+
+    def test_focus_chooses_which_part_of_a_tall_photo_is_kept(self):
+        tmp = tempfile.mkdtemp()
+        self.addCleanup(lambda: __import__("shutil").rmtree(tmp, ignore_errors=True))
+        source = Path(tmp) / "source.png"
+        tall = Image.new("RGB", (800, 1600), (255, 255, 255))
+        tall.paste(Image.new("RGB", (800, 200), (255, 0, 0)), (0, 0))      # haut rouge
+        tall.paste(Image.new("RGB", (800, 200), (0, 0, 255)), (0, 1400))   # bas bleu
+        tall.save(source)
+        out = Path(tmp) / "out"
+        for focus, expected in (("0.5,0", (255, 0, 0)), ("0.5,1", (0, 0, 255))):
+            argv = ["set_category_photo.py", "gala", str(source), "--licence", "x", "--focus", focus]
+            with mock.patch.object(self.tool, "ROOT", Path(tmp)), mock.patch.object(self.tool, "OUT_DIR", out), \
+                    mock.patch.object(self.tool, "CREDITS", Path(tmp) / "c.md"), mock.patch.object(sys, "argv", argv), \
+                    mock.patch("builtins.print"):
+                self.tool.main()
+            with Image.open(out / "gala.jpg") as result:
+                red, green, blue = result.convert("RGB").getpixel((400, 20 if focus.endswith("0") else result.height - 20))
+            self.assertTrue(all(abs(a - b) < 40 for a, b in zip((red, green, blue), expected)), (focus, (red, green, blue)))
+
+    def test_note_is_added_to_the_credits_line(self):
+        _, credits = self.run_tool((1200, 900), "--note", "filigrane du photographe")
+        self.assertIn("Photo du client (filigrane du photographe)", credits)
 
 
 class NavbarMoreMenuTests(TestCase):

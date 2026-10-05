@@ -53,7 +53,7 @@ DEFAULT_CATEGORIES = [
     (gettext_noop("Anniversaire"), "bi-balloon"), (gettext_noop("Mariage"), "bi-heart"),
     (gettext_noop("Baby shower"), "bi-balloon-heart"), (gettext_noop("Baptême"), "bi-droplet"),
     (gettext_noop("Gala"), "bi-stars"), (gettext_noop("Conférence"), "bi-mic"),
-    (gettext_noop("Concert"), "bi-music-note-beamed"),
+    (gettext_noop("Concert"), "bi-music-note-beamed"), (gettext_noop("Remise de diplôme"), "bi-mortarboard"),
 ]
 
 

@@ -1273,6 +1273,10 @@ msgstr "Anivèsè"
 msgid "Concert"
 msgstr "Konsè"
 
+#: events/models.py:56
+msgid "Remise de diplôme"
+msgstr "Gradyasyon"
+
 #: events/models.py:64
 msgid "identifiant dans l'adresse"
 msgstr "idantifyan nan adrès la"

@@ -1273,6 +1273,10 @@ msgstr "Birthday"
 msgid "Concert"
 msgstr "Concert"
 
+#: events/models.py:56
+msgid "Remise de diplôme"
+msgstr "Graduation"
+
 #: events/models.py:64
 msgid "identifiant dans l'adresse"
 msgstr "identifier in the web address"
