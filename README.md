@@ -196,8 +196,8 @@ Le site existe en français (langue par défaut), en anglais et en créole haït
 
 ## Fond du site
 
-- Le fond (public et tableau de bord) est un lilas rosé en dégradé avec un halo clair, une trame de points dans les coins, une grande courbe violette en haut à droite, un cercle violet sur le bord gauche et un trait fin sur le bord droit. Tout est en CSS, aucune image.
-- **Un seul endroit à régler** : le bloc « Fond du site » à la fin de `static/css/eventlead.css`. Les variables `--page-*` donnent les couleurs (`--page-top`, `--page-bottom`, `--page-dots`, `--page-curve-a/b`, `--page-band`) et la taille des courbes (`--page-curve-w/h`, `--page-lens`). Les formes sont dans `body::before` (courbes, cercles, halos) et `body::after` (points). Ces deux calques sont fixes et passent derrière tout le contenu.
+- Le fond (public et tableau de bord) est un lilas rosé uni, en léger dégradé du haut vers le bas. Aucun dessin derrière le contenu : les courbes violettes et la trame de points ont été retirées le 5 octobre 2026 à la demande du client.
+- **Un seul endroit à régler** : le bloc « Fond du site » à la fin de `static/css/eventlead.css`, variables `--page-top`, `--page-bottom` et `--page-band`.
 - Garder le bas de page assez clair : le texte gris (`--el-muted`) et le texte doré des petits titres doivent rester à un contraste d'au moins 4,5 sur le lilas (calculé : OK jusqu'à `#E6C0E0` avec `--el-muted: #434B5A` et `--el-gold-text: #6A500C`).
 - Les sections « blanches » de l'accueil sont des bandes claires translucides, les sections « douces » sont transparentes. Les cartes restent blanches. Le logo reste toujours sur fond blanc (barre blanche, badge du pied de page, badge de la page de connexion).
 - Les pages de l'invitation (parcours invité) gardent leur fond violet de gala.

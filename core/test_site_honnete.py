@@ -95,3 +95,8 @@ class HonestDesignTests(TestCase):
             rule = re.search(r"^" + re.escape(selector) + r" \{[^}]*\}", css, re.M)
             self.assertIsNotNone(rule, selector)
             self.assertNotIn("999px", rule.group(0), selector)
+
+    def test_page_background_has_no_drawing(self):
+        css = (BASE / "static/css/eventlead.css").read_text(encoding="utf-8")
+        for layer in ("html::before", "body::before", "body::after", "--page-curve", "--page-dots"):
+            self.assertNotIn(layer, css, layer)
