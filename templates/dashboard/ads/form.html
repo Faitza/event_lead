@@ -3,7 +3,7 @@
 {% block title %}{% if is_new %}{% trans "Nouvelle publicité" %}{% else %}{% trans "Modifier la publicité" %}{% endif %}{% endblock %}
 {% block dash_content %}
 <div class="page-head">
-  <div><h1>{% if is_new %}{% trans "Nouvelle publicité" %}{% else %}{{ ad.title }}{% endif %}</h1><p>{% trans "Affichée avec un compte à rebours avant que l'invité puisse passer." %}</p></div>
+  <div><h1>{% if is_new %}{% trans "Nouvelle publicité" %}{% else %}{{ ad.title }}{% endif %}</h1><p>{% trans "Affichée avec un compte à rebours avant que l'invité puisse passer." %} {% trans "Elle peut être une image ou une vidéo." %}</p></div>
   <a href="{% url 'dashboard:ad_list' %}" class="btn btn-light"><i class="bi bi-arrow-left me-2"></i>{% trans "Retour" %}</a>
 </div>
 <form method="post" enctype="multipart/form-data" novalidate>
@@ -21,6 +21,9 @@
       <div class="el-card el-card-body mb-4">
         {% if ad.image %}<img src="{{ ad.image.url }}" alt="" class="w-100 mb-3" style="border-radius:12px;max-height:180px;object-fit:cover">{% endif %}
         {% include "partials/_field.html" with field=form.image %}
+        {% if ad.video %}<video src="{{ ad.video.url }}" muted loop playsinline controls preload="metadata" class="w-100 mb-3" style="border-radius:12px;max-height:200px;background:#000"></video>{% endif %}
+        {% include "partials/_field.html" with field=form.video %}
+        {% include "partials/_field.html" with field=form.video_url %}
         {% include "partials/_field.html" with field=form.skip_after_seconds %}
         {% include "partials/_field.html" with field=form.order %}
         {% include "partials/_field.html" with field=form.is_active %}

@@ -300,6 +300,13 @@ h1 em, h2 em, h3 em, .disp em { color: var(--el-gold); font-style: italic; }
 .p-ad .in { height: 100%; border: 1px solid rgba(212, 175, 55, .35); border-radius: 12px; padding: 14px 14px 20px; display: flex; flex-direction: column; align-items: center; text-align: center; gap: 10px; background: rgba(255, 255, 255, .04); }
 .p-ad .pic { width: 100%; height: 150px; border-radius: 75px 75px 8px 8px; overflow: hidden; background: rgba(255, 255, 255, .08); display: flex; align-items: center; justify-content: center; font-size: 3rem; color: var(--el-gold); }
 .p-ad .pic img { width: 100%; height: 100%; object-fit: cover; }
+/* Publicité en vidéo : sans le son, en boucle, l'image reste dessous tant que la vidéo n'a pas démarré */
+.p-ad .pic, .ad-card .ad-media { position: relative; }
+.p-ad .pic video, .ad-card .ad-media video, .ad-media-list video { width: 100%; height: 100%; object-fit: cover; display: block; background: #000; }
+.ad-embed { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
+.ad-embed.no-touch { pointer-events: none; }
+.ad-media-list img, .ad-media-list video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+.ad-card .ad-media.has-video { height: auto; aspect-ratio: 16 / 9; border-radius: 12px; }
 .p-ad h3 { color: #fff; font-size: 1.5rem; line-height: 1.1; margin: 0; }
 .p-ad p { margin: 0; font-size: .875rem; line-height: 1.55; color: var(--el-tint-strong); }
 .p-ad .eyebrow { color: var(--el-gold-soft); font-size: .75rem; }

@@ -1,13 +1,25 @@
 {% load humanize %}{% load i18n %}{% if kind == "ad" %}
+{% if obj.video_embed_url %}{# Un lecteur YouTube ou Facebook ne peut pas être dans un lien : seul « Visiter le site » est cliquable #}
+<div class="p-card p-ad">
+  <div class="in">
+    <span class="eyebrow">{% trans "Publication partenaire" %}</span>
+    <div class="pic">{% include "partials/_ad_media.html" with ad=obj lazy=True %}</div>
+    <h3>{{ obj.title }}</h3>
+    <p>{{ obj.message|truncatechars:96 }}</p>
+    <a class="go" href="{% url 'ads:click' obj.pk %}" target="_blank" rel="noopener sponsored"{% if dup %} tabindex="-1"{% endif %}>{% trans "Visiter le site" %}</a>
+  </div>
+</div>
+{% else %}
 <a class="p-card p-ad" href="{% url 'ads:click' obj.pk %}" target="_blank" rel="noopener sponsored"{% if dup %} tabindex="-1"{% endif %}>
   <div class="in">
     <span class="eyebrow">{% trans "Publication partenaire" %}</span>
-    <div class="pic">{% if obj.image %}<img src="{{ obj.image.url }}" alt="" loading="lazy">{% else %}<i class="bi {{ obj.icon_name }}"></i>{% endif %}</div>
+    <div class="pic">{% include "partials/_ad_media.html" with ad=obj lazy=True %}</div>
     <h3>{{ obj.title }}</h3>
     <p>{{ obj.message|truncatechars:96 }}</p>
     <span class="go">{% trans "Visiter le site" %}</span>
   </div>
 </a>
+{% endif %}
 {% elif kind == "event" %}
 <a class="p-card p-event" href="{{ obj.get_absolute_url }}"{% if dup %} tabindex="-1"{% endif %}>
   <div class="arch-frame">

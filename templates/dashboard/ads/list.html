@@ -19,7 +19,7 @@
     <tbody>
     {% for ad in ads %}
       <tr>
-        <td><div class="d-flex align-items-center gap-3"><span class="icon-bubble" style="width:40px;height:40px;font-size:1.1rem"><i class="bi {{ ad.icon_name }}"></i></span><div><strong>{{ ad.title }}</strong><div class="small text-muted">{{ ad.sponsor_link|truncatechars:40 }}</div></div></div></td>
+        <td><div class="d-flex align-items-center gap-3"><span class="icon-bubble" style="width:40px;height:40px;font-size:1.1rem"><i class="bi {{ ad.icon_name }}"></i></span><div><strong>{{ ad.title }}</strong>{% if ad.has_video %} <span class="badge-el badge-gold ms-1">{% trans "Vidéo" %}</span>{% endif %}<div class="small text-muted">{{ ad.sponsor_link|truncatechars:40 }}</div></div></div></td>
         <td>{{ ad.views|intcomma }}</td><td>{{ ad.clicks|intcomma }}</td><td><strong>{{ ad.ctr }} %</strong></td>
         <td><form method="post" action="{% url 'dashboard:ad_toggle' ad.pk %}">{% csrf_token %}<input type="hidden" name="field" value="show_after_reply"><button class="btn btn-sm {% if ad.show_after_reply %}btn-soft{% else %}btn-light{% endif %}">{% if ad.show_after_reply %}<i class="bi bi-check2 me-1"></i>{% trans "Oui" %}{% else %}{% trans "Non" %}{% endif %}</button></form></td>
         <td><form method="post" action="{% url 'dashboard:ad_toggle' ad.pk %}">{% csrf_token %}<input type="hidden" name="field" value="is_active"><button class="btn btn-sm {% if ad.is_active %}btn-soft text-success{% else %}btn-light{% endif %}">{% if ad.is_active %}{% trans "Active" %}{% else %}{% trans "Inactive" %}{% endif %}</button></form></td>

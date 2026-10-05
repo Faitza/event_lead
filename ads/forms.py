@@ -1,9 +1,9 @@
 from django import forms
 from django.utils.translation import gettext_lazy as _
 
-from core.uploads import compress_photo
+from core.uploads import check_video, compress_photo
 
-from .models import Ad
+from .models import Ad, is_facebook_video, youtube_id
 
 AD_ICONS = [
     ("bi-megaphone", _("Annonce")), ("bi-shop", _("Boutique")), ("bi-cup-straw", _("Boissons")), ("bi-camera", _("Photo")),
@@ -18,20 +18,33 @@ class AdForm(forms.ModelForm):
 
     class Meta:
         model = Ad
-        fields = ["title", "icon_name", "message", "image", "sponsor_link", "skip_after_seconds",
+        fields = ["title", "icon_name", "message", "image", "video", "video_url", "sponsor_link", "skip_after_seconds",
                   "is_active", "show_after_reply", "order"]
         widgets = {
             "message": forms.Textarea(attrs={"rows": 3}),
             "image": forms.ClearableFileInput(attrs={"accept": "image/*"}),
+            "video": forms.ClearableFileInput(attrs={"accept": "video/*"}),
+            "video_url": forms.URLInput(attrs={"placeholder": "https://www.youtube.com/watch?v=..."}),
             "sponsor_link": forms.URLInput(attrs={"placeholder": "https://"}),
         }
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.fields["image"].help_text = _("JPEG, PNG ou WebP, 12 Mo au plus. L'image est réduite et allégée automatiquement.")
+        self.fields["video"].help_text = _("MP4, WebM ou MOV, 40 Mo au plus. Jouée sans le son et en boucle ; l'image sert d'affiche avant qu'elle démarre.")
+        self.fields["video_url"].help_text = _("Ou collez le lien d'une vidéo YouTube ou Facebook (utilisé s'il n'y a pas de fichier vidéo).")
 
     def clean_image(self):
         return compress_photo(self.cleaned_data.get("image"), max_side=1600)
+
+    def clean_video(self):
+        return check_video(self.cleaned_data.get("video"))
+
+    def clean_video_url(self):
+        url = (self.cleaned_data.get("video_url") or "").strip()
+        if url and not (youtube_id(url) or is_facebook_video(url)):
+            raise forms.ValidationError(_("Collez le lien d'une vidéo YouTube ou Facebook."))
+        return url
 
     def clean_skip_after_seconds(self):
         value = self.cleaned_data["skip_after_seconds"]

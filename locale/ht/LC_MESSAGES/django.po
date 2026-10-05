@@ -177,59 +177,87 @@ msgstr "Bote"
 msgid "Icône"
 msgstr "Ikòn"
 
-#: ads/forms.py:31
+#: ads/forms.py:33
 msgid "JPEG, PNG ou WebP, 12 Mo au plus. L'image est réduite et allégée automatiquement."
 msgstr "JPEG, PNG oswa WebP, 12 Mo pou pi plis. Imaj la vin pi piti e pi lejè otomatikman."
 
-#: ads/forms.py:39
+#: ads/forms.py:34
+msgid "MP4, WebM ou MOV, 40 Mo au plus. Jouée sans le son et en boucle ; l'image sert d'affiche avant qu'elle démarre."
+msgstr "MP4, WebM oswa MOV, 40 Mo pou pi plis. Li jwe san son epi an bouk ; imaj la parèt anvan li kòmanse."
+
+#: ads/forms.py:35
+msgid "Ou collez le lien d'une vidéo YouTube ou Facebook (utilisé s'il n'y a pas de fichier vidéo)."
+msgstr "Oswa kole lyen yon videyo YouTube oswa Facebook (li sèvi si pa gen fichye videyo)."
+
+#: ads/forms.py:46
+msgid "Collez le lien d'une vidéo YouTube ou Facebook."
+msgstr "Kole lyen yon videyo YouTube oswa Facebook."
+
+#: ads/forms.py:52
 msgid "30 secondes maximum."
 msgstr "30 segonn maksimòm."
 
-#: ads/models.py:6 events/models.py:133
+#: ads/models.py:33 events/models.py:133
 msgid "titre"
 msgstr "tit"
 
-#: ads/models.py:7 events/models.py:65 gifts/models.py:44
+#: ads/models.py:34 events/models.py:65 gifts/models.py:44
 msgid "icône"
 msgstr "ikòn"
 
-#: ads/models.py:8 core/models.py:29 core/models.py:63
+#: ads/models.py:35 core/models.py:29 core/models.py:63
 msgid "message"
 msgstr "mesaj"
 
-#: ads/models.py:9
+#: ads/models.py:36
 msgid "image"
 msgstr "imaj"
 
-#: ads/models.py:10
+#: ads/models.py:38
+msgid "vidéo"
+msgstr "videyo"
+
+#: ads/models.py:39
+msgid "Jouée sans le son, en boucle. L'image ci-dessus s'affiche avant qu'elle démarre."
+msgstr "Li jwe san son, an bouk. Imaj ki anwo a parèt anvan li kòmanse."
+
+#: ads/models.py:42
+msgid "lien d'une vidéo YouTube ou Facebook"
+msgstr "lyen yon videyo YouTube oswa Facebook"
+
+#: ads/models.py:43
+msgid "Utilisé seulement s'il n'y a pas de fichier vidéo."
+msgstr "Li sèvi sèlman si pa gen fichye videyo."
+
+#: ads/models.py:45
 msgid "lien du sponsor"
 msgstr "lyen sponsor a"
 
-#: ads/models.py:11
+#: ads/models.py:46
 msgid "passer après (secondes)"
 msgstr "pase apre (segonn)"
 
-#: ads/models.py:14
+#: ads/models.py:49
 msgid "active"
 msgstr "aktif"
 
-#: ads/models.py:16
+#: ads/models.py:51
 msgid "afficher après la réponse d'un invité"
 msgstr "montre apre repons yon envite"
 
-#: ads/models.py:17
+#: ads/models.py:52
 msgid "Si coché, la publicité fait partie de la séquence affichée après une réponse."
 msgstr "Si ou make l, piblisite a fè pati sekans yo montre apre yon repons."
 
-#: ads/models.py:19 events/models.py:66
+#: ads/models.py:54 events/models.py:66
 msgid "ordre d'affichage"
 msgstr "lòd afichaj"
 
-#: ads/models.py:25
+#: ads/models.py:60
 msgid "publicité"
 msgstr "piblisite"
 
-#: ads/models.py:26
+#: ads/models.py:61
 msgid "publicités"
 msgstr "piblisite"
 
@@ -827,63 +855,63 @@ msgstr "Videyo a refize : chwazi yon fichye MP4, WebM oswa MOV."
 msgid "Vidéo trop lourde (40 Mo au plus). Raccourcissez-la ou compressez-la avant de l'envoyer."
 msgstr "Videyo a twò lou (40 Mo pou pi plis). Fè l pi kout oswa konprese l anvan w voye l."
 
-#: core/views.py:26
+#: core/views.py:27
 msgid "Un tableau de bord pour tout piloter"
 msgstr "Yon tablo bò pou jere tout bagay"
 
-#: core/views.py:26
+#: core/views.py:27
 msgid "Mariage, gala, baptême ou conférence : créez l'événement, localisez le lieu sur une carte et gardez la main du début à la fin."
 msgstr "Maryaj, gala, batèm oswa konferans : kreye evènman an, make kote l ap fèt la sou yon kat epi rete responsab depi nan kòmansman jiska lafen."
 
-#: core/views.py:27
+#: core/views.py:28
 msgid "Invitations WhatsApp et e-mail"
 msgstr "Envitasyon WhatsApp ak imèl"
 
-#: core/views.py:27
+#: core/views.py:28
 msgid "Chaque invité reçoit un lien personnel, sans mot de passe, sur le canal qu'il utilise vraiment."
 msgstr "Chak envite resevwa yon lyen pèsonèl, san modpas, sou kanal li itilize vre a."
 
-#: core/views.py:28
+#: core/views.py:29
 msgid "Qui vient, avec qui"
 msgstr "Kiyès k ap vini, ak ki moun"
 
-#: core/views.py:28
+#: core/views.py:29
 msgid "Présences, accompagnants et cadeaux se mettent à jour à chaque réponse : sachez exactement combien de chaises préparer."
 msgstr "Prezans, moun k ap akonpanye yo ak kado yo mete ajou a chak repons : konnen egzakteman konbyen chèz pou prepare."
 
-#: core/views.py:29
+#: core/views.py:30
 msgid "Un cadeau choisi est aussitôt verrouillé pour les autres. La liste reste juste jusqu'au jour J."
 msgstr "Le yon kado chwazi, li bloke touswit pou lòt yo. Lis la rete jis jiska jou J a."
 
-#: core/views.py:30
+#: core/views.py:31
 msgid "Billetterie et paiements locaux"
 msgstr "Biyè ak peman lokal"
 
-#: core/views.py:30
+#: core/views.py:31
 msgid "Vendez vos billets et encaissez avec MonCash, NatCash, carte ou PayPal, avec les prix en gourdes et en dollars."
 msgstr "Vann biyè ou yo epi ankese ak MonCash, NatCash, kat bankè oswa PayPal, ak pri an goud ak an dola."
 
-#: core/views.py:31
+#: core/views.py:32
 msgid "Une vitrine pour vos partenaires"
 msgstr "Yon vitrin pou patnè ou yo"
 
-#: core/views.py:31
+#: core/views.py:32
 msgid "Traiteurs, fleuristes, photographes : leur publicité s'affiche après chaque réponse, et vous suivez les vues et les clics."
 msgstr "Tretè, machann flè, fotograf : piblisite yo parèt apre chak repons, epi ou swiv kantite vi ak klik yo."
 
-#: core/views.py:91
+#: core/views.py:92
 msgid "Merci pour votre avis. Il sera publié après relecture par l'équipe."
 msgstr "Mèsi pou opinyon ou. N ap pibliye l lè ekip la fin li l."
 
-#: core/views.py:93
+#: core/views.py:94
 msgid "Votre avis n'a pas pu être enregistré. Vérifiez les champs."
 msgstr "Opinyon ou pa t ka anrejistre. Verifye chan yo."
 
-#: core/views.py:103
+#: core/views.py:104
 msgid "Message envoyé. Notre équipe vous répondra rapidement."
 msgstr "Mesaj la voye. Ekip nou an ap reponn ou byento."
 
-#: core/views.py:105
+#: core/views.py:106
 msgid "Le message n'a pas pu être envoyé. Vérifiez les champs."
 msgstr "Mesaj la pa t ka voye. Verifye chan yo."
 
@@ -2229,75 +2257,75 @@ msgstr "Ou resevwa yon envitasyon ? Louvri lyen ou te resevwa sou WhatsApp oswa 
 msgid "EventLead, retour à l'accueil"
 msgstr "EventLead, retounen nan akèy"
 
-#: templates/accounts/become_organizer.html:3 templates/accounts/guest_space.html:33 templates/accounts/login.html:18 templates/core/landing.html:188 templates/partials/_footer.html:21 templates/payments/vip.html:4
+#: templates/accounts/become_organizer.html:4 templates/accounts/guest_space.html:34 templates/accounts/login.html:18 templates/core/landing.html:188 templates/partials/_footer.html:21 templates/payments/vip.html:4
 msgid "Devenir Organisateur VIP"
 msgstr "Vin Òganizatè VIP"
 
-#: templates/accounts/become_organizer.html:9 templates/payments/vip.html:14
+#: templates/accounts/become_organizer.html:10 templates/payments/vip.html:14
 msgid "Devenir Organisateur <em>VIP</em>"
 msgstr "Vin Òganizatè <em>VIP</em>"
 
-#: templates/accounts/become_organizer.html:10
+#: templates/accounts/become_organizer.html:11
 msgid "Le statut Organisateur est un accès payant. Une fois le paiement confirmé, votre badge VIP s'affiche et le portail Organisateur s'ouvre."
 msgstr "Estati Òganizatè a se yon aksè ki koute lajan. Le peman an konfime, badj VIP ou parèt epi pòtay Òganizatè a louvri."
 
-#: templates/accounts/become_organizer.html:11
+#: templates/accounts/become_organizer.html:12
 msgid "Continuer vers le paiement"
 msgstr "Kontinye pou peman an"
 
-#: templates/accounts/guest_space.html:3 templates/accounts/guest_space.html:8 templates/core/landing.html:20 templates/partials/_navbar.html:38
+#: templates/accounts/guest_space.html:4 templates/accounts/guest_space.html:9 templates/core/landing.html:20 templates/partials/_navbar.html:38
 msgid "Mon espace"
 msgstr "Espas mwen"
 
-#: templates/accounts/guest_space.html:8
+#: templates/accounts/guest_space.html:9
 msgid "Vos invitations et les événements à découvrir."
 msgstr "Envitasyon ou yo ak evènman pou dekouvri."
 
-#: templates/accounts/guest_space.html:8 templates/core/landing.html:16 templates/events/organizer_portal.html:13
+#: templates/accounts/guest_space.html:9 templates/core/landing.html:16 templates/events/organizer_portal.html:14
 msgid "Bonjour <em>%(name)s</em>"
 msgstr "Bonjou <em>%(name)s</em>"
 
-#: templates/accounts/guest_space.html:9
+#: templates/accounts/guest_space.html:10
 msgid "Explorer les événements"
 msgstr "Eksplore evènman yo"
 
-#: templates/accounts/guest_space.html:12
+#: templates/accounts/guest_space.html:13
 msgid "Mes invitations"
 msgstr "Envitasyon mwen yo"
 
-#: templates/accounts/guest_space.html:15 templates/dashboard/events/list.html:25 templates/dashboard/guests/export_pdf.html:17 templates/dashboard/guests/list.html:28 templates/dashboard/home.html:25 templates/events/organizer_portal.html:39
+#: templates/accounts/guest_space.html:16 templates/dashboard/events/list.html:25 templates/dashboard/guests/export_pdf.html:17 templates/dashboard/guests/list.html:28 templates/dashboard/home.html:25 templates/events/organizer_portal.html:40
 msgid "Événement"
 msgstr "Evènman"
 
-#: templates/accounts/guest_space.html:15 templates/dashboard/events/_live.html:55 templates/dashboard/events/list.html:25 templates/dashboard/home.html:25 templates/dashboard/payments/history.html:20 templates/events/organizer_portal.html:39
+#: templates/accounts/guest_space.html:16 templates/dashboard/events/_live.html:55 templates/dashboard/events/list.html:25 templates/dashboard/home.html:25 templates/dashboard/payments/history.html:20 templates/events/organizer_portal.html:40
 msgid "Date"
 msgstr "Dat"
 
-#: templates/accounts/guest_space.html:15
+#: templates/accounts/guest_space.html:16
 msgid "Ma réponse"
 msgstr "Repons mwen"
 
-#: templates/accounts/guest_space.html:20 templates/dashboard/checkin/_event_card.html:8 templates/dashboard/guests/export_pdf.html:15 templates/dashboard/help/list.html:29 templates/dashboard/reminders/_event_card.html:8 templates/dashboard/seating/_event_card.html:8
+#: templates/accounts/guest_space.html:21 templates/dashboard/checkin/_event_card.html:8 templates/dashboard/guests/export_pdf.html:15 templates/dashboard/help/list.html:29 templates/dashboard/reminders/_event_card.html:8 templates/dashboard/seating/_event_card.html:8
 msgid "j F Y"
 msgstr "j F Y"
 
-#: templates/accounts/guest_space.html:22
+#: templates/accounts/guest_space.html:23
 msgid "Voir ma réponse"
 msgstr "Gade repons mwen"
 
-#: templates/accounts/guest_space.html:22
+#: templates/accounts/guest_space.html:23
 msgid "Répondre"
 msgstr "Reponn"
 
-#: templates/accounts/guest_space.html:28
+#: templates/accounts/guest_space.html:29
 msgid "Aucune invitation liée à votre adresse e-mail pour le moment."
 msgstr "Pa gen okenn envitasyon ki lye ak adrès imèl ou pou kounye a."
 
-#: templates/accounts/guest_space.html:32
+#: templates/accounts/guest_space.html:33
 msgid "Vous organisez des événements ?"
 msgstr "Ou òganize evènman ?"
 
-#: templates/accounts/guest_space.html:32
+#: templates/accounts/guest_space.html:33
 msgid "Passez Organisateur VIP pour accéder à plus de détails."
 msgstr "Vin Òganizatè VIP pou jwenn plis detay."
 
@@ -2321,11 +2349,11 @@ msgstr "Ou poko gen kont ?"
 msgid "Créer un compte"
 msgstr "Kreye yon kont"
 
-#: templates/accounts/profile.html:3 templates/accounts/profile.html:7 templates/partials/_navbar.html:46
+#: templates/accounts/profile.html:4 templates/accounts/profile.html:8 templates/partials/_navbar.html:46
 msgid "Mon profil"
 msgstr "Pwofil mwen"
 
-#: templates/accounts/profile.html:18 templates/dashboard/ads/form.html:29 templates/dashboard/categories/form.html:31 templates/dashboard/gifts/form.html:19 templates/dashboard/guests/form.html:30 templates/dashboard/help/list.html:38
+#: templates/accounts/profile.html:19 templates/dashboard/ads/form.html:32 templates/dashboard/categories/form.html:31 templates/dashboard/gifts/form.html:19 templates/dashboard/guests/form.html:30 templates/dashboard/help/list.html:38
 msgid "Enregistrer"
 msgstr "Anrejistre"
 
@@ -2333,7 +2361,7 @@ msgstr "Anrejistre"
 msgid "Inscription Organisateur"
 msgstr "Enskripsyon Òganizatè"
 
-#: templates/accounts/register.html:4 templates/events/organizer_portal.html:12 core/help.py:55
+#: templates/accounts/register.html:4 templates/events/organizer_portal.html:13 core/help.py:55
 msgid "Organisateur VIP"
 msgstr "Òganizatè VIP"
 
@@ -2401,7 +2429,7 @@ msgstr "Mèsi %(name)s, repons ou anrejistre. %(title)s : òganizatè a jwenn no
 msgid "Offre pour les invités"
 msgstr "Òf pou envite yo"
 
-#: templates/ads/ad_page.html:27 templates/ads/list.html:18 templates/partials/_parade_card.html:8
+#: templates/ads/ad_page.html:27 templates/ads/list.html:18 templates/partials/_parade_card.html:9 templates/partials/_parade_card.html:19
 msgid "Visiter le site"
 msgstr "Vizite sit la"
 
@@ -2429,7 +2457,7 @@ msgstr "Apre sa : paj akèy la, ak pwochen evènman piblik yo."
 msgid "Nos partenaires"
 msgstr "Patnè nou yo"
 
-#: templates/ads/list.html:7 templates/events/organizer_portal.html:48
+#: templates/ads/list.html:7 templates/events/organizer_portal.html:49
 msgid "Offres partenaires"
 msgstr "Òf patnè yo"
 
@@ -2585,7 +2613,7 @@ msgstr "Pwen fò EventLead yo"
 msgid "Sans compte pour l'invité"
 msgstr "San kont pou envite a"
 
-#: templates/core/landing.html:43 core/views.py:29
+#: templates/core/landing.html:43 core/views.py:30
 msgid "Cadeaux sans doublon"
 msgstr "Kado san doub"
 
@@ -2653,7 +2681,7 @@ msgstr "Piblikasyon"
 msgid "Événement public"
 msgstr "Evènman piblik"
 
-#: templates/core/landing.html:100 templates/partials/_parade_card.html:28 templates/payments/checkout.html:15 payments/models.py:25
+#: templates/core/landing.html:100 templates/partials/_parade_card.html:40 templates/payments/checkout.html:15 payments/models.py:25
 msgid "Billet"
 msgstr "Biyè"
 
@@ -2839,6 +2867,10 @@ msgstr "Modifye piblisite a"
 msgid "Affichée avec un compte à rebours avant que l'invité puisse passer."
 msgstr "Li parèt ak yon konte a rebou anvan envite a ka pase l."
 
+#: templates/dashboard/ads/form.html:6
+msgid "Elle peut être une image ou une vidéo."
+msgstr "Li ka yon imaj oswa yon videyo."
+
 #: templates/dashboard/ads/form.html:7 templates/dashboard/categories/form.html:7 templates/dashboard/confirm_delete.html:10 templates/dashboard/events/form.html:9 templates/dashboard/gifts/form.html:7 templates/dashboard/guests/form.html:7
 msgid "Retour"
 msgstr "Retounen"
@@ -2855,11 +2887,11 @@ msgstr "Piblisite patnè"
 msgid "Choisissez les publicités affichées après la réponse des invités et suivez leurs performances."
 msgstr "Chwazi ki piblisite k ap parèt apre envite yo fin reponn epi swiv rezilta yo."
 
-#: templates/dashboard/ads/list.html:11 ads/models.py:12
+#: templates/dashboard/ads/list.html:11 ads/models.py:47
 msgid "vues"
 msgstr "vi"
 
-#: templates/dashboard/ads/list.html:12 ads/models.py:13
+#: templates/dashboard/ads/list.html:12 ads/models.py:48
 msgid "clics"
 msgstr "klik"
 
@@ -2890,6 +2922,10 @@ msgstr "Aktif"
 #: templates/dashboard/ads/list.html:18 templates/dashboard/categories/list.html:18 templates/dashboard/checkin/_recent.html:13 templates/dashboard/events/list.html:25 templates/dashboard/gifts/list.html:30 templates/dashboard/guests/list.html:28
 msgid "Actions"
 msgstr "Aksyon"
+
+#: templates/dashboard/ads/list.html:22
+msgid "Vidéo"
+msgstr "Videyo"
 
 #: templates/dashboard/ads/list.html:24 events/forms.py:161
 msgid "Oui"
@@ -3269,7 +3305,7 @@ msgstr "Jou J, li kòd QR chak envite nan antre a. Chwazi evènman an."
 msgid "Aujourd'hui et à venir"
 msgstr "Jodi a ak pwochen yo"
 
-#: templates/dashboard/checkin/index.html:16 templates/dashboard/reminders/index.html:16 templates/dashboard/seating/index.html:16 templates/events/organizer_portal.html:36
+#: templates/dashboard/checkin/index.html:16 templates/dashboard/reminders/index.html:16 templates/dashboard/seating/index.html:16 templates/events/organizer_portal.html:37
 msgid "Événements passés"
 msgstr "Evènman ki pase yo"
 
@@ -3525,7 +3561,7 @@ msgstr "Chèche yon tit oswa yon kote"
 msgid "Tous les types"
 msgstr "Tout tip"
 
-#: templates/dashboard/events/list.html:13 templates/partials/_event_card.html:9 templates/partials/_parade_card.html:17 events/models.py:125
+#: templates/dashboard/events/list.html:13 templates/partials/_event_card.html:9 templates/partials/_parade_card.html:29 events/models.py:125
 msgid "Public"
 msgstr "Piblik"
 
@@ -3537,7 +3573,7 @@ msgstr "Prive"
 msgid "Toutes les catégories"
 msgstr "Tout kategori"
 
-#: templates/dashboard/events/list.html:25 templates/dashboard/home.html:25 templates/dashboard/home.html:39 templates/dashboard/payments/history.html:20 templates/events/organizer_portal.html:39
+#: templates/dashboard/events/list.html:25 templates/dashboard/home.html:25 templates/dashboard/home.html:39 templates/dashboard/payments/history.html:20 templates/events/organizer_portal.html:40
 msgid "Type"
 msgstr "Tip"
 
@@ -3803,7 +3839,7 @@ msgid_plural "%(counter)s clics"
 msgstr[0] "%(counter)s klik"
 msgstr[1] "%(counter)s klik"
 
-#: templates/dashboard/home.html:22 templates/events/organizer_portal.html:23
+#: templates/dashboard/home.html:22 templates/events/organizer_portal.html:24
 msgid "Événements à venir"
 msgstr "Evènman k ap vini"
 
@@ -3811,7 +3847,7 @@ msgstr "Evènman k ap vini"
 msgid "Tout voir"
 msgstr "Wè tout"
 
-#: templates/dashboard/home.html:33 templates/events/organizer_portal.html:32
+#: templates/dashboard/home.html:33 templates/events/organizer_portal.html:33
 msgid "Aucun événement à venir."
 msgstr "Pa gen evènman k ap vini."
 
@@ -4605,23 +4641,23 @@ msgstr "Eseye ankò"
 msgid "Besoin d'aide tout de suite ?"
 msgstr "Ou bezwen èd kounye a ?"
 
-#: templates/events/evaluate.html:3
+#: templates/events/evaluate.html:4
 msgid "Évaluer %(titre)s"
 msgstr "Evalye %(titre)s"
 
-#: templates/events/evaluate.html:9
+#: templates/events/evaluate.html:10
 msgid "Comment s'est passé « %(titre)s » ?"
 msgstr "Kijan « %(titre)s » te pase ?"
 
-#: templates/events/evaluate.html:10
+#: templates/events/evaluate.html:11
 msgid "Votre évaluation est transmise à l'équipe EventLead."
 msgstr "Evalyasyon ou voye bay ekip EventLead la."
 
-#: templates/events/evaluate.html:13 core/forms.py:13 events/forms.py:216
+#: templates/events/evaluate.html:14 core/forms.py:13 events/forms.py:216
 msgid "Votre note"
 msgstr "Nòt ou"
 
-#: templates/events/evaluate.html:19
+#: templates/events/evaluate.html:20
 msgid "Envoyer mon évaluation"
 msgstr "Voye evalyasyon mwen"
 
@@ -4657,43 +4693,43 @@ msgstr "kapasite"
 msgid "Évaluer cet événement"
 msgstr "Evalye evènman sa a"
 
-#: templates/events/organizer_portal.html:3
+#: templates/events/organizer_portal.html:4
 msgid "Portail Organisateur"
 msgstr "Pòtay Òganizatè"
 
-#: templates/events/organizer_portal.html:14
+#: templates/events/organizer_portal.html:15
 msgid "Tous les événements publics, et les événements privés auxquels vous êtes invité."
 msgstr "Tout evènman piblik yo, ak evènman prive kote yo envite ou yo."
 
-#: templates/events/organizer_portal.html:16
+#: templates/events/organizer_portal.html:17
 msgid "Membre VIP depuis le %(date)s"
 msgstr "Manm VIP depi %(date)s"
 
-#: templates/events/organizer_portal.html:22
+#: templates/events/organizer_portal.html:23
 msgid "Votre accès est en lecture seule : la création et la gestion des événements restent réservées à l'équipe EventLead."
 msgstr "Aksè ou an lekti sèlman : se ekip EventLead la sèl ki ka kreye ak jere evènman yo."
 
-#: templates/events/organizer_portal.html:29
+#: templates/events/organizer_portal.html:30
 msgid "Vous êtes invité"
 msgstr "Yo envite ou"
 
-#: templates/events/organizer_portal.html:39
+#: templates/events/organizer_portal.html:40
 msgid "Évaluation"
 msgstr "Evalyasyon"
 
-#: templates/events/organizer_portal.html:42
+#: templates/events/organizer_portal.html:43
 msgid "Évalué"
 msgstr "Deja evalye"
 
-#: templates/events/organizer_portal.html:42
+#: templates/events/organizer_portal.html:43
 msgid "Évaluer"
 msgstr "Evalye"
 
-#: templates/events/organizer_portal.html:42
+#: templates/events/organizer_portal.html:43
 msgid "Ouverture le %(date)s"
 msgstr "Ap louvri le %(date)s"
 
-#: templates/events/organizer_portal.html:42
+#: templates/events/organizer_portal.html:43
 msgid "j F"
 msgstr "j F"
 
@@ -4709,7 +4745,7 @@ msgstr "Sou evènman an"
 msgid "Plus d'informations bientôt."
 msgstr "Plis enfòmasyon byento."
 
-#: templates/events/public_detail.html:46 templates/partials/_parade_card.html:34 templates/payments/ticketing.html:24
+#: templates/events/public_detail.html:46 templates/partials/_parade_card.html:46 templates/payments/ticketing.html:24
 msgid "Acheter un billet"
 msgstr "Achte yon biyè"
 
@@ -5153,11 +5189,15 @@ msgstr "Voye l sou WhatsApp mwen"
 msgid "Présentez ce code à l'entrée. Enregistrez-le dans votre téléphone pour l'avoir même sans réseau."
 msgstr "Montre kòd sa a nan antre a. Anrejistre l nan telefòn ou pou w gen li menm san rezo."
 
+#: templates/partials/_ad_media.html:5
+msgid "Vidéo : %(title)s"
+msgstr "Videyo : %(title)s"
+
 #: templates/partials/_category_filter.html:3
 msgid "Filtrer les événements par catégorie"
 msgstr "Filtre evènman yo pa kategori"
 
-#: templates/partials/_event_card.html:17 templates/partials/_parade_card.html:22
+#: templates/partials/_event_card.html:17 templates/partials/_parade_card.html:34
 msgid "Gratuit"
 msgstr "Gratis"
 
@@ -5257,11 +5297,11 @@ msgstr "Paj anvan an"
 msgid "Page suivante"
 msgstr "Paj apre a"
 
-#: templates/partials/_parade_card.html:4
+#: templates/partials/_parade_card.html:5 templates/partials/_parade_card.html:15
 msgid "Publication partenaire"
 msgstr "Piblikasyon patnè"
 
-#: templates/partials/_parade_card.html:28
+#: templates/partials/_parade_card.html:40
 msgid "j M Y"
 msgstr "j M Y"
 

@@ -20,7 +20,7 @@
     {% endif %}
     <article class="ad-card">
       <div class="in">
-        <div class="ad-media">{% if ad.image %}<img src="{{ ad.image.url }}" alt="{{ ad.title }}">{% else %}<i class="bi {{ ad.icon_name }}"></i>{% endif %}</div>
+        <div class="ad-media{% if ad.has_video %} has-video{% endif %}">{% include "partials/_ad_media.html" with alt=ad.title controls=True %}</div>
         <span class="eyebrow">{% trans "Offre pour les invités" %}</span>
         <h1 class="disp">{{ ad.title }}</h1>
         <p>{{ ad.message|linebreaksbr }}</p>

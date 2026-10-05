@@ -177,59 +177,87 @@ msgstr "Beauty"
 msgid "Icône"
 msgstr "Icon"
 
-#: ads/forms.py:31
+#: ads/forms.py:33
 msgid "JPEG, PNG ou WebP, 12 Mo au plus. L'image est réduite et allégée automatiquement."
 msgstr "JPEG, PNG or WebP, 12 MB at most. The image is resized and made lighter automatically."
 
-#: ads/forms.py:39
+#: ads/forms.py:34
+msgid "MP4, WebM ou MOV, 40 Mo au plus. Jouée sans le son et en boucle ; l'image sert d'affiche avant qu'elle démarre."
+msgstr "MP4, WebM or MOV, 40 MB max. Plays muted and on a loop; the image is shown until it starts."
+
+#: ads/forms.py:35
+msgid "Ou collez le lien d'une vidéo YouTube ou Facebook (utilisé s'il n'y a pas de fichier vidéo)."
+msgstr "Or paste a YouTube or Facebook video link (used when there is no video file)."
+
+#: ads/forms.py:46
+msgid "Collez le lien d'une vidéo YouTube ou Facebook."
+msgstr "Paste a YouTube or Facebook video link."
+
+#: ads/forms.py:52
 msgid "30 secondes maximum."
 msgstr "30 seconds maximum."
 
-#: ads/models.py:6 events/models.py:133
+#: ads/models.py:33 events/models.py:133
 msgid "titre"
 msgstr "title"
 
-#: ads/models.py:7 events/models.py:65 gifts/models.py:44
+#: ads/models.py:34 events/models.py:65 gifts/models.py:44
 msgid "icône"
 msgstr "icon"
 
-#: ads/models.py:8 core/models.py:29 core/models.py:63
+#: ads/models.py:35 core/models.py:29 core/models.py:63
 msgid "message"
 msgstr "message"
 
-#: ads/models.py:9
+#: ads/models.py:36
 msgid "image"
 msgstr "image"
 
-#: ads/models.py:10
+#: ads/models.py:38
+msgid "vidéo"
+msgstr "video"
+
+#: ads/models.py:39
+msgid "Jouée sans le son, en boucle. L'image ci-dessus s'affiche avant qu'elle démarre."
+msgstr "Plays muted, on a loop. The image above is shown until it starts."
+
+#: ads/models.py:42
+msgid "lien d'une vidéo YouTube ou Facebook"
+msgstr "YouTube or Facebook video link"
+
+#: ads/models.py:43
+msgid "Utilisé seulement s'il n'y a pas de fichier vidéo."
+msgstr "Used only when there is no video file."
+
+#: ads/models.py:45
 msgid "lien du sponsor"
 msgstr "sponsor link"
 
-#: ads/models.py:11
+#: ads/models.py:46
 msgid "passer après (secondes)"
 msgstr "skip after (seconds)"
 
-#: ads/models.py:14
+#: ads/models.py:49
 msgid "active"
 msgstr "active"
 
-#: ads/models.py:16
+#: ads/models.py:51
 msgid "afficher après la réponse d'un invité"
 msgstr "show after a guest's reply"
 
-#: ads/models.py:17
+#: ads/models.py:52
 msgid "Si coché, la publicité fait partie de la séquence affichée après une réponse."
 msgstr "If checked, the ad is part of the sequence shown after a reply."
 
-#: ads/models.py:19 events/models.py:66
+#: ads/models.py:54 events/models.py:66
 msgid "ordre d'affichage"
 msgstr "display order"
 
-#: ads/models.py:25
+#: ads/models.py:60
 msgid "publicité"
 msgstr "ad"
 
-#: ads/models.py:26
+#: ads/models.py:61
 msgid "publicités"
 msgstr "ads"
 
@@ -827,63 +855,63 @@ msgstr "Video refused: choose an MP4, WebM or MOV file."
 msgid "Vidéo trop lourde (40 Mo au plus). Raccourcissez-la ou compressez-la avant de l'envoyer."
 msgstr "Video too large (40 MB at most). Shorten or compress it before sending."
 
-#: core/views.py:26
+#: core/views.py:27
 msgid "Un tableau de bord pour tout piloter"
 msgstr "A dashboard to manage everything"
 
-#: core/views.py:26
+#: core/views.py:27
 msgid "Mariage, gala, baptême ou conférence : créez l'événement, localisez le lieu sur une carte et gardez la main du début à la fin."
 msgstr "Wedding, gala, christening or conference: create the event, locate the venue on a map and stay in control from start to finish."
 
-#: core/views.py:27
+#: core/views.py:28
 msgid "Invitations WhatsApp et e-mail"
 msgstr "WhatsApp and e-mail invitations"
 
-#: core/views.py:27
+#: core/views.py:28
 msgid "Chaque invité reçoit un lien personnel, sans mot de passe, sur le canal qu'il utilise vraiment."
 msgstr "Each guest receives a personal link, with no password, on the channel they really use."
 
-#: core/views.py:28
+#: core/views.py:29
 msgid "Qui vient, avec qui"
 msgstr "Who is coming, and with whom"
 
-#: core/views.py:28
+#: core/views.py:29
 msgid "Présences, accompagnants et cadeaux se mettent à jour à chaque réponse : sachez exactement combien de chaises préparer."
 msgstr "Attendance, companions and gifts update with every reply: know exactly how many chairs to prepare."
 
-#: core/views.py:29
+#: core/views.py:30
 msgid "Un cadeau choisi est aussitôt verrouillé pour les autres. La liste reste juste jusqu'au jour J."
 msgstr "Once a gift is chosen, it is immediately locked for everyone else. The list stays accurate until the big day."
 
-#: core/views.py:30
+#: core/views.py:31
 msgid "Billetterie et paiements locaux"
 msgstr "Ticketing and local payments"
 
-#: core/views.py:30
+#: core/views.py:31
 msgid "Vendez vos billets et encaissez avec MonCash, NatCash, carte ou PayPal, avec les prix en gourdes et en dollars."
 msgstr "Sell your tickets and collect payments with MonCash, NatCash, card or PayPal, with prices in gourdes and dollars."
 
-#: core/views.py:31
+#: core/views.py:32
 msgid "Une vitrine pour vos partenaires"
 msgstr "A showcase for your partners"
 
-#: core/views.py:31
+#: core/views.py:32
 msgid "Traiteurs, fleuristes, photographes : leur publicité s'affiche après chaque réponse, et vous suivez les vues et les clics."
 msgstr "Caterers, florists, photographers: their ad appears after each reply, and you follow the views and clicks."
 
-#: core/views.py:91
+#: core/views.py:92
 msgid "Merci pour votre avis. Il sera publié après relecture par l'équipe."
 msgstr "Thank you for your review. It will be published once the team has read it."
 
-#: core/views.py:93
+#: core/views.py:94
 msgid "Votre avis n'a pas pu être enregistré. Vérifiez les champs."
 msgstr "Your review could not be saved. Check the fields."
 
-#: core/views.py:103
+#: core/views.py:104
 msgid "Message envoyé. Notre équipe vous répondra rapidement."
 msgstr "Message sent. Our team will reply to you shortly."
 
-#: core/views.py:105
+#: core/views.py:106
 msgid "Le message n'a pas pu être envoyé. Vérifiez les champs."
 msgstr "The message could not be sent. Check the fields."
 
@@ -2229,75 +2257,75 @@ msgstr "Received an invitation? Just open the link you got by WhatsApp or e-mail
 msgid "EventLead, retour à l'accueil"
 msgstr "EventLead, back to home"
 
-#: templates/accounts/become_organizer.html:3 templates/accounts/guest_space.html:33 templates/accounts/login.html:18 templates/core/landing.html:188 templates/partials/_footer.html:21 templates/payments/vip.html:4
+#: templates/accounts/become_organizer.html:4 templates/accounts/guest_space.html:34 templates/accounts/login.html:18 templates/core/landing.html:188 templates/partials/_footer.html:21 templates/payments/vip.html:4
 msgid "Devenir Organisateur VIP"
 msgstr "Become a VIP Organizer"
 
-#: templates/accounts/become_organizer.html:9 templates/payments/vip.html:14
+#: templates/accounts/become_organizer.html:10 templates/payments/vip.html:14
 msgid "Devenir Organisateur <em>VIP</em>"
 msgstr "Become a <em>VIP</em> Organizer"
 
-#: templates/accounts/become_organizer.html:10
+#: templates/accounts/become_organizer.html:11
 msgid "Le statut Organisateur est un accès payant. Une fois le paiement confirmé, votre badge VIP s'affiche et le portail Organisateur s'ouvre."
 msgstr "Organizer status is a paid access. Once your payment is confirmed, your VIP badge appears and the Organizer portal opens."
 
-#: templates/accounts/become_organizer.html:11
+#: templates/accounts/become_organizer.html:12
 msgid "Continuer vers le paiement"
 msgstr "Continue to payment"
 
-#: templates/accounts/guest_space.html:3 templates/accounts/guest_space.html:8 templates/core/landing.html:20 templates/partials/_navbar.html:38
+#: templates/accounts/guest_space.html:4 templates/accounts/guest_space.html:9 templates/core/landing.html:20 templates/partials/_navbar.html:38
 msgid "Mon espace"
 msgstr "My space"
 
-#: templates/accounts/guest_space.html:8
+#: templates/accounts/guest_space.html:9
 msgid "Vos invitations et les événements à découvrir."
 msgstr "Your invitations and events to discover."
 
-#: templates/accounts/guest_space.html:8 templates/core/landing.html:16 templates/events/organizer_portal.html:13
+#: templates/accounts/guest_space.html:9 templates/core/landing.html:16 templates/events/organizer_portal.html:14
 msgid "Bonjour <em>%(name)s</em>"
 msgstr "Hello <em>%(name)s</em>"
 
-#: templates/accounts/guest_space.html:9
+#: templates/accounts/guest_space.html:10
 msgid "Explorer les événements"
 msgstr "Explore events"
 
-#: templates/accounts/guest_space.html:12
+#: templates/accounts/guest_space.html:13
 msgid "Mes invitations"
 msgstr "My invitations"
 
-#: templates/accounts/guest_space.html:15 templates/dashboard/events/list.html:25 templates/dashboard/guests/export_pdf.html:17 templates/dashboard/guests/list.html:28 templates/dashboard/home.html:25 templates/events/organizer_portal.html:39
+#: templates/accounts/guest_space.html:16 templates/dashboard/events/list.html:25 templates/dashboard/guests/export_pdf.html:17 templates/dashboard/guests/list.html:28 templates/dashboard/home.html:25 templates/events/organizer_portal.html:40
 msgid "Événement"
 msgstr "Event"
 
-#: templates/accounts/guest_space.html:15 templates/dashboard/events/_live.html:55 templates/dashboard/events/list.html:25 templates/dashboard/home.html:25 templates/dashboard/payments/history.html:20 templates/events/organizer_portal.html:39
+#: templates/accounts/guest_space.html:16 templates/dashboard/events/_live.html:55 templates/dashboard/events/list.html:25 templates/dashboard/home.html:25 templates/dashboard/payments/history.html:20 templates/events/organizer_portal.html:40
 msgid "Date"
 msgstr "Date"
 
-#: templates/accounts/guest_space.html:15
+#: templates/accounts/guest_space.html:16
 msgid "Ma réponse"
 msgstr "My reply"
 
-#: templates/accounts/guest_space.html:20 templates/dashboard/checkin/_event_card.html:8 templates/dashboard/guests/export_pdf.html:15 templates/dashboard/help/list.html:29 templates/dashboard/reminders/_event_card.html:8 templates/dashboard/seating/_event_card.html:8
+#: templates/accounts/guest_space.html:21 templates/dashboard/checkin/_event_card.html:8 templates/dashboard/guests/export_pdf.html:15 templates/dashboard/help/list.html:29 templates/dashboard/reminders/_event_card.html:8 templates/dashboard/seating/_event_card.html:8
 msgid "j F Y"
 msgstr "F j, Y"
 
-#: templates/accounts/guest_space.html:22
+#: templates/accounts/guest_space.html:23
 msgid "Voir ma réponse"
 msgstr "View my reply"
 
-#: templates/accounts/guest_space.html:22
+#: templates/accounts/guest_space.html:23
 msgid "Répondre"
 msgstr "Reply"
 
-#: templates/accounts/guest_space.html:28
+#: templates/accounts/guest_space.html:29
 msgid "Aucune invitation liée à votre adresse e-mail pour le moment."
 msgstr "No invitations linked to your e-mail address yet."
 
-#: templates/accounts/guest_space.html:32
+#: templates/accounts/guest_space.html:33
 msgid "Vous organisez des événements ?"
 msgstr "Do you organize events?"
 
-#: templates/accounts/guest_space.html:32
+#: templates/accounts/guest_space.html:33
 msgid "Passez Organisateur VIP pour accéder à plus de détails."
 msgstr "Become a VIP Organizer to access more details."
 
@@ -2321,11 +2349,11 @@ msgstr "No account yet?"
 msgid "Créer un compte"
 msgstr "Create an account"
 
-#: templates/accounts/profile.html:3 templates/accounts/profile.html:7 templates/partials/_navbar.html:46
+#: templates/accounts/profile.html:4 templates/accounts/profile.html:8 templates/partials/_navbar.html:46
 msgid "Mon profil"
 msgstr "My profile"
 
-#: templates/accounts/profile.html:18 templates/dashboard/ads/form.html:29 templates/dashboard/categories/form.html:31 templates/dashboard/gifts/form.html:19 templates/dashboard/guests/form.html:30 templates/dashboard/help/list.html:38
+#: templates/accounts/profile.html:19 templates/dashboard/ads/form.html:32 templates/dashboard/categories/form.html:31 templates/dashboard/gifts/form.html:19 templates/dashboard/guests/form.html:30 templates/dashboard/help/list.html:38
 msgid "Enregistrer"
 msgstr "Save"
 
@@ -2333,7 +2361,7 @@ msgstr "Save"
 msgid "Inscription Organisateur"
 msgstr "Organizer sign-up"
 
-#: templates/accounts/register.html:4 templates/events/organizer_portal.html:12 core/help.py:55
+#: templates/accounts/register.html:4 templates/events/organizer_portal.html:13 core/help.py:55
 msgid "Organisateur VIP"
 msgstr "VIP Organizer"
 
@@ -2401,7 +2429,7 @@ msgstr "Thank you %(name)s, your reply has been recorded. %(title)s: the host ha
 msgid "Offre pour les invités"
 msgstr "Offer for guests"
 
-#: templates/ads/ad_page.html:27 templates/ads/list.html:18 templates/partials/_parade_card.html:8
+#: templates/ads/ad_page.html:27 templates/ads/list.html:18 templates/partials/_parade_card.html:9 templates/partials/_parade_card.html:19
 msgid "Visiter le site"
 msgstr "Visit the website"
 
@@ -2429,7 +2457,7 @@ msgstr "Next: the home page, with upcoming public events."
 msgid "Nos partenaires"
 msgstr "Our partners"
 
-#: templates/ads/list.html:7 templates/events/organizer_portal.html:48
+#: templates/ads/list.html:7 templates/events/organizer_portal.html:49
 msgid "Offres partenaires"
 msgstr "Partner offers"
 
@@ -2585,7 +2613,7 @@ msgstr "EventLead highlights"
 msgid "Sans compte pour l'invité"
 msgstr "No account needed for guests"
 
-#: templates/core/landing.html:43 core/views.py:29
+#: templates/core/landing.html:43 core/views.py:30
 msgid "Cadeaux sans doublon"
 msgstr "No duplicate gifts"
 
@@ -2653,7 +2681,7 @@ msgstr "Post"
 msgid "Événement public"
 msgstr "Public event"
 
-#: templates/core/landing.html:100 templates/partials/_parade_card.html:28 templates/payments/checkout.html:15 payments/models.py:25
+#: templates/core/landing.html:100 templates/partials/_parade_card.html:40 templates/payments/checkout.html:15 payments/models.py:25
 msgid "Billet"
 msgstr "Ticket"
 
@@ -2839,6 +2867,10 @@ msgstr "Edit ad"
 msgid "Affichée avec un compte à rebours avant que l'invité puisse passer."
 msgstr "Shown with a countdown before the guest can skip it."
 
+#: templates/dashboard/ads/form.html:6
+msgid "Elle peut être une image ou une vidéo."
+msgstr "It can be an image or a video."
+
 #: templates/dashboard/ads/form.html:7 templates/dashboard/categories/form.html:7 templates/dashboard/confirm_delete.html:10 templates/dashboard/events/form.html:9 templates/dashboard/gifts/form.html:7 templates/dashboard/guests/form.html:7
 msgid "Retour"
 msgstr "Back"
@@ -2855,11 +2887,11 @@ msgstr "Partner ads"
 msgid "Choisissez les publicités affichées après la réponse des invités et suivez leurs performances."
 msgstr "Choose which ads are shown after guests reply and track how they perform."
 
-#: templates/dashboard/ads/list.html:11 ads/models.py:12
+#: templates/dashboard/ads/list.html:11 ads/models.py:47
 msgid "vues"
 msgstr "views"
 
-#: templates/dashboard/ads/list.html:12 ads/models.py:13
+#: templates/dashboard/ads/list.html:12 ads/models.py:48
 msgid "clics"
 msgstr "clicks"
 
@@ -2890,6 +2922,10 @@ msgstr "Active"
 #: templates/dashboard/ads/list.html:18 templates/dashboard/categories/list.html:18 templates/dashboard/checkin/_recent.html:13 templates/dashboard/events/list.html:25 templates/dashboard/gifts/list.html:30 templates/dashboard/guests/list.html:28
 msgid "Actions"
 msgstr "Actions"
+
+#: templates/dashboard/ads/list.html:22
+msgid "Vidéo"
+msgstr "Video"
 
 #: templates/dashboard/ads/list.html:24 events/forms.py:161
 msgid "Oui"
@@ -3269,7 +3305,7 @@ msgstr "On the big day, scan each guest's QR code at the entrance. Choose the ev
 msgid "Aujourd'hui et à venir"
 msgstr "Today and upcoming"
 
-#: templates/dashboard/checkin/index.html:16 templates/dashboard/reminders/index.html:16 templates/dashboard/seating/index.html:16 templates/events/organizer_portal.html:36
+#: templates/dashboard/checkin/index.html:16 templates/dashboard/reminders/index.html:16 templates/dashboard/seating/index.html:16 templates/events/organizer_portal.html:37
 msgid "Événements passés"
 msgstr "Past events"
 
@@ -3525,7 +3561,7 @@ msgstr "Search by title or venue"
 msgid "Tous les types"
 msgstr "All types"
 
-#: templates/dashboard/events/list.html:13 templates/partials/_event_card.html:9 templates/partials/_parade_card.html:17 events/models.py:125
+#: templates/dashboard/events/list.html:13 templates/partials/_event_card.html:9 templates/partials/_parade_card.html:29 events/models.py:125
 msgid "Public"
 msgstr "Public"
 
@@ -3537,7 +3573,7 @@ msgstr "Private"
 msgid "Toutes les catégories"
 msgstr "All categories"
 
-#: templates/dashboard/events/list.html:25 templates/dashboard/home.html:25 templates/dashboard/home.html:39 templates/dashboard/payments/history.html:20 templates/events/organizer_portal.html:39
+#: templates/dashboard/events/list.html:25 templates/dashboard/home.html:25 templates/dashboard/home.html:39 templates/dashboard/payments/history.html:20 templates/events/organizer_portal.html:40
 msgid "Type"
 msgstr "Type"
 
@@ -3803,7 +3839,7 @@ msgid_plural "%(counter)s clics"
 msgstr[0] "%(counter)s click"
 msgstr[1] "%(counter)s clicks"
 
-#: templates/dashboard/home.html:22 templates/events/organizer_portal.html:23
+#: templates/dashboard/home.html:22 templates/events/organizer_portal.html:24
 msgid "Événements à venir"
 msgstr "Upcoming events"
 
@@ -3811,7 +3847,7 @@ msgstr "Upcoming events"
 msgid "Tout voir"
 msgstr "View all"
 
-#: templates/dashboard/home.html:33 templates/events/organizer_portal.html:32
+#: templates/dashboard/home.html:33 templates/events/organizer_portal.html:33
 msgid "Aucun événement à venir."
 msgstr "No upcoming events."
 
@@ -4605,23 +4641,23 @@ msgstr "Try again"
 msgid "Besoin d'aide tout de suite ?"
 msgstr "Need help right away?"
 
-#: templates/events/evaluate.html:3
+#: templates/events/evaluate.html:4
 msgid "Évaluer %(titre)s"
 msgstr "Rate %(titre)s"
 
-#: templates/events/evaluate.html:9
+#: templates/events/evaluate.html:10
 msgid "Comment s'est passé « %(titre)s » ?"
 msgstr "How was “%(titre)s”?"
 
-#: templates/events/evaluate.html:10
+#: templates/events/evaluate.html:11
 msgid "Votre évaluation est transmise à l'équipe EventLead."
 msgstr "Your review is sent to the EventLead team."
 
-#: templates/events/evaluate.html:13 core/forms.py:13 events/forms.py:216
+#: templates/events/evaluate.html:14 core/forms.py:13 events/forms.py:216
 msgid "Votre note"
 msgstr "Your rating"
 
-#: templates/events/evaluate.html:19
+#: templates/events/evaluate.html:20
 msgid "Envoyer mon évaluation"
 msgstr "Send my review"
 
@@ -4657,43 +4693,43 @@ msgstr "capacity"
 msgid "Évaluer cet événement"
 msgstr "Rate this event"
 
-#: templates/events/organizer_portal.html:3
+#: templates/events/organizer_portal.html:4
 msgid "Portail Organisateur"
 msgstr "Organizer portal"
 
-#: templates/events/organizer_portal.html:14
+#: templates/events/organizer_portal.html:15
 msgid "Tous les événements publics, et les événements privés auxquels vous êtes invité."
 msgstr "All public events, and the private events you are invited to."
 
-#: templates/events/organizer_portal.html:16
+#: templates/events/organizer_portal.html:17
 msgid "Membre VIP depuis le %(date)s"
 msgstr "VIP member since %(date)s"
 
-#: templates/events/organizer_portal.html:22
+#: templates/events/organizer_portal.html:23
 msgid "Votre accès est en lecture seule : la création et la gestion des événements restent réservées à l'équipe EventLead."
 msgstr "Your access is read-only: creating and managing events remains reserved for the EventLead team."
 
-#: templates/events/organizer_portal.html:29
+#: templates/events/organizer_portal.html:30
 msgid "Vous êtes invité"
 msgstr "You are invited"
 
-#: templates/events/organizer_portal.html:39
+#: templates/events/organizer_portal.html:40
 msgid "Évaluation"
 msgstr "Rating"
 
-#: templates/events/organizer_portal.html:42
+#: templates/events/organizer_portal.html:43
 msgid "Évalué"
 msgstr "Rated"
 
-#: templates/events/organizer_portal.html:42
+#: templates/events/organizer_portal.html:43
 msgid "Évaluer"
 msgstr "Rate"
 
-#: templates/events/organizer_portal.html:42
+#: templates/events/organizer_portal.html:43
 msgid "Ouverture le %(date)s"
 msgstr "Opens on %(date)s"
 
-#: templates/events/organizer_portal.html:42
+#: templates/events/organizer_portal.html:43
 msgid "j F"
 msgstr "F j"
 
@@ -4709,7 +4745,7 @@ msgstr "About the event"
 msgid "Plus d'informations bientôt."
 msgstr "More information soon."
 
-#: templates/events/public_detail.html:46 templates/partials/_parade_card.html:34 templates/payments/ticketing.html:24
+#: templates/events/public_detail.html:46 templates/partials/_parade_card.html:46 templates/payments/ticketing.html:24
 msgid "Acheter un billet"
 msgstr "Buy a ticket"
 
@@ -5153,11 +5189,15 @@ msgstr "Send to my WhatsApp"
 msgid "Présentez ce code à l'entrée. Enregistrez-le dans votre téléphone pour l'avoir même sans réseau."
 msgstr "Show this code at the entrance. Save it on your phone to have it even without a network."
 
+#: templates/partials/_ad_media.html:5
+msgid "Vidéo : %(title)s"
+msgstr "Video: %(title)s"
+
 #: templates/partials/_category_filter.html:3
 msgid "Filtrer les événements par catégorie"
 msgstr "Filter events by category"
 
-#: templates/partials/_event_card.html:17 templates/partials/_parade_card.html:22
+#: templates/partials/_event_card.html:17 templates/partials/_parade_card.html:34
 msgid "Gratuit"
 msgstr "Free"
 
@@ -5257,11 +5297,11 @@ msgstr "Previous page"
 msgid "Page suivante"
 msgstr "Next page"
 
-#: templates/partials/_parade_card.html:4
+#: templates/partials/_parade_card.html:5 templates/partials/_parade_card.html:15
 msgid "Publication partenaire"
 msgstr "Partner post"
 
-#: templates/partials/_parade_card.html:28
+#: templates/partials/_parade_card.html:40
 msgid "j M Y"
 msgstr "M j, Y"
 

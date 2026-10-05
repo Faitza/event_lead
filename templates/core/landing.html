@@ -291,11 +291,27 @@
   (function () {
     var btn = document.getElementById("parade-toggle"), box = document.getElementById("parade");
     if (!btn || !box) return;
-    btn.addEventListener("click", function () {
-      var paused = box.classList.toggle("paused");
+    // Les publicités en vidéo s'arrêtent et reprennent avec le défilé
+    function videos(paused) {
+      box.querySelectorAll("video").forEach(function (v) { if (paused) { v.pause(); } else { var p = v.play(); if (p && p.catch) p.catch(function () {}); } });
+      box.querySelectorAll("iframe.ad-embed").forEach(function (f) {
+        if (f.src.indexOf("youtube") !== -1) {
+          f.contentWindow && f.contentWindow.postMessage(JSON.stringify({ event: "command", func: paused ? "pauseVideo" : "playVideo", args: [] }), "*");
+        } else if (paused) { f.dataset.src = f.src; f.src = "about:blank"; }
+        else if (f.dataset.src) { f.src = f.dataset.src; }
+      });
+    }
+    function setPaused(paused) {
+      box.classList.toggle("paused", paused);
       btn.setAttribute("aria-pressed", paused ? "true" : "false");
       btn.textContent = paused ? (btn.dataset.labelResume || "Reprendre") : (btn.dataset.labelPause || "Mettre en pause");
-    });
+      videos(paused);
+    }
+    btn.addEventListener("click", function () { setPaused(!box.classList.contains("paused")); });
+    // Mouvement réduit demandé par le visiteur : rien ne bouge tant qu'il n'appuie pas sur « Reprendre »
+    if (window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches && box.querySelector("video, iframe.ad-embed")) {
+      window.addEventListener("load", function () { setPaused(true); });
+    }
   })();
 </script>
 {% endblock %}
