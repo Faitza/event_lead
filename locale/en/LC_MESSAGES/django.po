@@ -177,89 +177,149 @@ msgstr "Beauty"
 msgid "Icône"
 msgstr "Icon"
 
-#: ads/forms.py:33
+#: ads/forms.py:36
 msgid "JPEG, PNG ou WebP, 12 Mo au plus. L'image est réduite et allégée automatiquement."
 msgstr "JPEG, PNG or WebP, 12 MB at most. The image is resized and made lighter automatically."
 
-#: ads/forms.py:34
+#: ads/forms.py:37
 msgid "MP4, WebM ou MOV, 40 Mo au plus. Jouée sans le son et en boucle ; l'image sert d'affiche avant qu'elle démarre."
 msgstr "MP4, WebM or MOV, 40 MB max. Plays muted and on a loop; the image is shown until it starts."
 
-#: ads/forms.py:35
+#: ads/forms.py:38
 msgid "Ou collez le lien d'une vidéo YouTube ou Facebook (utilisé s'il n'y a pas de fichier vidéo)."
 msgstr "Or paste a YouTube or Facebook video link (used when there is no video file)."
 
-#: ads/forms.py:46
+#: ads/forms.py:49
 msgid "Collez le lien d'une vidéo YouTube ou Facebook."
 msgstr "Paste a YouTube or Facebook video link."
 
-#: ads/forms.py:52
+#: ads/forms.py:56
+msgid "La fin de diffusion doit venir après le début."
+msgstr "The end date must come after the start date."
+
+#: ads/forms.py:62
 msgid "30 secondes maximum."
 msgstr "30 seconds maximum."
 
-#: ads/models.py:33 events/models.py:133
+#: ads/models.py:47
+msgid "annonceur"
+msgstr "advertiser"
+
+#: ads/models.py:48
+msgid "Le partenaire ou la personne qui paie cette publicité."
+msgstr "The partner or person paying for this ad."
+
+#: ads/models.py:49
+msgid "téléphone ou WhatsApp de l'annonceur"
+msgstr "advertiser's phone or WhatsApp"
+
+#: ads/models.py:50
+msgid "payée"
+msgstr "paid"
+
+#: ads/models.py:51
+msgid "La publicité n'apparaît sur le site qu'une fois cochée « payée »."
+msgstr "The ad only appears on the site once it is marked “paid”."
+
+#: ads/models.py:52
+msgid "montant payé (HTG)"
+msgstr "amount paid (HTG)"
+
+#: ads/models.py:53
+msgid "début de diffusion"
+msgstr "run start"
+
+#: ads/models.py:54
+msgid "fin de diffusion"
+msgstr "run end"
+
+#: ads/models.py:55
+msgid "Après cette date, la publicité ne s'affiche plus. Vide : sans fin."
+msgstr "After this date the ad no longer shows. Empty: no end."
+
+#: ads/models.py:56 events/models.py:133
 msgid "titre"
 msgstr "title"
 
-#: ads/models.py:34 events/models.py:65 gifts/models.py:44
+#: ads/models.py:57 events/models.py:65 gifts/models.py:44
 msgid "icône"
 msgstr "icon"
 
-#: ads/models.py:35 core/models.py:29 core/models.py:63
+#: ads/models.py:58 core/models.py:29 core/models.py:63
 msgid "message"
 msgstr "message"
 
-#: ads/models.py:36
+#: ads/models.py:59
 msgid "image"
 msgstr "image"
 
-#: ads/models.py:38
+#: ads/models.py:61
 msgid "vidéo"
 msgstr "video"
 
-#: ads/models.py:39
+#: ads/models.py:62
 msgid "Jouée sans le son, en boucle. L'image ci-dessus s'affiche avant qu'elle démarre."
 msgstr "Plays muted, on a loop. The image above is shown until it starts."
 
-#: ads/models.py:42
+#: ads/models.py:65
 msgid "lien d'une vidéo YouTube ou Facebook"
 msgstr "YouTube or Facebook video link"
 
-#: ads/models.py:43
+#: ads/models.py:66
 msgid "Utilisé seulement s'il n'y a pas de fichier vidéo."
 msgstr "Used only when there is no video file."
 
-#: ads/models.py:45
+#: ads/models.py:68
 msgid "lien du sponsor"
 msgstr "sponsor link"
 
-#: ads/models.py:46
+#: ads/models.py:69
 msgid "passer après (secondes)"
 msgstr "skip after (seconds)"
 
-#: ads/models.py:49
+#: ads/models.py:72
 msgid "active"
 msgstr "active"
 
-#: ads/models.py:51
+#: ads/models.py:74
 msgid "afficher après la réponse d'un invité"
 msgstr "show after a guest's reply"
 
-#: ads/models.py:52
+#: ads/models.py:75
 msgid "Si coché, la publicité fait partie de la séquence affichée après une réponse."
 msgstr "If checked, the ad is part of the sequence shown after a reply."
 
-#: ads/models.py:54 events/models.py:66
+#: ads/models.py:77 events/models.py:66
 msgid "ordre d'affichage"
 msgstr "display order"
 
-#: ads/models.py:60
+#: ads/models.py:85
 msgid "publicité"
 msgstr "ad"
 
-#: ads/models.py:61
+#: ads/models.py:86
 msgid "publicités"
 msgstr "ads"
+
+#: ads/models.py:96
+msgid "En attente de paiement"
+msgstr "Awaiting payment"
+
+#: ads/models.py:98
+msgid "Désactivée"
+msgstr "Turned off"
+
+#: ads/models.py:100
+msgid "Commence le %(date)s"
+msgstr "Starts on %(date)s"
+
+#: ads/models.py:102
+msgid "Terminée"
+msgstr "Ended"
+
+#: ads/models.py:103
+msgid "En ligne"
+msgstr "Live"
 
 #: ads/views_admin.py:31
 msgid "Publicité créée."
@@ -2353,7 +2413,7 @@ msgstr "Create an account"
 msgid "Mon profil"
 msgstr "My profile"
 
-#: templates/accounts/profile.html:19 templates/dashboard/ads/form.html:32 templates/dashboard/categories/form.html:31 templates/dashboard/gifts/form.html:19 templates/dashboard/guests/form.html:30 templates/dashboard/help/list.html:38
+#: templates/accounts/profile.html:19 templates/dashboard/ads/form.html:44 templates/dashboard/categories/form.html:31 templates/dashboard/gifts/form.html:19 templates/dashboard/guests/form.html:30 templates/dashboard/help/list.html:38
 msgid "Enregistrer"
 msgstr "Save"
 
@@ -2875,6 +2935,14 @@ msgstr "It can be an image or a video."
 msgid "Retour"
 msgstr "Back"
 
+#: templates/dashboard/ads/form.html:14
+msgid "Annonceur et paiement"
+msgstr "Advertiser and payment"
+
+#: templates/dashboard/ads/form.html:15
+msgid "Les publicités sont réservées aux partenaires qui paient. Une publicité n'apparaît sur le site qu'une fois cochée « payée », et seulement entre les dates de diffusion."
+msgstr "Ads are reserved for partners who pay. An ad only appears on the site once it is marked “paid”, and only between its run dates."
+
 #: templates/dashboard/ads/list.html:4 templates/dashboard/base_dashboard.html:22
 msgid "Publicités"
 msgstr "Ads"
@@ -2884,14 +2952,14 @@ msgid "Publicités partenaires"
 msgstr "Partner ads"
 
 #: templates/dashboard/ads/list.html:7
-msgid "Choisissez les publicités affichées après la réponse des invités et suivez leurs performances."
-msgstr "Choose which ads are shown after guests reply and track how they perform."
+msgid "Les publicités des partenaires qui paient : elles s'affichent une fois payées, pendant leurs dates de diffusion. Suivez leurs vues et leurs clics."
+msgstr "Ads from paying partners: they show once paid, during their run dates. Track their views and clicks."
 
-#: templates/dashboard/ads/list.html:11 ads/models.py:47
+#: templates/dashboard/ads/list.html:11 ads/models.py:70
 msgid "vues"
 msgstr "views"
 
-#: templates/dashboard/ads/list.html:12 ads/models.py:48
+#: templates/dashboard/ads/list.html:12 ads/models.py:71
 msgid "clics"
 msgstr "clicks"
 
@@ -2902,6 +2970,14 @@ msgstr "click rate (CTR)"
 #: templates/dashboard/ads/list.html:18
 msgid "Publicité"
 msgstr "Ad"
+
+#: templates/dashboard/ads/list.html:18
+msgid "Diffusion"
+msgstr "Run"
+
+#: templates/dashboard/ads/list.html:18
+msgid "Payée"
+msgstr "Paid"
 
 #: templates/dashboard/ads/list.html:18
 msgid "Vues"
@@ -2915,7 +2991,7 @@ msgstr "Clicks"
 msgid "Après réponse"
 msgstr "After reply"
 
-#: templates/dashboard/ads/list.html:18 templates/dashboard/ads/list.html:25
+#: templates/dashboard/ads/list.html:18 templates/dashboard/ads/list.html:27
 msgid "Active"
 msgstr "Active"
 
@@ -2927,19 +3003,19 @@ msgstr "Actions"
 msgid "Vidéo"
 msgstr "Video"
 
-#: templates/dashboard/ads/list.html:24 events/forms.py:161
+#: templates/dashboard/ads/list.html:24 templates/dashboard/ads/list.html:26 events/forms.py:161
 msgid "Oui"
 msgstr "Yes"
 
-#: templates/dashboard/ads/list.html:24 templates/dashboard/events/detail.html:50 templates/dashboard/events/detail.html:60 events/forms.py:162
+#: templates/dashboard/ads/list.html:24 templates/dashboard/ads/list.html:26 templates/dashboard/events/detail.html:50 templates/dashboard/events/detail.html:60 events/forms.py:162
 msgid "Non"
 msgstr "No"
 
-#: templates/dashboard/ads/list.html:25
+#: templates/dashboard/ads/list.html:27
 msgid "Inactive"
 msgstr "Inactive"
 
-#: templates/dashboard/ads/list.html:35
+#: templates/dashboard/ads/list.html:37
 msgid "Aucune publicité."
 msgstr "No ads."
 

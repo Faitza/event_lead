@@ -2,6 +2,8 @@ import re
 from urllib.parse import parse_qs, quote, urlparse
 
 from django.db import models
+from django.db.models import Q
+from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 
 YOUTUBE_HOSTS = {"youtube.com", "www.youtube.com", "m.youtube.com", "youtu.be", "www.youtube-nocookie.com"}
@@ -29,7 +31,28 @@ def is_facebook_video(url):
     return (urlparse(url or "").hostname or "").lower() in FACEBOOK_HOSTS
 
 
+class AdQuerySet(models.QuerySet):
+    def live(self):
+        """Publicités visibles sur le site : actives, payées par l'annonceur et dans leur période de diffusion."""
+        today = timezone.localdate()
+        return self.filter(is_active=True, is_paid=True).filter(
+            Q(start_date__isnull=True) | Q(start_date__lte=today),
+            Q(end_date__isnull=True) | Q(end_date__gte=today),
+        )
+
+
 class Ad(models.Model):
+    """Publicité d'un partenaire qui paie pour être affiché (image ou vidéo)."""
+
+    advertiser = models.CharField(_("annonceur"), max_length=150, blank=True,
+                                  help_text=_("Le partenaire ou la personne qui paie cette publicité."))
+    advertiser_phone = models.CharField(_("téléphone ou WhatsApp de l'annonceur"), max_length=30, blank=True)
+    is_paid = models.BooleanField(_("payée"), default=False,
+                                  help_text=_("La publicité n'apparaît sur le site qu'une fois cochée « payée »."))
+    amount_htg = models.DecimalField(_("montant payé (HTG)"), max_digits=10, decimal_places=2, null=True, blank=True)
+    start_date = models.DateField(_("début de diffusion"), null=True, blank=True)
+    end_date = models.DateField(_("fin de diffusion"), null=True, blank=True,
+                                help_text=_("Après cette date, la publicité ne s'affiche plus. Vide : sans fin."))
     title = models.CharField(_("titre"), max_length=150)
     icon_name = models.CharField(_("icône"), max_length=50, default="bi-megaphone")
     message = models.TextField(_("message"))
@@ -54,6 +77,8 @@ class Ad(models.Model):
     order = models.PositiveIntegerField(_("ordre d'affichage"), default=0)
     created_at = models.DateTimeField(auto_now_add=True)
 
+    objects = AdQuerySet.as_manager()
+
     class Meta:
         ordering = ["order", "-created_at"]
         indexes = [models.Index(fields=["is_active", "order"], name="ad_active_order_idx")]
@@ -62,6 +87,20 @@ class Ad(models.Model):
 
     def __str__(self):
         return self.title
+
+    @property
+    def state(self):
+        """(code, libellé) de diffusion, pour le tableau de bord."""
+        today = timezone.localdate()
+        if not self.is_paid:
+            return "unpaid", _("En attente de paiement")
+        if not self.is_active:
+            return "off", _("Désactivée")
+        if self.start_date and self.start_date > today:
+            return "soon", _("Commence le %(date)s") % {"date": self.start_date.strftime("%d/%m/%Y")}
+        if self.end_date and self.end_date < today:
+            return "ended", _("Terminée")
+        return "live", _("En ligne")
 
     @property
     def ctr(self):

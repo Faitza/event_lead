@@ -61,7 +61,7 @@ def ad_delete(request, pk):
 def ad_toggle(request, pk):
     ad = get_object_or_404(Ad, pk=pk)
     field = request.POST.get("field")
-    if field in {"is_active", "show_after_reply"}:
+    if field in {"is_active", "show_after_reply", "is_paid"}:
         setattr(ad, field, not getattr(ad, field))
         ad.save(update_fields=[field])
     return redirect("dashboard:ad_list")

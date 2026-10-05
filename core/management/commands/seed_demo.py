@@ -206,6 +206,7 @@ class Command(BaseCommand):
 
         # ------------------------------------------------------------------ Publicités
         patisserie = Ad.objects.create(
+            advertiser="Pâtisserie Kay Dous", is_paid=True,
             title="Pâtisserie Kay Dous", icon_name="bi-cake2", order=0, skip_after_seconds=5,
             message="Pièces montées et gâteaux de mariage à Pétion-Ville. -10 % pour les invités EventLead.",
             sponsor_link="https://example.com/kay-dous", views=1204, clicks=96,
@@ -214,11 +215,13 @@ class Command(BaseCommand):
         if photo.exists():
             patisserie.image.save("kay-dous.jpg", ContentFile(photo.read_bytes()), save=True)
         Ad.objects.create(
+            advertiser="Fleurs de la Caraïbe", is_paid=True,
             title="Fleurs de la Caraïbe", icon_name="bi-flower1", order=1, skip_after_seconds=5,
             message="Compositions florales pour mariages et galas, livrées partout à Port-au-Prince. -15 % avec le code EVENTLEAD.",
             sponsor_link="https://example.com/fleurs-caraibe", views=842, clicks=67, show_after_reply=False,
         )
         Ad.objects.create(
+            advertiser="Studio Lumière Photo", is_paid=True,
             title="Studio Lumière Photo", icon_name="bi-camera", order=2, skip_after_seconds=5,
             message="Photographes et vidéastes professionnels : immortalisez chaque instant de votre événement.",
             sponsor_link="https://example.com/studio-lumiere", views=615, clicks=41, show_after_reply=False,

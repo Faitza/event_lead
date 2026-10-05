@@ -216,7 +216,7 @@ def invitation_recap(request, token):
 
 
 def _ad_sequence():
-    return list(Ad.objects.filter(is_active=True, show_after_reply=True).values_list("pk", flat=True))
+    return list(Ad.objects.live().filter(show_after_reply=True).values_list("pk", flat=True))
 
 
 def _after_ads_url():
@@ -243,7 +243,7 @@ def invitation_done(request, token):
 def invitation_ad(request, token, ad_id):
     """Page publicité affichée après la réponse (section 7), puis retour à l'accueil."""
     guest = _load_guest(token)
-    ad = get_object_or_404(Ad, pk=ad_id, is_active=True)
+    ad = get_object_or_404(Ad.objects.live(), pk=ad_id)
     Ad.objects.filter(pk=ad.pk).update(views=F("views") + 1)
     ads = _ad_sequence()
     try:

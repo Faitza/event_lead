@@ -18,7 +18,7 @@ from .models import Event, EventEvaluation, Guest
 def explore(request):
     """Exploration des événements publics (fin du parcours invité)."""
     events, categories, selected = public_events_by_category(request.GET.get("categorie", ""))
-    ads = Ad.objects.filter(is_active=True)[:3]
+    ads = Ad.objects.live()[:3]
     page = paginate(request, events, 12)
     return render(request, "events/explore.html", {
         "events": page.object_list, "page_obj": page, "categories": categories, "selected_category": selected, "ads": ads,
@@ -63,7 +63,7 @@ def organizer_portal(request):
         event.can_evaluate = _can_evaluate(event, user, event.my_invitation) and event.pk not in evaluated
         event.already_evaluated = event.pk in evaluated
         (past if event.date < today else upcoming).append(event)
-    ads = Ad.objects.filter(is_active=True)
+    ads = Ad.objects.live()
     return render(request, "events/organizer_portal.html", {"upcoming": upcoming, "past": past, "ads": ads})
 
 

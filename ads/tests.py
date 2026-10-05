@@ -16,7 +16,7 @@ MEDIA = tempfile.mkdtemp()
 
 
 def form_data(**extra):
-    data = {"title": "Traiteur", "icon_name": "bi-megaphone", "message": "Buffet", "sponsor_link": "https://example.com",
+    data = {"advertiser": "Traiteur Bon Goût", "is_paid": True, "title": "Traiteur", "icon_name": "bi-megaphone", "message": "Buffet", "sponsor_link": "https://example.com",
             "skip_after_seconds": 5, "is_active": True, "show_after_reply": True, "order": 0}
     data.update(extra)
     return data
@@ -60,7 +60,7 @@ class AdVideoTests(TestCase):
         self.assertContains(self.client.get(reverse("dashboard:ad_list")), "Vidéo")
 
     def test_video_plays_muted_in_parade_and_on_ad_page(self):
-        ad = Ad.objects.create(title="Traiteur vidéo", message="m", sponsor_link="https://example.com",
+        ad = Ad.objects.create(title="Traiteur vidéo", is_paid=True, message="m", sponsor_link="https://example.com",
                                video=SimpleUploadedFile("clip.mp4", b"0" * 20, content_type="video/mp4"))
         landing = self.client.get(reverse("core:landing"))
         self.assertContains(landing, 'class="ad-video"')
@@ -72,14 +72,58 @@ class AdVideoTests(TestCase):
         self.assertContains(self.client.get(reverse("ads:list")), 'class="ad-video"')
 
     def test_youtube_ad_in_parade_keeps_link_outside_player(self):
-        Ad.objects.create(title="Fleuriste", message="m", sponsor_link="https://example.com",
+        Ad.objects.create(title="Fleuriste", is_paid=True, message="m", sponsor_link="https://example.com",
                           video_url="https://www.youtube.com/watch?v=dQw4w9WgXcQ")
         r = self.client.get(reverse("core:landing"))
         self.assertContains(r, "ad-embed no-touch")
         self.assertContains(r, '<div class="p-card p-ad">')
 
     def test_image_only_ad_unchanged(self):
-        Ad.objects.create(title="Pâtisserie", message="m", sponsor_link="https://example.com")
+        Ad.objects.create(title="Pâtisserie", is_paid=True, message="m", sponsor_link="https://example.com")
         r = self.client.get(reverse("core:landing"))
         self.assertNotContains(r, "<video")
         self.assertNotContains(r, "<iframe")
+
+
+class PaidAdTests(TestCase):
+    """Les publicités sont réservées aux partenaires qui paient, pendant leurs dates de diffusion."""
+
+    def make(self, **kw):
+        defaults = dict(title="Traiteur", message="m", sponsor_link="https://example.com", advertiser="Traiteur Bon Goût")
+        defaults.update(kw)
+        return Ad.objects.create(**defaults)
+
+    def test_only_paid_ads_in_their_dates_are_live(self):
+        from datetime import timedelta
+        from django.utils import timezone
+        today = timezone.localdate()
+        live = self.make(title="Payée", is_paid=True, start_date=today, end_date=today + timedelta(days=7))
+        self.make(title="Pas payée")
+        self.make(title="Terminée", is_paid=True, end_date=today - timedelta(days=1))
+        self.make(title="Plus tard", is_paid=True, start_date=today + timedelta(days=3))
+        self.assertEqual(list(Ad.objects.live()), [live])
+        r = self.client.get(reverse("core:landing"))
+        self.assertContains(r, "Payée")
+        for title in ("Pas payée", "Terminée", "Plus tard"):
+            self.assertNotContains(r, title)
+
+    def test_unpaid_ad_page_and_click_are_closed(self):
+        ad = self.make()
+        self.assertEqual(self.client.get(reverse("ads:click", args=[ad.pk])).status_code, 404)
+        guest = Guest.objects.create(event=make_event(), name="Carla", phone="+509 3712 3456")
+        self.assertEqual(self.client.get(reverse("events:invitation_ad", args=[guest.magic_token, ad.pk])).status_code, 404)
+
+    def test_form_needs_advertiser_and_ordered_dates(self):
+        form = AdForm(form_data(advertiser="", start_date="2026-11-10", end_date="2026-11-01"))
+        self.assertIn("advertiser", form.errors)
+        self.assertIn("end_date", form.errors)
+
+    def test_admin_marks_ad_paid_from_the_list(self):
+        ad = self.make()
+        self.client.force_login(make_user("adm@x.ht", role="admin"))
+        r = self.client.get(reverse("dashboard:ad_list"))
+        self.assertContains(r, "En attente de paiement")
+        self.client.post(reverse("dashboard:ad_toggle", args=[ad.pk]), {"field": "is_paid"})
+        ad.refresh_from_db()
+        self.assertTrue(ad.is_paid)
+        self.assertContains(self.client.get(reverse("dashboard:ad_list")), "En ligne")

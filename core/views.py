@@ -35,7 +35,7 @@ SERVICES = [
 
 def build_parade(minimum=6):
     """Défilé de la page d'accueil : publications, événements publics et billets, en alternance."""
-    ads = list(Ad.objects.filter(is_active=True)[:6])
+    ads = list(Ad.objects.live()[:6])
     events = list(Event.objects.public_active().upcoming().select_related("category")[:6])
     tickets = [e for e in events if e.is_paid]
     rows = zip_longest(

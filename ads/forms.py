@@ -18,10 +18,12 @@ class AdForm(forms.ModelForm):
 
     class Meta:
         model = Ad
-        fields = ["title", "icon_name", "message", "image", "video", "video_url", "sponsor_link", "skip_after_seconds",
+        fields = ["advertiser", "advertiser_phone", "is_paid", "amount_htg", "start_date", "end_date", "title", "icon_name", "message", "image", "video", "video_url", "sponsor_link", "skip_after_seconds",
                   "is_active", "show_after_reply", "order"]
         widgets = {
             "message": forms.Textarea(attrs={"rows": 3}),
+            "start_date": forms.DateInput(attrs={"type": "date"}, format="%Y-%m-%d"),
+            "end_date": forms.DateInput(attrs={"type": "date"}, format="%Y-%m-%d"),
             "image": forms.ClearableFileInput(attrs={"accept": "image/*"}),
             "video": forms.ClearableFileInput(attrs={"accept": "video/*"}),
             "video_url": forms.URLInput(attrs={"placeholder": "https://www.youtube.com/watch?v=..."}),
@@ -30,6 +32,7 @@ class AdForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
+        self.fields["advertiser"].required = True
         self.fields["image"].help_text = _("JPEG, PNG ou WebP, 12 Mo au plus. L'image est réduite et allégée automatiquement.")
         self.fields["video"].help_text = _("MP4, WebM ou MOV, 40 Mo au plus. Jouée sans le son et en boucle ; l'image sert d'affiche avant qu'elle démarre.")
         self.fields["video_url"].help_text = _("Ou collez le lien d'une vidéo YouTube ou Facebook (utilisé s'il n'y a pas de fichier vidéo).")
@@ -45,6 +48,13 @@ class AdForm(forms.ModelForm):
         if url and not (youtube_id(url) or is_facebook_video(url)):
             raise forms.ValidationError(_("Collez le lien d'une vidéo YouTube ou Facebook."))
         return url
+
+    def clean(self):
+        cleaned = super().clean()
+        start, end = cleaned.get("start_date"), cleaned.get("end_date")
+        if start and end and end < start:
+            self.add_error("end_date", _("La fin de diffusion doit venir après le début."))
+        return cleaned
 
     def clean_skip_after_seconds(self):
         value = self.cleaned_data["skip_after_seconds"]

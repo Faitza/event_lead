@@ -10,6 +10,18 @@
   {% csrf_token %}
   <div class="row g-4">
     <div class="col-xl-7">
+      <div class="el-card el-card-body mb-4">
+        <h2 class="h6 fw-bold mb-1">{% trans "Annonceur et paiement" %}</h2>
+        <p class="small text-muted">{% trans "Les publicités sont réservées aux partenaires qui paient. Une publicité n'apparaît sur le site qu'une fois cochée « payée », et seulement entre les dates de diffusion." %}</p>
+        <div class="row g-3">
+          <div class="col-md-7">{% include "partials/_field.html" with field=form.advertiser %}</div>
+          <div class="col-md-5">{% include "partials/_field.html" with field=form.advertiser_phone %}</div>
+          <div class="col-md-6">{% include "partials/_field.html" with field=form.amount_htg %}</div>
+          <div class="col-md-6 d-flex align-items-end">{% include "partials/_field.html" with field=form.is_paid %}</div>
+          <div class="col-md-6">{% include "partials/_field.html" with field=form.start_date %}</div>
+          <div class="col-md-6">{% include "partials/_field.html" with field=form.end_date %}</div>
+        </div>
+      </div>
       <div class="el-card el-card-body">
         {% include "partials/_field.html" with field=form.title %}
         {% include "partials/_field.html" with field=form.message %}

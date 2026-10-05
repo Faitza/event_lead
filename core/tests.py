@@ -109,7 +109,7 @@ class InvitationFlowTests(TestCase):
         self.event = make_event()
         self.guest = Guest.objects.create(event=self.event, name="Carla", phone="+509 3712 3456")
         self.gift = Gift.objects.create(event=self.event, name="Lampe", icon_name="bi-lamp")
-        self.ad = Ad.objects.create(title="Pub", message="m", sponsor_link="https://example.com")
+        self.ad = Ad.objects.create(title="Pub", is_paid=True, message="m", sponsor_link="https://example.com")
         self.token = self.guest.magic_token
 
     def url(self, name, *extra):
@@ -169,7 +169,7 @@ class InvitationFlowTests(TestCase):
         self.assertContains(r, reverse("core:landing") + "#affiche")
 
     def test_ads_chain_ends_on_home(self):
-        second = Ad.objects.create(title="Pub 2", message="m", sponsor_link="https://example.com/2", order=2)
+        second = Ad.objects.create(title="Pub 2", is_paid=True, message="m", sponsor_link="https://example.com/2", order=2)
         self.client.post(self.url("invitation"), {"status": "declined"})
         self.client.post(self.url("invitation_recap"))
         r = self.client.get(self.url("invitation_ad", self.ad.pk))
@@ -209,8 +209,8 @@ class HomeParadeTests(TestCase):
         self.free = make_event(title="Conférence ouverte", event_type="public", status="active")
         self.paid = make_event(title="Gala payant", event_type="public", status="active", price_htg=Decimal("3500"))
         self.private = make_event(title="Mariage secret")
-        self.ad = Ad.objects.create(title="Pâtisserie Test", message="Gâteaux", sponsor_link="https://example.com")
-        Ad.objects.create(title="Pub inactive", message="x", sponsor_link="https://example.com", is_active=False)
+        self.ad = Ad.objects.create(title="Pâtisserie Test", is_paid=True, message="Gâteaux", sponsor_link="https://example.com")
+        Ad.objects.create(title="Pub inactive", is_paid=True, message="x", sponsor_link="https://example.com", is_active=False)
 
     def test_parade_mixes_ads_events_and_tickets(self):
         r = self.client.get(reverse("core:landing"))
