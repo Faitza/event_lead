@@ -3,6 +3,7 @@ import os
 from datetime import time, timedelta
 from decimal import Decimal
 
+from django.conf import settings
 from django.test import TestCase
 from django.urls import reverse
 from django.utils import timezone
@@ -685,6 +686,12 @@ class SmokeTests(TestCase):
     def test_guest_pages(self):
         self.client.login(email="invite@eventlead.ht", password="EventLead2026!")
         self.assertContains(self.client.get(reverse("accounts:guest_space")), "Mariage")
+        # Le bouton "Explorer les événements" mène à la page Événements (fr, en, ht).
+        for lang in ("fr", "en", "ht"):
+            self.client.cookies[settings.LANGUAGE_COOKIE_NAME] = lang
+            r = self.client.get(reverse("accounts:guest_space"))
+            self.assertContains(r, 'href="%s" class="btn btn-primary"><i class="bi bi-compass' % reverse("events:explore"))
+            self.assertNotContains(r, 'href="%s#affiche" class="btn btn-primary"' % reverse("core:landing"))
         event = Event.objects.filter(price_htg__gt=0).first()
         self.assertEqual(self.client.get(reverse("payments:checkout", args=[event.pk])).status_code, 200)
         self.assertEqual(self.client.get(reverse("payments:vip")).status_code, 200)
