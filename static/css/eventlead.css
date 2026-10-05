@@ -1003,6 +1003,9 @@ h2.h6 { font-size: 1.15rem; }
   --page-band: rgba(255, 255, 255, .14);    /* bandes claires des sections « blanches » (0 = aucune) */
 }
 body { background-image: linear-gradient(180deg, var(--page-top) 0%, var(--page-bottom) 100%); background-attachment: fixed; }
+/* Espace personnel (tableau de bord, Mon espace, profil, portail Organisateur) : fond blanc, à la demande du client */
+body.espace-perso { background: #fff; }
+body.espace-perso .section-white { background: transparent; }
 /* Sections de l'accueil : les « douces » laissent voir le fond, les « blanches » deviennent des bandes à peine plus claires */
 .section-soft { background: transparent; }
 .section-white { background: var(--page-band); }

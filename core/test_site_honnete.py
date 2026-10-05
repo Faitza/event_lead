@@ -100,3 +100,11 @@ class HonestDesignTests(TestCase):
         css = (BASE / "static/css/eventlead.css").read_text(encoding="utf-8")
         for layer in ("html::before", "body::before", "body::after", "--page-curve", "--page-dots"):
             self.assertNotIn(layer, css, layer)
+
+    def test_personal_space_has_a_white_background(self):
+        css = (BASE / "static/css/eventlead.css").read_text(encoding="utf-8")
+        self.assertIn("body.espace-perso { background: #fff; }", css)
+        for tpl in ("dashboard/base_dashboard.html", "accounts/guest_space.html", "accounts/profile.html",
+                    "accounts/become_organizer.html", "events/organizer_portal.html", "events/evaluate.html"):
+            self.assertIn("espace-perso", (BASE / "templates" / tpl).read_text(encoding="utf-8"), tpl)
+        self.assertNotIn("espace-perso", self.client.get(reverse("core:landing")).content.decode())

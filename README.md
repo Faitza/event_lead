@@ -197,6 +197,7 @@ Le site existe en français (langue par défaut), en anglais et en créole haït
 ## Fond du site
 
 - Le fond (public et tableau de bord) est un lilas rosé uni, en léger dégradé du haut vers le bas. Aucun dessin derrière le contenu : les courbes violettes et la trame de points ont été retirées le 5 octobre 2026 à la demande du client.
+- **Espace personnel** (tableau de bord, Mon espace, profil, portail Organisateur, évaluation) : fond blanc, classe `espace-perso` sur `<body>`.
 - **Un seul endroit à régler** : le bloc « Fond du site » à la fin de `static/css/eventlead.css`, variables `--page-top`, `--page-bottom` et `--page-band`.
 - Garder le bas de page assez clair : le texte gris (`--el-muted`) et le texte doré des petits titres doivent rester à un contraste d'au moins 4,5 sur le lilas (calculé : OK jusqu'à `#E6C0E0` avec `--el-muted: #434B5A` et `--el-gold-text: #6A500C`).
 - Les sections « blanches » de l'accueil sont des bandes claires translucides, les sections « douces » sont transparentes. Les cartes restent blanches. Le logo reste toujours sur fond blanc (barre blanche, badge du pied de page, badge de la page de connexion).
