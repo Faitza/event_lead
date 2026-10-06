@@ -25,6 +25,11 @@ urlpatterns = [
     path("aide/<int:pk>/statut/", core_admin.help_set_status, name="help_set_status"),
     # Provenance des visites (liens avec utm_*)
     path("provenance/", core_admin.utm_report, name="utm_report"),
+    # Logo du site : versions en couleur par dates
+    path("logo/", core_admin.logo_list, name="logo_list"),
+    path("logo/nouveau/", core_admin.logo_create, name="logo_create"),
+    path("logo/<int:pk>/modifier/", core_admin.logo_edit, name="logo_edit"),
+    path("logo/<int:pk>/supprimer/", core_admin.logo_delete, name="logo_delete"),
     # Événements
     path("evenements/", events_admin.event_list, name="event_list"),
     path("evenements/nouveau/", events_admin.event_create, name="event_create"),

@@ -440,8 +440,8 @@ h1 em, h2 em, h3 em, .disp em { color: var(--el-gold); font-style: italic; }
 .el-footer { background: var(--el-primary-dark); color: rgba(255, 255, 255, .72); padding: 3.5rem 0 2rem; }
 .el-footer a { color: rgba(255, 255, 255, .8); }
 .el-footer a:hover { color: var(--el-gold); }
-.el-footer .footer-badge { display: inline-flex; background: #fff; border: 1px solid var(--el-gold); border-radius: 14px; padding: 12px 20px; }
-.el-footer .footer-badge:hover { background: #fff; }
+.el-footer .footer-badge { display: inline-flex; }
+.el-footer .brand-name { color: #fff; }
 .el-footer h4 { font-family: var(--font-body); color: #fff; font-size: .95rem; font-weight: 700 !important; margin-bottom: 1rem; }
 
 /* Apparition progressive au défilement (IntersectionObserver) */
@@ -1017,8 +1017,7 @@ body.espace-perso .section-white { background: transparent; }
 .section-soft { background: transparent; }
 .section-white { background: var(--page-band); }
 .auth-wrap, .auth-panel { background: transparent; }
-/* Le logo reste toujours sur fond blanc : sur le fond lilas de la page de connexion il est dans un badge blanc */
-.auth-panel > a { background: #fff; border-radius: 18px; padding: 10px 28px 6px; box-shadow: var(--el-shadow); }
+
 /* Astérisque et textes d'erreur : rouge plus foncé pour rester lisible sur le fond lilas */
 .text-danger { --bs-danger-rgb: 160, 26, 20; }
 

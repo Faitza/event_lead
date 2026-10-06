@@ -1,14 +1,27 @@
 from django.conf import settings
+from django.templatetags.static import static
 from django.utils import timezone
 
 from events.models import Event
 
 from .content_cache import remember
-from .models import HelpRequest
+from .models import HelpRequest, LogoVariant
 
 
 def _next_public_event():
     return remember("next-public-event", lambda: Event.objects.public_active().upcoming().first())
+
+
+def _site_logo():
+    """Logo du jour : la version prévue pour aujourd'hui (Tableau de bord > Logo), sinon l'original."""
+    def build():
+        variant = LogoVariant.current()
+        if variant:
+            light, dark = variant.urls
+        else:
+            light, dark = static("img/logo/eventlead-original.png"), static("img/logo/eventlead-original-sombre.png")
+        return {"light": light, "dark": dark}
+    return remember("site-logo", build)
 
 
 def _new_help_requests():
@@ -26,6 +39,7 @@ def site_settings(request):
         # Appelable : la requête n'est exécutée que si le gabarit l'utilise.
         "next_public_event": _next_public_event,
         "new_help_requests": _new_help_requests,
+        "site_logo": _site_logo,
         "TODAY": timezone.localdate,
         # (code, sigle affiché, nom dans sa propre langue) : jamais traduits
         "LANGUAGE_OPTIONS": [("fr", "FR", "Français"), ("en", "EN", "English"), ("ht", "KR", "Kreyòl ayisyen")],

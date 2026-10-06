@@ -11,6 +11,7 @@
     <div class="nav-section">{% trans "Pilotage" %}</div>
     <a class="side-link {% if request.resolver_match.url_name == 'home' %}active{% endif %}" href="{% url 'dashboard:home' %}"><i class="bi bi-speedometer2"></i>{% trans "Tableau de bord" %}</a>
     <a class="side-link {% active '/admin-dashboard/evenements/' %}" href="{% url 'dashboard:event_list' %}"><i class="bi bi-calendar2-event"></i>{% trans "Événements" %}</a>
+    <a class="side-link {% active '/admin-dashboard/logo/' %}" href="{% url 'dashboard:logo_list' %}"><i class="bi bi-palette"></i>{% trans "Logo" %}</a>
     <a class="side-link {% active '/admin-dashboard/categories/' %}" href="{% url 'dashboard:category_list' %}"><i class="bi bi-tags"></i>{% trans "Catégories" %}</a>
     <a class="side-link {% active '/admin-dashboard/invites/' %}" href="{% url 'dashboard:guest_list' %}"><i class="bi bi-people"></i>{% trans "Invités" %}</a>
     <a class="side-link {% active '/admin-dashboard/pointage/' %}" href="{% url 'dashboard:checkin_index' %}"><i class="bi bi-qr-code-scan"></i>{% trans "Pointage" %}</a>

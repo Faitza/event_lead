@@ -105,7 +105,7 @@
 
 /* ==========================================================================
    01. Mode sombre : activé seulement par le bouton (lune / soleil), gardé dans le navigateur.
-   Violet nuit pour le fond, textes clairs, or inchangé. Le logo reste sur fond blanc (règle du logo).
+   Violet nuit pour le fond, textes clairs, or inchangé. Le logo passe à sa version pour fond sombre.
    ========================================================================== */
 [data-theme="dark"] {
   color-scheme: dark;
@@ -190,18 +190,14 @@
 [data-theme="dark"] .vip-link .disp, [data-theme="dark"] .ticket-head h1, [data-theme="dark"] .legal h2, [data-theme="dark"] .contact-item i,
 [data-theme="dark"] .meta-row i, [data-theme="dark"] .cat-chip i, [data-theme="dark"] .event-arch .foot i,
 [data-theme="dark"] [style*="color:var(--el-primary-dark)"], [data-theme="dark"] [style*="color:var(--el-primary)"] { color: #F1E6F7 !important; }
-[data-theme="dark"] .brand-name { color: var(--el-primary) !important; }  /* le nom reste violet : il est sur le badge blanc du logo */
 [data-theme="dark"] .how-sub, [data-theme="dark"] .service-cell p, [data-theme="dark"] .testi blockquote, [data-theme="dark"] .contact-item,
 [data-theme="dark"] .meta-row, [data-theme="dark"] .stepper-label, [data-theme="dark"] .faq-item p, [data-theme="dark"] .how-step p,
 [data-theme="dark"] .scan-result-table, [data-theme="dark"] .form-text,
 [data-theme="dark"] [style*="color:#4B5563"], [data-theme="dark"] [style*="color:#6B7280"], [data-theme="dark"] [style*="color:#9CA3AF"] { color: var(--el-muted) !important; }
 
-/* Barre de navigation : violet nuit ; le logo garde son fond blanc */
+/* Barre de navigation : violet nuit */
 [data-theme="dark"] .el-nav { background: #1E1226; box-shadow: 0 1px 0 var(--el-line); }
-[data-theme="dark"] .el-nav .brand-lockup, [data-theme="dark"] .dash-sidebar .brand-lockup,
-[data-theme="dark"] .inv-topbar .brand-lockup, [data-theme="dark"] .ad-topbar .brand-lockup {
-  background: #fff; border-radius: 14px; padding: 4px 14px 4px 6px;
-}
+[data-theme="dark"] .brand-name { color: #fff !important; }
 [data-theme="dark"] .navbar-toggler .bi { color: #F4ECF8 !important; }
 [data-theme="dark"] .dropdown-menu { --bs-dropdown-bg: var(--el-card); --bs-dropdown-link-color: var(--el-text); --bs-dropdown-border-color: var(--el-border); }
 [data-theme="dark"] .el-nav .nav-more .dropdown-item, [data-theme="dark"] .lang-menu .dropdown-item { color: var(--el-text); }
@@ -236,3 +232,22 @@
   [data-theme="dark"] body, [data-theme="dark"] .el-card, [data-theme="dark"] .frame { background: #fff !important; color: #000 !important; }
   [data-theme="dark"] h1, [data-theme="dark"] h2, [data-theme="dark"] h3, [data-theme="dark"] .disp { color: #000 !important; }
 }
+
+/* ==========================================================================
+   Logo sans fond blanc (6 octobre 2026, à la demande du client) : deux fichiers par couleur,
+   un pour fond clair, un pour fond sombre (pied de page, mode sombre). Logo du jour : Tableau de bord > Logo.
+   ========================================================================== */
+.brand-mark.mark-dark { display: none; }
+.el-footer .brand-mark.mark-light, [data-theme="dark"] .brand-mark.mark-light { display: none; }
+.el-footer .brand-mark.mark-dark, [data-theme="dark"] .brand-mark.mark-dark { display: block; }
+.logo-preview { display: flex; gap: 10px; }
+.logo-preview span { width: 76px; height: 82px; border-radius: 10px; display: flex; align-items: center; justify-content: center; border: 1px solid var(--el-border); }
+.logo-preview span.on-light { background: #F6DAEE; }
+.logo-preview span.on-dark { background: #2C033B; }
+.logo-preview img { max-height: 70px; max-width: 66px; }
+.logo-choices { display: grid; grid-template-columns: repeat(auto-fill, minmax(190px, 1fr)); gap: 10px; }
+.logo-choices input { position: absolute; opacity: 0; }
+.logo-choices label { display: flex; flex-direction: column; align-items: center; gap: 8px; padding: 10px; border: 2px solid var(--el-border); border-radius: 12px; cursor: pointer; background: #fff; font-weight: 500; }
+.logo-choices input:checked + label { border-color: var(--el-primary); box-shadow: 0 0 0 3px rgba(69, 6, 92, .15); }
+.logo-choices input:focus-visible + label { outline: 3px solid var(--el-gold); outline-offset: 2px; }
+[data-theme="dark"] .logo-choices label { background: var(--el-card); color: var(--el-text); }

@@ -17,7 +17,8 @@ from events.models import Event, Guest
 from gifts.models import Gift, GiftClaim
 from payments.models import Payment
 
-from .models import Attribution, ContactMessage, HelpRequest, Review
+from .forms import LogoVariantForm
+from .models import Attribution, ContactMessage, HelpRequest, LogoVariant, Review
 from .paging import paginate
 
 
@@ -189,4 +190,55 @@ def utm_report(request):
     return render(request, "dashboard/utm/report.html", {
         "kinds": kinds, "summary": summary, "items": page.object_list, "page_obj": page,
         "builder": builder, "built_link": built_link,
+    })
+
+
+# ---------------------------------------------------------------------------
+# Logo du site : versions en couleur pour une période
+# ---------------------------------------------------------------------------
+LOGO_PRESETS = [c for c in LogoVariant.Preset.choices if c[0] != LogoVariant.Preset.CUSTOM]
+
+
+@admin_required
+def logo_list(request):
+    today = timezone.localdate()
+    variants = list(LogoVariant.objects.all())
+    return render(request, "dashboard/logo/list.html", {
+        "variants": [(v, v.state(today)) for v in variants], "current": LogoVariant.current(today),
+        "presets": LOGO_PRESETS,
+    })
+
+
+def _logo_form(request, variant=None):
+    initial = {}
+    if variant is None:
+        initial = {"preset": request.GET.get("couleur") or LogoVariant.Preset.GOLD, "start_date": timezone.localdate()}
+    form = LogoVariantForm(request.POST or None, request.FILES or None, instance=variant, initial=initial)
+    if request.method == "POST" and form.is_valid():
+        form.save()
+        messages.success(request, _("Version du logo enregistrée.") if variant is None else _("Version du logo mise à jour."))
+        return redirect("dashboard:logo_list")
+    return render(request, "dashboard/logo/form.html", {"form": form, "variant": variant, "presets": LOGO_PRESETS})
+
+
+@admin_required
+def logo_create(request):
+    return _logo_form(request)
+
+
+@admin_required
+def logo_edit(request, pk):
+    return _logo_form(request, get_object_or_404(LogoVariant, pk=pk))
+
+
+@admin_required
+def logo_delete(request, pk):
+    variant = get_object_or_404(LogoVariant, pk=pk)
+    if request.method == "POST":
+        variant.delete()
+        messages.success(request, _("Version du logo supprimée. Le logo original revient pour ces dates."))
+        return redirect("dashboard:logo_list")
+    return render(request, "dashboard/confirm_delete.html", {
+        "object": variant, "kind": _("la version du logo"), "blocked": False, "note": "",
+        "cancel_url": reverse("dashboard:logo_list"),
     })

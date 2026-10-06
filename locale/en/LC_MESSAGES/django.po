@@ -337,41 +337,53 @@ msgstr "Ad deleted."
 msgid "la publicité"
 msgstr "the ad"
 
-#: core/forms.py:20 core/forms.py:39
+#: core/forms.py:22 core/forms.py:41
 msgid "Votre nom"
 msgstr "Your name"
 
-#: core/forms.py:34
+#: core/forms.py:36
 msgid "Ne pas remplir"
 msgstr "Do not fill in"
 
-#: core/forms.py:39
+#: core/forms.py:41
 msgid "E-mail ou numéro WhatsApp"
 msgstr "E-mail or WhatsApp number"
 
-#: core/forms.py:39 core/views_admin.py:150
+#: core/forms.py:41 core/views_admin.py:151
 msgid "Sujet"
 msgstr "Subject"
 
-#: core/forms.py:39
+#: core/forms.py:41
 msgid "Votre question"
 msgstr "Your question"
 
-#: core/forms.py:42
+#: core/forms.py:44
 msgid "nom@exemple.com ou +509 ..."
 msgstr "name@example.com or +509 ..."
 
-#: core/forms.py:43
+#: core/forms.py:45
 msgid "Dites-nous ce qui se passe, avec le nom de l'événement si possible"
 msgstr "Tell us what is happening, with the name of the event if possible"
 
-#: core/forms.py:55
+#: core/forms.py:57
 msgid "Cette adresse e-mail n'est pas valide."
 msgstr "This e-mail address is not valid."
 
-#: core/forms.py:57
+#: core/forms.py:59
 msgid "Indiquez une adresse e-mail ou un numéro de téléphone valide."
 msgstr "Enter a valid e-mail address or phone number."
+
+#: core/forms.py:70
+msgid "Noël 2026"
+msgstr "Christmas 2026"
+
+#: core/forms.py:92
+msgid "La date de fin doit être après la date de début."
+msgstr "The end date must be after the start date."
+
+#: core/forms.py:94
+msgid "Ajoutez votre fichier, ou choisissez une des couleurs prêtes."
+msgstr "Add your file, or choose one of the ready colors."
 
 #: core/help.py:17
 msgid "Invité ou visiteur"
@@ -815,7 +827,7 @@ msgid_plural "This password is too short. It must contain at least %(min_length)
 msgstr[0] "This password is too short. It must contain at least %(min_length)d character."
 msgstr[1] "This password is too short. It must contain at least %(min_length)d characters."
 
-#: core/models.py:9 core/models.py:26 core/models.py:60 events/models.py:63 events/models.py:268 events/models.py:305
+#: core/models.py:9 core/models.py:26 core/models.py:60 core/models.py:147 events/models.py:63 events/models.py:268
 msgid "nom"
 msgstr "name"
 
@@ -947,6 +959,90 @@ msgstr "source"
 msgid "provenances"
 msgstr "sources"
 
+#: core/models.py:139
+msgid "Violet (original)"
+msgstr "Purple (original)"
+
+#: core/models.py:140
+msgid "Or"
+msgstr "Gold"
+
+#: core/models.py:141
+msgid "Rose"
+msgstr "Pink"
+
+#: core/models.py:142
+msgid "Rouge"
+msgstr "Red"
+
+#: core/models.py:143
+msgid "Bleu"
+msgstr "Blue"
+
+#: core/models.py:144
+msgid "Vert"
+msgstr "Green"
+
+#: core/models.py:145
+msgid "Mon propre fichier"
+msgstr "My own file"
+
+#: core/models.py:147
+msgid "Par exemple : Noël 2026, Saint-Valentin."
+msgstr "For example: Christmas 2026, Valentine's Day."
+
+#: core/models.py:148
+msgid "couleur"
+msgstr "color"
+
+#: core/models.py:149
+msgid "logo pour fond clair"
+msgstr "logo for light backgrounds"
+
+#: core/models.py:150
+msgid "Seulement pour « Mon propre fichier » : PNG à fond transparent."
+msgstr "Only for \"My own file\": PNG with a transparent background."
+
+#: core/models.py:151
+msgid "logo pour fond sombre"
+msgstr "logo for dark backgrounds"
+
+#: core/models.py:152
+msgid "Facultatif : sinon le logo pour fond clair est utilisé partout."
+msgstr "Optional: otherwise the light-background logo is used everywhere."
+
+#: core/models.py:153
+msgid "du"
+msgstr "from"
+
+#: core/models.py:154
+msgid "au"
+msgstr "to"
+
+#: core/models.py:155
+msgid "activé"
+msgstr "enabled"
+
+#: core/models.py:160
+msgid "version du logo"
+msgstr "logo version"
+
+#: core/models.py:161
+msgid "versions du logo"
+msgstr "logo versions"
+
+#: core/models.py:186
+msgid "Désactivé"
+msgstr "Disabled"
+
+#: core/models.py:190
+msgid "Terminé"
+msgstr "Ended"
+
+#: core/models.py:191
+msgid "En ce moment"
+msgstr "Now showing"
+
 #: core/ratelimit.py:55
 msgid "Trop de demandes en peu de temps. Patientez une minute puis réessayez."
 msgstr "Too many requests in a short time. Wait a minute, then try again."
@@ -1071,29 +1167,45 @@ msgstr "The message could not be sent. Check the fields."
 msgid "La demande n'a pas pu être envoyée. Corrigez les champs en rouge."
 msgstr "The request could not be sent. Please fix the fields in red."
 
-#: core/views_admin.py:85
+#: core/views_admin.py:86
 msgid "Avis publié."
 msgstr "Review published."
 
-#: core/views_admin.py:85
+#: core/views_admin.py:86
 msgid "Avis masqué."
 msgstr "Review hidden."
 
-#: core/views_admin.py:132
+#: core/views_admin.py:133
 msgid "Demande de %(name)s : %(status)s."
 msgstr "Request from %(name)s: %(status)s."
 
-#: core/views_admin.py:147
+#: core/views_admin.py:148
 msgid "demandes-aide-eventlead"
 msgstr "help-requests-eventlead"
 
-#: core/views_admin.py:150
+#: core/views_admin.py:151
 msgid "Reçue le"
 msgstr "Received on"
 
-#: core/views_admin.py:150
+#: core/views_admin.py:151
 msgid "E-mail ou téléphone"
 msgstr "Email or phone"
+
+#: core/views_admin.py:219
+msgid "Version du logo enregistrée."
+msgstr "Logo version saved."
+
+#: core/views_admin.py:219
+msgid "Version du logo mise à jour."
+msgstr "Logo version updated."
+
+#: core/views_admin.py:239
+msgid "Version du logo supprimée. Le logo original revient pour ces dates."
+msgstr "Logo version deleted. The original logo comes back for those dates."
+
+#: core/views_admin.py:242
+msgid "la version du logo"
+msgstr "the logo version"
 
 #: events/album.py:52
 msgid "« %(name)s » est trop lourde (12 Mo au plus)."
@@ -2955,7 +3067,7 @@ msgstr "Be the first to leave a review."
 msgid "Laisser un avis"
 msgstr "Leave a review"
 
-#: templates/core/landing.html:242 templates/dashboard/checkin/event.html:68 templates/dashboard/events/detail.html:44 templates/dashboard/guests/export_pdf.html:17 core/views_admin.py:150 events/views_admin.py:319
+#: templates/core/landing.html:242 templates/dashboard/checkin/event.html:68 templates/dashboard/events/detail.html:44 templates/dashboard/guests/export_pdf.html:17 templates/dashboard/logo/list.html:39 core/views_admin.py:151
 msgid "Nom"
 msgstr "Name"
 
@@ -2967,11 +3079,11 @@ msgstr "Rating"
 msgid "%(n)s sur 5"
 msgstr "%(n)s out of 5"
 
-#: templates/core/landing.html:249 core/forms.py:20
+#: templates/core/landing.html:249 core/forms.py:22
 msgid "Votre avis"
 msgstr "Your review"
 
-#: templates/core/landing.html:249 core/forms.py:21
+#: templates/core/landing.html:249 core/forms.py:23
 msgid "Partagez votre expérience avec EventLead"
 msgstr "Share your experience with EventLead"
 
@@ -2999,23 +3111,23 @@ msgstr "Hello EventLead, I would like to organize an event."
 msgid "Écrivez-nous"
 msgstr "Write to us"
 
-#: templates/core/landing.html:276 core/forms.py:28
+#: templates/core/landing.html:276 core/forms.py:30
 msgid "Nom complet"
 msgstr "Full name"
 
-#: templates/core/landing.html:277 accounts/forms.py:79 core/forms.py:28 events/views_admin.py:319
+#: templates/core/landing.html:277 accounts/forms.py:79 core/forms.py:30 events/views_admin.py:319
 msgid "Téléphone"
 msgstr "Phone"
 
-#: templates/core/landing.html:278 accounts/forms.py:13 accounts/forms.py:38 core/forms.py:28
+#: templates/core/landing.html:278 accounts/forms.py:13 accounts/forms.py:38 core/forms.py:30
 msgid "Adresse e-mail"
 msgstr "E-mail address"
 
-#: templates/core/landing.html:279 core/forms.py:28 core/views_admin.py:150
+#: templates/core/landing.html:279 core/forms.py:30 core/views_admin.py:151
 msgid "Message"
 msgstr "Message"
 
-#: templates/core/landing.html:279 core/forms.py:29
+#: templates/core/landing.html:279 core/forms.py:31
 msgid "Parlez-nous de votre événement"
 msgstr "Tell us about your event"
 
@@ -3069,7 +3181,7 @@ msgstr[1] "%(counter)s results for “%(q)s”"
 msgid "Événements publics"
 msgstr "Public events"
 
-#: templates/core/search.html:25 templates/dashboard/base_dashboard.html:14 templates/dashboard/categories/list.html:3
+#: templates/core/search.html:25 templates/dashboard/base_dashboard.html:15 templates/dashboard/categories/list.html:3
 msgid "Catégories"
 msgstr "Categories"
 
@@ -3117,7 +3229,7 @@ msgstr "Advertiser and payment"
 msgid "Les publicités sont réservées aux partenaires qui paient. Une publicité n'apparaît sur le site qu'une fois cochée « payée », et seulement entre les dates de diffusion."
 msgstr "Ads are reserved for partners who pay. An ad only appears on the site once it is marked “paid”, and only between its run dates."
 
-#: templates/dashboard/ads/list.html:4 templates/dashboard/base_dashboard.html:22
+#: templates/dashboard/ads/list.html:4 templates/dashboard/base_dashboard.html:23
 msgid "Publicités"
 msgstr "Ads"
 
@@ -3217,79 +3329,83 @@ msgstr "Dashboard"
 msgid "Événements"
 msgstr "Events"
 
-#: templates/dashboard/base_dashboard.html:15 templates/dashboard/events/detail.html:35 templates/dashboard/guests/list.html:3 templates/dashboard/guests/list.html:6 templates/dashboard/home.html:25
+#: templates/dashboard/base_dashboard.html:14 templates/dashboard/logo/list.html:3 templates/dashboard/logo/list.html:39
+msgid "Logo"
+msgstr "Logo"
+
+#: templates/dashboard/base_dashboard.html:16 templates/dashboard/events/detail.html:35 templates/dashboard/guests/list.html:3 templates/dashboard/guests/list.html:6 templates/dashboard/home.html:25
 msgid "Invités"
 msgstr "Guests"
 
-#: templates/dashboard/base_dashboard.html:16 templates/dashboard/checkin/index.html:3 templates/dashboard/checkin/index.html:6 templates/dashboard/events/detail.html:21
+#: templates/dashboard/base_dashboard.html:17 templates/dashboard/checkin/index.html:3 templates/dashboard/checkin/index.html:6 templates/dashboard/events/detail.html:21
 msgid "Pointage"
 msgstr "Check-in"
 
-#: templates/dashboard/base_dashboard.html:17 templates/dashboard/events/detail.html:22 templates/dashboard/reminders/_table.html:13 templates/dashboard/reminders/index.html:3 templates/dashboard/reminders/index.html:6
+#: templates/dashboard/base_dashboard.html:18 templates/dashboard/events/detail.html:22 templates/dashboard/reminders/_table.html:13 templates/dashboard/reminders/index.html:3 templates/dashboard/reminders/index.html:6
 msgid "Relances"
 msgstr "Reminders"
 
-#: templates/dashboard/base_dashboard.html:18 templates/dashboard/seating/index.html:3 templates/dashboard/seating/index.html:6 templates/dashboard/seating/print.html:39
+#: templates/dashboard/base_dashboard.html:19 templates/dashboard/seating/index.html:3 templates/dashboard/seating/index.html:6 templates/dashboard/seating/print.html:39
 msgid "Plan de table"
 msgstr "Seating plan"
 
-#: templates/dashboard/base_dashboard.html:19 templates/dashboard/events/detail.html:23 templates/dashboard/thanks/index.html:3 templates/dashboard/thanks/index.html:6
+#: templates/dashboard/base_dashboard.html:20 templates/dashboard/events/detail.html:23 templates/dashboard/thanks/index.html:3 templates/dashboard/thanks/index.html:6
 msgid "Remerciements"
 msgstr "Thank-yous"
 
-#: templates/dashboard/base_dashboard.html:20 templates/dashboard/events/list.html:25 templates/dashboard/gifts/list.html:4 templates/dashboard/guests/export_pdf.html:17 templates/dashboard/guests/list.html:28 templates/invitation/step_recap.html:13
+#: templates/dashboard/base_dashboard.html:21 templates/dashboard/events/list.html:25 templates/dashboard/gifts/list.html:4 templates/dashboard/guests/export_pdf.html:17 templates/dashboard/guests/list.html:28 templates/invitation/step_recap.html:13
 msgid "Cadeaux"
 msgstr "Gifts"
 
-#: templates/dashboard/base_dashboard.html:21
+#: templates/dashboard/base_dashboard.html:22
 msgid "Revenus"
 msgstr "Revenue"
 
-#: templates/dashboard/base_dashboard.html:23 templates/dashboard/payments/history.html:4
+#: templates/dashboard/base_dashboard.html:24 templates/dashboard/payments/history.html:4
 msgid "Paiements"
 msgstr "Payments"
 
-#: templates/dashboard/base_dashboard.html:24
+#: templates/dashboard/base_dashboard.html:25
 msgid "Communauté"
 msgstr "Community"
 
-#: templates/dashboard/base_dashboard.html:25 templates/dashboard/inbox.html:3 templates/dashboard/inbox.html:5
+#: templates/dashboard/base_dashboard.html:26 templates/dashboard/inbox.html:3 templates/dashboard/inbox.html:5
 msgid "Messages et avis"
 msgstr "Messages and reviews"
 
-#: templates/dashboard/base_dashboard.html:26 templates/dashboard/help/list.html:3 templates/dashboard/help/list.html:6
+#: templates/dashboard/base_dashboard.html:27 templates/dashboard/help/list.html:3 templates/dashboard/help/list.html:6
 msgid "Demandes d'aide"
 msgstr "Help requests"
 
-#: templates/dashboard/base_dashboard.html:26
+#: templates/dashboard/base_dashboard.html:27
 msgid "Demandes nouvelles"
 msgstr "New requests"
 
-#: templates/dashboard/base_dashboard.html:27 templates/dashboard/utm/report.html:3 templates/dashboard/utm/report.html:6
+#: templates/dashboard/base_dashboard.html:28 templates/dashboard/utm/report.html:3 templates/dashboard/utm/report.html:6
 msgid "Provenance des visites"
 msgstr "Visit sources"
 
-#: templates/dashboard/base_dashboard.html:28
+#: templates/dashboard/base_dashboard.html:29
 msgid "Back-office Django"
 msgstr "Django back office"
 
-#: templates/dashboard/base_dashboard.html:29
+#: templates/dashboard/base_dashboard.html:30
 msgid "Voir le site"
 msgstr "View site"
 
-#: templates/dashboard/base_dashboard.html:31 templates/partials/_navbar.html:51
+#: templates/dashboard/base_dashboard.html:32 templates/partials/_navbar.html:51
 msgid "Se déconnecter"
 msgstr "Log out"
 
-#: templates/dashboard/base_dashboard.html:37 templates/partials/_navbar.html:16
+#: templates/dashboard/base_dashboard.html:38 templates/partials/_navbar.html:16
 msgid "Menu"
 msgstr "Menu"
 
-#: templates/dashboard/base_dashboard.html:38 templates/dashboard/checkin/event.html:28 templates/dashboard/events/detail.html:17 templates/dashboard/reminders/event.html:20 templates/dashboard/seating/event.html:22 templates/dashboard/seating/print.html:40
+#: templates/dashboard/base_dashboard.html:39 templates/dashboard/checkin/event.html:28 templates/dashboard/events/detail.html:17 templates/dashboard/reminders/event.html:20 templates/dashboard/seating/event.html:22 templates/dashboard/seating/print.html:40
 msgid "l j F Y"
 msgstr "l, F j, Y"
 
-#: templates/dashboard/base_dashboard.html:43 templates/dashboard/base_dashboard.html:43 templates/dashboard/base_dashboard.html:43 templates/dashboard/events/form.html:4 templates/dashboard/events/form.html:8 templates/dashboard/events/list.html:7
+#: templates/dashboard/base_dashboard.html:44 templates/dashboard/base_dashboard.html:44 templates/dashboard/base_dashboard.html:44 templates/dashboard/events/form.html:4 templates/dashboard/events/form.html:8 templates/dashboard/events/list.html:7
 msgid "Nouvel événement"
 msgstr "New event"
 
@@ -3345,11 +3461,11 @@ msgstr "site photo"
 msgid "Aucune"
 msgstr "None"
 
-#: templates/dashboard/categories/list.html:27 templates/dashboard/events/detail.html:24 templates/dashboard/events/list.html:41 templates/dashboard/gifts/list.html:42 templates/dashboard/guests/list.html:49
+#: templates/dashboard/categories/list.html:27 templates/dashboard/events/detail.html:24 templates/dashboard/events/list.html:41 templates/dashboard/gifts/list.html:42 templates/dashboard/guests/list.html:49 templates/dashboard/logo/list.html:48
 msgid "Modifier"
 msgstr "Edit"
 
-#: templates/dashboard/categories/list.html:28 templates/dashboard/confirm_delete.html:18 templates/dashboard/events/list.html:42 templates/dashboard/gifts/list.html:46 templates/dashboard/guests/list.html:50 templates/dashboard/seating/event.html:56
+#: templates/dashboard/categories/list.html:28 templates/dashboard/confirm_delete.html:18 templates/dashboard/events/list.html:42 templates/dashboard/gifts/list.html:46 templates/dashboard/guests/list.html:50 templates/dashboard/logo/list.html:49
 msgid "Supprimer"
 msgstr "Delete"
 
@@ -4179,6 +4295,62 @@ msgstr "Publish"
 msgid "Aucun avis."
 msgstr "No reviews."
 
+#: templates/dashboard/logo/form.html:3
+msgid "Modifier la couleur du logo"
+msgstr "Edit the logo color"
+
+#: templates/dashboard/logo/form.html:3 templates/dashboard/logo/form.html:6 templates/dashboard/logo/list.html:7
+msgid "Programmer une couleur"
+msgstr "Schedule a color"
+
+#: templates/dashboard/logo/form.html:6
+msgid "Choisissez la couleur et les dates. Le premier jour, le logo change sur tout le site ; après le dernier jour, le logo original revient."
+msgstr "Choose the color and the dates. On the first day the logo changes across the site; after the last day the original logo comes back."
+
+#: templates/dashboard/logo/form.html:34
+msgid "Utiliser mon propre fichier"
+msgstr "Use my own file"
+
+#: templates/dashboard/logo/list.html:6
+msgid "Logo du site"
+msgstr "Site logo"
+
+#: templates/dashboard/logo/list.html:6
+msgid "Changez la couleur du logo pour une période (Noël, Saint-Valentin, fête du drapeau...). En dehors de ces dates, le site revient tout seul au logo original."
+msgstr "Change the logo color for a period (Christmas, Valentine's Day, Flag Day...). Outside those dates the site goes back to the original logo by itself."
+
+#: templates/dashboard/logo/list.html:12
+msgid "Affiché aujourd'hui"
+msgstr "Showing today"
+
+#: templates/dashboard/logo/list.html:16
+msgid "Logo original (aucune couleur programmée aujourd'hui)."
+msgstr "Original logo (no color scheduled today)."
+
+#: templates/dashboard/logo/list.html:16
+msgid "du %(start)s au %(end)s"
+msgstr "from %(start)s to %(end)s"
+
+#: templates/dashboard/logo/list.html:21
+msgid "Couleurs prêtes"
+msgstr "Ready colors"
+
+#: templates/dashboard/logo/list.html:30
+msgid "Seule la couleur des lettres change : le dessin, les flûtes, l'enveloppe et le petit « EventLead » au centre restent ceux du logo original."
+msgstr "Only the color of the letters changes: the drawing, the glasses, the envelope and the small \"EventLead\" in the middle stay as in the original logo."
+
+#: templates/dashboard/logo/list.html:35
+msgid "Couleurs programmées"
+msgstr "Scheduled colors"
+
+#: templates/dashboard/logo/list.html:39
+msgid "Dates"
+msgstr "Dates"
+
+#: templates/dashboard/logo/list.html:57
+msgid "Aucune couleur programmée : le logo original s'affiche toute l'année."
+msgstr "No color scheduled: the original logo shows all year."
+
 #: templates/dashboard/payments/history.html:7
 msgid "Historique des transactions"
 msgstr "Transaction history"
@@ -4433,7 +4605,7 @@ msgstr "The message is written in each guest's language. The link opens the repl
 msgid "Relancez en un clic les invités qui n'ont pas répondu, par WhatsApp ou par e-mail. Choisissez l'événement."
 msgstr "Remind guests who have not replied in one click, by WhatsApp or e-mail. Choose the event."
 
-#: templates/dashboard/reminders/index.html:10 templates/dashboard/seating/index.html:10 templates/dashboard/thanks/index.html:16
+#: templates/dashboard/reminders/index.html:10 templates/dashboard/seating/index.html:10 templates/dashboard/thanks/index.html:16 core/models.py:188
 msgid "À venir"
 msgstr "Upcoming"
 
@@ -4991,7 +5163,7 @@ msgstr "How was “%(titre)s”?"
 msgid "Votre évaluation est transmise à l'équipe EventLead."
 msgstr "Your review is sent to the EventLead team."
 
-#: templates/events/evaluate.html:14 core/forms.py:13 events/forms.py:216
+#: templates/events/evaluate.html:14 core/forms.py:15 events/forms.py:216
 msgid "Votre note"
 msgstr "Your rating"
 

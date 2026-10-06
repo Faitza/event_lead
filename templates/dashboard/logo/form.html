@@ -1,0 +1,56 @@
+{% extends "dashboard/base_dashboard.html" %}
+{% load i18n static %}
+{% block title %}{% if variant %}{% trans "Modifier la couleur du logo" %}{% else %}{% trans "Programmer une couleur" %}{% endif %}{% endblock %}
+{% block dash_content %}
+<div class="page-head">
+  <div><h1>{% if variant %}{{ variant.name }}{% else %}{% trans "Programmer une couleur" %}{% endif %}</h1><p>{% trans "Choisissez la couleur et les dates. Le premier jour, le logo change sur tout le site ; après le dernier jour, le logo original revient." %}</p></div>
+  <a href="{% url 'dashboard:logo_list' %}" class="btn btn-light"><i class="bi bi-arrow-left me-2"></i>{% trans "Retour" %}</a>
+</div>
+<form method="post" enctype="multipart/form-data" novalidate>
+  {% csrf_token %}
+  <div class="el-card el-card-body" style="max-width:860px">
+    {% include "partials/_field.html" with field=form.name %}
+    <fieldset class="mb-4">
+      <legend class="form-label">{{ form.preset.label }}</legend>
+      <div class="logo-choices">
+        {% for value, label in form.preset.field.choices %}
+        <div>
+          <input type="radio" name="{{ form.preset.html_name }}" id="preset-{{ value }}" value="{{ value }}" {% if form.preset.value == value %}checked{% endif %}>
+          <label for="preset-{{ value }}">
+            {% if value == 'perso' %}<span class="logo-preview"><span class="on-light"><i class="bi bi-upload fs-3 text-primary"></i></span></span>
+            {% else %}<span class="logo-preview"><span class="on-light"><img src="{% static 'img/logo/eventlead-'|add:value|add:'.png' %}" alt=""></span><span class="on-dark"><img src="{% static 'img/logo/eventlead-'|add:value|add:'-sombre.png' %}" alt=""></span></span>{% endif %}
+            <span class="small">{{ label }}</span>
+          </label>
+        </div>
+        {% endfor %}
+      </div>
+      {% for error in form.preset.errors %}<div class="invalid-feedback d-block">{{ error }}</div>{% endfor %}
+    </fieldset>
+    <div class="row g-3">
+      <div class="col-md-6">{% include "partials/_field.html" with field=form.start_date %}</div>
+      <div class="col-md-6">{% include "partials/_field.html" with field=form.end_date %}</div>
+    </div>
+    <details class="help-hint mb-3" {% if form.image.errors or form.preset.value == 'perso' %}open{% endif %}>
+      <summary><i class="bi bi-upload"></i>{% trans "Utiliser mon propre fichier" %}</summary>
+      <div class="hint-body">
+        <div class="mb-3">
+          <label class="form-label" for="{{ form.image.id_for_label }}">{{ form.image.label }}</label>
+          {% if variant.image %}<div class="logo-preview mb-2"><span class="on-light"><img src="{{ variant.image.url }}" alt=""></span></div>{% endif %}
+          <input type="file" name="{{ form.image.html_name }}" id="{{ form.image.id_for_label }}" class="form-control{% if form.image.errors %} is-invalid{% endif %}" accept="image/png,image/webp">
+          {% for error in form.image.errors %}<div class="invalid-feedback d-block">{{ error }}</div>{% endfor %}
+          <div class="form-text">{{ form.image.help_text }}</div>
+        </div>
+        <div class="mb-0">
+          <label class="form-label" for="{{ form.image_dark.id_for_label }}">{{ form.image_dark.label }}</label>
+          {% if variant.image_dark %}<div class="logo-preview mb-2"><span class="on-dark"><img src="{{ variant.image_dark.url }}" alt=""></span></div>{% endif %}
+          <input type="file" name="{{ form.image_dark.html_name }}" id="{{ form.image_dark.id_for_label }}" class="form-control" accept="image/png,image/webp">
+          {% for error in form.image_dark.errors %}<div class="invalid-feedback d-block">{{ error }}</div>{% endfor %}
+          <div class="form-text">{{ form.image_dark.help_text }}</div>
+        </div>
+      </div>
+    </details>
+    {% include "partials/_field.html" with field=form.is_active %}
+    <button class="btn btn-primary btn-lg"><i class="bi bi-check2 me-2"></i>{% trans "Enregistrer" %}</button>
+  </div>
+</form>
+{% endblock %}

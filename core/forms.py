@@ -2,10 +2,12 @@ import re
 
 from django import forms
 from django.core.exceptions import ValidationError
+from django.core.files.uploadedfile import UploadedFile
 from django.core.validators import validate_email
 from django.utils.translation import gettext_lazy as _
 
-from .models import ContactMessage, HelpRequest, Review
+from .models import ContactMessage, HelpRequest, LogoVariant, Review
+from .uploads import compress_photo
 
 
 class ReviewForm(forms.ModelForm):
@@ -56,3 +58,38 @@ class HelpRequestForm(forms.ModelForm):
         elif not 8 <= len(re.sub(r"\D", "", contact)) <= 15:
             raise ValidationError(_("Indiquez une adresse e-mail ou un numéro de téléphone valide."))
         return contact
+
+
+class LogoVariantForm(forms.ModelForm):
+    """Version du logo pour une période : une couleur prête, ou son propre fichier PNG transparent."""
+
+    class Meta:
+        model = LogoVariant
+        fields = ["name", "preset", "image", "image_dark", "start_date", "end_date", "is_active"]
+        widgets = {
+            "name": forms.TextInput(attrs={"class": "form-control", "placeholder": _("Noël 2026")}),
+            "preset": forms.RadioSelect,
+            "start_date": forms.DateInput(attrs={"type": "date", "class": "form-control"}, format="%Y-%m-%d"),
+            "end_date": forms.DateInput(attrs={"type": "date", "class": "form-control"}, format="%Y-%m-%d"),
+        }
+
+    def _clean_logo(self, field):
+        uploaded = self.cleaned_data.get(field)
+        if isinstance(uploaded, UploadedFile):
+            return compress_photo(uploaded, max_side=900)
+        return uploaded
+
+    def clean_image(self):
+        return self._clean_logo("image")
+
+    def clean_image_dark(self):
+        return self._clean_logo("image_dark")
+
+    def clean(self):
+        data = super().clean()
+        start, end = data.get("start_date"), data.get("end_date")
+        if start and end and end < start:
+            self.add_error("end_date", _("La date de fin doit être après la date de début."))
+        if data.get("preset") == LogoVariant.Preset.CUSTOM and not (data.get("image") or self.instance.image):
+            self.add_error("image", _("Ajoutez votre fichier, ou choisissez une des couleurs prêtes."))
+        return data

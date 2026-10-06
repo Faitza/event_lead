@@ -126,3 +126,66 @@ class Attribution(models.Model):
 
     def __str__(self):
         return f"{self.get_kind_display()} - {self.source or '?'} / {self.campaign or '?'}"
+
+
+class LogoVariant(models.Model):
+    """Version du logo affichée sur tout le site pendant une période (Noël, Saint-Valentin, fête du drapeau...).
+
+    Hors de ces périodes, le site montre le logo original. Chaque couleur existe en deux fichiers : un pour les
+    fonds clairs, un pour les fonds sombres (pied de page, mode sombre). Fichiers prêts dans static/img/logo/.
+    """
+
+    class Preset(models.TextChoices):
+        ORIGINAL = "original", _("Violet (original)")
+        GOLD = "or", _("Or")
+        PINK = "rose", _("Rose")
+        RED = "rouge", _("Rouge")
+        BLUE = "bleu", _("Bleu")
+        GREEN = "vert", _("Vert")
+        CUSTOM = "perso", _("Mon propre fichier")
+
+    name = models.CharField(_("nom"), max_length=80, help_text=_("Par exemple : Noël 2026, Saint-Valentin."))
+    preset = models.CharField(_("couleur"), max_length=12, choices=Preset.choices, default=Preset.GOLD)
+    image = models.ImageField(_("logo pour fond clair"), upload_to="logos/", blank=True,
+                              help_text=_("Seulement pour « Mon propre fichier » : PNG à fond transparent."))
+    image_dark = models.ImageField(_("logo pour fond sombre"), upload_to="logos/", blank=True,
+                                   help_text=_("Facultatif : sinon le logo pour fond clair est utilisé partout."))
+    start_date = models.DateField(_("du"))
+    end_date = models.DateField(_("au"))
+    is_active = models.BooleanField(_("activé"), default=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ["-start_date", "-pk"]
+        verbose_name = _("version du logo")
+        verbose_name_plural = _("versions du logo")
+
+    def __str__(self):
+        return self.name
+
+    @classmethod
+    def current(cls, day=None):
+        from django.utils import timezone
+        day = day or timezone.localdate()
+        return cls.objects.filter(is_active=True, start_date__lte=day, end_date__gte=day).first()
+
+    @property
+    def urls(self):
+        """(fond clair, fond sombre) : adresses des deux fichiers à afficher."""
+        from django.templatetags.static import static
+        if self.preset == self.Preset.CUSTOM and self.image:
+            light = self.image.url
+            return light, (self.image_dark.url if self.image_dark else light)
+        preset = self.preset if self.preset != self.Preset.CUSTOM else self.Preset.ORIGINAL
+        return static(f"img/logo/eventlead-{preset}.png"), static(f"img/logo/eventlead-{preset}-sombre.png")
+
+    def state(self, day=None):
+        from django.utils import timezone
+        day = day or timezone.localdate()
+        if not self.is_active:
+            return "off", _("Désactivé")
+        if day < self.start_date:
+            return "soon", _("À venir")
+        if day > self.end_date:
+            return "past", _("Terminé")
+        return "live", _("En ce moment")

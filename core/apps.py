@@ -12,10 +12,10 @@ class CoreConfig(AppConfig):
         from events.models import Event, EventCategory
 
         from .content_cache import forget
-        from .models import Review
+        from .models import LogoVariant, Review
 
         # Le contenu gardé en mémoire (accueil, menu) est oublié dès qu'une de ces données change
-        for model in (Event, EventCategory, Ad, Review):
+        for model in (Event, EventCategory, Ad, Review, LogoVariant):
             post_save.connect(forget, sender=model, dispatch_uid=f"content-cache-save-{model.__name__}")
             post_delete.connect(forget, sender=model, dispatch_uid=f"content-cache-delete-{model.__name__}")
 
