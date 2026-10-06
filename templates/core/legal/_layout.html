@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load i18n %}
 {% comment %}
 Mise en page commune des pages légales. Chaque langue a son propre gabarit (privacy_fr.html, terms_en.html, ...).
 Pour changer un texte : modifier les trois langues, puis LEGAL_UPDATED dans core/views.py.
@@ -8,7 +9,10 @@ Pour changer un texte : modifier les trois langues, puis LEGAL_UPDATED dans core
 <section class="section pt-5">
   <div class="container">
     <article class="legal el-card">
-      <p class="legal-date">{{ updated_label }} {{ legal_updated|date:"j F Y" }}</p>
+      <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-3">
+        <p class="legal-date mb-0">{{ updated_label }} {{ legal_updated|date:"j F Y" }}</p>
+        <button type="button" class="btn btn-light btn-sm" data-print><i class="bi bi-printer me-1"></i>{% trans "Imprimer" %}</button>
+      </div>
       {% block legal_body %}{% endblock %}
     </article>
   </div>

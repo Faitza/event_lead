@@ -80,13 +80,14 @@ Sans ces valeurs, le bouton « Continuer avec Google » est affiché désactivé
 |---|---|
 | `/` | Accueil : défilé des publications, événements publics et billets, puis services (une photo par service, `static/img/photos/svc-*.jpg`), avis et contact |
 | `/connexion/`, `/inscription/`, `/inscription/organisateur/` | Authentification |
-| `/admin-dashboard/` (+ `evenements/`, `categories/`, `invites/`, `cadeaux/`, `publicites/`, `paiements/`, `messages/`, `aide/`, `pointage/`, `relances/`, `plan-de-table/`, `remerciements/`) | Administrateur |
+| `/admin-dashboard/` (+ `evenements/`, `categories/`, `invites/`, `cadeaux/`, `publicites/`, `paiements/`, `messages/`, `aide/`, `provenance/`, `pointage/`, `relances/`, `plan-de-table/`, `remerciements/`) | Administrateur |
 | `/organisateur/` | Portail Organisateur VIP |
 | `/organisateur/devenir-vip/` | Paiement de l'accès VIP |
 | `/invitation/<uuid:token>/` | Flux invité (présence, cadeaux, récapitulatif, confirmation), sans compte ni connexion : le lien personnel suffit |
 | `/invitation/<uuid:token>/contribution/` | Contribution en argent (MonCash ou NatCash) à la place d'un cadeau, si l'événement l'accepte |
 | `/invitation/<uuid:token>/remerciements/` (+ `album.zip`) | Page « Merci » et album partagé, pour les invités présents, une fois publiés par l'équipe |
 | `/invitation/<uuid:token>/publicite/<int:ad_id>/` | Page publicité |
+| `/recherche/?q=` | Recherche sur tout le site : événements publics, catégories, questions de l'aide, pages |
 | `/aide/` | Aide : questions fréquentes par profil, WhatsApp, formulaire « J'ai besoin d'aide » (`?sujet=` présélectionne le sujet) |
 | `/evenements/` (+ `?categorie=<identifiant>`) | Exploration des événements publics, filtrable par catégorie |
 | `/billetterie/` | Billetterie |
@@ -223,6 +224,10 @@ Vérification faite le 5 octobre 2026 avec la liste « à éviter / à avoir » 
 - **Boutons** : coins arrondis (8 à 14 px), plus de boutons en forme de pilule. Les petites étiquettes non cliquables (badges) restent arrondies.
 - **Déjà conformes** : pas de tiret long, pas d'emoji (icônes Bootstrap Icons), pas d'animation de curseur, pas de mention « fait avec l'IA », apparition au défilement légère (18 px, 0,3 s, coupée si le système demande moins d'animations), chiffres de l'accueil (4 modes de paiement, 1 lien par invité, 0 cadeau en double) qui décrivent le produit et non des résultats inventés.
 
+## Petits détails du site
+
+Mode sombre au choix du visiteur, bandeau cookies, recherche sur tout le site (`/recherche/`), retour en haut, barre de progression, lien « Aller au contenu », oeil du mot de passe, boutons copier et imprimer, confirmations, date de mise à jour de l'aide, et suivi des liens de campagne `utm_*` sans outil extérieur (**Tableau de bord > Provenance des visites**). Détail point par point : `docs/details.md`.
+
 ### Nom de domaine (au lancement)
 
 1. Acheter le domaine (par exemple `eventlead.ht` ou `eventlead.com`) chez un registraire.
@@ -237,7 +242,7 @@ Vérification faite le 5 octobre 2026 avec la liste « à éviter / à avoir » 
 python manage.py test
 ```
 
-363 tests couvrent la règle « dernière unité », la transaction annulée en cas de conflit, le caractère définitif des réponses, le parcours invité complet jusqu'à la publicité puis l'accueil, le défilé de l'accueil, les redirections après connexion, les règles d'accès par rôle, le paiement VIP et l'affichage de chaque page principale, l'absence de connexion forcée sur le parcours invité et la page d'accueil publique, les catégories d'événements (gestion réservée à l'administrateur, filtre, badge, événements privés jamais exposés) l'espace d'aide (page, bouton WhatsApp, formulaire, statuts, export CSV, aides du parcours) le QR code d'entrée et le pointage (codes uniques, billet réservé aux présents, validation une seule fois, refus des codes inconnus ou d'un autre événement, ajout sur place, annulation, chiffres) les relances (qui est à relancer et quand, arrêt à la réponse, maximum de 3, e-mail dans la langue de l'invité, WhatsApp seulement noté, jamais de SMS, réglages, commande planifiée) le plan de table (places et accompagnants, déplacement, tables, placement automatique, numéro sur le billet et au pointage) la contribution en argent (montants, MonCash et NatCash seulement, paiement refusé sans réponse enregistrée, jamais de double débit, montants jamais montrés aux autres invités, carte réservée à l'équipe) les remerciements et l'album (photos vérifiées, réduites et sans données GPS, limites, page réservée aux invités présents et à partir de la publication, merci personnel, téléchargement .zip, envoi WhatsApp ou e-mail sans double envoi, fichiers supprimés avec la photo) les avis validés par l'équipe, les pages Confidentialité et Conditions d'utilisation dans les trois langues, le favicon, et les trois langues (sélecteur, cookie, profil, `?lang=`, pages principales en anglais et en créole sans reste de français, message d'invitation par langue, catalogues complets).
+413 tests couvrent la règle « dernière unité », la transaction annulée en cas de conflit, le caractère définitif des réponses, le parcours invité complet jusqu'à la publicité puis l'accueil, le défilé de l'accueil, les redirections après connexion, les règles d'accès par rôle, le paiement VIP et l'affichage de chaque page principale, l'absence de connexion forcée sur le parcours invité et la page d'accueil publique, les catégories d'événements (gestion réservée à l'administrateur, filtre, badge, événements privés jamais exposés) l'espace d'aide (page, bouton WhatsApp, formulaire, statuts, export CSV, aides du parcours) le QR code d'entrée et le pointage (codes uniques, billet réservé aux présents, validation une seule fois, refus des codes inconnus ou d'un autre événement, ajout sur place, annulation, chiffres) les relances (qui est à relancer et quand, arrêt à la réponse, maximum de 3, e-mail dans la langue de l'invité, WhatsApp seulement noté, jamais de SMS, réglages, commande planifiée) le plan de table (places et accompagnants, déplacement, tables, placement automatique, numéro sur le billet et au pointage) la contribution en argent (montants, MonCash et NatCash seulement, paiement refusé sans réponse enregistrée, jamais de double débit, montants jamais montrés aux autres invités, carte réservée à l'équipe) les remerciements et l'album (photos vérifiées, réduites et sans données GPS, limites, page réservée aux invités présents et à partir de la publication, merci personnel, téléchargement .zip, envoi WhatsApp ou e-mail sans double envoi, fichiers supprimés avec la photo) les avis validés par l'équipe, les pages Confidentialité et Conditions d'utilisation dans les trois langues, le favicon, les petits détails (recherche, provenance des liens `utm_*`, mode sombre jamais par défaut, bandeau cookies, impression, copier, confirmations) et les trois langues (sélecteur, cookie, profil, `?lang=`, pages principales en anglais et en créole sans reste de français, message d'invitation par langue, catalogues complets).
 
 ## Production
 

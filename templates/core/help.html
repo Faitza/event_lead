@@ -8,6 +8,10 @@
   <div class="container">
     <div class="row g-4 g-lg-5">
       <div class="col-lg-8">
+        <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-3">
+          <p class="updated-on mb-0">{% trans "Dernière mise à jour :" %} <time datetime="{{ help_updated|date:'Y-m-d' }}">{{ help_updated|date:_("j F Y") }}</time></p>
+          <button type="button" class="btn btn-light btn-sm" data-print><i class="bi bi-printer me-1"></i>{% trans "Imprimer les questions" %}</button>
+        </div>
         <nav class="cat-filter justify-content-start" aria-label="{% trans 'Aller à un profil' %}">
           {% for profile in profiles %}<a href="#aide-{{ profile.key }}" class="cat-chip"><i class="bi {{ profile.icon }}"></i>{{ profile.title }}</a>{% endfor %}
         </nav>

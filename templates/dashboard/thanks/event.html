@@ -16,7 +16,8 @@
       <h1>{% trans "Remerciements et album" %}</h1>
       <p>{{ event.title }} &middot; {{ event.date|date:_("l j F Y") }} &middot; {{ event.time|time:_("H\\hi") }}</p>
     </div>
-    <form method="post" action="{% url 'dashboard:thanks_publish' event.pk %}" class="d-flex gap-2 align-items-center">
+    {% trans "Publier les remerciements ? Les invités présents pourront voir le message et l'album." as t_publish %}{% trans "Ne plus publier les remerciements ? Les invités ne les verront plus." as t_unpublish %}
+    <form method="post" action="{% url 'dashboard:thanks_publish' event.pk %}" class="d-flex gap-2 align-items-center" data-confirm="{% if stats.published %}{{ t_unpublish }}{% else %}{{ t_publish }}{% endif %}">
       {% csrf_token %}
       {% if stats.published %}
       <input type="hidden" name="action" value="unpublish">
@@ -107,7 +108,8 @@
   <div class="el-card">
     <div class="el-card-header flex-wrap gap-2">
       <h2><i class="bi bi-people me-2"></i>{% trans "Invités présents" %} ({{ rows|length }})</h2>
-      <form method="post" action="{% url 'dashboard:thanks_send_all' event.pk %}">
+      {% blocktranslate trimmed asvar t_send with n=to_email %}Envoyer l'e-mail de remerciement à {{ n }} invité(s) ? L'envoi ne peut pas être annulé.{% endblocktranslate %}
+      <form method="post" action="{% url 'dashboard:thanks_send_all' event.pk %}" data-confirm="{{ t_send }}">
         {% csrf_token %}
         <button class="btn btn-sm btn-primary" {% if not stats.published or not to_email %}disabled{% endif %}><i class="bi bi-envelope me-1"></i>{% blocktranslate trimmed with n=to_email %}Envoyer par e-mail · {{ n }}{% endblocktranslate %}</button>
       </form>

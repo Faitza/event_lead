@@ -11,7 +11,7 @@
       <a href="{% url 'core:landing' %}" aria-label="{% trans 'EventLead, accueil' %}">{% include "partials/_logo.html" %}</a>
     </div>
   </div>
-  <div class="inv-container ticket-wrap">
+  <div class="inv-container ticket-wrap" id="contenu" tabindex="-1">
     <div class="ticket-rays" aria-hidden="true"></div>
     <div class="ticket-eyebrow"><span></span><em class="eyebrow">{% trans "Votre billet d'entrée" %}</em><span></span></div>
     <div class="ticket-card">
@@ -35,6 +35,8 @@
     <div class="ticket-actions">
       <a href="{% url 'events:invitation_ticket_png' guest.magic_token %}" class="btn btn-light" download><i class="bi bi-download me-2"></i>{% trans "Enregistrer dans mon téléphone" %}</a>
       <a href="{{ whatsapp_url }}" target="_blank" rel="noopener" class="btn btn-outline-gold-light"><i class="bi bi-whatsapp me-2"></i>{% trans "Envoyer sur mon WhatsApp" %}</a>
+      <button type="button" class="btn btn-outline-gold-light" data-copy="{{ guest.entry_code }}"><i class="bi bi-clipboard me-2"></i>{% trans "Copier le code" %}</button>
+      <button type="button" class="btn btn-outline-gold-light" data-print><i class="bi bi-printer me-2"></i>{% trans "Imprimer" %}</button>
     </div>
     <p class="ticket-note">{% trans "Présentez ce code à l'entrée. Enregistrez-le dans votre téléphone pour l'avoir même sans réseau." %}</p>
   </div>

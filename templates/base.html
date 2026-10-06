@@ -6,6 +6,8 @@
   <title>{% block title %}EventLead{% endblock %} | EventLead</title>
   <meta name="description" content="{% block meta_description %}{% trans "EventLead, la plateforme de gestion d'événements pour Haïti et la Caraïbe : invitations WhatsApp et e-mail, liste de cadeaux, suivi en temps réel." %}{% endblock %}">
   <meta name="theme-color" content="#45065C">
+  {# Mode sombre : seulement si le visiteur l'a choisi avec le bouton (lu avant l'affichage, sans clignotement) #}
+  <script>try{if(localStorage.getItem("el-theme")==="dark"){document.documentElement.setAttribute("data-theme","dark");document.documentElement.setAttribute("data-bs-theme","dark");}}catch(e){}</script>
   <link rel="icon" href="{% static 'favicon.ico' %}" sizes="48x48">
   <link rel="icon" type="image/png" sizes="32x32" href="{% static 'img/favicon-32.png' %}">
   <link rel="icon" type="image/png" sizes="64x64" href="{% static 'img/favicon.png' %}">
@@ -18,19 +20,25 @@
   {% block extra_head %}{% endblock %}
   <link href="{% static_v 'css/eventlead.css' %}" rel="stylesheet">
   <link href="{% static_v 'css/solidite.css' %}" rel="stylesheet">
+  <link href="{% static_v 'css/details.css' %}" rel="stylesheet">
 </head>
 <body class="{% block body_class %}{% endblock %}" data-msg-net-failed="{% trans "La connexion a échoué. Vérifiez votre réseau, la page réessaie toute seule." %}" data-msg-net-slow="{% trans "Le serveur met trop de temps à répondre. Réessayez dans un instant." %}" data-msg-net-busy="{% trans "Trop de demandes en peu de temps. Patientez une minute." %}" data-msg-net-back="{% trans "Connexion rétablie." %}" data-error-url="{% url 'browser_error' %}">
+  <a class="skip-link" href="#contenu">{% trans "Aller au contenu" %}</a>
+  <div id="el-progress" aria-hidden="true"><span></span></div>
   <div id="el-loading" aria-hidden="true"></div>
   <div id="el-net" role="status" aria-live="polite"></div>
   {% include "partials/_messages.html" %}
   {% block body %}
     {% include "partials/_navbar.html" %}
-    <main>{% block content %}{% endblock %}</main>
+    <main id="contenu" tabindex="-1">{% block content %}{% endblock %}</main>
     {% include "partials/_footer.html" %}
   {% endblock %}
   {% block help_fab %}{% include "partials/_help_fab.html" %}{% endblock %}
+  <button type="button" class="to-top" data-to-top hidden aria-label="{% trans "Retour en haut de la page" %}" title="{% trans "Retour en haut de la page" %}"><i class="bi bi-arrow-up" aria-hidden="true"></i></button>
+  {% block cookie_note %}{% include "partials/_cookie_note.html" %}{% endblock %}
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
   <script src="{% static_v 'js/eventlead.js' %}"></script>
+  <script src="{% static_v 'js/details.js' %}"></script>
   {% block extra_js %}{% endblock %}
 </body>
 </html>

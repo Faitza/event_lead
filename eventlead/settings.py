@@ -62,6 +62,8 @@ MIDDLEWARE = [
     # Limite de requêtes par visiteur (voir RATELIMIT_* plus bas) ; l'équipe connectée n'est pas limitée
     "core.ratelimit.RateLimitMiddleware",
     "core.middleware.LanguagePreferenceMiddleware",
+    # Liens de campagne : utm_* gardés dans la session du visiteur (core/utm.py), aucun outil extérieur
+    "core.utm.UtmCaptureMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
     "allauth.account.middleware.AccountMiddleware",

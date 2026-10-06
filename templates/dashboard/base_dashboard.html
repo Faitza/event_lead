@@ -24,6 +24,7 @@
     <div class="nav-section">{% trans "Communauté" %}</div>
     <a class="side-link {% active '/admin-dashboard/messages/' %}" href="{% url 'dashboard:inbox' %}"><i class="bi bi-chat-square-heart"></i>{% trans "Messages et avis" %}</a>
     <a class="side-link {% active '/admin-dashboard/aide/' %}" href="{% url 'dashboard:help_list' %}"><i class="bi bi-life-preserver"></i>{% trans "Demandes d'aide" %}{% if new_help_requests %}<span class="side-count" title="{% trans 'Demandes nouvelles' %}">{{ new_help_requests }}</span>{% endif %}</a>
+    <a class="side-link {% active '/admin-dashboard/provenance/' %}" href="{% url 'dashboard:utm_report' %}"><i class="bi bi-signpost-split"></i>{% trans "Provenance des visites" %}</a>
     <a class="side-link" href="{% url 'admin:index' %}"><i class="bi bi-database-gear"></i>{% trans "Back-office Django" %}</a>
     <a class="side-link" href="{% url 'core:landing' %}" target="_blank"><i class="bi bi-box-arrow-up-right"></i>{% trans "Voir le site" %}</a>
     <div class="mt-auto pt-4">
@@ -37,12 +38,13 @@
         <span class="text-muted small d-none d-md-inline">{{ TODAY|date:_("l j F Y") }}</span>
       </div>
       <div class="d-flex align-items-center gap-2">
+        {% include "partials/_theme_toggle.html" %}
         {% include "partials/_language_switcher.html" %}
         <a href="{% url 'dashboard:event_create' %}" class="btn btn-primary btn-sm text-nowrap" title="{% trans 'Nouvel événement' %}"><i class="bi bi-plus-lg me-1"></i><span class="d-none d-sm-inline">{% trans "Nouvel événement" %}</span><span class="visually-hidden d-sm-none">{% trans "Nouvel événement" %}</span></a>
         <span class="user-pill"><span class="avatar">{{ user.initials }}</span><span class="d-none d-sm-inline">{{ user.display_name }}</span><span class="badge-el badge-primary">Admin</span></span>
       </div>
     </header>
-    <div class="dash-content">{% block dash_content %}{% endblock %}</div>
+    <div class="dash-content" id="contenu" tabindex="-1">{% block dash_content %}{% endblock %}</div>
   </div>
 </div>
 {% endblock %}

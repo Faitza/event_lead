@@ -18,7 +18,7 @@
     <div class="auth-lang">{% include "partials/_language_switcher.html" %}</div>
     {% trans "EventLead, retour à l'accueil" as home_label %}
     <a href="{% url 'core:landing' %}" aria-label="{{ home_label }}">{% include "partials/_logo.html" with stacked=True %}</a>
-    <div class="auth-card">
+    <div class="auth-card" id="contenu" tabindex="-1">
       {% block panel %}{% endblock %}
     </div>
   </div>

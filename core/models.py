@@ -90,3 +90,39 @@ class HelpRequest(models.Model):
         if len(digits) == 8:
             return "509" + digits
         return digits if 10 <= len(digits) <= 15 else ""
+
+
+class Attribution(models.Model):
+    """Provenance d'une inscription, d'un paiement, d'une demande d'aide ou d'un message (liens avec utm_*).
+
+    Rien n'est envoyé à un service extérieur : les paramètres utm_* lus à l'arrivée sont gardés dans la session
+    du visiteur (core/utm.py), puis recopiés ici quand il fait une de ces actions.
+    """
+
+    class Kind(models.TextChoices):
+        SIGNUP = "signup", _("Inscription")
+        PAYMENT = "payment", _("Paiement")
+        HELP = "help", _("Demande d'aide")
+        CONTACT = "contact", _("Message de contact")
+
+    kind = models.CharField(_("action"), max_length=20, choices=Kind.choices)
+    label = models.CharField(_("détail"), max_length=200, blank=True)
+    user = models.ForeignKey("accounts.CustomUser", on_delete=models.SET_NULL, null=True, blank=True,
+                             related_name="+", verbose_name=_("compte"))
+    source = models.CharField("utm_source", max_length=120, blank=True)
+    medium = models.CharField("utm_medium", max_length=120, blank=True)
+    campaign = models.CharField("utm_campaign", max_length=120, blank=True)
+    term = models.CharField("utm_term", max_length=120, blank=True)
+    content = models.CharField("utm_content", max_length=120, blank=True)
+    landing_page = models.CharField(_("page d'arrivée"), max_length=300, blank=True)
+    created_at = models.DateTimeField(_("date"), auto_now_add=True)
+
+    class Meta:
+        ordering = ["-created_at"]
+        indexes = [models.Index(fields=["-created_at"], name="attribution_created_idx"),
+                   models.Index(fields=["source", "campaign"], name="attribution_source_idx")]
+        verbose_name = _("provenance")
+        verbose_name_plural = _("provenances")
+
+    def __str__(self):
+        return f"{self.get_kind_display()} - {self.source or '?'} / {self.campaign or '?'}"

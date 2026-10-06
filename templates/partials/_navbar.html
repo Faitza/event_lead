@@ -32,6 +32,8 @@
         </div>
       </nav>
       <div class="d-flex align-items-center gap-2 mt-3 mt-xl-0 flex-wrap">
+        <a href="{% url 'core:search' %}" class="icon-btn" title="{% trans 'Rechercher sur le site' %}" aria-label="{% trans 'Rechercher sur le site' %}"><i class="bi bi-search" aria-hidden="true"></i></a>
+        {% include "partials/_theme_toggle.html" %}
         <div class="d-none d-xl-block">{% include "partials/_language_switcher.html" with variant="menu" %}</div>
         <div class="d-xl-none">{% include "partials/_language_switcher.html" %}</div>
         {% if user.is_authenticated %}

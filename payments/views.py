@@ -14,6 +14,8 @@ from django.utils.translation import gettext as _
 from accounts.decorators import admin_required
 from events.models import Event
 
+from core import utm
+from core.models import Attribution
 from core.paging import paginate
 from core.ratelimit import ratelimit
 
@@ -67,6 +69,7 @@ def _process(request, form, *, kind, amount, event=None, quantity=1):
             user.vip_since = timezone.now()
             user.save(update_fields=["role", "is_vip", "vip_since"])
     if status == Payment.Status.SUCCESS:
+        utm.record(request, Attribution.Kind.PAYMENT, f"{payment.reference} - {payment.amount_htg} HTG")
         return redirect("payments:success", reference=payment.reference)
     messages.error(request, _("%(message)s Référence : %(reference)s.") % {"message": message, "reference": payment.reference})
     return None

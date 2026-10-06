@@ -12,6 +12,10 @@
       <div class="inv-pane my-4">
         <div class="small text-muted">{% trans "Référence" %}</div>
         <div class="disp fs-2 fig" style="letter-spacing:.06em;color:var(--el-primary-dark)">{{ payment.reference }}</div>
+        <div class="d-flex justify-content-center flex-wrap gap-2 mt-2 no-print">
+          <button type="button" class="btn btn-light btn-sm" data-copy="{{ payment.reference }}"><i class="bi bi-clipboard me-1"></i>{% trans "Copier la référence" %}</button>
+          <button type="button" class="btn btn-light btn-sm" data-print><i class="bi bi-printer me-1"></i>{% trans "Imprimer le reçu" %}</button>
+        </div>
       </div>
       <div class="text-start">
         <div class="recap-row"><span class="text-muted">{% trans "Objet" %}</span><strong>{% if payment.event %}{{ payment.event.title }}{% if payment.quantity > 1 %} x{{ payment.quantity }}{% endif %}{% else %}{{ payment.get_kind_display }}{% endif %}</strong></div>

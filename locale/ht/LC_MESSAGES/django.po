@@ -101,23 +101,23 @@ msgstr "itilizatè"
 msgid "utilisateurs"
 msgstr "itilizatè"
 
-#: accounts/views.py:55
+#: accounts/views.py:57
 msgid "Bienvenue, %(nom)s."
 msgstr "Byenvini, %(nom)s."
 
-#: accounts/views.py:70
+#: accounts/views.py:73
 msgid "Compte créé. Dernière étape : activez votre accès Organisateur VIP."
 msgstr "Kont lan kreye. Dènye etap : aktive aksè Òganizatè VIP ou."
 
-#: accounts/views.py:72
+#: accounts/views.py:75
 msgid "Votre compte a été créé avec succès."
 msgstr "Kont ou kreye avèk siksè."
 
-#: accounts/views.py:80
+#: accounts/views.py:83
 msgid "Vous êtes déconnecté."
 msgstr "Ou dekonekte."
 
-#: accounts/views.py:117
+#: accounts/views.py:120
 msgid "Profil mis à jour."
 msgstr "Pwofil la mete ajou."
 
@@ -349,7 +349,7 @@ msgstr "Pa ranpli"
 msgid "E-mail ou numéro WhatsApp"
 msgstr "Imèl oswa nimewo WhatsApp"
 
-#: core/forms.py:39 core/views_admin.py:149
+#: core/forms.py:39 core/views_admin.py:150
 msgid "Sujet"
 msgstr "Sijè"
 
@@ -373,183 +373,183 @@ msgstr "Adrès imèl sa a pa valid."
 msgid "Indiquez une adresse e-mail ou un numéro de téléphone valide."
 msgstr "Ekri yon adrès imèl oswa yon nimewo telefòn ki valid."
 
-#: core/help.py:12
+#: core/help.py:17
 msgid "Invité ou visiteur"
 msgstr "Envite oswa vizitè"
 
-#: core/help.py:14
+#: core/help.py:19
 msgid "Vous avez reçu une invitation, ou vous voulez réserver un billet."
 msgstr "Ou resevwa yon envitasyon, oswa ou vle rezève yon biyè."
 
-#: core/help.py:16
+#: core/help.py:21
 msgid "Dois-je créer un compte pour répondre à une invitation ?"
 msgstr "Èske m dwe kreye yon kont pou m reponn yon envitasyon ?"
 
-#: core/help.py:17
+#: core/help.py:22
 msgid "Non. Le lien personnel reçu par WhatsApp ou par e-mail suffit : pas de compte, pas de mot de passe, pas d'application. Ouvrez le lien et répondez."
 msgstr "Non. Lyen pèsonèl ou resevwa sou WhatsApp oswa pa imèl la sifi : pa gen kont, pa gen modpas, pa gen aplikasyon. Louvri lyen an epi reponn."
 
-#: core/help.py:19
+#: core/help.py:24
 msgid "J'ai perdu mon lien, ou il ne s'ouvre pas."
 msgstr "Mwen pèdi lyen mwen an, oswa li pa louvri."
 
-#: core/help.py:20
+#: core/help.py:25
 msgid "Retrouvez le message d'invitation dans WhatsApp ou dans votre boîte e-mail (regardez aussi les courriers indésirables). Si vous ne le trouvez plus, demandez-le à la personne qui vous a invité(e) ou écrivez-nous avec le formulaire de cette page."
 msgstr "Chèche mesaj envitasyon an nan WhatsApp oswa nan bwat imèl ou (gade nan dosye spam lan tou). Si w pa jwenn li ankò, mande moun ki te envite w la oswa ekri nou ak fòmilè ki sou paj sa a."
 
-#: core/help.py:23
+#: core/help.py:28
 msgid "Puis-je changer ma réponse ?"
 msgstr "Èske m ka chanje repons mwen an ?"
 
-#: core/help.py:24
+#: core/help.py:29
 msgid "Oui, tant que vous n'avez pas confirmé votre présence : revenez simplement sur votre lien. Une fois la présence confirmée, la réponse est définitive."
 msgstr "Wi, toutotan ou poko konfime prezans ou : retounen sou lyen ou an tou senpleman. Yon fwa prezans lan konfime, repons lan final : li pa ka chanje ankò."
 
-#: core/help.py:26
+#: core/help.py:31
 msgid "Puis-je venir avec quelqu'un ?"
 msgstr "Èske m ka vini ak yon moun ?"
 
-#: core/help.py:27
+#: core/help.py:32
 msgid "Cela dépend de l'événement. Si l'hôte accepte les accompagnants, vous indiquez leur nombre en répondant, jusqu'au maximum prévu. Sinon, la question n'apparaît pas."
 msgstr "Sa depann de evènman an. Si òganizatè a aksepte moun k ap akonpanye w yo, ou endike konbyen yo ye lè w ap reponn, jouk nan maksimòm ki prevwa a. Si se pa sa, kesyon an pa parèt."
 
-#: core/help.py:29
+#: core/help.py:34
 msgid "Comment choisir un cadeau ?"
 msgstr "Kijan pou m chwazi yon kado ?"
 
-#: core/help.py:30
+#: core/help.py:35
 msgid "Après avoir confirmé votre présence, si l'hôte a préparé une liste de cadeaux, vous cochez ceux que vous voulez offrir. Un cadeau choisi est aussitôt réservé pour vous : personne d'autre ne peut le prendre. Votre choix est définitif."
 msgstr "Apre w fin konfime prezans ou, si òganizatè a prepare yon lis kado, ou make kado ou vle bay yo. Yon kado ou chwazi rezève pou ou touswit : pesonn lòt pa ka pran l. Chwa w la final."
 
-#: core/help.py:33
+#: core/help.py:38
 msgid "Un cadeau a disparu de la liste. Pourquoi ?"
 msgstr "Yon kado disparèt nan lis la. Poukisa ?"
 
-#: core/help.py:34
+#: core/help.py:39
 msgid "Un autre invité l'a choisi avant vous et il n'en reste plus. La liste se met à jour toute seule : choisissez simplement un autre cadeau."
 msgstr "Yon lòt envite chwazi l anvan w e pa rete ankò. Lis la mete tèt li ajou poukont li : chwazi yon lòt kado tou senpleman."
 
-#: core/help.py:36
+#: core/help.py:41
 msgid "Pourquoi une publicité s'affiche-t-elle après ma réponse ?"
 msgstr "Poukisa yon piblisite parèt apre repons mwen an ?"
 
-#: core/help.py:37
+#: core/help.py:42
 msgid "Après votre réponse, nous présentons les publications de nos partenaires. Un bouton « Passer » apparaît après un court compte à rebours, puis vous arrivez sur l'accueil, où se trouvent les événements publics."
 msgstr "Apre repons ou an, nou prezante piblikasyon patnè nou yo. Yon bouton « Sote » parèt apre kèk segonn, epi w rive sou paj akèy la, kote evènman piblik yo ye."
 
-#: core/help.py:40
+#: core/help.py:45
 msgid "Comment payer un billet avec MonCash ?"
 msgstr "Kijan pou m peye yon biyè ak MonCash ?"
 
-#: core/help.py:41
+#: core/help.py:46
 msgid "Choisissez MonCash, saisissez votre numéro puis demandez le code de confirmation : il vous arrive par SMS. Saisissez-le pour valider. Le prix est en gourdes."
 msgstr "Chwazi MonCash, antre nimewo w la, epi mande kòd konfimasyon an : li rive sou telefòn ou pa SMS. Antre l pou valide peman an. Pri a an goud."
 
-#: core/help.py:43
+#: core/help.py:48
 msgid "Comment payer avec NatCash ?"
 msgstr "Kijan pou m peye ak NatCash ?"
 
-#: core/help.py:44
+#: core/help.py:49
 msgid "Choisissez NatCash, saisissez votre numéro puis le code PIN à 4 chiffres de votre compte NatCash."
 msgstr "Chwazi NatCash, antre nimewo w la, epi kòd PIN 4 chif kont NatCash ou a."
 
-#: core/help.py:45
+#: core/help.py:50
 msgid "Et avec une carte bancaire ou PayPal ?"
 msgstr "E ak yon kat bankè oswa PayPal ?"
 
-#: core/help.py:46
+#: core/help.py:51
 msgid "La carte (Visa, Mastercard) est débitée en dollars. Le montant en dollars est affiché avant que vous payiez, à côté du prix en gourdes."
 msgstr "Yo debite kat la (Visa, Mastercard) an dola. Montan an dola a afiche anvan w peye, bò kote pri an goud la."
 
-#: core/help.py:48
+#: core/help.py:53
 msgid "J'ai payé : que dois-je conserver ?"
 msgstr "M peye : kisa pou m kenbe ?"
 
-#: core/help.py:49
+#: core/help.py:54
 msgid "Conservez la référence de transaction affichée à la fin du paiement. Si le paiement a échoué ou si un doute persiste, écrivez-nous en indiquant cette référence."
 msgstr "Kenbe referans tranzaksyon an ki afiche nan fen peman an. Si peman an echwe oswa si w toujou gen dout, ekri nou epi site referans lan."
 
-#: core/help.py:57
+#: core/help.py:62
 msgid "Vous avez un compte Organisateur, ou vous voulez en ouvrir un."
 msgstr "Ou gen yon kont Òganizatè, oswa ou vle louvri youn."
 
-#: core/help.py:59
+#: core/help.py:64
 msgid "Qu'est-ce que l'accès Organisateur VIP ?"
 msgstr "Kisa aksè Òganizatè VIP la ye ?"
 
-#: core/help.py:60
+#: core/help.py:65
 msgid "C'est un accès payant, en paiement unique, au portail Organisateur : le détail de tous les événements publics, les événements privés auxquels vous êtes invité(e), et l'évaluation d'un événement une fois terminé. Le portail est en lecture seule : la création et la gestion des événements restent assurées par l'équipe EventLead."
 msgstr "Se yon aksè ki peye, ak yon sèl peman, pou antre nan pòtay Òganizatè a : detay tout evènman piblik yo, evènman prive ou envite yo, ak evalyasyon yon evènman lè li fini. Pòtay la an lekti sèlman : se ekip EventLead la ki kontinye kreye ak jere evènman yo."
 
-#: core/help.py:64
+#: core/help.py:69
 msgid "Comment devenir Organisateur VIP ?"
 msgstr "Kijan pou m vin Òganizatè VIP ?"
 
-#: core/help.py:65
+#: core/help.py:70
 msgid "Cliquez sur « Devenir VIP », créez votre compte Organisateur, puis réglez l'accès VIP avec MonCash, NatCash, carte ou PayPal. Le portail s'ouvre dès que le paiement est confirmé. Le montant est affiché sur la page de paiement, en gourdes et en dollars."
 msgstr "Klike sou « Vin VIP », kreye kont Òganizatè w la, epi peye aksè VIP la ak MonCash, NatCash, kat bankè oswa PayPal. Depi peman an konfime, pòtay la louvri. Montan an afiche sou paj peman an, an goud ak an dola."
 
-#: core/help.py:68
+#: core/help.py:73
 msgid "Comment évaluer un événement ?"
 msgstr "Kijan pou m evalye yon evènman ?"
 
-#: core/help.py:69
+#: core/help.py:74
 msgid "Une fois l'événement passé et le délai prévu écoulé, un bouton « Évaluer » apparaît dans votre portail pour les événements privés où vous avez confirmé votre présence : une note de 1 à 5 étoiles et un commentaire. Chaque événement ne peut être évalué qu'une fois."
 msgstr "Lè evènman an fini e delè ki prevwa a pase, yon bouton « Evalye » parèt nan pòtay ou pou evènman prive kote w te konfime prezans ou : yon nòt ant 1 ak 5 zetwal ak yon kòmantè. Ou ka evalye chak evènman yon sèl fwa."
 
-#: core/help.py:72
+#: core/help.py:77
 msgid "Je ne vois pas un événement privé dans mon portail."
 msgstr "Mwen pa wè yon evènman prive nan pòtay mwen an."
 
-#: core/help.py:73
+#: core/help.py:78
 msgid "Un événement privé n'apparaît que si vous y êtes invité(e). Écrivez-nous avec le nom de l'événement : nous vérifierons que l'invitation est bien liée à votre compte."
 msgstr "Yon evènman prive parèt sèlman si w envite ladan l. Ekri nou ak non evènman an : n ap verifye si envitasyon an byen lye ak kont ou."
 
-#: core/help.py:79
+#: core/help.py:84
 msgid "Équipe EventLead"
 msgstr "Ekip EventLead"
 
-#: core/help.py:81
+#: core/help.py:86
 msgid "Pour les administrateurs qui organisent les événements dans le tableau de bord."
 msgstr "Pou administratè ki òganize evènman yo nan tablo bò a."
 
-#: core/help.py:83
+#: core/help.py:88
 msgid "Comment créer un événement ?"
 msgstr "Kijan pou m kreye yon evènman ?"
 
-#: core/help.py:84
+#: core/help.py:89
 msgid "Dans le tableau de bord, ouvrez Événements puis « Nouvel événement » : titre, type (public ou privé), catégorie, date, lieu (localisé sur la carte), nombre maximum d'invités, accompagnants autorisés et photo de couverture."
 msgstr "Nan tablo bò a, louvri Evènman yo epi « Nouvo evènman » : tit, kalite (piblik oswa prive), kategori, dat, kote evènman an ye (make sou kat la), kantite maksimòm envite, si yo ka vini ak moun k ap akonpanye yo, ak foto kouvèti a."
 
-#: core/help.py:87
+#: core/help.py:92
 msgid "Comment envoyer les invitations ?"
 msgstr "Kijan pou m voye envitasyon yo ?"
 
-#: core/help.py:88
+#: core/help.py:93
 msgid "Ajoutez vos invités dans Invités, avec une adresse e-mail ou un numéro WhatsApp. Chaque invité a un lien personnel : un bouton ouvre WhatsApp ou votre messagerie avec le message déjà écrit, et vous l'envoyez vous-même. Marquez ensuite l'invitation comme envoyée."
 msgstr "Ajoute envite ou yo nan Envite yo, ak yon adrès imèl oswa yon nimewo WhatsApp. Chak envite gen yon lyen pèsonèl : yon bouton louvri WhatsApp oswa aplikasyon imèl ou an ak mesaj la ki deja ekri, epi se ou menm ki voye l. Apre sa, make envitasyon an kòm voye."
 
-#: core/help.py:91
+#: core/help.py:96
 msgid "Comment suivre les réponses ?"
 msgstr "Kijan pou m swiv repons yo ?"
 
-#: core/help.py:92
+#: core/help.py:97
 msgid "La page de suivi de chaque événement se met à jour avec les présences, les accompagnants et les cadeaux choisis. Les invités et les cadeaux s'exportent en CSV, les invités aussi en PDF."
 msgstr "Paj swivi chak evènman an mete tèt li ajou ak prezans yo, moun k ap akonpanye yo ak kado yo chwazi yo. Ou ka ekspòte envite yo ak kado yo an CSV, epi envite yo tou an PDF."
 
-#: core/help.py:94
+#: core/help.py:99
 msgid "Comment classer les événements ?"
 msgstr "Kijan pou m klase evènman yo ?"
 
-#: core/help.py:95
+#: core/help.py:100
 msgid "Dans Catégories, créez, renommez ou supprimez des catégories, puis choisissez-en une dans le formulaire de l'événement. Elle apparaît en badge sur la carte de l'événement et dans les filtres du site."
 msgstr "Nan Kategori, kreye, chanje non oswa siprime kategori, epi chwazi youn nan fòmilè evènman an. Li parèt kòm badj sou kat evènman an ak nan filt sit la."
 
-#: core/help.py:98
+#: core/help.py:103
 msgid "Où voir les demandes d'aide ?"
 msgstr "Kote pou m wè demann èd yo ?"
 
-#: core/help.py:99
+#: core/help.py:104
 msgid "Dans Demandes d'aide : chaque demande a un statut (nouvelle, en cours, résolue), et la liste s'exporte en CSV."
 msgstr "Nan Demann èd : chak demann gen yon estati (nouvo, ankou, rezoud), epi ou ka ekspòte lis la an CSV."
 
@@ -903,9 +903,101 @@ msgstr "demann èd"
 msgid "demandes d'aide"
 msgstr "demann èd"
 
+#: core/models.py:103
+msgid "Inscription"
+msgstr "Enskripsyon"
+
+#: core/models.py:104
+msgid "Paiement"
+msgstr "Peman"
+
+#: core/models.py:105
+msgid "Demande d'aide"
+msgstr "Demann èd"
+
+#: core/models.py:106
+msgid "Message de contact"
+msgstr "Mesaj kontak"
+
+#: core/models.py:108
+msgid "action"
+msgstr "aksyon"
+
+#: core/models.py:109
+msgid "détail"
+msgstr "detay"
+
+#: core/models.py:111
+msgid "compte"
+msgstr "kont"
+
+#: core/models.py:117
+msgid "page d'arrivée"
+msgstr "paj kote moun nan rive"
+
+#: core/models.py:118 events/models.py:136
+msgid "date"
+msgstr "dat"
+
+#: core/models.py:124
+msgid "provenance"
+msgstr "kote l soti"
+
+#: core/models.py:125
+msgid "provenances"
+msgstr "kote yo soti"
+
 #: core/ratelimit.py:55
 msgid "Trop de demandes en peu de temps. Patientez une minute puis réessayez."
 msgstr "Twòp demann nan yon ti tan. Tann yon minit epi eseye ankò."
+
+#: core/search.py:19
+msgid "Présentation d'EventLead, événements à venir et contact."
+msgstr "Prezantasyon EventLead, evènman k ap vini ak kontak."
+
+#: core/search.py:20
+msgid "Invitations WhatsApp et e-mail, suivi des présences, cadeaux, billetterie, partenaires."
+msgstr "Envitasyon WhatsApp ak imèl, swivi prezans, kado, vant biyè, patnè."
+
+#: core/search.py:21
+msgid "Tous les événements publics à venir, par catégorie."
+msgstr "Tout evènman piblik k ap vini yo, pa kategori."
+
+#: core/search.py:22
+msgid "Acheter un billet avec MonCash, NatCash, carte ou PayPal."
+msgstr "Achte yon biyè ak MonCash, NatCash, kat oswa PayPal."
+
+#: core/search.py:23
+msgid "Questions fréquentes, WhatsApp et formulaire « J'ai besoin d'aide »."
+msgstr "Kesyon moun poze souvan, WhatsApp ak fòmilè « Mwen bezwen èd »."
+
+#: core/search.py:24
+msgid "Écrire à l'équipe EventLead."
+msgstr "Ekri ekip EventLead la."
+
+#: core/search.py:25
+msgid "Qui nous sommes et les avis de nos clients."
+msgstr "Kiyès nou ye ak sa kliyan nou yo di."
+
+#: core/search.py:26
+msgid "Ouvrir un compte Organisateur et activer l'accès VIP."
+msgstr "Louvri yon kont Òganizatè epi aktive aksè VIP la."
+
+#: core/search.py:27
+msgid "Se connecter à son espace."
+msgstr "Konekte nan espas ou."
+
+#: core/search.py:28
+msgid "Politique de confidentialité"
+msgstr "Règ sou done pèsonèl"
+
+#: core/search.py:28
+msgid "Les données que nous gardons et pourquoi, les cookies."
+msgstr "Done nou kenbe yo ak poukisa, cookies yo."
+
+#: core/search.py:29
+msgid "Les règles d'utilisation du site."
+msgstr "Règ pou sèvi ak sit la."
 
 #: core/uploads.py:57
 msgid "Vidéo refusée : choisissez un fichier MP4, WebM ou MOV."
@@ -915,87 +1007,91 @@ msgstr "Videyo a refize : chwazi yon fichye MP4, WebM oswa MOV."
 msgid "Vidéo trop lourde (40 Mo au plus). Raccourcissez-la ou compressez-la avant de l'envoyer."
 msgstr "Videyo a twò lou (40 Mo pou pi plis). Fè l pi kout oswa konprese l anvan w voye l."
 
-#: core/views.py:27
+#: core/views.py:29
 msgid "Un tableau de bord pour tout piloter"
 msgstr "Yon tablo bò pou jere tout bagay"
 
-#: core/views.py:27
+#: core/views.py:29
 msgid "Mariage, gala, baptême ou conférence : créez l'événement, localisez le lieu sur une carte et gardez la main du début à la fin."
 msgstr "Maryaj, gala, batèm oswa konferans : kreye evènman an, make kote l ap fèt la sou yon kat epi rete responsab depi nan kòmansman jiska lafen."
 
-#: core/views.py:28
+#: core/views.py:30
 msgid "Invitations WhatsApp et e-mail"
 msgstr "Envitasyon WhatsApp ak imèl"
 
-#: core/views.py:28
+#: core/views.py:30
 msgid "Chaque invité reçoit un lien personnel, sans mot de passe, sur le canal qu'il utilise vraiment."
 msgstr "Chak envite resevwa yon lyen pèsonèl, san modpas, sou kanal li itilize vre a."
 
-#: core/views.py:29
+#: core/views.py:31
 msgid "Qui vient, avec qui"
 msgstr "Kiyès k ap vini, ak ki moun"
 
-#: core/views.py:29
+#: core/views.py:31
 msgid "Présences, accompagnants et cadeaux se mettent à jour à chaque réponse : sachez exactement combien de chaises préparer."
 msgstr "Prezans, moun k ap akonpanye yo ak kado yo mete ajou a chak repons : konnen egzakteman konbyen chèz pou prepare."
 
-#: core/views.py:30
+#: core/views.py:32
 msgid "Un cadeau choisi est aussitôt verrouillé pour les autres. La liste reste juste jusqu'au jour J."
 msgstr "Le yon kado chwazi, li bloke touswit pou lòt yo. Lis la rete jis jiska jou J a."
 
-#: core/views.py:31
+#: core/views.py:33
 msgid "Billetterie et paiements locaux"
 msgstr "Biyè ak peman lokal"
 
-#: core/views.py:31
+#: core/views.py:33
 msgid "Vendez vos billets et encaissez avec MonCash, NatCash, carte ou PayPal, avec les prix en gourdes et en dollars."
 msgstr "Vann biyè ou yo epi ankese ak MonCash, NatCash, kat bankè oswa PayPal, ak pri an goud ak an dola."
 
-#: core/views.py:32
+#: core/views.py:34
 msgid "Une vitrine pour vos partenaires"
 msgstr "Yon vitrin pou patnè ou yo"
 
-#: core/views.py:32
+#: core/views.py:34
 msgid "Traiteurs, fleuristes, photographes : leur publicité s'affiche après chaque réponse, et vous suivez les vues et les clics."
 msgstr "Tretè, machann flè, fotograf : piblisite yo parèt apre chak repons, epi ou swiv kantite vi ak klik yo."
 
-#: core/views.py:92
+#: core/views.py:94
 msgid "Merci pour votre avis. Il sera publié après relecture par l'équipe."
 msgstr "Mèsi pou opinyon ou. N ap pibliye l lè ekip la fin li l."
 
-#: core/views.py:94
+#: core/views.py:96
 msgid "Votre avis n'a pas pu être enregistré. Vérifiez les champs."
 msgstr "Opinyon ou pa t ka anrejistre. Verifye chan yo."
 
-#: core/views.py:104
+#: core/views.py:107
 msgid "Message envoyé. Notre équipe vous répondra rapidement."
 msgstr "Mesaj la voye. Ekip nou an ap reponn ou byento."
 
-#: core/views.py:106
+#: core/views.py:109
 msgid "Le message n'a pas pu être envoyé. Vérifiez les champs."
 msgstr "Mesaj la pa t ka voye. Verifye chan yo."
 
-#: core/views_admin.py:84
+#: core/views.py:132
+msgid "La demande n'a pas pu être envoyée. Corrigez les champs en rouge."
+msgstr "Demann lan pa t ka pati. Korije chan ki an wouj yo."
+
+#: core/views_admin.py:85
 msgid "Avis publié."
 msgstr "Opinyon an pibliye."
 
-#: core/views_admin.py:84
+#: core/views_admin.py:85
 msgid "Avis masqué."
 msgstr "Opinyon an kache."
 
-#: core/views_admin.py:131
+#: core/views_admin.py:132
 msgid "Demande de %(name)s : %(status)s."
 msgstr "Demann %(name)s : %(status)s."
 
-#: core/views_admin.py:146
+#: core/views_admin.py:147
 msgid "demandes-aide-eventlead"
 msgstr "demann-ed-eventlead"
 
-#: core/views_admin.py:149
+#: core/views_admin.py:150
 msgid "Reçue le"
 msgstr "Dat resepsyon"
 
-#: core/views_admin.py:149
+#: core/views_admin.py:150
 msgid "E-mail ou téléphone"
 msgstr "Imèl oswa telefòn"
 
@@ -1309,10 +1405,6 @@ msgstr "Anile"
 msgid "type"
 msgstr "tip"
 
-#: events/models.py:136
-msgid "date"
-msgstr "dat"
-
 #: events/models.py:137
 msgid "heure"
 msgstr "lè"
@@ -1556,10 +1648,6 @@ msgstr "Kontwòl anile"
 #: events/models.py:441
 msgid "QR code"
 msgstr "Kòd QR"
-
-#: events/models.py:442
-msgid "Recherche"
-msgstr "Rechèch"
 
 #: events/models.py:443
 msgid "Sur place"
@@ -1833,7 +1921,7 @@ msgstr "Albòm nan vid toujou."
 msgid "Indiquez le nom de la personne."
 msgstr "Ekri non moun nan."
 
-#: events/views_contribution.py:57 payments/views.py:71
+#: events/views_contribution.py:57 payments/views.py:74
 msgid "%(message)s Référence : %(reference)s."
 msgstr "%(message)s Referans : %(reference)s."
 
@@ -2289,15 +2377,15 @@ msgstr "kontribisyon"
 msgid "contributions"
 msgstr "kontribisyon"
 
-#: payments/views.py:57
+#: payments/views.py:59
 msgid "Votre accès Organisateur VIP est déjà actif : rien n'a été débité."
 msgstr "Aksè Òganizatè VIP ou a deja aktif : yo pa retire okenn lajan."
 
-#: payments/views.py:90
+#: payments/views.py:93
 msgid "Billet - %(titre)s"
 msgstr "Biyè - %(titre)s"
 
-#: payments/views.py:108
+#: payments/views.py:111
 msgid "Bienvenue parmi les Organisateurs VIP."
 msgstr "Byenvenu nan mitan Òganizatè VIP yo."
 
@@ -2337,7 +2425,7 @@ msgstr "Estati Òganizatè a se yon aksè ki koute lajan. Le peman an konfime, b
 msgid "Continuer vers le paiement"
 msgstr "Kontinye pou peman an"
 
-#: templates/accounts/guest_space.html:4 templates/accounts/guest_space.html:9 templates/core/landing.html:20 templates/partials/_navbar.html:38
+#: templates/accounts/guest_space.html:4 templates/accounts/guest_space.html:9 templates/core/landing.html:20 templates/partials/_navbar.html:40
 msgid "Mon espace"
 msgstr "Espas mwen"
 
@@ -2361,7 +2449,7 @@ msgstr "Envitasyon mwen yo"
 msgid "Événement"
 msgstr "Evènman"
 
-#: templates/accounts/guest_space.html:16 templates/dashboard/events/_live.html:55 templates/dashboard/events/list.html:25 templates/dashboard/home.html:25 templates/dashboard/payments/history.html:20 templates/events/organizer_portal.html:40
+#: templates/accounts/guest_space.html:16 templates/dashboard/events/_live.html:55 templates/dashboard/events/list.html:25 templates/dashboard/home.html:25 templates/dashboard/payments/history.html:20 templates/dashboard/utm/report.html:32
 msgid "Date"
 msgstr "Dat"
 
@@ -2369,7 +2457,7 @@ msgstr "Dat"
 msgid "Ma réponse"
 msgstr "Repons mwen"
 
-#: templates/accounts/guest_space.html:21 templates/dashboard/checkin/_event_card.html:8 templates/dashboard/guests/export_pdf.html:15 templates/dashboard/help/list.html:29 templates/dashboard/reminders/_event_card.html:8 templates/dashboard/seating/_event_card.html:8
+#: templates/accounts/guest_space.html:21 templates/core/help.html:12 templates/core/search.html:20 templates/dashboard/checkin/_event_card.html:8 templates/dashboard/guests/export_pdf.html:15 templates/dashboard/help/list.html:29
 msgid "j F Y"
 msgstr "j F Y"
 
@@ -2393,7 +2481,7 @@ msgstr "Ou òganize evènman ?"
 msgid "Passez Organisateur VIP pour accéder à plus de détails."
 msgstr "Vin Òganizatè VIP pou jwenn plis detay."
 
-#: templates/accounts/login.html:3 templates/accounts/login.html:5 templates/partials/_footer.html:22 templates/partials/_navbar.html:54
+#: templates/accounts/login.html:3 templates/accounts/login.html:5 templates/partials/_footer.html:22 templates/partials/_navbar.html:56 core/search.py:27
 msgid "Connexion"
 msgstr "Konekte"
 
@@ -2413,7 +2501,7 @@ msgstr "Ou poko gen kont ?"
 msgid "Créer un compte"
 msgstr "Kreye yon kont"
 
-#: templates/accounts/profile.html:4 templates/accounts/profile.html:8 templates/partials/_navbar.html:46
+#: templates/accounts/profile.html:4 templates/accounts/profile.html:8 templates/partials/_navbar.html:48
 msgid "Mon profil"
 msgstr "Pwofil mwen"
 
@@ -2425,7 +2513,7 @@ msgstr "Anrejistre"
 msgid "Inscription Organisateur"
 msgstr "Enskripsyon Òganizatè"
 
-#: templates/accounts/register.html:4 templates/events/organizer_portal.html:13 core/help.py:55
+#: templates/accounts/register.html:4 templates/events/organizer_portal.html:13 core/help.py:60
 msgid "Organisateur VIP"
 msgstr "Òganizatè VIP"
 
@@ -2537,23 +2625,31 @@ msgstr "Pa gen okenn òf pou kounye a."
 msgid "EventLead, la plateforme de gestion d'événements pour Haïti et la Caraïbe : invitations WhatsApp et e-mail, liste de cadeaux, suivi en temps réel."
 msgstr "EventLead, platfòm pou jere evènman an Ayiti ak nan Karayib la : envitasyon sou WhatsApp ak imèl, lis kado, swivi an tan reyèl."
 
-#: templates/base.html:22
+#: templates/base.html:25
 msgid "La connexion a échoué. Vérifiez votre réseau, la page réessaie toute seule."
 msgstr "Koneksyon an pa pase. Tcheke rezo w la, paj la ap eseye ankò poukont li."
 
-#: templates/base.html:22
+#: templates/base.html:25
 msgid "Le serveur met trop de temps à répondre. Réessayez dans un instant."
 msgstr "Sèvè a pran twòp tan pou l reponn. Eseye ankò nan yon ti moman."
 
-#: templates/base.html:22
+#: templates/base.html:25
 msgid "Trop de demandes en peu de temps. Patientez une minute."
 msgstr "Twòp demann nan yon ti tan. Tann yon minit."
 
-#: templates/base.html:22
+#: templates/base.html:25
 msgid "Connexion rétablie."
 msgstr "Koneksyon an tounen."
 
-#: templates/core/help.html:3 templates/core/help.html:6 templates/partials/_footer.html:15 templates/partials/_navbar.html:30
+#: templates/base.html:26
+msgid "Aller au contenu"
+msgstr "Ale nan kontni an"
+
+#: templates/base.html:37 templates/base.html:37
+msgid "Retour en haut de la page"
+msgstr "Tounen anlè paj la"
+
+#: templates/core/help.html:3 templates/core/help.html:6 templates/partials/_footer.html:15 templates/partials/_navbar.html:30 core/search.py:23
 msgid "Aide"
 msgstr "Èd"
 
@@ -2573,51 +2669,59 @@ msgstr "Nou la"
 msgid "Des réponses simples pour les invités, les Organisateurs VIP et l'équipe, et un moyen rapide de nous écrire."
 msgstr "Repons senp pou envite yo, Òganizatè VIP yo ak ekip la, ak yon fason rapid pou ekri nou."
 
-#: templates/core/help.html:11
+#: templates/core/help.html:12
+msgid "Dernière mise à jour :"
+msgstr "Dènye mizajou :"
+
+#: templates/core/help.html:13
+msgid "Imprimer les questions"
+msgstr "Enprime kesyon yo"
+
+#: templates/core/help.html:15
 msgid "Aller à un profil"
 msgstr "Ale nan yon seksyon"
 
-#: templates/core/help.html:31 templates/partials/_help_hint.html:10
+#: templates/core/help.html:35 templates/partials/_help_hint.html:10
 msgid "Écrire à l'équipe"
 msgstr "Ekri ekip la"
 
-#: templates/core/help.html:32
+#: templates/core/help.html:36
 msgid "Une question qui n'est pas ici ? Écrivez-nous sur WhatsApp, ou remplissez le formulaire plus bas. Nous répondons par WhatsApp ou par e-mail."
 msgstr "Ou gen yon kesyon ki pa isit la ? Ekri nou sou WhatsApp, oswa ranpli fòmilè ki pi ba a. N ap reponn ou sou WhatsApp oswa pa imèl."
 
-#: templates/core/help.html:33 templates/core/landing.html:269 templates/invitation/base_invitation.html:34
+#: templates/core/help.html:37 templates/core/landing.html:269 templates/invitation/base_invitation.html:34
 msgid "Écrire sur WhatsApp"
 msgstr "Ekri sou WhatsApp"
 
-#: templates/core/help.html:33 templates/partials/_help_fab.html:1
+#: templates/core/help.html:37 templates/partials/_help_fab.html:1
 msgid "Bonjour EventLead, j'ai besoin d'aide."
 msgstr "Bonjou EventLead, mwen bezwen èd."
 
-#: templates/core/help.html:34
+#: templates/core/help.html:38
 msgid "Remplir le formulaire"
 msgstr "Ranpli fòmilè a"
 
-#: templates/core/help.html:44
+#: templates/core/help.html:48
 msgid "Formulaire"
 msgstr "Fòmilè"
 
-#: templates/core/help.html:45
+#: templates/core/help.html:49
 msgid "J'ai besoin d'aide"
 msgstr "Mwen bezwen èd"
 
-#: templates/core/help.html:47
+#: templates/core/help.html:51
 msgid "Merci, votre demande est bien arrivée."
 msgstr "Mèsi, demann ou an byen rive."
 
-#: templates/core/help.html:47
+#: templates/core/help.html:51
 msgid "Nous vous répondons par le moyen de contact que vous avez indiqué."
 msgstr "N ap reponn ou ak mwayen kontak ou te endike a."
 
-#: templates/core/help.html:48
+#: templates/core/help.html:52
 msgid "Poser une autre question"
 msgstr "Poze yon lòt kesyon"
 
-#: templates/core/help.html:61
+#: templates/core/help.html:65
 msgid "Envoyer ma demande"
 msgstr "Voye demann mwen an"
 
@@ -2629,7 +2733,7 @@ msgstr "Envitasyon, kado ak biyè pou evènman ou yo"
 msgid "Invitations élégantes par WhatsApp ou e-mail, réponses en direct, liste de cadeaux sans doublon et billets payables par MonCash, NatCash, carte ou PayPal. Pour Haïti, la Caraïbe et la diaspora."
 msgstr "Envitasyon elegan sou WhatsApp oswa imèl, repons an dirèk, lis kado san doub, ak biyè ou ka peye ak MonCash, NatCash, kat bankè oswa PayPal. Pou Ayiti, Karayib la ak dyaspora a."
 
-#: templates/core/landing.html:15 templates/partials/_navbar.html:21
+#: templates/core/landing.html:15 templates/partials/_navbar.html:21 core/search.py:19
 msgid "Accueil"
 msgstr "Akèy"
 
@@ -2677,7 +2781,7 @@ msgstr "Pwen fò EventLead yo"
 msgid "Sans compte pour l'invité"
 msgstr "San kont pou envite a"
 
-#: templates/core/landing.html:43 core/views.py:30
+#: templates/core/landing.html:43 core/views.py:32
 msgid "Cadeaux sans doublon"
 msgstr "Kado san doub"
 
@@ -2789,7 +2893,7 @@ msgstr "Gade tout evènman piblik yo"
 msgid "Voir tous les événements publics : %(cat)s"
 msgstr "Gade tout evènman piblik yo : %(cat)s"
 
-#: templates/core/landing.html:145 templates/partials/_footer.html:12 templates/partials/_navbar.html:24
+#: templates/core/landing.html:145 templates/partials/_footer.html:12 templates/partials/_navbar.html:24 core/search.py:20
 msgid "Services"
 msgstr "Sèvis"
 
@@ -2813,7 +2917,7 @@ msgstr "Yon aksè privilejye&nbsp;: detay tout evènman piblik yo, fèt prive ko
 msgid "Décoration de réception"
 msgstr "Dekorasyon resepsyon"
 
-#: templates/core/landing.html:200 templates/partials/_navbar.html:28
+#: templates/core/landing.html:200 templates/partials/_navbar.html:28 core/search.py:25
 msgid "À propos"
 msgstr "Sou nou"
 
@@ -2851,7 +2955,7 @@ msgstr "Kite premye opinyon an."
 msgid "Laisser un avis"
 msgstr "Kite yon opinyon"
 
-#: templates/core/landing.html:242 templates/dashboard/checkin/event.html:68 templates/dashboard/events/detail.html:44 templates/dashboard/guests/export_pdf.html:17 core/views_admin.py:149 events/views_admin.py:319
+#: templates/core/landing.html:242 templates/dashboard/checkin/event.html:68 templates/dashboard/events/detail.html:44 templates/dashboard/guests/export_pdf.html:17 core/views_admin.py:150 events/views_admin.py:319
 msgid "Nom"
 msgstr "Non"
 
@@ -2875,7 +2979,7 @@ msgstr "Pataje eksperyans ou avèk EventLead"
 msgid "Publier mon avis"
 msgstr "Pibliye opinyon mwen"
 
-#: templates/core/landing.html:263 templates/dashboard/guests/export_pdf.html:17 templates/partials/_footer.html:26 templates/partials/_navbar.html:29
+#: templates/core/landing.html:263 templates/dashboard/guests/export_pdf.html:17 templates/partials/_footer.html:26 templates/partials/_navbar.html:29 core/search.py:24
 msgid "Contact"
 msgstr "Kontak"
 
@@ -2907,7 +3011,7 @@ msgstr "Telefòn"
 msgid "Adresse e-mail"
 msgstr "Adrès imèl"
 
-#: templates/core/landing.html:279 core/forms.py:28 core/views_admin.py:149
+#: templates/core/landing.html:279 core/forms.py:28 core/views_admin.py:150
 msgid "Message"
 msgstr "Mesaj"
 
@@ -2918,6 +3022,72 @@ msgstr "Pale nou de evènman ou an"
 #: templates/core/landing.html:280
 msgid "Envoyer le message"
 msgstr "Voye mesaj la"
+
+#: templates/core/legal/_layout.html:14 templates/dashboard/seating/print.html:42 templates/events/public_detail.html:44 templates/invitation/ticket.html:39
+msgid "Imprimer"
+msgstr "Enprime"
+
+#: templates/core/search.html:3 templates/core/search.html:12 templates/core/search.html:6
+msgid "Rechercher"
+msgstr "Chèche"
+
+#: templates/core/search.html:3
+msgid "Recherche : %(q)s"
+msgstr "Rechèch : %(q)s"
+
+#: templates/core/search.html:4
+msgid "Rechercher un événement, une catégorie, une question de l'aide ou une page du site EventLead."
+msgstr "Chèche yon evènman, yon kategori, yon kesyon nan èd la oswa yon paj sou sit EventLead la."
+
+#: templates/core/search.html:6 events/models.py:442
+msgid "Recherche"
+msgstr "Rechèch"
+
+#: templates/core/search.html:6
+msgid "sur tout le site"
+msgstr "sou tout sit la"
+
+#: templates/core/search.html:6
+msgid "Événements, catégories, questions fréquentes et pages."
+msgstr "Evènman, kategori, kesyon moun poze souvan ak paj."
+
+#: templates/core/search.html:10
+msgid "Que cherchez-vous ?"
+msgstr "Kisa w ap chèche ?"
+
+#: templates/core/search.html:11
+msgid "Mariage, billet, MonCash, cadeau..."
+msgstr "Maryaj, biyè, MonCash, kado..."
+
+#: templates/core/search.html:15
+msgid "%(counter)s résultat pour « %(q)s »"
+msgid_plural "%(counter)s résultats pour « %(q)s »"
+msgstr[0] "%(counter)s rezilta pou « %(q)s »"
+msgstr[1] "%(counter)s rezilta pou « %(q)s »"
+
+#: templates/core/search.html:17 templates/events/explore.html:3 templates/events/explore.html:5 templates/partials/_footer.html:13 templates/partials/_navbar.html:49 core/search.py:21
+msgid "Événements publics"
+msgstr "Evènman piblik"
+
+#: templates/core/search.html:25 templates/dashboard/base_dashboard.html:14 templates/dashboard/categories/list.html:3
+msgid "Catégories"
+msgstr "Kategori"
+
+#: templates/core/search.html:31
+msgid "Questions fréquentes"
+msgstr "Kesyon moun poze souvan"
+
+#: templates/core/search.html:39 templates/partials/_pagination.html:3
+msgid "Pages"
+msgstr "Paj yo"
+
+#: templates/core/search.html:47
+msgid "Aucun résultat. Essayez un autre mot, ou posez votre question à l'équipe."
+msgstr "Pa gen rezilta. Eseye yon lòt mo, oswa poze ekip la kesyon w lan."
+
+#: templates/core/search.html:47 templates/payments/_payment_modal.html:34
+msgid "Demander de l'aide"
+msgstr "Mande èd"
 
 #: templates/dashboard/ads/form.html:3 templates/dashboard/ads/form.html:6 templates/dashboard/ads/list.html:8
 msgid "Nouvelle publicité"
@@ -2995,7 +3165,7 @@ msgstr "Klik"
 msgid "Après réponse"
 msgstr "Apre repons"
 
-#: templates/dashboard/ads/list.html:18 templates/dashboard/ads/list.html:27
+#: templates/dashboard/ads/list.html:18 templates/dashboard/ads/list.html:28
 msgid "Active"
 msgstr "Aktif"
 
@@ -3003,23 +3173,31 @@ msgstr "Aktif"
 msgid "Actions"
 msgstr "Aksyon"
 
-#: templates/dashboard/ads/list.html:22
+#: templates/dashboard/ads/list.html:20
+msgid "Marquer cette publicité comme payée ? Elle pourra s'afficher pendant ses dates de diffusion."
+msgstr "Make piblisite sa a kòm peye ? L ap ka parèt pandan dat difizyon li yo."
+
+#: templates/dashboard/ads/list.html:20
+msgid "Marquer cette publicité comme non payée ? Elle ne s'affichera plus."
+msgstr "Make piblisite sa a kòm pa peye ? Li p ap parèt ankò."
+
+#: templates/dashboard/ads/list.html:23
 msgid "Vidéo"
 msgstr "Videyo"
 
-#: templates/dashboard/ads/list.html:24 templates/dashboard/ads/list.html:26 events/forms.py:161
+#: templates/dashboard/ads/list.html:25 templates/dashboard/ads/list.html:27 events/forms.py:161
 msgid "Oui"
 msgstr "Wi"
 
-#: templates/dashboard/ads/list.html:24 templates/dashboard/ads/list.html:26 templates/dashboard/events/detail.html:50 templates/dashboard/events/detail.html:60 events/forms.py:162
+#: templates/dashboard/ads/list.html:25 templates/dashboard/ads/list.html:27 templates/dashboard/events/detail.html:50 templates/dashboard/events/detail.html:60 events/forms.py:162
 msgid "Non"
 msgstr "Non"
 
-#: templates/dashboard/ads/list.html:27
+#: templates/dashboard/ads/list.html:28
 msgid "Inactive"
 msgstr "Inaktif"
 
-#: templates/dashboard/ads/list.html:37
+#: templates/dashboard/ads/list.html:38
 msgid "Aucune publicité."
 msgstr "Pa gen piblisite."
 
@@ -3038,10 +3216,6 @@ msgstr "Tablo bò"
 #: templates/dashboard/base_dashboard.html:13 templates/dashboard/categories/list.html:18 templates/dashboard/events/list.html:3 templates/dashboard/events/list.html:6 templates/partials/_navbar.html:22
 msgid "Événements"
 msgstr "Evènman"
-
-#: templates/dashboard/base_dashboard.html:14 templates/dashboard/categories/list.html:3
-msgid "Catégories"
-msgstr "Kategori"
 
 #: templates/dashboard/base_dashboard.html:15 templates/dashboard/events/detail.html:35 templates/dashboard/guests/list.html:3 templates/dashboard/guests/list.html:6 templates/dashboard/home.html:25
 msgid "Invités"
@@ -3091,27 +3265,31 @@ msgstr "Demann èd"
 msgid "Demandes nouvelles"
 msgstr "Nouvo demann"
 
-#: templates/dashboard/base_dashboard.html:27
+#: templates/dashboard/base_dashboard.html:27 templates/dashboard/utm/report.html:3 templates/dashboard/utm/report.html:6
+msgid "Provenance des visites"
+msgstr "Kote vizit yo soti"
+
+#: templates/dashboard/base_dashboard.html:28
 msgid "Back-office Django"
 msgstr "Back-office Django"
 
-#: templates/dashboard/base_dashboard.html:28
+#: templates/dashboard/base_dashboard.html:29
 msgid "Voir le site"
 msgstr "Gade sit la"
 
-#: templates/dashboard/base_dashboard.html:30 templates/partials/_navbar.html:49
+#: templates/dashboard/base_dashboard.html:31 templates/partials/_navbar.html:51
 msgid "Se déconnecter"
 msgstr "Dekonekte"
 
-#: templates/dashboard/base_dashboard.html:36 templates/partials/_navbar.html:16
+#: templates/dashboard/base_dashboard.html:37 templates/partials/_navbar.html:16
 msgid "Menu"
 msgstr "Meni"
 
-#: templates/dashboard/base_dashboard.html:37 templates/dashboard/checkin/event.html:28 templates/dashboard/events/detail.html:17 templates/dashboard/reminders/event.html:20 templates/dashboard/seating/event.html:22 templates/dashboard/seating/print.html:40
+#: templates/dashboard/base_dashboard.html:38 templates/dashboard/checkin/event.html:28 templates/dashboard/events/detail.html:17 templates/dashboard/reminders/event.html:20 templates/dashboard/seating/event.html:22 templates/dashboard/seating/print.html:40
 msgid "l j F Y"
 msgstr "l j F Y"
 
-#: templates/dashboard/base_dashboard.html:41 templates/dashboard/base_dashboard.html:41 templates/dashboard/base_dashboard.html:41 templates/dashboard/events/form.html:4 templates/dashboard/events/form.html:8 templates/dashboard/events/list.html:7
+#: templates/dashboard/base_dashboard.html:43 templates/dashboard/base_dashboard.html:43 templates/dashboard/base_dashboard.html:43 templates/dashboard/events/form.html:4 templates/dashboard/events/form.html:8 templates/dashboard/events/list.html:7
 msgid "Nouvel événement"
 msgstr "Nouvo evènman"
 
@@ -3223,7 +3401,7 @@ msgstr "Sou plas · %(n)s"
 msgid "Heure"
 msgstr "Lè"
 
-#: templates/dashboard/checkin/_recent.html:13 templates/dashboard/events/_live.html:55 templates/dashboard/guests/list.html:28 templates/dashboard/reminders/_table.html:13 templates/dashboard/thanks/event.html:118 accounts/models.py:11
+#: templates/dashboard/checkin/_recent.html:13 templates/dashboard/events/_live.html:55 templates/dashboard/guests/list.html:28 templates/dashboard/reminders/_table.html:13 templates/dashboard/thanks/event.html:120 accounts/models.py:11
 msgid "Invité"
 msgstr "Envite"
 
@@ -3491,11 +3669,11 @@ msgid_plural "%(counter)s contributions"
 msgstr[0] "%(counter)s kontribisyon"
 msgstr[1] "%(counter)s kontribisyon"
 
-#: templates/dashboard/events/_live.html:55 templates/dashboard/home.html:39 templates/dashboard/payments/history.html:20 templates/invitation/step_contribution.html:19 templates/payments/success.html:19
+#: templates/dashboard/events/_live.html:55 templates/dashboard/home.html:39 templates/dashboard/payments/history.html:20 templates/invitation/step_contribution.html:19 templates/payments/success.html:23
 msgid "Montant"
 msgstr "Montan"
 
-#: templates/dashboard/events/_live.html:55 templates/dashboard/home.html:39 templates/dashboard/payments/history.html:20 templates/payments/success.html:18
+#: templates/dashboard/events/_live.html:55 templates/dashboard/home.html:39 templates/dashboard/payments/history.html:20 templates/payments/success.html:22
 msgid "Mode"
 msgstr "Mwayen peman"
 
@@ -3515,7 +3693,7 @@ msgstr "%(d)s a %(t)s"
 msgid "Gérer et envoyer"
 msgstr "Jere ak voye"
 
-#: templates/dashboard/events/detail.html:44 templates/dashboard/guests/export_pdf.html:17 templates/dashboard/reminders/_table.html:13 templates/dashboard/reminders/event.html:61 templates/dashboard/thanks/event.html:62 templates/dashboard/thanks/event.html:118
+#: templates/dashboard/events/detail.html:44 templates/dashboard/guests/export_pdf.html:17 templates/dashboard/reminders/_table.html:13 templates/dashboard/reminders/event.html:61 templates/dashboard/thanks/event.html:63 templates/dashboard/thanks/event.html:120
 msgid "Canal"
 msgstr "Chanèl"
 
@@ -3773,7 +3951,7 @@ msgstr "Tout evènman"
 msgid "Généré le %(d)s"
 msgstr "Jenere nan dat %(d)s"
 
-#: templates/dashboard/guests/export_pdf.html:15 templates/dashboard/guests/form.html:46 templates/dashboard/inbox.html:17 templates/payments/success.html:20
+#: templates/dashboard/guests/export_pdf.html:15 templates/dashboard/guests/form.html:46 templates/dashboard/inbox.html:17 templates/payments/success.html:24
 msgid "j F Y H:i"
 msgstr "j F Y H:i"
 
@@ -3793,7 +3971,7 @@ msgstr "Chanèl pou voye"
 msgid "Lien d'invitation"
 msgstr "Lyen envitasyon an"
 
-#: templates/dashboard/guests/form.html:43 templates/dashboard/reminders/_table.html:18 templates/dashboard/reminders/event.html:63 templates/dashboard/thanks/event.html:64 templates/dashboard/thanks/event.html:123 events/views_admin.py:319
+#: templates/dashboard/guests/form.html:43 templates/dashboard/reminders/_table.html:18 templates/dashboard/reminders/event.html:63 templates/dashboard/thanks/event.html:65 templates/dashboard/thanks/event.html:125 events/views_admin.py:319
 msgid "E-mail"
 msgstr "Imèl"
 
@@ -4135,7 +4313,7 @@ msgstr "Pou rapèl"
 msgid "Maximum atteint"
 msgstr "Limit la rive"
 
-#: templates/dashboard/reminders/_table.html:21 templates/dashboard/thanks/event.html:123
+#: templates/dashboard/reminders/_table.html:21 templates/dashboard/thanks/event.html:125
 msgid "Aucun contact"
 msgstr "Pa gen kontak"
 
@@ -4243,7 +4421,7 @@ msgstr "Rapèl la sispann le envite a reponn. Li pati pa menm chanèl ak envitas
 msgid "Enregistrer les réglages"
 msgstr "Anrejistre règleman yo"
 
-#: templates/dashboard/reminders/event.html:60 templates/dashboard/thanks/event.html:61
+#: templates/dashboard/reminders/event.html:60 templates/dashboard/thanks/event.html:62
 msgid "Message envoyé"
 msgstr "Mesaj ki voye a"
 
@@ -4459,10 +4637,6 @@ msgstr "Plase envite ki konfime yo nan tab yo, ansanm ak moun k ap akonpanye yo.
 msgid "Aucun événement n'a encore d'invités qui ont confirmé leur présence."
 msgstr "Pa gen evènman ki gen envite ki konfime prezans yo ankò."
 
-#: templates/dashboard/seating/print.html:42
-msgid "Imprimer"
-msgstr "Enprime"
-
 #: templates/dashboard/seating/print.html:51
 msgid "Aucun invité"
 msgstr "Pa gen envite"
@@ -4473,11 +4647,11 @@ msgid_plural "Sans table : %(counter)s invités"
 msgstr[0] "San tab : %(counter)s envite"
 msgstr[1] "San tab : %(counter)s envite"
 
-#: templates/dashboard/thanks/_event_card.html:6 templates/dashboard/thanks/event.html:42
+#: templates/dashboard/thanks/_event_card.html:6 templates/dashboard/thanks/event.html:43
 msgid "Publié"
 msgstr "Pibliye"
 
-#: templates/dashboard/thanks/_event_card.html:6 templates/dashboard/thanks/event.html:42
+#: templates/dashboard/thanks/_event_card.html:6 templates/dashboard/thanks/event.html:43
 msgid "Pas publié"
 msgstr "Pa pibliye"
 
@@ -4519,133 +4693,145 @@ msgstr "Apre evènman an"
 msgid "Remerciements et album"
 msgstr "Remèsiman ak albòm"
 
-#: templates/dashboard/thanks/event.html:23
+#: templates/dashboard/thanks/event.html:19
+msgid "Publier les remerciements ? Les invités présents pourront voir le message et l'album."
+msgstr "Pibliye remèsiman yo ? Envite ki te la yo ap ka wè mesaj la ak album lan."
+
+#: templates/dashboard/thanks/event.html:19
+msgid "Ne plus publier les remerciements ? Les invités ne les verront plus."
+msgstr "Sispann pibliye remèsiman yo ? Envite yo p ap wè yo ankò."
+
+#: templates/dashboard/thanks/event.html:24
 msgid "Ne plus publier"
 msgstr "Pa pibliye ankò"
 
-#: templates/dashboard/thanks/event.html:25
+#: templates/dashboard/thanks/event.html:26
 msgid "Publier les remerciements"
 msgstr "Pibliye remèsiman yo"
 
-#: templates/dashboard/thanks/event.html:32
+#: templates/dashboard/thanks/event.html:33
 msgid "Publié le %(d)s. Les invités présents ouvrent la page « Merci » et l'album avec leur lien personnel."
 msgstr "Pibliye le %(d)s. Envite ki prezan yo louvri paj « Mèsi » a ak albòm nan ak lyen pèsonèl yo."
 
-#: templates/dashboard/thanks/event.html:34
+#: templates/dashboard/thanks/event.html:35
 msgid "Pas encore publié : les invités ne voient rien. Écrivez votre message, ajoutez des photos, puis publiez."
 msgstr "Poko pibliye : envite yo pa wè anyen. Ekri mesaj ou, ajoute foto, apre sa pibliye."
 
-#: templates/dashboard/thanks/event.html:36
+#: templates/dashboard/thanks/event.html:37
 msgid "Mode démonstration : les e-mails de remerciement s'affichent dans la console du serveur au lieu de partir. Ils partent vraiment une fois la messagerie configurée (variables EMAIL_* du fichier .env)."
 msgstr "Mòd demonstrasyon : imèl remèsiman yo parèt nan konsòl sèvè a olye yo pati. Yo pati vre le mesajri a konfigire (varyab EMAIL_* nan fichye .env a)."
 
-#: templates/dashboard/thanks/event.html:39
+#: templates/dashboard/thanks/event.html:40
 msgid "photos dans l'album"
 msgstr "foto nan albòm nan"
 
-#: templates/dashboard/thanks/event.html:39
+#: templates/dashboard/thanks/event.html:40
 msgid "%(n)s ajoutées par des invités"
 msgstr "%(n)s envite ajoute"
 
-#: templates/dashboard/thanks/event.html:40
+#: templates/dashboard/thanks/event.html:41
 msgid "invités présents"
 msgstr "envite prezan"
 
-#: templates/dashboard/thanks/event.html:41
+#: templates/dashboard/thanks/event.html:42
 msgid "remerciements envoyés sur %(n)s"
 msgstr "remèsiman voye sou %(n)s"
 
-#: templates/dashboard/thanks/event.html:42
+#: templates/dashboard/thanks/event.html:43
 msgid "visible par les invités présents"
 msgstr "envite ki prezan yo ka wè l"
 
-#: templates/dashboard/thanks/event.html:49
+#: templates/dashboard/thanks/event.html:50
 msgid "Votre message"
 msgstr "Mesaj ou"
 
-#: templates/dashboard/thanks/event.html:51
+#: templates/dashboard/thanks/event.html:52
 msgid "Message de remerciement"
 msgstr "Mesaj remèsiman"
 
-#: templates/dashboard/thanks/event.html:53
+#: templates/dashboard/thanks/event.html:54
 msgid "Affiché en haut de la page « Merci » (%(n)s signes au plus). Laissé vide, le texte ci-dessus s'affiche à la place."
 msgstr "Parèt anlè paj « Mèsi » a (%(n)s karaktè o plis). Si ou kite l vid, tèks ki anlè a parèt nan plas li."
 
-#: templates/dashboard/thanks/event.html:54
+#: templates/dashboard/thanks/event.html:55
 msgid "Enregistrer le message"
 msgstr "Anrejistre mesaj la"
 
-#: templates/dashboard/thanks/event.html:70
+#: templates/dashboard/thanks/event.html:71
 msgid "Le message s'écrit dans la langue de chaque invité. Le lien ouvre la page « Merci » et l'album, sans connexion. Jamais de SMS."
 msgstr "Mesaj la ekri nan lang chak envite. Lyen an louvri paj « Mèsi » a ak albòm nan, san koneksyon. Jamè pa SMS."
 
-#: templates/dashboard/thanks/event.html:78
+#: templates/dashboard/thanks/event.html:79
 msgid "Album"
 msgstr "Albòm"
 
-#: templates/dashboard/thanks/event.html:81
+#: templates/dashboard/thanks/event.html:82
 msgid "Photos à ajouter"
 msgstr "Foto pou ajoute"
 
-#: templates/dashboard/thanks/event.html:83
+#: templates/dashboard/thanks/event.html:84
 msgid "Ajouter des photos"
 msgstr "Ajoute foto"
 
-#: templates/dashboard/thanks/event.html:92
+#: templates/dashboard/thanks/event.html:93
 msgid "Hôtes"
 msgstr "Òganizatè yo"
 
-#: templates/dashboard/thanks/event.html:101
+#: templates/dashboard/thanks/event.html:102
 msgid "L'album est vide. Ajoutez des photos : les invités présents pourront aussi y ajouter les leurs."
 msgstr "Albòm nan vid. Ajoute foto : envite ki prezan yo pral ka ajoute pa yo tou."
 
-#: templates/dashboard/thanks/event.html:103
+#: templates/dashboard/thanks/event.html:104
 msgid "Photos JPEG, PNG ou WebP, 12 Mo au plus chacune, %(up)s à la fois, %(total)s dans l'album. Les photos sont réduites et leurs données de position sont retirées."
 msgstr "Foto JPEG, PNG oswa WebP, 12 Mo o plis chak, %(up)s alafwa, %(total)s nan albòm nan. Foto yo redui epi done pozisyon yo retire."
 
-#: templates/dashboard/thanks/event.html:109
+#: templates/dashboard/thanks/event.html:110
 msgid "Invités présents"
 msgstr "Envite prezan"
 
-#: templates/dashboard/thanks/event.html:112
+#: templates/dashboard/thanks/event.html:111
+msgid "Envoyer l'e-mail de remerciement à %(n)s invité(s) ? L'envoi ne peut pas être annulé."
+msgstr "Voye imèl remèsiman an bay %(n)s envite ? Ou p ap ka anile voye a."
+
+#: templates/dashboard/thanks/event.html:114
 msgid "Envoyer par e-mail · %(n)s"
 msgstr "Voye pa imèl · %(n)s"
 
-#: templates/dashboard/thanks/event.html:115
+#: templates/dashboard/thanks/event.html:117
 msgid "Publiez d'abord les remerciements pour pouvoir les envoyer."
 msgstr "Pibliye remèsiman yo anvan pou w ka voye yo."
 
-#: templates/dashboard/thanks/event.html:118
+#: templates/dashboard/thanks/event.html:120
 msgid "Remerciement"
 msgstr "Remèsiman"
 
-#: templates/dashboard/thanks/event.html:122
+#: templates/dashboard/thanks/event.html:124
 msgid "Aucune photo ajoutée"
 msgstr "Pa gen foto ajoute"
 
-#: templates/dashboard/thanks/event.html:122
+#: templates/dashboard/thanks/event.html:124
 msgid "%(counter)s photo ajoutée"
 msgid_plural "%(counter)s photos ajoutées"
 msgstr[0] "%(counter)s foto ajoute"
 msgstr[1] "%(counter)s foto ajoute"
 
-#: templates/dashboard/thanks/event.html:124
+#: templates/dashboard/thanks/event.html:126
 msgid "Pas encore envoyé"
 msgstr "Poko voye"
 
-#: templates/dashboard/thanks/event.html:124
+#: templates/dashboard/thanks/event.html:126
 msgid "Envoyé le %(d)s"
 msgstr "Voye le %(d)s"
 
-#: templates/dashboard/thanks/event.html:128 templates/dashboard/thanks/event.html:130
+#: templates/dashboard/thanks/event.html:130 templates/dashboard/thanks/event.html:132
 msgid "Renvoyer"
 msgstr "Voye ankò"
 
-#: templates/dashboard/thanks/event.html:128 templates/dashboard/thanks/event.html:130 templates/invitation/step_thanks.html:43
+#: templates/dashboard/thanks/event.html:130 templates/dashboard/thanks/event.html:132 templates/invitation/step_thanks.html:43
 msgid "Envoyer"
 msgstr "Voye"
 
-#: templates/dashboard/thanks/event.html:139
+#: templates/dashboard/thanks/event.html:141
 msgid "Aucun invité n'a confirmé sa présence."
 msgstr "Pa gen envite ki konfime prezans li."
 
@@ -4665,6 +4851,78 @@ msgstr "Poko gen evènman ki gen envite prezan oswa foto."
 msgid "Voir les événements"
 msgstr "Wè evènman yo"
 
+#: templates/dashboard/utm/report.html:6
+msgid "Les personnes arrivées par un lien de campagne (paramètres utm_*) et ce qu'elles ont fait ensuite. Aucun outil extérieur : tout reste sur le site."
+msgstr "Moun ki rive pa yon lyen kanpay (paramèt utm_*) ak sa yo fè apre. Pa gen zouti deyò : tout bagay rete sou sit la."
+
+#: templates/dashboard/utm/report.html:11
+msgid "Par source et par campagne"
+msgstr "Pa sous ak pa kanpay"
+
+#: templates/dashboard/utm/report.html:15 templates/dashboard/utm/report.html:32 templates/dashboard/utm/report.html:52
+msgid "Source"
+msgstr "Sous"
+
+#: templates/dashboard/utm/report.html:15 templates/dashboard/utm/report.html:53
+msgid "Support"
+msgstr "Mwayen"
+
+#: templates/dashboard/utm/report.html:15 templates/dashboard/utm/report.html:32 templates/dashboard/utm/report.html:54
+msgid "Campagne"
+msgstr "Kanpay"
+
+#: templates/dashboard/utm/report.html:15 templates/payments/checkout.html:34
+msgid "Total"
+msgstr "Total"
+
+#: templates/dashboard/utm/report.html:24
+msgid "Rien pour le moment. Partagez un lien créé avec le générateur : les inscriptions, paiements, demandes d'aide et messages qui en viennent s'afficheront ici."
+msgstr "Anyen pou kounye a. Pataje yon lyen ou fè ak jeneratè a : enskripsyon, peman, demann èd ak mesaj ki soti ladan l ap parèt la a."
+
+#: templates/dashboard/utm/report.html:28
+msgid "Dernières actions"
+msgstr "Dènye aksyon yo"
+
+#: templates/dashboard/utm/report.html:32
+msgid "Action"
+msgstr "Aksyon"
+
+#: templates/dashboard/utm/report.html:32
+msgid "Détail"
+msgstr "Detay"
+
+#: templates/dashboard/utm/report.html:42
+msgid "Aucune action pour le moment."
+msgstr "Pa gen aksyon pou kounye a."
+
+#: templates/dashboard/utm/report.html:48
+msgid "Créer un lien de campagne"
+msgstr "Kreye yon lyen kanpay"
+
+#: templates/dashboard/utm/report.html:49
+msgid "Exemple : source facebook, support publication, campagne mariages-octobre. Utilisez un lien différent pour chaque endroit où vous le partagez."
+msgstr "Egzanp : sous facebook, mwayen piblikasyon, kanpay maryaj-oktob. Sèvi ak yon lyen diferan pou chak kote ou pataje l."
+
+#: templates/dashboard/utm/report.html:51
+msgid "Page du site"
+msgstr "Paj sou sit la"
+
+#: templates/dashboard/utm/report.html:55
+msgid "Créer le lien"
+msgstr "Kreye lyen an"
+
+#: templates/dashboard/utm/report.html:58
+msgid "Votre lien"
+msgstr "Lyen ou"
+
+#: templates/dashboard/utm/report.html:59 templates/dashboard/utm/report.html:59
+msgid "Copier"
+msgstr "Kopye"
+
+#: templates/dashboard/utm/report.html:61
+msgid "Indiquez au moins la source et la campagne."
+msgstr "Mete omwen sous la ak kanpay la."
+
 #: templates/errors/400.html:2 templates/errors/400.html:4
 msgid "Demande refusée"
 msgstr "Demann lan refize"
@@ -4677,7 +4935,7 @@ msgstr "Nou pa t ka trete demann sa a. Si w t ap voye yon fichye, li ka twò lou
 msgid "Revenir en arrière"
 msgstr "Retounen"
 
-#: templates/errors/400.html:7 templates/errors/403.html:9 templates/errors/404.html:9 templates/errors/500.html:7 templates/invitation/entry_code.html:28 templates/payments/success.html:25
+#: templates/errors/400.html:7 templates/errors/403.html:9 templates/errors/404.html:9 templates/errors/500.html:7 templates/invitation/entry_code.html:28 templates/payments/success.html:29
 msgid "Retour à l'accueil"
 msgstr "Retounen nan akèy"
 
@@ -4740,10 +4998,6 @@ msgstr "Nòt ou"
 #: templates/events/evaluate.html:20
 msgid "Envoyer mon évaluation"
 msgstr "Voye evalyasyon mwen"
-
-#: templates/events/explore.html:3 templates/events/explore.html:5 templates/partials/_footer.html:13 templates/partials/_navbar.html:47
-msgid "Événements publics"
-msgstr "Evènman piblik"
 
 #: templates/events/explore.html:5
 msgid "Explorer"
@@ -4825,11 +5079,19 @@ msgstr "Sou evènman an"
 msgid "Plus d'informations bientôt."
 msgstr "Plis enfòmasyon byento."
 
-#: templates/events/public_detail.html:46 templates/partials/_parade_card.html:46 templates/payments/ticketing.html:24
+#: templates/events/public_detail.html:42
+msgid "Copier l'adresse"
+msgstr "Kopye adrès la"
+
+#: templates/events/public_detail.html:43
+msgid "Copier le lien"
+msgstr "Kopye lyen an"
+
+#: templates/events/public_detail.html:51 templates/partials/_parade_card.html:46 templates/payments/ticketing.html:24
 msgid "Acheter un billet"
 msgstr "Achte yon biyè"
 
-#: templates/events/public_detail.html:50
+#: templates/events/public_detail.html:55
 msgid "Voir mon invitation"
 msgstr "Gade envitasyon mwen"
 
@@ -5265,7 +5527,11 @@ msgstr "Anrejistre l nan telefòn mwen"
 msgid "Envoyer sur mon WhatsApp"
 msgstr "Voye l sou WhatsApp mwen"
 
-#: templates/invitation/ticket.html:39
+#: templates/invitation/ticket.html:38
+msgid "Copier le code"
+msgstr "Kopye kòd la"
+
+#: templates/invitation/ticket.html:41
 msgid "Présentez ce code à l'entrée. Enregistrez-le dans votre téléphone pour l'avoir même sans réseau."
 msgstr "Montre kòd sa a nan antre a. Anrejistre l nan telefòn ou pou w gen li menm san rezo."
 
@@ -5276,6 +5542,22 @@ msgstr "Videyo : %(title)s"
 #: templates/partials/_category_filter.html:3
 msgid "Filtrer les événements par catégorie"
 msgstr "Filtre evènman yo pa kategori"
+
+#: templates/partials/_cookie_note.html:2
+msgid "Cookies"
+msgstr "Cookies"
+
+#: templates/partials/_cookie_note.html:3
+msgid "Ce site utilise seulement les cookies nécessaires à son fonctionnement : rester connecté, protéger les formulaires et garder votre langue. Aucun cookie publicitaire ni de mesure d'audience."
+msgstr "Sit sa a sèvi sèlman ak cookies li bezwen pou l mache : kenbe w konekte, pwoteje fòmilè yo ak sonje lang ou. Pa gen cookies piblisite ni pou mezire odyans."
+
+#: templates/partials/_cookie_note.html:3
+msgid "En savoir plus"
+msgstr "Konn plis"
+
+#: templates/partials/_cookie_note.html:4
+msgid "J'ai compris"
+msgstr "Mwen konprann"
 
 #: templates/partials/_event_card.html:17 templates/partials/_parade_card.html:34
 msgid "Gratuit"
@@ -5305,7 +5587,7 @@ msgstr "Enfòmasyon legal"
 msgid "Confidentialité"
 msgstr "Done pèsonèl"
 
-#: templates/partials/_footer.html:38
+#: templates/partials/_footer.html:38 core/search.py:29
 msgid "Conditions d'utilisation"
 msgstr "Kondisyon itilizasyon"
 
@@ -5357,13 +5639,13 @@ msgstr "Navigasyon sit la"
 msgid "Plus"
 msgstr "Plis"
 
-#: templates/partials/_navbar.html:53
+#: templates/partials/_navbar.html:35 templates/partials/_navbar.html:35
+msgid "Rechercher sur le site"
+msgstr "Chèche sou sit la"
+
+#: templates/partials/_navbar.html:55
 msgid "Devenir VIP"
 msgstr "Vin VIP"
-
-#: templates/partials/_pagination.html:3
-msgid "Pages"
-msgstr "Paj yo"
 
 #: templates/partials/_pagination.html:4
 msgid "%(start)s à %(end)s sur %(total)s"
@@ -5384,6 +5666,14 @@ msgstr "Piblikasyon patnè"
 #: templates/partials/_parade_card.html:40
 msgid "j M Y"
 msgstr "j M Y"
+
+#: templates/partials/_theme_toggle.html:1 templates/partials/_theme_toggle.html:1 templates/partials/_theme_toggle.html:1
+msgid "Mode sombre"
+msgstr "Mòd fènwa"
+
+#: templates/partials/_theme_toggle.html:1
+msgid "Mode clair"
+msgstr "Mòd klè"
 
 #: templates/payments/_payment_modal.html:3
 msgid "Choisissez votre mode de paiement"
@@ -5408,10 +5698,6 @@ msgstr "Kont oswa kat"
 #: templates/payments/_payment_modal.html:34
 msgid "Un souci pour payer ?"
 msgstr "Ou gen pwoblèm pou peye ?"
-
-#: templates/payments/_payment_modal.html:34
-msgid "Demander de l'aide"
-msgstr "Mande èd"
 
 #: templates/payments/_payment_modal.html:35
 msgid "Mode démonstration : aucun montant réel n'est débité."
@@ -5549,10 +5835,6 @@ msgstr "Kantite biyè"
 msgid "Moins"
 msgstr "Mwens"
 
-#: templates/payments/checkout.html:34
-msgid "Total"
-msgstr "Total"
-
 #: templates/payments/checkout.html:35
 msgid "Payer maintenant"
 msgstr "Peye kounye a"
@@ -5573,15 +5855,23 @@ msgstr "Peman <em>konfime</em>"
 msgid "Merci ! Conservez votre référence de transaction."
 msgstr "Mèsi ! Kenbe referans tranzaksyon ou an."
 
+#: templates/payments/success.html:16
+msgid "Copier la référence"
+msgstr "Kopye referans lan"
+
 #: templates/payments/success.html:17
+msgid "Imprimer le reçu"
+msgstr "Enprime resi a"
+
+#: templates/payments/success.html:21
 msgid "Objet"
 msgstr "Pou kisa"
 
-#: templates/payments/success.html:23
+#: templates/payments/success.html:27
 msgid "VIP activé"
 msgstr "VIP aktive"
 
-#: templates/payments/success.html:23
+#: templates/payments/success.html:27
 msgid "Accéder au portail Organisateur"
 msgstr "Ale nan pòtay Òganizatè a"
 
@@ -5633,7 +5923,7 @@ msgstr "Badj VIP an lò"
 msgid "Visible à côté de votre nom."
 msgstr "Li parèt bò kote non ou."
 
-#: templates/payments/vip.html:23 payments/models.py:26 payments/views.py:111
+#: templates/payments/vip.html:23 payments/models.py:26 payments/views.py:114
 msgid "Accès Organisateur VIP"
 msgstr "Aksè Òganizatè VIP"
 

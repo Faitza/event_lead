@@ -1,4 +1,5 @@
 import csv
+from urllib.parse import parse_qsl, urlencode, urlsplit, urlunsplit
 
 from django.contrib import messages
 from django.db.models import Count, Sum
@@ -16,7 +17,7 @@ from events.models import Event, Guest
 from gifts.models import Gift, GiftClaim
 from payments.models import Payment
 
-from .models import ContactMessage, HelpRequest, Review
+from .models import Attribution, ContactMessage, HelpRequest, Review
 from .paging import paginate
 
 
@@ -153,3 +154,39 @@ def help_export_csv(request):
             r.get_topic_display(), _csv_safe(r.message), r.get_status_display(),
         ])
     return response
+
+
+def _utm_link(request):
+    """Générateur de lien de campagne : adresse du site + utm_source / utm_medium / utm_campaign."""
+    values = {k: request.GET.get(k, "").strip()[:120] for k in ("page", "source", "medium", "campaign")}
+    if not (values["source"] and values["campaign"]):
+        return values, ""
+    page = values["page"] or "/"
+    if not page.startswith("/"):
+        page = "/" + page
+    parts = urlsplit(request.build_absolute_uri(page))
+    query = [(k, v) for k, v in parse_qsl(parts.query) if not k.startswith("utm_")]
+    query += [(f"utm_{k}", values[k]) for k in ("source", "medium", "campaign") if values[k]]
+    return values, urlunsplit(parts._replace(query=urlencode(query)))
+
+
+@admin_required
+def utm_report(request):
+    """Provenance des visites : d'où viennent les inscriptions, paiements, demandes d'aide et messages."""
+    kinds = Attribution.Kind.choices
+    rows = {}
+    for item in Attribution.objects.values("source", "medium", "campaign", "kind").annotate(n=Count("id")):
+        key = (item["source"], item["medium"], item["campaign"])
+        row = rows.setdefault(key, {"source": item["source"], "medium": item["medium"], "campaign": item["campaign"],
+                                    "counts": dict.fromkeys(k for k, _ in kinds), "total": 0})
+        row["counts"][item["kind"]] = (row["counts"].get(item["kind"]) or 0) + item["n"]
+        row["total"] += item["n"]
+    summary = sorted(rows.values(), key=lambda r: -r["total"])
+    for row in summary:
+        row["cells"] = [row["counts"].get(k) or 0 for k, _ in kinds]
+    page = paginate(request, Attribution.objects.select_related("user"), 30)
+    builder, built_link = _utm_link(request)
+    return render(request, "dashboard/utm/report.html", {
+        "kinds": kinds, "summary": summary, "items": page.object_list, "page_obj": page,
+        "builder": builder, "built_link": built_link,
+    })

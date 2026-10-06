@@ -4,7 +4,12 @@ Chaque question a un identifiant stable : les petites aides du parcours (invitat
 renvoient vers `/aide/#faq-<identifiant>`. Les réponses décrivent ce que fait le site aujourd'hui.
 """
 
+from datetime import date
+
 from django.utils.translation import gettext_lazy as _
+
+# Date affichée en haut de la page Aide : à changer quand une question ou une réponse change
+HELP_UPDATED = date(2026, 10, 6)
 
 HELP_PROFILES = [
     {

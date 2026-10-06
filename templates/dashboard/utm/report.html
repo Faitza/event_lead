@@ -1,0 +1,66 @@
+{% extends "dashboard/base_dashboard.html" %}
+{% load i18n %}
+{% block title %}{% trans "Provenance des visites" %}{% endblock %}
+{% block dash_content %}
+<div class="page-head">
+  <div><h1>{% trans "Provenance des visites" %}</h1><p>{% trans "Les personnes arrivées par un lien de campagne (paramètres utm_*) et ce qu'elles ont fait ensuite. Aucun outil extérieur : tout reste sur le site." %}</p></div>
+</div>
+<div class="row g-4">
+  <div class="col-xl-7">
+    <div class="el-card mb-4">
+      <div class="el-card-body pb-0"><h2 class="h6 fw-bold text-primary mb-0"><i class="bi bi-bar-chart me-2"></i>{% trans "Par source et par campagne" %}</h2></div>
+      {% if summary %}
+      <div class="table-responsive">
+        <table class="table table-el mb-0">
+          <thead><tr><th>{% trans "Source" %}</th><th>{% trans "Support" %}</th><th>{% trans "Campagne" %}</th>{% for value, label in kinds %}<th class="text-end">{{ label }}</th>{% endfor %}<th class="text-end">{% trans "Total" %}</th></tr></thead>
+          <tbody>
+          {% for row in summary %}
+            <tr><td>{{ row.source|default:"-" }}</td><td>{{ row.medium|default:"-" }}</td><td>{{ row.campaign|default:"-" }}</td>{% for n in row.cells %}<td class="text-end">{{ n }}</td>{% endfor %}<td class="text-end fw-semibold">{{ row.total }}</td></tr>
+          {% endfor %}
+          </tbody>
+        </table>
+      </div>
+      {% else %}
+      <div class="empty-state"><i class="bi bi-signpost-split"></i><p class="mt-2 mb-0">{% trans "Rien pour le moment. Partagez un lien créé avec le générateur : les inscriptions, paiements, demandes d'aide et messages qui en viennent s'afficheront ici." %}</p></div>
+      {% endif %}
+    </div>
+    <div class="el-card">
+      <div class="el-card-body pb-0"><h2 class="h6 fw-bold text-primary mb-0"><i class="bi bi-clock-history me-2"></i>{% trans "Dernières actions" %}</h2></div>
+      {% if items %}
+      <div class="table-responsive">
+        <table class="table table-el mb-0">
+          <thead><tr><th>{% trans "Date" %}</th><th>{% trans "Action" %}</th><th>{% trans "Détail" %}</th><th>{% trans "Source" %}</th><th>{% trans "Campagne" %}</th></tr></thead>
+          <tbody>
+          {% for a in items %}
+            <tr><td class="text-nowrap small">{{ a.created_at|date:_("j F Y") }} {{ a.created_at|date:"H:i" }}</td><td>{{ a.get_kind_display }}</td><td class="small">{{ a.label }}</td><td>{{ a.source|default:"-" }}</td><td>{{ a.campaign|default:"-" }}</td></tr>
+          {% endfor %}
+          </tbody>
+        </table>
+      </div>
+      <div class="px-3 pb-3">{% include "partials/_pagination.html" with page=page_obj %}</div>
+      {% else %}
+      <p class="el-card-body text-muted mb-0">{% trans "Aucune action pour le moment." %}</p>
+      {% endif %}
+    </div>
+  </div>
+  <div class="col-xl-5">
+    <div class="el-card el-card-body">
+      <h2 class="h6 fw-bold text-primary mb-1"><i class="bi bi-link-45deg me-2"></i>{% trans "Créer un lien de campagne" %}</h2>
+      <p class="small text-muted">{% trans "Exemple : source facebook, support publication, campagne mariages-octobre. Utilisez un lien différent pour chaque endroit où vous le partagez." %}</p>
+      <form method="get" novalidate>
+        <div class="mb-3"><label class="form-label" for="utm-page">{% trans "Page du site" %}</label><input id="utm-page" name="page" class="form-control" value="{{ builder.page }}" placeholder="/evenements/"></div>
+        <div class="mb-3"><label class="form-label" for="utm-source">{% trans "Source" %} <span class="text-danger">*</span></label><input id="utm-source" name="source" class="form-control" value="{{ builder.source }}" placeholder="facebook" required></div>
+        <div class="mb-3"><label class="form-label" for="utm-medium">{% trans "Support" %}</label><input id="utm-medium" name="medium" class="form-control" value="{{ builder.medium }}" placeholder="publication"></div>
+        <div class="mb-3"><label class="form-label" for="utm-campaign">{% trans "Campagne" %} <span class="text-danger">*</span></label><input id="utm-campaign" name="campaign" class="form-control" value="{{ builder.campaign }}" placeholder="mariages-octobre" required></div>
+        <button class="btn btn-primary"><i class="bi bi-magic me-2"></i>{% trans "Créer le lien" %}</button>
+      </form>
+      {% if built_link %}
+      <label class="form-label mt-4" for="utm-result">{% trans "Votre lien" %}</label>
+      <div class="copy-field"><input id="utm-result" class="form-control" value="{{ built_link }}" readonly><button class="btn btn-soft" data-copy="{{ built_link }}" title="{% trans 'Copier' %}" aria-label="{% trans 'Copier' %}"><i class="bi bi-clipboard"></i></button></div>
+      {% elif builder.source or builder.campaign %}
+      <p class="text-danger small mt-3 mb-0">{% trans "Indiquez au moins la source et la campagne." %}</p>
+      {% endif %}
+    </div>
+  </div>
+</div>
+{% endblock %}

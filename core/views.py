@@ -18,9 +18,11 @@ from events.models import Event, EventCategory
 
 from .forms import ContactForm, HelpRequestForm, ReviewForm
 from .content_cache import remember
-from .help import HELP_PROFILES
+from .help import HELP_PROFILES, HELP_UPDATED
+from .search import search
 from .middleware import set_language_cookie
-from .models import HelpRequest, Review
+from . import utm
+from .models import Attribution, HelpRequest, Review
 from .ratelimit import ratelimit
 
 SERVICES = [
@@ -100,7 +102,8 @@ def submit_review(request):
 def submit_contact(request):
     form = ContactForm(request.POST)
     if form.is_valid():
-        form.save()
+        contact = form.save()
+        utm.record(request, Attribution.Kind.CONTACT, contact.email)
         messages.success(request, _("Message envoyé. Notre équipe vous répondra rapidement."))
     else:
         messages.error(request, _("Le message n'a pas pu être envoyé. Vérifiez les champs."))
@@ -114,7 +117,8 @@ def help_page(request):
         form = HelpRequestForm(request.POST)
         if form.is_valid():
             if not form.cleaned_data["website"]:  # champ piège vide : vraie personne
-                form.save()
+                help_request = form.save()
+                utm.record(request, Attribution.Kind.HELP, help_request.get_topic_display())
             return redirect(reverse("core:help") + "?envoye=1#demande")
     else:
         initial = {}
@@ -124,9 +128,18 @@ def help_page(request):
             initial["name"] = request.user.display_name
             initial["contact"] = request.user.email
         form = HelpRequestForm(initial=initial)
+    if request.method == "POST":
+        messages.error(request, _("La demande n'a pas pu être envoyée. Corrigez les champs en rouge."))
     return render(request, "core/help.html", {
-        "profiles": HELP_PROFILES, "form": form, "sent": request.GET.get("envoye") == "1" and request.method == "GET",
+        "profiles": HELP_PROFILES, "help_updated": HELP_UPDATED, "form": form, "sent": request.GET.get("envoye") == "1" and request.method == "GET",
     })
+
+
+@ratelimit("search", 60, 60, methods=("GET",))
+def search_page(request):
+    """Recherche sur tout le site : événements publics, catégories, questions de l'aide, pages."""
+    results = search(request.GET.get("q", ""))
+    return render(request, "core/search.html", {"results": results, "q": results["query"]})
 
 
 @require_POST
@@ -149,7 +162,7 @@ def set_language(request):
 
 
 # Pages légales : un gabarit complet par langue (texte long, plus simple à relire et à faire valider qu'en .po).
-LEGAL_UPDATED = date(2026, 10, 5)
+LEGAL_UPDATED = date(2026, 10, 6)
 
 
 def _legal(request, page):

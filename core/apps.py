@@ -18,3 +18,9 @@ class CoreConfig(AppConfig):
         for model in (Event, EventCategory, Ad, Review):
             post_save.connect(forget, sender=model, dispatch_uid=f"content-cache-save-{model.__name__}")
             post_delete.connect(forget, sender=model, dispatch_uid=f"content-cache-delete-{model.__name__}")
+
+        # Inscription avec Google : provenance notée comme pour le formulaire d'inscription
+        from allauth.account.signals import user_signed_up
+
+        from .utm import record_signup
+        user_signed_up.connect(record_signup, dispatch_uid="utm-signup-google")

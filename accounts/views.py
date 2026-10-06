@@ -7,6 +7,8 @@ from django.utils.http import url_has_allowed_host_and_scheme
 from django.utils.translation import gettext as _
 from django.views.decorators.http import require_POST
 
+from core import utm
+from core.models import Attribution
 from core.ratelimit import ratelimit
 
 from core.middleware import set_language_cookie
@@ -66,6 +68,7 @@ def register_view(request, organizer=False):
         role = CustomUser.Role.ORGANIZER if organizer else CustomUser.Role.GUEST
         user = form.save(role=role)
         login(request, user, backend="accounts.backends.EmailBackend")
+        utm.record(request, Attribution.Kind.SIGNUP, user.email, user=user)
         if organizer:
             messages.info(request, _("Compte créé. Dernière étape : activez votre accès Organisateur VIP."))
             return redirect("payments:vip")

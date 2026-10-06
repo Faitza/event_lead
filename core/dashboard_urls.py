@@ -23,6 +23,8 @@ urlpatterns = [
     path("aide/", core_admin.help_list, name="help_list"),
     path("aide/export.csv", core_admin.help_export_csv, name="help_export_csv"),
     path("aide/<int:pk>/statut/", core_admin.help_set_status, name="help_set_status"),
+    # Provenance des visites (liens avec utm_*)
+    path("provenance/", core_admin.utm_report, name="utm_report"),
     # Événements
     path("evenements/", events_admin.event_list, name="event_list"),
     path("evenements/nouveau/", events_admin.event_create, name="event_create"),
