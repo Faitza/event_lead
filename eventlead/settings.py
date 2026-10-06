@@ -64,6 +64,8 @@ MIDDLEWARE = [
     "core.middleware.LanguagePreferenceMiddleware",
     # Liens de campagne : utm_* gardés dans la session du visiteur (core/utm.py), aucun outil extérieur
     "core.utm.UtmCaptureMiddleware",
+    # Compteur de pages vues privé, sans cookie ni adresse IP (core/visits.py)
+    "core.visits.PageViewMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
     "allauth.account.middleware.AccountMiddleware",
@@ -292,7 +294,19 @@ if TESTING:  # les tests provoquent volontairement des erreurs : rien dans le te
     LOGGING["handlers"]["console"]["level"] = "CRITICAL"
     LOGGING["handlers"]["file"] = {"class": "logging.NullHandler"}
 
+# HTTPS obligatoire en ligne (DEBUG=False) : toute adresse en http:// est renvoyée vers https://,
+# le navigateur retient de n'utiliser que https:// (HSTS), les cookies ne partent qu'en https://.
+# Sur votre PC (DEBUG=True), rien ne change.
+SECURE_CONTENT_TYPE_NOSNIFF = True
+SECURE_REFERRER_POLICY = "strict-origin-when-cross-origin"
 if not DEBUG:
     SESSION_COOKIE_SECURE = True
     CSRF_COOKIE_SECURE = True
     SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
+    SECURE_SSL_REDIRECT = env.bool("SECURE_SSL_REDIRECT", default=True)
+    # La page de santé reste joignable en http:// pour les sondes de l'hébergeur
+    SECURE_REDIRECT_EXEMPT = [r"^sante/$"]
+    # 1 an. Mettre 0 dans .env tant que le domaine n'a pas encore son certificat https.
+    SECURE_HSTS_SECONDS = env.int("SECURE_HSTS_SECONDS", default=31536000)
+    SECURE_HSTS_INCLUDE_SUBDOMAINS = env.bool("SECURE_HSTS_INCLUDE_SUBDOMAINS", default=False)
+    SECURE_HSTS_PRELOAD = False

@@ -2,6 +2,11 @@
 {% load static humanize %}
 {% load i18n %}
 {% block title %}{{ event.title }}{% endblock %}
+{% block robots %}{% if not event.is_public %}<meta name="robots" content="noindex, nofollow">{% endif %}{% endblock %}
+{% block meta_description %}{{ event.date|date:"j F Y" }}, {{ event.venue }}. {{ event.description|striptags|truncatechars:120 }}{% endblock %}
+{% block og_title %}{{ event.title }}{% endblock %}
+{% block og_description %}{{ event.date|date:"j F Y" }}, {{ event.venue }}{% if event.description %}. {{ event.description|striptags|truncatechars:150 }}{% endif %}{% endblock %}
+{% block og_image %}<meta property="og:image" content="{% if event.cover_url|slice:":4" == "http" %}{{ event.cover_url }}{% else %}{{ SITE_ORIGIN }}{{ event.cover_url }}{% endif %}">{% endblock %}
 {% block extra_head %}<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.css">{% endblock %}
 {% block content %}
 <section class="page-banner">

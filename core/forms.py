@@ -3,14 +3,21 @@ import re
 from django import forms
 from django.core.exceptions import ValidationError
 from django.core.files.uploadedfile import UploadedFile
-from django.core.validators import validate_email
+from django.core.validators import MaxLengthValidator, validate_email
 from django.utils.translation import gettext_lazy as _
 
 from .models import ContactMessage, HelpRequest, LogoVariant, Review
 from .uploads import compress_photo
 
 
+def honeypot_field():
+    """Champ piège : caché aux personnes (classe .hp-field), les robots le remplissent et leur envoi est ignoré."""
+    return forms.CharField(required=False, label=_("Ne pas remplir"),
+                           widget=forms.TextInput(attrs={"tabindex": "-1", "autocomplete": "off"}))
+
+
 class ReviewForm(forms.ModelForm):
+    website = honeypot_field()
     stars = forms.TypedChoiceField(
         label=_("Votre note"), choices=[(i, f"{i} / 5") for i in range(5, 0, -1)], coerce=int,
         widget=forms.RadioSelect,
@@ -22,18 +29,27 @@ class ReviewForm(forms.ModelForm):
         labels = {"name": _("Votre nom"), "text": _("Votre avis")}
         widgets = {"text": forms.Textarea(attrs={"rows": 3, "placeholder": _("Partagez votre expérience avec EventLead")})}
 
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields["text"].validators.append(MaxLengthValidator(1000))
+
 
 class ContactForm(forms.ModelForm):
+    website = honeypot_field()
+
     class Meta:
         model = ContactMessage
         fields = ["name", "email", "phone", "message"]
         labels = {"name": _("Nom complet"), "email": _("Adresse e-mail"), "phone": _("Téléphone"), "message": _("Message")}
         widgets = {"message": forms.Textarea(attrs={"rows": 4, "placeholder": _("Parlez-nous de votre événement")})}
 
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields["message"].validators.append(MaxLengthValidator(3000))
+
 
 class HelpRequestForm(forms.ModelForm):
-    # Champ piège : invisible pour une personne, rempli par les robots.
-    website = forms.CharField(required=False, label=_("Ne pas remplir"), widget=forms.TextInput(attrs={"tabindex": "-1", "autocomplete": "off"}))
+    website = honeypot_field()
 
     class Meta:
         model = HelpRequest

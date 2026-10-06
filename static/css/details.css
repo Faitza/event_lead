@@ -251,3 +251,11 @@
 .logo-choices input:checked + label { border-color: var(--el-primary); box-shadow: 0 0 0 3px rgba(69, 6, 92, .15); }
 .logo-choices input:focus-visible + label { outline: 3px solid var(--el-gold); outline-offset: 2px; }
 [data-theme="dark"] .logo-choices label { background: var(--el-card); color: var(--el-text); }
+
+/* Pages vues par jour (tableau de bord > Provenance des visites) */
+.visits-bars { display: flex; align-items: flex-end; gap: 6px; height: 120px; }
+.visits-bar { flex: 1; height: 100%; display: flex; flex-direction: column; justify-content: flex-end; align-items: center; gap: 4px; }
+.visits-bar span { display: block; width: 100%; min-height: 2px; background: var(--el-primary, #45065C); border-radius: 4px 4px 0 0; }
+.visits-bar small { font-size: .7rem; color: #4B5563; }
+[data-theme="dark"] .visits-bar span { background: #E2BE52; }
+[data-theme="dark"] .visits-bar small { color: #cbd5e1; }

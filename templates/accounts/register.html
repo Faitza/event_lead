@@ -26,6 +26,7 @@
   {% include "partials/_field.html" with field=form.phone %}
   {% include "partials/_field.html" with field=form.password1 %}
   {% include "partials/_field.html" with field=form.password2 %}
+  <div class="hp-field" aria-hidden="true"><label for="{{ form.website.id_for_label }}">{{ form.website.label }}</label>{{ form.website }}</div>
   <button class="btn btn-primary w-100 btn-lg mt-2">{% if organizer %}{% trans "Continuer vers le paiement VIP" %}<i class="bi bi-arrow-right ms-2"></i>{% else %}{% trans "Créer mon compte" %}{% endif %}</button>
 </form>
 {% url 'core:terms' as terms_url %}{% url 'core:privacy' as privacy_url %}

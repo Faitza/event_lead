@@ -6,6 +6,20 @@
   <title>{% block title %}EventLead{% endblock %} | EventLead</title>
   <meta name="description" content="{% block meta_description %}{% trans "EventLead, la plateforme de gestion d'événements pour Haïti et la Caraïbe : invitations WhatsApp et e-mail, liste de cadeaux, suivi en temps réel." %}{% endblock %}">
   <meta name="theme-color" content="#45065C">
+  {# Moteurs de recherche et partage sur les réseaux (Facebook, WhatsApp, X) : docs/lancement.md #}
+  {% if robots_noindex %}<meta name="robots" content="noindex, nofollow">{% else %}{% block robots %}{% endblock %}{% endif %}
+  <link rel="canonical" href="{{ SITE_ORIGIN }}{{ request.path }}">
+  <meta property="og:site_name" content="EventLead">
+  <meta property="og:type" content="website">
+  <meta property="og:locale" content="{{ OG_LOCALE }}">
+  <meta property="og:url" content="{{ SITE_ORIGIN }}{{ request.path }}">
+  <meta property="og:title" content="{% block og_title %}{% trans "EventLead, vos événements en Haïti" %}{% endblock %}">
+  <meta property="og:description" content="{% block og_description %}{% trans "Invitations par WhatsApp et e-mail, liste de cadeaux, billets et suivi des réponses pour vos mariages, galas et anniversaires." %}{% endblock %}">
+  {% block og_image %}<meta property="og:image" content="{{ SITE_ORIGIN }}{% static 'img/partage.jpg' %}">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">{% endblock %}
+  <meta property="og:image:alt" content="{% trans "Logo EventLead et un couple qui prépare son événement" %}">
+  <meta name="twitter:card" content="summary_large_image">
   {# Mode sombre : seulement si le visiteur l'a choisi avec le bouton (lu avant l'affichage, sans clignotement) #}
   <script>try{if(localStorage.getItem("el-theme")==="dark"){document.documentElement.setAttribute("data-theme","dark");document.documentElement.setAttribute("data-bs-theme","dark");}}catch(e){}</script>
   <link rel="icon" href="{% static 'favicon.ico' %}" sizes="48x48">

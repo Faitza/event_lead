@@ -246,7 +246,8 @@
                 {% for i in "54321" %}<input type="radio" name="stars" id="star{{ i }}" value="{{ i }}" {% if i == "5" %}checked{% endif %}>{% blocktranslate trimmed with n=i asvar star_title %}{{ n }} sur 5{% endblocktranslate %}<label for="star{{ i }}" title="{{ star_title }}"><i class="bi bi-star-fill"></i></label>{% endfor %}
               </div>
             </div>
-            <div><label class="form-label" for="id_text">{% trans "Votre avis" %}</label><textarea name="text" id="id_text" rows="4" class="form-control" required placeholder="{% trans 'Partagez votre expérience avec EventLead' %}"></textarea></div>
+            <div><label class="form-label" for="id_text">{% trans "Votre avis" %}</label><textarea name="text" id="id_text" rows="4" class="form-control" required maxlength="1000" placeholder="{% trans 'Partagez votre expérience avec EventLead' %}"></textarea></div>
+            <div class="hp-field" aria-hidden="true"><label for="r_website">{% trans "Ne pas remplir" %}</label><input type="text" name="website" id="r_website" tabindex="-1" autocomplete="off"></div>
             <button class="btn btn-primary align-self-start">{% trans "Publier mon avis" %}</button>
           </div>
         </form>
@@ -276,7 +277,8 @@
             <div class="col-md-6"><label class="form-label" for="c_name">{% trans "Nom complet" %}</label><input id="c_name" name="name" class="form-control" required maxlength="100"></div>
             <div class="col-md-6"><label class="form-label" for="c_phone">{% trans "Téléphone" %}</label><input id="c_phone" name="phone" class="form-control" maxlength="30" placeholder="+509 ..."></div>
             <div class="col-12"><label class="form-label" for="c_email">{% trans "Adresse e-mail" %}</label><input id="c_email" type="email" name="email" class="form-control" required></div>
-            <div class="col-12"><label class="form-label" for="c_message">{% trans "Message" %}</label><textarea id="c_message" name="message" rows="4" class="form-control" required placeholder="{% trans 'Parlez-nous de votre événement' %}"></textarea></div>
+            <div class="col-12"><label class="form-label" for="c_message">{% trans "Message" %}</label><textarea id="c_message" name="message" rows="4" class="form-control" required maxlength="3000" placeholder="{% trans 'Parlez-nous de votre événement' %}"></textarea></div>
+            <div class="hp-field" aria-hidden="true"><label for="c_website">{% trans "Ne pas remplir" %}</label><input type="text" name="website" id="c_website" tabindex="-1" autocomplete="off"></div>
             <div class="col-12"><button class="btn btn-primary btn-lg">{% trans "Envoyer le message" %}</button></div>
           </div>
         </form>

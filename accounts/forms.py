@@ -29,6 +29,9 @@ class LoginForm(forms.Form):
 
 
 class RegisterForm(forms.ModelForm):
+    # Champ piège (caché) : un robot qui le remplit ne peut pas créer de compte
+    website = forms.CharField(required=False, label=_("Ne pas remplir"),
+                              widget=forms.TextInput(attrs={"tabindex": "-1", "autocomplete": "off"}))
     password1 = forms.CharField(label=_("Mot de passe"), widget=forms.PasswordInput(attrs={"autocomplete": "new-password"}))
     password2 = forms.CharField(label=_("Confirmer le mot de passe"), widget=forms.PasswordInput(attrs={"autocomplete": "new-password"}))
 
@@ -47,6 +50,11 @@ class RegisterForm(forms.ModelForm):
         if CustomUser.objects.filter(email__iexact=email).exists():
             raise forms.ValidationError(_("Un compte existe déjà avec cette adresse e-mail."))
         return email
+
+    def clean_website(self):
+        if self.cleaned_data.get("website"):
+            raise forms.ValidationError(_("Inscription refusée."))
+        return ""
 
     def clean(self):
         cleaned = super().clean()

@@ -90,7 +90,8 @@ def landing(request):
 def submit_review(request):
     form = ReviewForm(request.POST)
     if form.is_valid():
-        form.save()
+        if not form.cleaned_data["website"]:  # champ piège vide : vraie personne (sinon robot : rien n'est gardé)
+            form.save()
         messages.success(request, _("Merci pour votre avis. Il sera publié après relecture par l'équipe."))
     else:
         messages.error(request, _("Votre avis n'a pas pu être enregistré. Vérifiez les champs."))
@@ -102,8 +103,9 @@ def submit_review(request):
 def submit_contact(request):
     form = ContactForm(request.POST)
     if form.is_valid():
-        contact = form.save()
-        utm.record(request, Attribution.Kind.CONTACT, contact.email)
+        if not form.cleaned_data["website"]:  # champ piège vide : vraie personne
+            contact = form.save()
+            utm.record(request, Attribution.Kind.CONTACT, contact.email)
         messages.success(request, _("Message envoyé. Notre équipe vous répondra rapidement."))
     else:
         messages.error(request, _("Le message n'a pas pu être envoyé. Vérifiez les champs."))

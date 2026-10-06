@@ -24,6 +24,21 @@ def _site_logo():
     return remember("site-logo", build)
 
 
+# Pages qui ne doivent pas apparaître dans Google : espaces personnels, tableau de bord, invitations (lien secret),
+# paiements, formulaires. Les mêmes chemins sont interdits dans /robots.txt (core/seo.py).
+PRIVATE_PREFIXES = (
+    "/admin-dashboard/", "/django-admin/", "/accounts/", "/connexion/", "/inscription/", "/deconnexion/",
+    "/tableau-de-bord/", "/devenir-organisateur/", "/mon-espace/", "/mon-profil/", "/organisateur/",
+    "/invitation/", "/entree/", "/paiement/", "/publicites/", "/recherche/", "/langue/", "/journal/",
+    "/avis/", "/contact/",
+)
+OG_LOCALES = {"fr": "fr_FR", "en": "en_US", "ht": "ht_HT"}
+
+
+def _is_private(path):
+    return path.startswith(PRIVATE_PREFIXES) or ("/billetterie/" in path and path.endswith("/payer/"))
+
+
 def _new_help_requests():
     return HelpRequest.objects.filter(status=HelpRequest.Status.NEW).count()
 
@@ -41,6 +56,10 @@ def site_settings(request):
         "new_help_requests": _new_help_requests,
         "site_logo": _site_logo,
         "TODAY": timezone.localdate,
+        # Adresse du site vue par le visiteur (https://... en ligne), pour les liens complets des réseaux sociaux
+        "SITE_ORIGIN": f"{request.scheme}://{request.get_host()}",
+        "OG_LOCALE": OG_LOCALES.get((getattr(request, "LANGUAGE_CODE", "") or "fr")[:2], "fr_FR"),
+        "robots_noindex": _is_private(request.path),
         # (code, sigle affiché, nom dans sa propre langue) : jamais traduits
         "LANGUAGE_OPTIONS": [("fr", "FR", "Français"), ("en", "EN", "English"), ("ht", "KR", "Kreyòl ayisyen")],
     }

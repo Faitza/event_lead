@@ -5,6 +5,33 @@
 <div class="page-head">
   <div><h1>{% trans "Provenance des visites" %}</h1><p>{% trans "Les personnes arrivées par un lien de campagne (paramètres utm_*) et ce qu'elles ont fait ensuite. Aucun outil extérieur : tout reste sur le site." %}</p></div>
 </div>
+<div class="el-card mb-4">
+  <div class="el-card-body">
+    <div class="d-flex flex-wrap justify-content-between align-items-start gap-3 mb-3">
+      <div>
+        <h2 class="h6 fw-bold text-primary mb-1"><i class="bi bi-eye me-2"></i>{% trans "Pages vues" %}</h2>
+        <p class="small text-muted mb-0">{% trans "Compteur privé : aucun cookie, aucune adresse IP. Les robots et l'équipe connectée ne sont pas comptés." %}</p>
+      </div>
+      <div class="d-flex gap-4">
+        <div><div class="small text-muted">{% trans "Aujourd'hui" %}</div><div class="fs-4 fw-semibold" data-visits-today>{{ visits.today }}</div></div>
+        <div><div class="small text-muted">{% blocktranslate trimmed with n=visits.days %}{{ n }} derniers jours{% endblocktranslate %}</div><div class="fs-4 fw-semibold" data-visits-total>{{ visits.total }}</div></div>
+      </div>
+    </div>
+    {% if visits.total %}
+    <div class="visits-bars mb-3" role="img" aria-label="{% trans "Pages vues par jour, 14 derniers jours" %}">
+      {% for d in visits.daily %}<div class="visits-bar" title="{{ d.day|date:_("j F") }} : {{ d.views }}"><span style="height:{{ d.pct }}%"></span><small>{{ d.day|date:"j" }}</small></div>{% endfor %}
+    </div>
+    <div class="table-responsive">
+      <table class="table table-el mb-0">
+        <thead><tr><th>{% trans "Page" %}</th><th class="text-end">{% trans "Vues" %}</th></tr></thead>
+        <tbody>{% for p in visits.pages|slice:":12" %}<tr><td>{{ p.label }}</td><td class="text-end">{{ p.views }}</td></tr>{% endfor %}</tbody>
+      </table>
+    </div>
+    {% else %}
+    <p class="text-muted mb-0">{% trans "Aucune visite comptée pour le moment." %}</p>
+    {% endif %}
+  </div>
+</div>
 <div class="row g-4">
   <div class="col-xl-7">
     <div class="el-card mb-4">

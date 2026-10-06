@@ -232,6 +232,10 @@ Le logo s'affiche sans fond blanc : `static/img/logo/eventlead-<couleur>.png` po
 
 Mode sombre au choix du visiteur, bandeau cookies, recherche sur tout le site (`/recherche/`), retour en haut, barre de progression, lien « Aller au contenu », oeil du mot de passe, boutons copier et imprimer, confirmations, date de mise à jour de l'aide, et suivi des liens de campagne `utm_*` sans outil extérieur (**Tableau de bord > Provenance des visites**). Détail point par point : `docs/details.md`.
 
+## Avant le lancement
+
+HTTPS obligatoire en ligne, image de partage pour les réseaux, `/sitemap.xml` et `/robots.txt`, pages privées cachées à Google, champs pièges anti-spam, compteur de pages vues privé (sans cookie ni Google Analytics, dans **Tableau de bord > Provenance des visites**) et test des liens cassés. Les 20 points un par un : `docs/lancement.md`. Après `git pull` : `python manage.py migrate`.
+
 ### Nom de domaine (au lancement)
 
 1. Acheter le domaine (par exemple `eventlead.ht` ou `eventlead.com`) chez un registraire.

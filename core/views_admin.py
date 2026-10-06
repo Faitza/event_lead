@@ -17,6 +17,7 @@ from events.models import Event, Guest
 from gifts.models import Gift, GiftClaim
 from payments.models import Payment
 
+from . import visits
 from .forms import LogoVariantForm
 from .models import Attribution, ContactMessage, HelpRequest, LogoVariant, Review
 from .paging import paginate
@@ -189,7 +190,7 @@ def utm_report(request):
     builder, built_link = _utm_link(request)
     return render(request, "dashboard/utm/report.html", {
         "kinds": kinds, "summary": summary, "items": page.object_list, "page_obj": page,
-        "builder": builder, "built_link": built_link,
+        "builder": builder, "built_link": built_link, "visits": visits.summary(),
     })
 
 

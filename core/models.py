@@ -189,3 +189,21 @@ class LogoVariant(models.Model):
         if day > self.end_date:
             return "past", _("Terminé")
         return "live", _("En ce moment")
+
+
+class PageView(models.Model):
+    """Nombre de pages vues par jour et par page (core/visits.py). Aucun cookie, aucune adresse IP, aucun nom :
+    seulement un compteur. Les robots et l'équipe connectée ne sont pas comptés."""
+
+    day = models.DateField(_("jour"))
+    page = models.CharField(_("page"), max_length=80)
+    views = models.PositiveIntegerField(_("vues"), default=0)
+
+    class Meta:
+        ordering = ["-day", "page"]
+        constraints = [models.UniqueConstraint(fields=["day", "page"], name="pageview_day_page_unique")]
+        verbose_name = _("pages vues")
+        verbose_name_plural = _("pages vues")
+
+    def __str__(self):
+        return f"{self.day} {self.page} : {self.views}"
