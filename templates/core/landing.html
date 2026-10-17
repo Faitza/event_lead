@@ -162,14 +162,11 @@
     </div>
     {% endif %}
     <div class="service-grid">
-      {% for icon, photo, title, text in services %}
+      {% for icon, title, text in services %}
       <div class="service-cell reveal">
-        <div class="service-photo"><img src="{% static 'img/photos/'|add:photo %}" alt="" width="720" height="480" loading="lazy"></div>
-        <div class="service-body">
-          <span class="icon-bubble"><i class="bi {{ icon }}"></i></span>
-          <h3>{{ title }}</h3>
-          <p>{{ text }}</p>
-        </div>
+        <span class="icon-bubble"><i class="bi {{ icon }}"></i></span>
+        <h3>{{ title }}</h3>
+        <p>{{ text }}</p>
       </div>
       {% endfor %}
     </div>

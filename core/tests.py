@@ -698,15 +698,13 @@ class SmokeTests(TestCase):
 
 
 class LandingServicesTests(TestCase):
-    """Chaque service de l'accueil montre sa photo, et le fichier existe."""
+    """Les services de l'accueil montrent leur illustration (icône), sans photo."""
 
-    def test_each_service_has_an_existing_photo(self):
-        from django.contrib.staticfiles import finders
-
+    def test_each_service_has_its_icon_and_no_photo(self):
         from core.views import SERVICES
 
         html = self.client.get(reverse("core:landing")).content.decode()
-        self.assertEqual(html.count('class="service-photo"'), len(SERVICES))
-        for _icon, photo, _title, _text in SERVICES:
-            self.assertTrue(finders.find(f"img/photos/{photo}"), photo)
-            self.assertIn(f"img/photos/{photo}", html)
+        self.assertNotIn("service-photo", html)
+        self.assertNotIn("img/photos/svc-", html)
+        for icon, _title, _text in SERVICES:
+            self.assertIn(f'<span class="icon-bubble"><i class="bi {icon}"></i></span>', html)

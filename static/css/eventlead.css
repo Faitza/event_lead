@@ -390,17 +390,10 @@ h1 em, h2 em, h3 em, .disp em { color: var(--el-gold); font-style: italic; }
 
 /* Services : grille à filets 1px */
 .service-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 320px), 1fr)); gap: 1px; background: var(--el-border); border: 1px solid var(--el-border); border-radius: 16px; overflow: hidden; }
-.service-cell { background: #fff; display: flex; flex-direction: column; transition: background-color var(--el-ease); }
+.service-cell { background: #fff; padding: 44px 40px; display: flex; flex-direction: column; gap: 16px; transition: background-color var(--el-ease); }
 .service-cell:hover { background: #FBF8FC; }
-.service-photo { aspect-ratio: 3 / 2; overflow: hidden; background: var(--el-tint); }
-.service-photo img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform .6s ease; }
-.service-cell:hover .service-photo img { transform: scale(1.04); }
-.service-body { position: relative; padding: 0 40px 44px; display: flex; flex-direction: column; gap: 16px; }
-.service-body .icon-bubble { margin-top: -26px; box-shadow: 0 0 0 5px #fff; }
-.service-cell:hover .service-body .icon-bubble { box-shadow: 0 0 0 5px #FBF8FC; }
 .service-cell h3 { font-size: 1.6rem; line-height: 1.15; margin: 0; text-wrap: balance; }
 .service-cell p { margin: 0; font-size: 1.0625rem; line-height: 1.7; color: #4B5563; text-wrap: pretty; }
-@media (prefers-reduced-motion: reduce) { .service-photo img { transition: none; } .service-cell:hover .service-photo img { transform: none; } }
 
 /* Bandeau VIP */
 .vip-band { position: relative; overflow: hidden; background: linear-gradient(110deg, #2C033B, #45065C); color: #fff; padding: 72px 0; }
@@ -722,7 +715,7 @@ h1 em, h2 em, h3 em, .disp em { color: var(--el-gold); font-style: italic; }
   .pay-methods { grid-template-columns: 1fr; }
   .el-card-body { padding: 1.25rem; }
   .testi-main { padding: 28px; }
-  .service-body { padding: 0 26px 32px; }
+  .service-cell { padding: 32px 26px; }
   .frame > .frame-in { padding: 1.4rem; }
 }
 
