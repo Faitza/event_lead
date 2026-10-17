@@ -449,11 +449,13 @@ h1 em, h2 em, h3 em, .disp em { color: var(--el-gold); font-style: italic; }
    Authentification : visuel violet + panneau blanc porteur du logo
    -------------------------------------------------------------------------- */
 .auth-wrap { min-height: 100vh; display: grid; grid-template-columns: 1fr 1fr; background: #fff; }
-.auth-visual { position: relative; overflow: hidden; background: var(--el-primary-dark); color: #fff; padding: 64px; display: flex; flex-direction: column; justify-content: flex-end; gap: 20px; min-height: 360px; }
+.auth-visual { position: relative; overflow: hidden; background: var(--el-primary-dark); color: #fff; padding: clamp(56px, 11vh, 120px) 64px 64px; display: flex; flex-direction: column; justify-content: flex-start; gap: 20px; min-height: 360px; }
 .auth-visual .bg { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
 .auth-visual .veil { position: absolute; inset: 0; background: linear-gradient(160deg, rgba(44, 3, 59, .9), rgba(69, 6, 92, .72)); }
 .auth-visual .sunburst { left: 50%; bottom: -460px; margin-left: -460px; width: 920px; height: 920px; background: repeating-conic-gradient(from 0deg at 50% 50%, rgba(212, 175, 55, .24) 0deg 1.5deg, transparent 1.5deg 7.5deg); }
 .auth-visual > .inner { position: relative; display: flex; flex-direction: column; gap: 20px; }
+/* Le titre reste en haut, visible sans défiler, même quand le formulaire est long */
+@media (min-width: 992px) { .auth-visual > .inner { position: sticky; top: 64px; } }
 .auth-visual h2 { color: #fff; font-size: clamp(2.4rem, 5vw, 4.5rem); line-height: 1.02; text-wrap: balance; }
 .auth-visual p { color: var(--el-tint-strong); font-size: 1.125rem; line-height: 1.65; max-width: 26em; }
 .auth-visual .note { font-size: .875rem; padding-top: 20px; border-top: 1px solid rgba(212, 175, 55, .45); max-width: 32em; }

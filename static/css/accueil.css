@@ -39,8 +39,8 @@
    claire.
    ========================================================================== */
 .hero-salle { min-height: min(720px, calc(100vh - 160px)); display: flex; background: #0D0112; isolation: isolate; }
-.hero.hero-salle .hero-bg-clair { object-position: 50% 38%; }
-.hero.hero-salle .hero-bg-sombre { object-position: 50% 64%; display: none; }
+.hero.hero-salle .hero-bg-clair, .hero.hero-salle .hero-bg-sombre { object-position: 50% 50%; }
+.hero.hero-salle .hero-bg-sombre { display: none; }
 /* Mode sombre : la photo des bougies remplace la table longue */
 [data-theme="dark"] .hero.hero-salle .hero-bg-clair { display: none; }
 [data-theme="dark"] .hero.hero-salle .hero-bg-sombre { display: block; }
