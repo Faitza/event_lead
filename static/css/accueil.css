@@ -32,3 +32,34 @@
 @media print {
   [data-anim] { opacity: 1 !important; transform: none !important; }
 }
+
+/* ==========================================================================
+   Accueil public : grande photo plein écran. À gauche, un dégradé nuit
+   (violet presque noir) bien marqué pour le texte ; à droite la photo reste
+   claire.
+   ========================================================================== */
+.hero-salle { min-height: min(720px, calc(100vh - 160px)); display: flex; background: #0D0112; isolation: isolate; }
+.hero.hero-salle .hero-bg { object-position: 72% 45%; filter: saturate(.6) sepia(.12) contrast(1.1) brightness(.95); }
+.hero.hero-salle .hero-veil {
+  background:
+    linear-gradient(90deg, #0D0112 0%, rgba(13, 1, 18, .96) 24%, rgba(22, 2, 30, .78) 40%, rgba(30, 2, 40, .32) 58%, rgba(30, 2, 40, 0) 74%),
+    linear-gradient(0deg, rgba(13, 1, 18, .55) 0%, rgba(13, 1, 18, 0) 26%);
+}
+.hero-salle .hero-inner { position: relative; z-index: 2; display: flex; flex-direction: column; justify-content: center; width: 100%; padding-top: 72px; padding-bottom: 72px; }
+.hero-salle .hero-text { max-width: 560px; }
+.hero-eyebrow { display: flex; align-items: center; gap: 14px; }
+.hero-eyebrow::before { content: ""; width: 40px; height: 1px; background: var(--el-gold); flex: none; }
+.hero-eyebrow .eyebrow { color: var(--el-gold-soft); letter-spacing: .18em; }
+.hero.hero-salle h1 { font-size: clamp(2.4rem, 4.8vw, 4rem); line-height: 1.04; }
+.hero.hero-salle h1 em { color: var(--el-gold); font-style: italic; }
+.hero.hero-salle .lead { color: #E9E2EC; max-width: 30em; }
+.hero-salle .btn-gold { padding: 1rem 1.6rem; }
+
+@media (max-width: 991.98px) {
+  .hero-salle { min-height: 0; }
+  .hero.hero-salle .hero-bg { object-position: 60% 30%; height: 62%; }
+  .hero.hero-salle .hero-veil {
+    background: linear-gradient(180deg, rgba(13, 1, 18, 0) 0%, rgba(13, 1, 18, .2) 18%, rgba(13, 1, 18, .85) 42%, #0D0112 60%);
+  }
+  .hero-salle .hero-inner { padding-top: 300px; padding-bottom: 56px; }
+}

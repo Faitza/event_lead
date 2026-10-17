@@ -3,7 +3,7 @@
 {% load i18n %}
 {% block title %}{% trans "Invitations, cadeaux et billets pour vos événements" %}{% endblock %}
 {% block meta_description %}{% trans "Invitations élégantes par WhatsApp ou e-mail, réponses en direct, liste de cadeaux sans doublon et billets payables par MonCash, NatCash, carte ou PayPal. Pour Haïti, la Caraïbe et la diaspora." %}{% endblock %}
-{% block extra_head %}<link rel="preload" as="image" href="{% static 'img/photos/hero-bg.jpg' %}">
+{% block extra_head %}<link rel="preload" as="image" href="{% static 'img/photos/accueil-salle.jpg' %}">
 <link href="{% static_v 'css/accueil.css' %}" rel="stylesheet">
 {# Animations de l'accueil : seulement avec JavaScript et sans « mouvement réduit » #}
 <script>try{if(!window.matchMedia("(prefers-reduced-motion: reduce)").matches&&"IntersectionObserver" in window){document.documentElement.classList.add("anim-on");}}catch(e){}</script>{% endblock %}
@@ -26,30 +26,17 @@
   </div>
 </section>
 {% else %}
-<section id="accueil" class="hero">
-  <img class="hero-bg" src="{% static 'img/photos/hero-bg.jpg' %}" alt="">
+<section id="accueil" class="hero hero-salle">
+  {# Grande photo d'accueil : static/img/photos/accueil-salle.jpg (paysage, au moins 1600 px de large, moins de 250 Ko) #}
+  <img class="hero-bg" src="{% static 'img/photos/accueil-salle.jpg' %}" alt="">
   <div class="hero-veil"></div>
-  <div class="sunburst" aria-hidden="true"></div>
   <div class="container hero-inner" data-anim-step="0.2">
-    <div class="row align-items-center g-4 g-lg-5">
-      <div class="col-lg-7 d-flex flex-column gap-4">
-        <div class="eyebrow-row light" data-anim="up"><span class="diamond"></span><span class="eyebrow">{% trans "Haïti" %} &middot; {% trans "Caraïbe" %} &middot; {% trans "Diaspora" %}</span></div>
-        <h1 class="disp" data-anim="up">{% trans "Votre invitation, en <em>beauté</em>. Vos invités, sans stress." %}</h1>
-        <p class="lead mb-0" data-anim="up">{% trans "Mariage, gala, baptême ou anniversaire&nbsp;: envoyez une invitation élégante par WhatsApp ou par e-mail. Vos invités répondent en un clic, sans compte ni application, et vous voyez qui vient en direct." %}</p>
-        <div class="d-flex flex-wrap gap-3" data-anim="up">
-          <a href="#contact" class="btn btn-gold btn-lg">{% trans "Organiser mon événement" %}</a>
-          <a href="#comment-ca-marche" class="btn btn-light-ghost btn-lg">{% trans "Voir comment ça marche" %}</a>
-        </div>
-        {% trans "Les points forts d'EventLead" as points_label %}
-        <ul class="hero-points" aria-label="{{ points_label }}">
-          <li data-anim="left"><span class="diamond"></span>{% trans "Sans compte pour l'invité" %}</li>
-          <li data-anim="left"><span class="diamond"></span>{% trans "Cadeaux sans doublon" %}</li>
-          <li data-anim="left"><span class="diamond"></span>{% trans "MonCash, NatCash, carte, PayPal" %}</li>
-        </ul>
-      </div>
-      <div class="col-lg-5">
-        {# Photo d'accueil (image générée par IA, fournie par le client) : remplacer static/img/photos/hero-arch.jpg, portrait, sans texte par-dessus #}
-        <div class="hero-photo" data-anim="zoom"><div class="arch-frame"><div class="arch-img"><img src="{% static 'img/photos/hero-arch.jpg' %}" alt="{% trans 'Un homme et une femme préparent un événement, un carnet et un stylo à la main' %}" width="825" height="1024" loading="lazy" decoding="async"></div></div></div>
+    <div class="hero-text d-flex flex-column gap-4">
+      <div class="hero-eyebrow" data-anim="up"><span class="eyebrow">{% trans "Haïti" %} &middot; {% trans "Caraïbe" %} &middot; {% trans "Diaspora" %}</span></div>
+      <h1 class="disp" data-anim="up">{% trans "Votre invitation, en <em>beauté</em>. Vos invités, sans stress." %}</h1>
+      <p class="lead mb-0" data-anim="up">{% trans "Mariage, gala, baptême ou anniversaire&nbsp;: envoyez une invitation élégante par WhatsApp ou par e-mail. Vos invités répondent en un clic, sans compte ni application, et vous voyez qui vient en direct." %}</p>
+      <div class="d-flex flex-wrap align-items-center gap-4" data-anim="up">
+        <a href="#contact" class="btn btn-gold btn-lg">{% trans "Organiser mon événement" %}<i class="bi bi-chevron-right ms-3"></i></a>
       </div>
     </div>
   </div>
