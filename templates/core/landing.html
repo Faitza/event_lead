@@ -3,7 +3,7 @@
 {% load i18n %}
 {% block title %}{% trans "Invitations, cadeaux et billets pour vos événements" %}{% endblock %}
 {% block meta_description %}{% trans "Invitations élégantes par WhatsApp ou e-mail, réponses en direct, liste de cadeaux sans doublon et billets payables par MonCash, NatCash, carte ou PayPal. Pour Haïti, la Caraïbe et la diaspora." %}{% endblock %}
-{% block extra_head %}<link rel="preload" as="image" href="{% static 'img/photos/accueil-salle.jpg' %}">
+{% block extra_head %}<link rel="preload" as="image" href="{% static 'img/photos/accueil-clair.jpg' %}">
 <link href="{% static_v 'css/accueil.css' %}" rel="stylesheet">
 {# Animations de l'accueil : seulement avec JavaScript et sans « mouvement réduit » #}
 <script>try{if(!window.matchMedia("(prefers-reduced-motion: reduce)").matches&&"IntersectionObserver" in window){document.documentElement.classList.add("anim-on");}}catch(e){}</script>{% endblock %}
@@ -27,8 +27,9 @@
 </section>
 {% else %}
 <section id="accueil" class="hero hero-salle">
-  {# Grande photo d'accueil : static/img/photos/accueil-salle.jpg (paysage, au moins 1600 px de large, moins de 250 Ko) #}
-  <img class="hero-bg" src="{% static 'img/photos/accueil-salle.jpg' %}" alt="">
+  {# Grandes photos d'accueil : accueil-clair.jpg en mode clair, accueil-sombre.jpg en mode sombre (static/img/photos/, moins de 250 Ko) #}
+  <img class="hero-bg hero-bg-clair" src="{% static 'img/photos/accueil-clair.jpg' %}" alt="">
+  <img class="hero-bg hero-bg-sombre" src="{% static 'img/photos/accueil-sombre.jpg' %}" alt="" loading="lazy">
   <div class="hero-veil"></div>
   <div class="container hero-inner" data-anim-step="0.2">
     <div class="hero-text d-flex flex-column gap-4">

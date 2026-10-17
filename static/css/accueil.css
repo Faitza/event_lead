@@ -39,7 +39,11 @@
    claire.
    ========================================================================== */
 .hero-salle { min-height: min(720px, calc(100vh - 160px)); display: flex; background: #0D0112; isolation: isolate; }
-.hero.hero-salle .hero-bg { object-position: 72% 45%; filter: saturate(.6) sepia(.12) contrast(1.1) brightness(.95); }
+.hero.hero-salle .hero-bg-clair { object-position: 50% 38%; }
+.hero.hero-salle .hero-bg-sombre { object-position: 50% 64%; display: none; }
+/* Mode sombre : la photo des bougies remplace la table longue */
+[data-theme="dark"] .hero.hero-salle .hero-bg-clair { display: none; }
+[data-theme="dark"] .hero.hero-salle .hero-bg-sombre { display: block; }
 .hero.hero-salle .hero-veil {
   background:
     linear-gradient(90deg, #0D0112 0%, rgba(13, 1, 18, .96) 24%, rgba(22, 2, 30, .78) 40%, rgba(30, 2, 40, .32) 58%, rgba(30, 2, 40, 0) 74%),
@@ -57,7 +61,9 @@
 
 @media (max-width: 991.98px) {
   .hero-salle { min-height: 0; }
-  .hero.hero-salle .hero-bg { object-position: 60% 30%; height: 62%; }
+  .hero.hero-salle .hero-bg { height: 62%; }
+  .hero.hero-salle .hero-bg-clair { object-position: 50% 30%; }
+  .hero.hero-salle .hero-bg-sombre { object-position: 50% 55%; }
   .hero.hero-salle .hero-veil {
     background: linear-gradient(180deg, rgba(13, 1, 18, 0) 0%, rgba(13, 1, 18, .2) 18%, rgba(13, 1, 18, .85) 42%, #0D0112 60%);
   }
