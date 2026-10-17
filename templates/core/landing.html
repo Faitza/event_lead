@@ -3,7 +3,7 @@
 {% load i18n %}
 {% block title %}{% trans "Invitations, cadeaux et billets pour vos événements" %}{% endblock %}
 {% block meta_description %}{% trans "Invitations élégantes par WhatsApp ou e-mail, réponses en direct, liste de cadeaux sans doublon et billets payables par MonCash, NatCash, carte ou PayPal. Pour Haïti, la Caraïbe et la diaspora." %}{% endblock %}
-{% block extra_head %}<link rel="preload" as="image" href="{% static 'img/photos/accueil-clair.jpg' %}">
+{% block extra_head %}<link rel="preload" as="image" href="{% static 'img/photos/accueil-clair.svg' %}" media="(min-width: 992px)">
 <link href="{% static_v 'css/accueil.css' %}" rel="stylesheet">
 {# Animations de l'accueil : seulement avec JavaScript et sans « mouvement réduit » #}
 <script>try{if(!window.matchMedia("(prefers-reduced-motion: reduce)").matches&&"IntersectionObserver" in window){document.documentElement.classList.add("anim-on");}}catch(e){}</script>{% endblock %}
@@ -27,12 +27,10 @@
 </section>
 {% else %}
 <section id="accueil" class="hero hero-salle">
-  {# Photos d'accueil 800 x 1200 : accueil-clair.jpg (mode clair), accueil-sombre.jpg (mode sombre). Sur ordinateur : nette à droite à sa vraie taille, floutée en fond. #}
-  <img class="hero-bg hero-bg-clair" src="{% static 'img/photos/accueil-clair.jpg' %}" alt="">
-  <img class="hero-bg hero-bg-sombre" src="{% static 'img/photos/accueil-sombre.jpg' %}" alt="" loading="lazy">
+  {# Ordinateur : photo en vectoriel (accueil-*.svg, nette à toute taille) ; téléphone : photo d'origine en hauteur (accueil-*.jpg) #}
+  <picture><source media="(min-width: 992px)" srcset="{% static 'img/photos/accueil-clair.svg' %}" type="image/svg+xml"><img class="hero-bg hero-bg-clair" src="{% static 'img/photos/accueil-clair.jpg' %}" alt=""></picture>
+  <picture><source media="(min-width: 992px)" srcset="{% static 'img/photos/accueil-sombre.svg' %}" type="image/svg+xml"><img class="hero-bg hero-bg-sombre" src="{% static 'img/photos/accueil-sombre.jpg' %}" alt="" loading="lazy"></picture>
   <div class="hero-veil"></div>
-  <img class="hero-net hero-bg-clair" src="{% static 'img/photos/accueil-clair.jpg' %}" alt="">
-  <img class="hero-net hero-bg-sombre" src="{% static 'img/photos/accueil-sombre.jpg' %}" alt="" loading="lazy">
   <div class="container hero-inner" data-anim-step="0.2">
     <div class="hero-text d-flex flex-column gap-4">
       <div class="hero-eyebrow" data-anim="up"><span class="eyebrow">{% trans "Haïti" %} &middot; {% trans "Caraïbe" %} &middot; {% trans "Diaspora" %}</span></div>
