@@ -39,8 +39,12 @@
    claire.
    ========================================================================== */
 .hero-salle { min-height: min(720px, calc(100vh - 160px)); display: flex; background: #0D0112; isolation: isolate; }
-.hero.hero-salle .hero-bg-clair, .hero.hero-salle .hero-bg-sombre { object-position: 50% 50%; }
 .hero.hero-salle .hero-bg-sombre { display: none; }
+/* Ordinateur : la photo (800 px de large) n'est jamais agrandie. Le fond est la même photo floutée,
+   la photo nette est posée à droite, à sa taille, et se fond dans le dégradé par la gauche. */
+.hero.hero-salle .hero-bg { object-position: 50% 45%; filter: blur(22px) saturate(1.15) brightness(.7); transform: scale(1.12); }
+.hero-salle .hero-net { position: absolute; z-index: 1; top: 0; right: 0; height: 100%; max-height: 1200px; width: auto; max-width: 62%; object-fit: cover; object-position: 50% 45%;
+  -webkit-mask-image: linear-gradient(90deg, transparent 0%, #000 34%); mask-image: linear-gradient(90deg, transparent 0%, #000 34%); }
 /* Mode sombre : la photo des bougies remplace la table longue */
 [data-theme="dark"] .hero.hero-salle .hero-bg-clair { display: none; }
 [data-theme="dark"] .hero.hero-salle .hero-bg-sombre { display: block; }
@@ -61,7 +65,8 @@
 
 @media (max-width: 991.98px) {
   .hero-salle { min-height: 0; }
-  .hero.hero-salle .hero-bg { height: 62%; }
+  .hero.hero-salle .hero-bg { height: 62%; filter: none; transform: none; }
+  .hero-salle .hero-net { display: none !important; }
   .hero.hero-salle .hero-bg-clair { object-position: 50% 30%; }
   .hero.hero-salle .hero-bg-sombre { object-position: 50% 55%; }
   .hero.hero-salle .hero-veil {
