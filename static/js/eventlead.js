@@ -33,10 +33,17 @@
     reveals.forEach(function (el) { el.classList.add("visible"); });
   }
 
-  // Ombre de la barre de navigation au défilement
+  // Ombre de la barre de navigation au défilement.
+  // La barre rétrécit de ~20 px quand on descend : avec un seul seuil, la page remontait
+  // sous le seuil, la barre regrandissait, et tout le site tremblait en boucle.
+  // Deux seuils écartés (réduire après 64 px, regrandir sous 4 px) arrêtent cette boucle.
   var nav = document.querySelector(".el-nav");
   if (nav) {
-    var onScroll = function () { nav.classList.toggle("scrolled", window.scrollY > 8); };
+    var onScroll = function () {
+      var y = window.scrollY;
+      if (y > 64) nav.classList.add("scrolled");
+      else if (y < 4) nav.classList.remove("scrolled");
+    };
     window.addEventListener("scroll", onScroll, { passive: true });
     onScroll();
   }
