@@ -33,7 +33,13 @@ def public_detail(request, pk):
     invitation = None
     if request.user.is_authenticated:
         invitation = event.guests.filter(user=request.user).first()
-    return render(request, "events/public_detail.html", {"event": event, "invitation": invitation})
+    tickets_left = None
+    if event.price_htg:
+        from payments.tickets import tickets_left as left_for  # payments dépend déjà de events
+        tickets_left = left_for(event)
+    return render(request, "events/public_detail.html", {
+        "event": event, "invitation": invitation, "tickets_left": tickets_left,
+    })
 
 
 def _can_evaluate(event, user, invitation=False):

@@ -21,7 +21,11 @@
         </div>
         <div class="t-buy">
           <span class="d-flex align-items-baseline gap-2 flex-wrap"><span class="htg">{{ event.price_htg|floatformat:0|intcomma }} HTG</span><span class="small text-muted">&asymp; {{ event.price_usd }} USD</span></span>
+          {% if event.tickets_left %}
           <a href="{% url 'payments:checkout' event.pk %}" class="btn btn-primary">{% trans "Acheter un billet" %}</a>
+          {% else %}
+          <span class="btn btn-light disabled" aria-disabled="true">{% trans "Complet" %}</span>
+          {% endif %}
         </div>
       </article>
       {% empty %}

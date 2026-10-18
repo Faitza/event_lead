@@ -10,6 +10,7 @@ from django.db.models import Q, Sum
 from django.shortcuts import get_object_or_404, redirect, render
 from django.utils import timezone
 from django.utils.translation import gettext as _
+from django.utils.translation import ngettext
 
 from accounts.decorators import admin_required
 from events.models import Event
@@ -19,7 +20,7 @@ from core.models import Attribution
 from core.paging import paginate
 from core.ratelimit import ratelimit
 
-from . import idempotency
+from . import idempotency, tickets
 from .forms import PaymentForm
 from .models import Payment
 
@@ -32,6 +33,8 @@ def ticketing(request):
     """Billetterie : événements payants avec prix en HTG et équivalent USD."""
     events = Event.objects.visible_to(request.user).filter(price_htg__isnull=False, price_htg__gt=0).upcoming()
     page = paginate(request, events.select_related("category"), 12)
+    for event in page.object_list:
+        event.tickets_left = tickets.tickets_left(event)
     return render(request, "payments/ticketing.html", {
         "events": page.object_list, "page_obj": page, "rate": settings.HTG_TO_USD_RATE,
     })
@@ -42,11 +45,18 @@ def _process(request, form, *, kind, amount, event=None, quantity=1):
     method = form.cleaned_data["method"]
     key = idempotency.key_from(request)
     guest = event.guests.filter(user=request.user).first() if event else None
-    payment, created = idempotency.reserve(
-        key, kind=kind, event=event, guest=guest, user=request.user, method=method, amount_htg=amount,
-        quantity=quantity, reference=Payment.generate_reference(method),
-        payer_detail=form.cleaned_data.get("payer_detail", "")[:120],
+    fields = dict(
+        guest=guest, user=request.user, method=method, amount_htg=amount,
+        reference=Payment.generate_reference(method), payer_detail=form.cleaned_data.get("payer_detail", "")[:120],
     )
+    if kind == Payment.Kind.TICKET:
+        try:
+            payment, created = tickets.reserve(key, event, quantity, **fields)
+        except tickets.SoldOutError as exc:
+            messages.error(request, sold_out_message(exc.left))
+            return None
+    else:
+        payment, created = idempotency.reserve(key, kind=kind, event=event, quantity=quantity, **fields)
     if not created:  # double clic ou formulaire renvoyé : on ne débite pas une deuxième fois
         if payment.status == Payment.Status.SUCCESS and payment.user_id == request.user.pk:
             messages.info(request, idempotency.duplicate_message(payment))
@@ -91,7 +101,18 @@ def checkout(request, event_id):
     return render(request, "payments/checkout.html", {
         "event": event, "form": form, "amount_htg": event.price_htg, "amount_usd": event.price_usd,
         "title": _("Billet - %(titre)s") % {"titre": event.title}, "allow_quantity": True,
+        "tickets_left": tickets.tickets_left(event),
     })
+
+
+def sold_out_message(left):
+    if left <= 0:
+        return _("Désolé, cet événement est complet : il n'y a plus de billets. Rien n'a été débité.")
+    return ngettext(
+        "Il ne reste que %(n)d billet pour cet événement. Choisissez un nombre plus petit. Rien n'a été débité.",
+        "Il ne reste que %(n)d billets pour cet événement. Choisissez un nombre plus petit. Rien n'a été débité.",
+        left,
+    ) % {"n": left}
 
 
 @login_required

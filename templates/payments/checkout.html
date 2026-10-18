@@ -28,11 +28,16 @@
             <div class="eyebrow-row mb-2"><span class="diamond"></span><span class="eyebrow">{% trans "Paiement sécurisé" %}</span></div>
             <h2 class="mb-3" style="font-size:1.9rem">{% trans "Votre commande" %}</h2>
             <div class="recap-row"><span class="text-muted">{% trans "Prix unitaire" %}</span><strong>{{ event.price_htg|floatformat:2 }} HTG</strong></div>
+            {% if tickets_left %}
             <div class="recap-row"><span class="text-muted">{% trans "Nombre de billets" %}</span>
-              <div class="counter"><button type="button" data-step="-1" aria-label="{% trans 'Moins' %}"><i class="bi bi-dash-lg"></i></button><input type="number" id="id_quantity_visible" value="{{ form.quantity.value|default:1 }}" min="1" max="20"><button type="button" data-step="1" aria-label="{% trans 'Plus' %}"><i class="bi bi-plus-lg"></i></button></div>
+              <div class="counter"><button type="button" data-step="-1" aria-label="{% trans 'Moins' %}"><i class="bi bi-dash-lg"></i></button><input type="number" id="id_quantity_visible" value="{{ form.quantity.value|default:1 }}" min="1" max="{% if tickets_left < 20 %}{{ tickets_left }}{% else %}20{% endif %}"><button type="button" data-step="1" aria-label="{% trans 'Plus' %}"><i class="bi bi-plus-lg"></i></button></div>
             </div>
+            {% if tickets_left <= 20 %}<div class="small text-muted text-end">{% blocktranslate trimmed count n=tickets_left %}Plus que {{ n }} billet{% plural %}Plus que {{ n }} billets{% endblocktranslate %}</div>{% endif %}
             <div class="recap-row"><span class="fw-semibold">{% trans "Total" %}</span><span class="text-end"><span class="price-tag" data-amount-htg>{{ amount_htg }} HTG</span><br><span class="small text-muted" data-amount-usd>{{ amount_usd }} USD</span></span></div>
             <button class="btn btn-primary btn-lg w-100 mt-3" data-bs-toggle="modal" data-bs-target="#paymentModal" style="height:56px"><i class="bi bi-lock me-2"></i>{% trans "Payer maintenant" %}</button>
+            {% else %}
+            <div class="alert alert-light border mt-2 mb-0" role="status"><i class="bi bi-x-circle me-2"></i>{% trans "Cet événement est complet : il n'y a plus de billets en vente." %}</div>
+            {% endif %}
             <div class="d-flex justify-content-center gap-3 mt-3 small text-muted"><span>MonCash</span><span>NatCash</span><span>{% trans "Carte" %}</span><span>PayPal</span></div>
           </div>
         </div>

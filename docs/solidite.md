@@ -139,9 +139,10 @@ Puis `python manage.py collectstatic` (fichiers statiques compressés) et `pytho
 ## Plusieurs personnes en même temps
 
 - Déjà protégé : réponse de présence, choix des cadeaux (un cadeau ne part qu'une fois), places à table, pointage
-  le jour J, contributions, remerciements, relances, paiements (double clic = un seul débit), limite d'invités.
+  le jour J, contributions, remerciements, relances, paiements (double clic = un seul débit), limite d'invités,
+  billets (jamais plus de billets que le nombre maximum d'invités ; un paiement en cours garde sa place 30 min).
 - Sur SQLite (votre ordinateur), chaque écriture prend son tour dès le début (`transaction_mode=IMMEDIATE`).
-- En ligne avec beaucoup de visiteurs : utiliser PostgreSQL (`DATABASE_URL=postgres://...`) et le cache partagé
+- En ligne avec beaucoup de visiteurs : utiliser PostgreSQL (voir docs/postgresql.md) et le cache partagé
   (`CACHE_URL` ci-dessus). Les connexions restent valables même avec plusieurs processus (sessions en base).
 - Deux membres de l'équipe qui modifient la même fiche (événement, invité) au même moment : la dernière
   sauvegarde gagne. Se répartir le travail suffit.

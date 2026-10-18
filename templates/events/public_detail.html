@@ -53,7 +53,12 @@
           <div class="p-4" style="border-top:2px dashed var(--el-tint-strong)">
             <div class="price-tag">{{ event.price_htg|floatformat:0|intcomma }} HTG</div>
             <div class="text-muted small mb-3">&asymp; {{ event.price_usd }} USD</div>
+            {% if tickets_left %}
             <a href="{% url 'payments:checkout' event.pk %}" class="btn btn-primary w-100 btn-lg"><i class="bi bi-ticket-perforated me-2"></i>{% trans "Acheter un billet" %}</a>
+            {% if tickets_left <= 20 %}<div class="small text-muted text-center mt-2">{% blocktranslate trimmed count n=tickets_left %}Plus que {{ n }} billet{% plural %}Plus que {{ n }} billets{% endblocktranslate %}</div>{% endif %}
+            {% else %}
+            <div class="btn btn-light w-100 btn-lg disabled" aria-disabled="true"><i class="bi bi-x-circle me-2"></i>{% trans "Complet" %}</div>
+            {% endif %}
           </div>
           {% endif %}
           {% if invitation %}
