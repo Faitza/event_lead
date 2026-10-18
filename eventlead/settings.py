@@ -101,6 +101,8 @@ DATABASES = {
 if DATABASES["default"]["ENGINE"] == "django.db.backends.sqlite3":
     # Plusieurs visiteurs en même temps : SQLite attend jusqu'à 20 s au lieu d'échouer (« database is locked »)
     DATABASES["default"].setdefault("OPTIONS", {})["timeout"] = 20
+    # Chaque écriture prend son tour dès le début : deux personnes qui confirment en même temps ne se bloquent pas
+    DATABASES["default"]["OPTIONS"]["transaction_mode"] = "IMMEDIATE"
 else:
     # Connexions réutilisées entre deux requêtes (PostgreSQL / MySQL) ; vérifiées avant usage
     DATABASES["default"]["CONN_MAX_AGE"] = env.int("CONN_MAX_AGE", default=60)

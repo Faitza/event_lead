@@ -2,6 +2,7 @@
 import csv
 
 from django.contrib import messages
+from django.db import transaction
 from django.db.models import Count, Q, Sum
 from django.http import HttpResponse, JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
@@ -247,8 +248,13 @@ def guest_create(request):
     if request.GET.get("event", "").isdigit():
         initial["event"] = request.GET["event"]
     form = GuestForm(request.POST or None, initial=initial)
-    if request.method == "POST" and form.is_valid():
-        guest = form.save()
+    if request.method == "POST":
+        with transaction.atomic():
+            # Verrou sur l'événement : deux personnes qui ajoutent le dernier invité en même temps ne dépassent pas la limite
+            if request.POST.get("event", "").isdigit():
+                Event.objects.select_for_update().filter(pk=request.POST["event"]).first()
+            guest = form.save() if form.is_valid() else None
+    if request.method == "POST" and guest:
         messages.success(
             request, _("%(name)s a été ajouté(e). Son lien d'invitation est prêt à être envoyé.") % {"name": guest.name}
         )
