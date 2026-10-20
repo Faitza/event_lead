@@ -30,7 +30,7 @@ PRIVATE_PREFIXES = (
     "/admin-dashboard/", "/django-admin/", "/accounts/", "/connexion/", "/inscription/", "/deconnexion/",
     "/tableau-de-bord/", "/devenir-organisateur/", "/mon-espace/", "/mon-profil/", "/organisateur/",
     "/invitation/", "/entree/", "/paiement/", "/publicites/", "/recherche/", "/langue/", "/journal/",
-    "/avis/", "/contact/",
+    "/avis/", "/contact/", "/ensemble/",
 )
 OG_LOCALES = {"fr": "fr_FR", "en": "en_US", "ht": "ht_HT"}
 
@@ -41,6 +41,11 @@ def _is_private(path):
 
 def _new_help_requests():
     return HelpRequest.objects.filter(status=HelpRequest.Status.NEW).count()
+
+
+def _new_ensemble_reports():
+    from ensemble.models import Report
+    return Report.objects.filter(status=Report.Status.NEW).count()
 
 
 def site_settings(request):
@@ -54,6 +59,7 @@ def site_settings(request):
         # Appelable : la requête n'est exécutée que si le gabarit l'utilise.
         "next_public_event": _next_public_event,
         "new_help_requests": _new_help_requests,
+        "new_ensemble_reports": _new_ensemble_reports,
         "site_logo": _site_logo,
         "TODAY": timezone.localdate,
         # Adresse du site vue par le visiteur (https://... en ligne), pour les liens complets des réseaux sociaux

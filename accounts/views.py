@@ -12,6 +12,7 @@ from core.models import Attribution
 from core.ratelimit import ratelimit
 
 from core.middleware import set_language_cookie
+from ensemble.views import pending_count as ensemble_pending
 from events.models import Guest
 
 from .forms import LoginForm, ProfileForm, RegisterForm
@@ -109,7 +110,7 @@ def guest_space(request):
     invitations = (
         Guest.objects.filter(user=user).select_related("event").order_by("event__date")
     )
-    return render(request, "accounts/guest_space.html", {"invitations": invitations})
+    return render(request, "accounts/guest_space.html", {"invitations": invitations, "ensemble_pending": ensemble_pending(user)})
 
 
 @login_required

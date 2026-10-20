@@ -9,6 +9,7 @@ from django.utils.translation import gettext as _
 from accounts.decorators import vip_organizer_required
 from core.paging import paginate
 from ads.models import Ad
+from ensemble.views import event_block_context
 
 from .forms import EvaluationForm
 from .listing import public_events_by_category
@@ -39,6 +40,7 @@ def public_detail(request, pk):
         tickets_left = left_for(event)
     return render(request, "events/public_detail.html", {
         "event": event, "invitation": invitation, "tickets_left": tickets_left,
+        "ensemble": event_block_context(event, request.user),
     })
 
 

@@ -29,6 +29,10 @@
       <div class="empty-state"><i class="bi bi-envelope-open"></i><p class="mt-2 mb-0">{% trans "Aucune invitation liée à votre adresse e-mail pour le moment." %}</p></div>
       {% endif %}
     </div>
+    <div class="el-card el-card-body d-flex flex-wrap align-items-center justify-content-between gap-3 mb-4">
+      <div class="d-flex align-items-center gap-3"><span class="icon-bubble"><i class="bi bi-people"></i></span><div><strong>{% trans "Y aller ensemble" %}</strong><div class="text-muted small">{% trans "Vos demandes et vos messages avec les personnes qui vont au même événement que vous." %}</div></div></div>
+      <div class="d-flex flex-wrap gap-2"><a href="{% url 'ensemble:requests' %}" class="btn btn-soft">{% trans "Mes demandes" %}{% if ensemble_pending %} <span class="badge-el badge-gold ms-1">{{ ensemble_pending }}</span>{% endif %}</a><a href="{% url 'ensemble:inbox' %}" class="btn btn-soft">{% trans "Mes messages" %}</a></div>
+    </div>
     <div class="el-card el-card-body d-flex flex-wrap align-items-center justify-content-between gap-3">
       <div class="d-flex align-items-center gap-3"><span class="icon-bubble gold"><i class="bi bi-gem"></i></span><div><strong>{% trans "Vous organisez des événements ?" %}</strong><div class="text-muted small">{% trans "Passez Organisateur VIP pour accéder à plus de détails." %}</div></div></div>
       <a href="{% url 'accounts:become_organizer' %}" class="btn btn-gold">{% trans "Devenir Organisateur VIP" %}</a>

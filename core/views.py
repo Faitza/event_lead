@@ -164,7 +164,7 @@ def set_language(request):
 
 
 # Pages légales : un gabarit complet par langue (texte long, plus simple à relire et à faire valider qu'en .po).
-LEGAL_UPDATED = date(2026, 10, 6)
+LEGAL_UPDATED = date(2026, 10, 20)
 
 
 def _legal(request, page):

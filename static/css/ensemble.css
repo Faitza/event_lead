@@ -1,0 +1,29 @@
+/* « Y aller ensemble » : petits profils, demandes, messages (maquette validée le 20 octobre 2026). */
+.ya-av { width: 56px; height: 56px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; font-family: var(--font-display); font-size: 1.35rem; color: #fff; background: var(--el-gradient); border: 2px solid var(--el-gold); flex: none; overflow: hidden; }
+.ya-av img { width: 100%; height: 100%; object-fit: cover; }
+.ya-av.sm { width: 40px; height: 40px; font-size: 1rem; }
+.ya-av.lg { width: 88px; height: 88px; font-size: 2rem; }
+.ya-av.c1 { background: linear-gradient(135deg, #B8962A, #D4AF37); }
+.ya-av.c2 { background: linear-gradient(135deg, #7A2E5A, #A54C82); }
+.ya-stack .ya-av { margin-left: -12px; box-shadow: 0 0 0 3px var(--el-card); }
+.ya-stack .ya-av:first-child { margin-left: 0; }
+.ya-block { border-color: var(--el-gold-soft); }
+.ya-person { border: 1px solid var(--el-line); border-radius: var(--el-radius); background: var(--el-card); padding: 1.25rem; height: 100%; display: flex; flex-direction: column; gap: .75rem; }
+.ya-person .ya-name { font-size: 1.1rem; }
+.ya-safe { background: #FFFBEF; border: 1px solid var(--el-gold-soft); border-radius: var(--el-radius-sm); padding: .9rem 1rem; font-size: .92rem; color: var(--el-text); }
+.ya-safe > .bi { color: var(--el-gold-text); }
+.ya-tag { display: inline-block; font-size: .8rem; padding: .15rem .6rem; border-radius: 999px; background: var(--el-tint); color: var(--el-primary); }
+.ya-rules li { margin-bottom: .35rem; }
+.ya-chat { display: flex; flex-direction: column; gap: .6rem; padding: 1.25rem; min-height: 300px; max-height: 60vh; overflow-y: auto; background: var(--el-bg-soft); }
+.ya-msg { max-width: 72%; padding: .65rem .9rem; border-radius: 14px; background: var(--el-card); border: 1px solid var(--el-line); font-size: .95rem; white-space: pre-line; overflow-wrap: anywhere; }
+.ya-msg.me { align-self: flex-end; background: var(--el-primary); color: #fff; border-color: var(--el-primary); }
+.ya-msg small { display: block; opacity: .7; font-size: .75rem; margin-top: .2rem; }
+.ya-sys { align-self: center; font-size: .8rem; color: var(--el-muted); background: var(--el-card); border: 1px dashed var(--el-tint-strong); border-radius: 999px; padding: .25rem .8rem; text-align: center; }
+.ya-conv-list a { display: flex; align-items: center; gap: .75rem; padding: .75rem 1rem; border-bottom: 1px solid var(--el-line); color: var(--el-text); }
+.ya-conv-list a.active, .ya-conv-list a:hover { background: var(--el-bg-soft); }
+.ya-note { white-space: pre-line; overflow-wrap: anywhere; }
+@media (max-width: 575.98px) { .ya-msg { max-width: 88%; } }
+
+[data-theme="dark"] .ya-safe { background: #2A2010; border-color: #6A500C; }
+[data-theme="dark"] .ya-tag { color: #E8D3F2; }
+[data-theme="dark"] .ya-sys { border-color: #4A3557; }

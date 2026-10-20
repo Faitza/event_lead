@@ -48,6 +48,7 @@ INSTALLED_APPS = [
     "gifts",
     "ads",
     "payments",
+    "ensemble",
 ]
 
 MIDDLEWARE = [

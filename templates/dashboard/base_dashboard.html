@@ -25,6 +25,7 @@
     <div class="nav-section">{% trans "Communauté" %}</div>
     <a class="side-link {% active '/admin-dashboard/messages/' %}" href="{% url 'dashboard:inbox' %}"><i class="bi bi-chat-square-heart"></i>{% trans "Messages et avis" %}</a>
     <a class="side-link {% active '/admin-dashboard/aide/' %}" href="{% url 'dashboard:help_list' %}"><i class="bi bi-life-preserver"></i>{% trans "Demandes d'aide" %}{% if new_help_requests %}<span class="side-count" title="{% trans 'Demandes nouvelles' %}">{{ new_help_requests }}</span>{% endif %}</a>
+    <a class="side-link {% active '/admin-dashboard/signalements/' %}" href="{% url 'dashboard:ensemble_reports' %}"><i class="bi bi-flag"></i>{% trans "Signalements" %}{% if new_ensemble_reports %}<span class="side-count" title="{% trans 'Signalements à traiter' %}">{{ new_ensemble_reports }}</span>{% endif %}</a>
     <a class="side-link {% active '/admin-dashboard/provenance/' %}" href="{% url 'dashboard:utm_report' %}"><i class="bi bi-signpost-split"></i>{% trans "Provenance des visites" %}</a>
     <a class="side-link" href="{% url 'admin:index' %}"><i class="bi bi-database-gear"></i>{% trans "Back-office Django" %}</a>
     <a class="side-link" href="{% url 'core:landing' %}" target="_blank"><i class="bi bi-box-arrow-up-right"></i>{% trans "Voir le site" %}</a>

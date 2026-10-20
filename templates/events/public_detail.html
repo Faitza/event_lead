@@ -7,7 +7,7 @@
 {% block og_title %}{{ event.title }}{% endblock %}
 {% block og_description %}{{ event.date|date:"j F Y" }}, {{ event.venue }}{% if event.description %}. {{ event.description|striptags|truncatechars:150 }}{% endif %}{% endblock %}
 {% block og_image %}<meta property="og:image" content="{% if event.cover_url|slice:":4" == "http" %}{{ event.cover_url }}{% else %}{{ SITE_ORIGIN }}{{ event.cover_url }}{% endif %}">{% endblock %}
-{% block extra_head %}<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.css">{% endblock %}
+{% block extra_head %}<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.css">{% if ensemble %}{% load el_tags %}<link href="{% static_v 'css/ensemble.css' %}" rel="stylesheet">{% endif %}{% endblock %}
 {% block content %}
 <section class="page-banner">
   <img class="hero-bg" src="{{ event.cover_url }}" alt="" onerror="this.style.visibility='hidden'">
@@ -27,6 +27,7 @@
           <h2 class="h4 mb-3">{% trans "À propos de l'événement" %}</h2>
           <p class="mb-0">{{ event.description|default:_("Plus d'informations bientôt.")|linebreaksbr }}</p>
         </div>
+        {% if ensemble %}{% include "ensemble/_event_block.html" %}{% endif %}
         {% if event.cover_video %}
         <div class="el-card overflow-hidden mb-4"><video src="{{ event.cover_video.url }}" controls preload="none" class="w-100" style="display:block"></video></div>
         {% endif %}

@@ -25,6 +25,7 @@ urlpatterns = [
     path("", include("events.urls")),
     path("", include("payments.urls")),
     path("", include("ads.urls")),
+    path("", include("ensemble.urls")),
     path("", include("core.urls")),
 ]
 

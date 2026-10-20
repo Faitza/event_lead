@@ -32,7 +32,7 @@ ROOT = Path(__file__).resolve().parent.parent
 LOCALE = ROOT / "locale"
 WORK = LOCALE / "_work"
 LANGS = {"en": "n != 1", "ht": "n > 1"}
-APP_DIRS = ["accounts", "ads", "core", "events", "gifts", "payments", "eventlead"]
+APP_DIRS = ["accounts", "ads", "core", "ensemble", "events", "gifts", "payments", "eventlead"]
 PY_FUNCS = {"gettext", "gettext_lazy", "gettext_noop", "_", "ngettext", "ngettext_lazy", "pgettext", "pgettext_lazy", "npgettext"}
 SKIP_PY_PARTS = {"migrations", "tests", "__pycache__"}
 SKIP_PY_NAMES = {"seed_demo.py"}

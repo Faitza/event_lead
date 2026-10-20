@@ -1,0 +1,63 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% block body_class %}espace-perso{% endblock %}
+{% block title %}{% trans "Y aller ensemble" %}{% endblock %}
+{% block extra_head %}{% include "ensemble/_head.html" %}{% endblock %}
+{% block content %}
+<section class="section">
+  <div class="container" style="max-width:860px">
+    <div class="page-head"><div><div class="eyebrow-row mb-3"><span class="diamond"></span><span class="eyebrow">{% trans "Y aller ensemble" %} &middot; {{ event.title }}</span></div><h1 class="em-on-light">{% blocktranslate trimmed %}Votre <em>petit profil</em>{% endblocktranslate %}</h1><p>{% trans "Les autres personnes inscrites pour cet événement verront seulement ces informations." %}</p></div></div>
+    {% include "ensemble/_warning.html" %}
+    <form method="post" enctype="multipart/form-data" class="el-card el-card-body" novalidate>
+      {% csrf_token %}
+      <div class="hp-field" aria-hidden="true"><label for="id_website">{% trans "Ne pas remplir" %}</label><input type="text" name="website" id="id_website" tabindex="-1" autocomplete="off"></div>
+      {% if form.non_field_errors %}<div class="alert alert-danger">{% for e in form.non_field_errors %}{{ e }}{% if not forloop.last %}<br>{% endif %}{% endfor %}</div>{% endif %}
+      <div class="row g-4">
+        <div class="col-md-4 text-center">
+          {% if profile %}{% include "ensemble/_avatar.html" with p=profile size="lg" %}{% else %}<span class="ya-av lg" aria-hidden="true"><i class="bi bi-person"></i></span>{% endif %}
+          <div class="mt-3 text-start">
+            <label class="form-label fw-semibold" for="id_photo">{{ form.photo.label }}</label>
+            <input type="file" name="photo" id="id_photo" accept="image/*" class="form-control form-control-sm{% if form.photo.errors %} is-invalid{% endif %}">
+            {% for e in form.photo.errors %}<div class="invalid-feedback d-block">{{ e }}</div>{% endfor %}
+            <div class="form-text">{{ form.photo.help_text }}</div>
+          </div>
+        </div>
+        <div class="col-md-8">
+          {% for field in form %}{% if field.name == "first_name" or field.name == "city" or field.name == "about" %}
+          <div class="mb-3">
+            <label class="form-label fw-semibold" for="{{ field.id_for_label }}">{{ field.label }}</label>
+            {% if field.name == "about" %}<textarea name="about" id="id_about" rows="3" maxlength="200" class="form-control{% if field.errors %} is-invalid{% endif %}">{{ field.value|default_if_none:"" }}</textarea>
+            {% else %}<input type="text" name="{{ field.name }}" id="{{ field.id_for_label }}" value="{{ field.value|default_if_none:'' }}" maxlength="{% if field.name == 'first_name' %}40{% else %}60{% endif %}" required class="form-control{% if field.errors %} is-invalid{% endif %}">{% endif %}
+            {% for e in field.errors %}<div class="invalid-feedback d-block">{{ e }}</div>{% endfor %}
+            {% if field.help_text %}<div class="form-text">{{ field.help_text }}</div>{% endif %}
+          </div>
+          {% endif %}{% endfor %}
+          <fieldset class="mb-1">
+            <legend class="form-label fw-semibold fs-6">{% trans "Je cherche" %}</legend>
+            <div class="d-flex flex-wrap gap-3">
+              {% for field in form %}{% if field.name == "wants_company" or field.name == "wants_transport" or field.name == "wants_group" %}
+              <div class="form-check"><input class="form-check-input" type="checkbox" name="{{ field.name }}" id="{{ field.id_for_label }}" {% if field.value %}checked{% endif %}><label class="form-check-label" for="{{ field.id_for_label }}">{{ field.label }}</label></div>
+              {% endif %}{% endfor %}
+            </div>
+          </fieldset>
+        </div>
+      </div>
+      <hr>
+      <h2 class="h5 mb-2">{% trans "Les règles" %}</h2>
+      <ul class="ya-rules small mb-3">
+        <li>{% trans "On se respecte. Pas de messages déplacés, pas d'insultes." %}</li>
+        <li>{% trans "On ne demande jamais d'argent, ni de recharge, ni de transfert MonCash." %}</li>
+        <li>{% trans "Pour une première rencontre, retrouvez-vous sur le lieu de l'événement ou dans un endroit public." %}</li>
+        <li>{% trans "Une personne bloquée ne peut plus vous voir ni vous écrire." %}</li>
+      </ul>
+      <div class="form-check mb-2"><input class="form-check-input{% if form.adult.errors %} is-invalid{% endif %}" type="checkbox" name="adult" id="id_adult" {% if form.adult.value %}checked{% endif %}><label class="form-check-label" for="id_adult">{{ form.adult.label }}</label>{% for e in form.adult.errors %}<div class="invalid-feedback">{{ e }}</div>{% endfor %}</div>
+      <div class="form-check mb-4"><input class="form-check-input{% if form.rules.errors %} is-invalid{% endif %}" type="checkbox" name="rules" id="id_rules" {% if form.rules.value %}checked{% endif %}><label class="form-check-label" for="id_rules">{% url 'core:terms' as terms_url %}{% blocktranslate trimmed %}J'accepte les règles et les <a href="{{ terms_url }}#y-aller-ensemble" target="_blank">conditions d'utilisation</a>.{% endblocktranslate %}</label>{% for e in form.rules.errors %}<div class="invalid-feedback">{{ e }}</div>{% endfor %}</div>
+      <div class="d-flex flex-wrap gap-2 justify-content-end">
+        <a href="{{ event.get_absolute_url }}" class="btn btn-light">{% trans "Annuler" %}</a>
+        <button class="btn btn-primary"><i class="bi bi-check2 me-1"></i>{% if listing %}{% trans "Enregistrer" %}{% else %}{% trans "M'afficher pour cet événement" %}{% endif %}</button>
+      </div>
+      <p class="small text-muted mb-0 mt-3 text-end">{% trans "Vous pouvez vous retirer à tout moment. Votre profil disparaît après l'événement." %}</p>
+    </form>
+  </div>
+</section>
+{% endblock %}

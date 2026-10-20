@@ -1,0 +1,22 @@
+{% load i18n %}
+{# Bloc « Y aller ensemble » de la page d'un événement public à venir. Contexte : ensemble (voir ensemble.views.event_block_context) #}
+<div class="el-card el-card-body mb-4 ya-block" id="y-aller-ensemble">
+  <div class="eyebrow-row mb-2"><span class="diamond"></span><span class="eyebrow">{% trans "Nouveau" %}</span></div>
+  <h2 class="h4 mb-2"><i class="bi bi-people me-2" style="color:var(--el-gold)"></i>{% trans "Y aller ensemble" %}</h2>
+  <p class="mb-3">{% trans "Vous ne voulez pas venir seul ? Trouvez quelqu'un qui va aussi à cet événement et faites le chemin ensemble." %}</p>
+  <div class="d-flex flex-wrap align-items-center justify-content-between gap-3">
+    <div class="d-flex align-items-center gap-3">
+      {% if ensemble.preview %}<span class="ya-stack d-inline-flex">{% for p in ensemble.preview %}{% include "ensemble/_avatar.html" with p=p size="sm" %}{% endfor %}</span>{% endif %}
+      <span class="small text-muted">{% if ensemble.count %}{% blocktranslate trimmed count n=ensemble.count %}<strong class="text-body">{{ n }} personne</strong> cherche quelqu'un pour y aller{% plural %}<strong class="text-body">{{ n }} personnes</strong> cherchent quelqu'un pour y aller{% endblocktranslate %}{% else %}{% trans "Soyez la première personne à vous afficher." %}{% endif %}</span>
+    </div>
+    <div class="d-flex flex-wrap gap-2">
+      {% if ensemble.mine %}
+      <a href="{% url 'ensemble:people' event.pk %}" class="btn btn-primary"><i class="bi bi-eye me-1"></i>{% trans "Voir les personnes" %}</a>
+      <form method="post" action="{% url 'ensemble:leave' event.pk %}" data-confirm="{% trans 'Ne plus vous afficher pour cet événement ?' %}">{% csrf_token %}<button class="btn btn-light">{% trans "Me retirer" %}</button></form>
+      {% else %}
+      <a href="{% url 'ensemble:join' event.pk %}" class="btn btn-primary"><i class="bi bi-person-plus me-1"></i>{% trans "Je cherche quelqu'un pour y aller" %}</a>
+      {% endif %}
+    </div>
+  </div>
+  <p class="small text-muted mb-0 mt-3"><i class="bi bi-shield-check me-1"></i>{% trans "Réservé aux membres connectés de 18 ans ou plus. Personne ne voit votre numéro ni votre e-mail." %}</p>
+</div>

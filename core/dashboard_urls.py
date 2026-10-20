@@ -2,6 +2,7 @@
 from django.urls import path
 
 from ads import views_admin as ads_admin
+from ensemble import views_admin as ensemble_admin
 from events import views_admin as events_admin
 from events import views_checkin as checkin_admin
 from events import views_reminders as reminder_admin
@@ -23,6 +24,10 @@ urlpatterns = [
     path("aide/", core_admin.help_list, name="help_list"),
     path("aide/export.csv", core_admin.help_export_csv, name="help_export_csv"),
     path("aide/<int:pk>/statut/", core_admin.help_set_status, name="help_set_status"),
+    # Y aller ensemble : signalements
+    path("signalements/", ensemble_admin.report_list, name="ensemble_reports"),
+    path("signalements/<int:pk>/decision/", ensemble_admin.report_action, name="ensemble_report_action"),
+    path("signalements/<int:pk>/conversation/", ensemble_admin.report_conversation, name="ensemble_report_conversation"),
     # Provenance des visites (liens avec utm_*)
     path("provenance/", core_admin.utm_report, name="utm_report"),
     # Logo du site : versions en couleur par dates
