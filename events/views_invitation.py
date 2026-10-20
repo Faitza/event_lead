@@ -278,6 +278,7 @@ def invitation_ticket(request, token):
     qr = qr_svg(entry_url(request, guest), label=_("QR code d'entrée de %(name)s") % {"name": guest.name})
     return render(request, "invitation/ticket.html", {
         "guest": guest, "event": guest.event, "qr": qr, "party": checkin.party_text(guest),
+        "paid_refs": ", ".join(guest.payments.filter(kind="ticket", status="success").values_list("reference", flat=True)),
         "whatsapp_url": f"https://wa.me/?text={quote(share)}",
     })
 

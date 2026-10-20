@@ -317,6 +317,7 @@ class Guest(models.Model):
     checked_in_at = models.DateTimeField(_("arrivé le"), null=True, blank=True)
     thanks_sent_at = models.DateTimeField(_("remerciement envoyé le"), null=True, blank=True)
     added_on_site = models.BooleanField(_("ajouté sur place"), default=False)
+    from_ticket = models.BooleanField(_("billet acheté"), default=False)
     table = models.ForeignKey(
         Table, on_delete=models.SET_NULL, null=True, blank=True, related_name="guests", verbose_name=_("table"),
     )

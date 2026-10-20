@@ -105,23 +105,23 @@ msgstr "user"
 msgid "utilisateurs"
 msgstr "users"
 
-#: accounts/views.py:58
+#: accounts/views.py:60
 msgid "Bienvenue, %(nom)s."
 msgstr "Welcome, %(nom)s."
 
-#: accounts/views.py:74
+#: accounts/views.py:76
 msgid "Compte créé. Dernière étape : activez votre accès Organisateur VIP."
 msgstr "Account created. Last step: activate your VIP Organizer access."
 
-#: accounts/views.py:76
+#: accounts/views.py:78
 msgid "Votre compte a été créé avec succès."
 msgstr "Your account has been created successfully."
 
-#: accounts/views.py:84
+#: accounts/views.py:86
 msgid "Vous êtes déconnecté."
 msgstr "You have been logged out."
 
-#: accounts/views.py:121
+#: accounts/views.py:133
 msgid "Profil mis à jour."
 msgstr "Profile updated."
 
@@ -831,7 +831,7 @@ msgstr[1] "This password is too short. It must contain at least %(min_length)d c
 msgid "nom"
 msgstr "name"
 
-#: core/models.py:10 events/models.py:474
+#: core/models.py:10 events/models.py:475
 msgid "note"
 msgstr "rating"
 
@@ -918,10 +918,6 @@ msgstr "help requests"
 #: core/models.py:103 core/visits.py:35
 msgid "Inscription"
 msgstr "Sign-up"
-
-#: core/models.py:104
-msgid "Paiement"
-msgstr "Payment"
 
 #: core/models.py:105
 msgid "Demande d'aide"
@@ -1295,7 +1291,7 @@ msgstr "Reason"
 msgid "prénom affiché"
 msgstr "first name shown"
 
-#: ensemble/models.py:36 events/models.py:408
+#: ensemble/models.py:36 events/models.py:409
 msgid "photo"
 msgstr "photo"
 
@@ -1439,55 +1435,55 @@ msgstr "report"
 msgid "signalements"
 msgstr "reports"
 
-#: ensemble/views.py:28 events/views.py:33
+#: ensemble/views.py:28 events/views.py:37 events/views.py:60
 msgid "Événement introuvable."
 msgstr "Event not found."
 
-#: ensemble/views.py:90
+#: ensemble/views.py:91
 msgid "L'équipe EventLead vous a retiré de Y aller ensemble. Écrivez-nous depuis la page Aide si vous pensez que c'est une erreur."
 msgstr "The EventLead team removed you from Go together. Write to us from the Help page if you think this is a mistake."
 
-#: ensemble/views.py:122
+#: ensemble/views.py:123
 msgid "Vous êtes affiché pour cet événement. Vous pouvez maintenant voir les autres personnes."
 msgstr "You are listed for this event. You can now see the other people."
 
-#: ensemble/views.py:134
+#: ensemble/views.py:135
 msgid "Vous n'êtes plus affiché pour cet événement."
 msgstr "You are no longer listed for this event."
 
-#: ensemble/views.py:185
+#: ensemble/views.py:187
 msgid "Achetez d'abord votre billet pour cet événement : ensuite vous pourrez proposer à quelqu'un d'y aller avec vous."
 msgstr "Buy your ticket for this event first: then you can ask someone to go with you."
 
-#: ensemble/views.py:190
+#: ensemble/views.py:192
 msgid "Cette personne n'est plus affichée pour cet événement."
 msgstr "This person is no longer listed for this event."
 
-#: ensemble/views.py:194
+#: ensemble/views.py:196
 msgid "Votre petit mot est trop long (300 caractères au plus)."
 msgstr "Your note is too long (300 characters at most)."
 
-#: ensemble/views.py:198
+#: ensemble/views.py:200
 msgid "Cette personne vous a déjà fait une demande. Répondez-lui dans Mes demandes."
 msgstr "This person already sent you a request. Answer it in My requests."
 
-#: ensemble/views.py:205
+#: ensemble/views.py:207
 msgid "Demande envoyée. Vous pourrez vous écrire si la personne accepte."
 msgstr "Request sent. You can write to each other if the person accepts."
 
-#: ensemble/views.py:241
+#: ensemble/views.py:243
 msgid "Demande acceptée. Vous pouvez maintenant vous écrire."
 msgstr "Request accepted. You can now write to each other."
 
-#: ensemble/views.py:245
+#: ensemble/views.py:247
 msgid "Demande refusée."
 msgstr "Request declined."
 
-#: ensemble/views.py:305
+#: ensemble/views.py:307
 msgid "Personne bloquée. Elle ne peut plus vous voir ni vous écrire."
 msgstr "Person blocked. They can no longer see you or write to you."
 
-#: ensemble/views.py:321
+#: ensemble/views.py:323
 msgid "Merci. L'équipe EventLead va lire votre signalement."
 msgstr "Thank you. The EventLead team will read your report."
 
@@ -1925,7 +1921,7 @@ msgstr "created by"
 msgid "créé le"
 msgstr "created on"
 
-#: events/models.py:183 events/models.py:266 events/models.py:300 events/models.py:404 events/models.py:447 gifts/models.py:42
+#: events/models.py:183 events/models.py:266 events/models.py:300 events/models.py:405 events/models.py:448 gifts/models.py:42
 msgid "événement"
 msgstr "event"
 
@@ -1933,7 +1929,7 @@ msgstr "event"
 msgid "numéro"
 msgstr "number"
 
-#: events/models.py:276 events/models.py:321
+#: events/models.py:276 events/models.py:322
 msgid "table"
 msgstr "table"
 
@@ -1997,103 +1993,107 @@ msgstr "thank-you sent on"
 msgid "ajouté sur place"
 msgstr "added on site"
 
-#: events/models.py:333 events/models.py:381 events/models.py:448 gifts/models.py:79 payments/models.py:34 payments/models.py:85
+#: events/models.py:320
+msgid "billet acheté"
+msgstr "ticket bought"
+
+#: events/models.py:334 events/models.py:382 events/models.py:449 gifts/models.py:79 payments/models.py:34 payments/models.py:85
 msgid "invité"
 msgstr "guest"
 
-#: events/models.py:382
+#: events/models.py:383
 msgid "canal"
 msgstr "channel"
 
-#: events/models.py:385
+#: events/models.py:386
 msgid "envoyée le"
 msgstr "sent on"
 
-#: events/models.py:389
+#: events/models.py:390
 msgid "relance"
 msgstr "reminder"
 
-#: events/models.py:390
+#: events/models.py:391
 msgid "relances"
 msgstr "reminders"
 
-#: events/models.py:406
+#: events/models.py:407
 msgid "ajoutée par"
 msgstr "added by"
 
-#: events/models.py:409
+#: events/models.py:410
 msgid "miniature"
 msgstr "thumbnail"
 
-#: events/models.py:410
+#: events/models.py:411
 msgid "ajoutée le"
 msgstr "added on"
 
-#: events/models.py:414
+#: events/models.py:415
 msgid "photo de l'album"
 msgstr "album photo"
 
-#: events/models.py:415
+#: events/models.py:416
 msgid "photos de l'album"
 msgstr "album photos"
 
-#: events/models.py:433
+#: events/models.py:434
 msgid "Entrée validée"
 msgstr "Entry validated"
 
-#: events/models.py:434
+#: events/models.py:435
 msgid "QR déjà utilisé"
 msgstr "QR already used"
 
-#: events/models.py:436
+#: events/models.py:437
 msgid "Autre événement"
 msgstr "Other event"
 
-#: events/models.py:437
+#: events/models.py:438
 msgid "Ajouté sur place"
 msgstr "Added on site"
 
-#: events/models.py:438
+#: events/models.py:439
 msgid "Pointage annulé"
 msgstr "Check-in cancelled"
 
-#: events/models.py:441
+#: events/models.py:442
 msgid "QR code"
 msgstr "QR code"
 
-#: events/models.py:443
+#: events/models.py:444
 msgid "Sur place"
 msgstr "On site"
 
-#: events/models.py:449
+#: events/models.py:450
 msgid "code lu"
 msgstr "code read"
 
-#: events/models.py:450
+#: events/models.py:451
 msgid "résultat"
 msgstr "result"
 
-#: events/models.py:451
+#: events/models.py:452
 msgid "origine"
 msgstr "source"
 
-#: events/models.py:458
+#: events/models.py:459
 msgid "pointage"
 msgstr "check-in"
 
-#: events/models.py:459
+#: events/models.py:460
 msgid "pointages"
 msgstr "check-ins"
 
-#: events/models.py:475
+#: events/models.py:476
 msgid "commentaire"
 msgstr "comment"
 
-#: events/models.py:480
+#: events/models.py:481
 msgid "évaluation"
 msgstr "evaluation"
 
-#: events/models.py:481
+#: events/models.py:482
 msgid "évaluations"
 msgstr "evaluations"
 
@@ -2207,15 +2207,23 @@ msgstr "%(name)s has just received the thank-you."
 msgid "Plafond d'e-mails du jour atteint : le merci de %(name)s partira demain."
 msgstr "Daily e-mail limit reached: the thank-you to %(name)s will go out tomorrow."
 
-#: events/views.py:92
+#: events/views.py:64
+msgid "Désolé, il n'y a plus de place pour cet événement."
+msgstr "Sorry, there are no places left for this event."
+
+#: events/views.py:68
+msgid "Vous êtes inscrit(e). Voici votre billet d'entrée."
+msgstr "You're signed up. Here is your entry ticket."
+
+#: events/views.py:117
 msgid "L'évaluation de cet événement n'est pas encore ouverte."
 msgstr "Rating for this event is not open yet."
 
-#: events/views.py:96
+#: events/views.py:121
 msgid "Vous avez déjà évalué cet événement. Merci."
 msgstr "You have already rated this event. Thank you."
 
-#: events/views.py:104
+#: events/views.py:129
 msgid "Merci pour votre évaluation."
 msgstr "Thank you for your review."
 
@@ -2329,7 +2337,7 @@ msgstr "The album is still empty."
 msgid "Indiquez le nom de la personne."
 msgstr "Enter the person's name."
 
-#: events/views_contribution.py:57 payments/views.py:84
+#: events/views_contribution.py:57 payments/views.py:86
 msgid "%(message)s Référence : %(reference)s."
 msgstr "%(message)s Reference: %(reference)s."
 
@@ -2785,21 +2793,21 @@ msgstr "contributions"
 msgid "Votre accès Organisateur VIP est déjà actif : rien n'a été débité."
 msgstr "Your VIP Organizer access is already active: nothing was charged."
 
-#: payments/views.py:103
+#: payments/views.py:105
 msgid "Billet - %(titre)s"
 msgstr "Ticket - %(titre)s"
 
-#: payments/views.py:110
+#: payments/views.py:112
 msgid "Désolé, cet événement est complet : il n'y a plus de billets. Rien n'a été débité."
 msgstr "Sorry, this event is full: there are no tickets left. Nothing was charged."
 
-#: payments/views.py:111
+#: payments/views.py:113
 msgid "Il ne reste que %(n)d billet pour cet événement. Choisissez un nombre plus petit. Rien n'a été débité."
 msgid_plural "Il ne reste que %(n)d billets pour cet événement. Choisissez un nombre plus petit. Rien n'a été débité."
 msgstr[0] "Only %(n)d ticket is left for this event. Choose a smaller number. Nothing was charged."
 msgstr[1] "Only %(n)d tickets are left for this event. Choose a smaller number. Nothing was charged."
 
-#: payments/views.py:132
+#: payments/views.py:134
 msgid "Bienvenue parmi les Organisateurs VIP."
 msgstr "Welcome to the VIP Organizers."
 
@@ -2823,7 +2831,7 @@ msgstr "Received an invitation? Just open the link you got by WhatsApp or e-mail
 msgid "EventLead, retour à l'accueil"
 msgstr "EventLead, back to home"
 
-#: templates/accounts/become_organizer.html:4 templates/accounts/guest_space.html:38 templates/accounts/login.html:18 templates/core/landing.html:176 templates/partials/_footer.html:21 templates/payments/vip.html:4
+#: templates/accounts/become_organizer.html:4 templates/accounts/guest_space.html:66 templates/accounts/login.html:18 templates/core/landing.html:176 templates/partials/_footer.html:21 templates/payments/vip.html:4
 msgid "Devenir Organisateur VIP"
 msgstr "Become a VIP Organizer"
 
@@ -2844,8 +2852,8 @@ msgid "Mon espace"
 msgstr "My space"
 
 #: templates/accounts/guest_space.html:9
-msgid "Vos invitations et les événements à découvrir."
-msgstr "Your invitations and events to discover."
+msgid "Vos billets, vos invitations et les événements à découvrir."
+msgstr "Your tickets, your invitations and events to discover."
 
 #: templates/accounts/guest_space.html:9 templates/core/landing.html:19 templates/events/organizer_portal.html:14
 msgid "Bonjour <em>%(name)s</em>"
@@ -2855,59 +2863,83 @@ msgstr "Hello <em>%(name)s</em>"
 msgid "Explorer les événements"
 msgstr "Explore events"
 
-#: templates/accounts/guest_space.html:13
-msgid "Mes invitations"
-msgstr "My invitations"
+#: templates/accounts/guest_space.html:14
+msgid "Mes billets"
+msgstr "My tickets"
 
-#: templates/accounts/guest_space.html:16 templates/dashboard/events/list.html:25 templates/dashboard/guests/export_pdf.html:17 templates/dashboard/guests/list.html:28 templates/dashboard/home.html:25 templates/events/organizer_portal.html:40
+#: templates/accounts/guest_space.html:16 templates/accounts/guest_space.html:44 templates/dashboard/events/list.html:25 templates/dashboard/guests/export_pdf.html:17 templates/dashboard/guests/list.html:28 templates/dashboard/home.html:25
 msgid "Événement"
 msgstr "Event"
 
-#: templates/accounts/guest_space.html:16 templates/dashboard/events/_live.html:55 templates/dashboard/events/list.html:25 templates/dashboard/home.html:25 templates/dashboard/payments/history.html:20 templates/dashboard/utm/report.html:59
+#: templates/accounts/guest_space.html:16 templates/accounts/guest_space.html:44 templates/dashboard/events/_live.html:55 templates/dashboard/events/list.html:25 templates/dashboard/home.html:25 templates/dashboard/payments/history.html:20
 msgid "Date"
 msgstr "Date"
 
-#: templates/accounts/guest_space.html:16
-msgid "Ma réponse"
-msgstr "My reply"
+#: templates/accounts/guest_space.html:16 templates/dashboard/seating/event.html:39 templates/dashboard/seating/event.html:53
+msgid "Places"
+msgstr "Seats"
 
-#: templates/accounts/guest_space.html:21 templates/core/help.html:12 templates/core/search.html:20 templates/dashboard/checkin/_event_card.html:8 templates/dashboard/guests/export_pdf.html:15 templates/dashboard/help/list.html:29
+#: templates/accounts/guest_space.html:16 core/models.py:104
+msgid "Paiement"
+msgstr "Payment"
+
+#: templates/accounts/guest_space.html:21 templates/accounts/guest_space.html:30 templates/accounts/guest_space.html:49 templates/core/help.html:12 templates/core/search.html:20 templates/dashboard/checkin/_event_card.html:8
 msgid "j F Y"
 msgstr "F j, Y"
 
 #: templates/accounts/guest_space.html:23
+msgid "Payé"
+msgstr "Paid"
+
+#: templates/accounts/guest_space.html:24 templates/accounts/guest_space.html:33 templates/events/public_detail.html:66 templates/payments/success.html:16
+msgid "Voir mon billet"
+msgstr "View my ticket"
+
+#: templates/accounts/guest_space.html:32 templates/partials/_event_card.html:17 templates/partials/_parade_card.html:34
+msgid "Gratuit"
+msgstr "Free"
+
+#: templates/accounts/guest_space.html:41
+msgid "Mes invitations"
+msgstr "My invitations"
+
+#: templates/accounts/guest_space.html:44
+msgid "Ma réponse"
+msgstr "My reply"
+
+#: templates/accounts/guest_space.html:51
 msgid "Voir ma réponse"
 msgstr "View my reply"
 
-#: templates/accounts/guest_space.html:23
+#: templates/accounts/guest_space.html:51
 msgid "Répondre"
 msgstr "Reply"
 
-#: templates/accounts/guest_space.html:29
+#: templates/accounts/guest_space.html:57
 msgid "Aucune invitation liée à votre adresse e-mail pour le moment."
 msgstr "No invitations linked to your e-mail address yet."
 
-#: templates/accounts/guest_space.html:33 templates/ensemble/_event_block.html:5 templates/ensemble/conversation.html:9 templates/ensemble/people.html:4 templates/ensemble/people.html:10 templates/ensemble/profile_form.html:4
+#: templates/accounts/guest_space.html:61 templates/ensemble/_event_block.html:5 templates/ensemble/conversation.html:9 templates/ensemble/people.html:4 templates/ensemble/people.html:10 templates/ensemble/profile_form.html:4
 msgid "Y aller ensemble"
 msgstr "Go together"
 
-#: templates/accounts/guest_space.html:33
+#: templates/accounts/guest_space.html:61
 msgid "Vos demandes et vos messages avec les personnes qui vont au même événement que vous."
 msgstr "Your requests and messages with people going to the same event as you."
 
-#: templates/accounts/guest_space.html:34 templates/ensemble/_tabs_nav.html:3 templates/ensemble/people.html:11 templates/ensemble/requests.html:4
+#: templates/accounts/guest_space.html:62 templates/ensemble/_tabs_nav.html:3 templates/ensemble/people.html:11 templates/ensemble/requests.html:4
 msgid "Mes demandes"
 msgstr "My requests"
 
-#: templates/accounts/guest_space.html:34 templates/ensemble/_tabs_nav.html:4 templates/ensemble/conversation.html:4
+#: templates/accounts/guest_space.html:62 templates/ensemble/_tabs_nav.html:4 templates/ensemble/conversation.html:4
 msgid "Mes messages"
 msgstr "My messages"
 
-#: templates/accounts/guest_space.html:37
+#: templates/accounts/guest_space.html:65
 msgid "Vous organisez des événements ?"
 msgstr "Do you organize events?"
 
-#: templates/accounts/guest_space.html:37
+#: templates/accounts/guest_space.html:65
 msgid "Passez Organisateur VIP pour accéder à plus de détails."
 msgstr "Become a VIP Organizer to access more details."
 
@@ -3393,7 +3425,7 @@ msgstr "Your review"
 msgid "Partagez votre expérience avec EventLead"
 msgstr "Share your experience with EventLead"
 
-#: templates/core/landing.html:238 templates/core/landing.html:269 templates/ensemble/people.html:65 templates/ensemble/profile_form.html:13 accounts/forms.py:33 core/forms.py:15
+#: templates/core/landing.html:238 templates/core/landing.html:269 templates/ensemble/people.html:70 templates/ensemble/profile_form.html:13 accounts/forms.py:33 core/forms.py:15
 msgid "Ne pas remplir"
 msgstr "Do not fill in"
 
@@ -3461,7 +3493,7 @@ msgstr "Search: %(q)s"
 msgid "Rechercher un événement, une catégorie, une question de l'aide ou une page du site EventLead."
 msgstr "Search for an event, a category, a help question or a page of the EventLead site."
 
-#: templates/core/search.html:6 core/visits.py:31 events/models.py:442
+#: templates/core/search.html:6 core/visits.py:31 events/models.py:443
 msgid "Recherche"
 msgstr "Search"
 
@@ -3815,7 +3847,7 @@ msgstr "Open check-in"
 msgid "Dernières arrivées"
 msgstr "Latest arrivals"
 
-#: templates/dashboard/checkin/_recent.html:5 templates/dashboard/reminders/_table.html:5 templates/ensemble/people.html:20
+#: templates/dashboard/checkin/_recent.html:5 templates/dashboard/reminders/_table.html:5 templates/ensemble/people.html:25
 msgid "Filtrer"
 msgstr "Filter"
 
@@ -3965,7 +3997,7 @@ msgstr "Name or code EL-XXXX-XXXX"
 msgid "Ajouter un invité sur place"
 msgstr "Add a guest on site"
 
-#: templates/dashboard/checkin/event.html:65 templates/dashboard/seating/event.html:36 templates/dashboard/seating/event.html:50 templates/ensemble/_report_modal.html:5 templates/ensemble/people.html:62 templates/invitation/step_thanks.html:6
+#: templates/dashboard/checkin/event.html:65 templates/dashboard/seating/event.html:36 templates/dashboard/seating/event.html:50 templates/ensemble/_report_modal.html:5 templates/ensemble/people.html:67 templates/invitation/step_thanks.html:6
 msgid "Fermer"
 msgstr "Close"
 
@@ -3981,7 +4013,7 @@ msgstr "Companions"
 msgid "Téléphone (optionnel)"
 msgstr "Phone (optional)"
 
-#: templates/dashboard/checkin/event.html:75 templates/dashboard/confirm_delete.html:17 templates/dashboard/seating/event.html:41 templates/dashboard/seating/event.html:56 templates/ensemble/_report_modal.html:14 templates/ensemble/people.html:70
+#: templates/dashboard/checkin/event.html:75 templates/dashboard/confirm_delete.html:17 templates/dashboard/seating/event.html:41 templates/dashboard/seating/event.html:56 templates/ensemble/_report_modal.html:14 templates/ensemble/people.html:75
 msgid "Annuler"
 msgstr "Cancel"
 
@@ -4103,11 +4135,11 @@ msgid_plural "%(counter)s contributions"
 msgstr[0] "%(counter)s contribution"
 msgstr[1] "%(counter)s contributions"
 
-#: templates/dashboard/events/_live.html:55 templates/dashboard/home.html:39 templates/dashboard/payments/history.html:20 templates/invitation/step_contribution.html:19 templates/payments/success.html:23
+#: templates/dashboard/events/_live.html:55 templates/dashboard/home.html:39 templates/dashboard/payments/history.html:20 templates/invitation/step_contribution.html:19 templates/payments/success.html:32
 msgid "Montant"
 msgstr "Amount"
 
-#: templates/dashboard/events/_live.html:55 templates/dashboard/home.html:39 templates/dashboard/payments/history.html:20 templates/payments/success.html:22
+#: templates/dashboard/events/_live.html:55 templates/dashboard/home.html:39 templates/dashboard/payments/history.html:20 templates/payments/success.html:31
 msgid "Mode"
 msgstr "Method"
 
@@ -4343,7 +4375,7 @@ msgstr "Progress"
 msgid "Choisi par"
 msgstr "Chosen by"
 
-#: templates/dashboard/gifts/list.html:37 templates/events/public_detail.html:61 templates/payments/ticketing.html:27 gifts/views_admin.py:101
+#: templates/dashboard/gifts/list.html:37 templates/events/public_detail.html:61 templates/events/public_detail.html:81 templates/payments/ticketing.html:27 gifts/views_admin.py:101
 msgid "Complet"
 msgstr "Full"
 
@@ -4385,7 +4417,7 @@ msgstr "All events"
 msgid "Généré le %(d)s"
 msgstr "Generated on %(d)s"
 
-#: templates/dashboard/guests/export_pdf.html:15 templates/dashboard/guests/form.html:46 templates/dashboard/inbox.html:17 templates/payments/success.html:24
+#: templates/dashboard/guests/export_pdf.html:15 templates/dashboard/guests/form.html:46 templates/dashboard/inbox.html:17 templates/payments/success.html:33
 msgid "j F Y H:i"
 msgstr "F j, Y H:i"
 
@@ -4509,7 +4541,7 @@ msgstr "events"
 msgid "%(n)s à venir"
 msgstr "%(n)s upcoming"
 
-#: templates/dashboard/home.html:15 templates/events/organizer_event_detail.html:8 events/models.py:334
+#: templates/dashboard/home.html:15 templates/events/organizer_event_detail.html:8 events/models.py:335
 msgid "invités"
 msgstr "guests"
 
@@ -4551,7 +4583,7 @@ msgstr "Latest payments"
 msgid "Historique"
 msgstr "History"
 
-#: templates/dashboard/home.html:39 templates/dashboard/payments/history.html:20 templates/payments/success.html:13
+#: templates/dashboard/home.html:39 templates/dashboard/payments/history.html:20 templates/payments/success.html:22
 msgid "Référence"
 msgstr "Reference"
 
@@ -4741,7 +4773,7 @@ msgstr "%(n)s twice"
 msgid "%(n)s trois fois"
 msgstr "%(n)s three times"
 
-#: templates/dashboard/reminders/_stats.html:6 events/models.py:383
+#: templates/dashboard/reminders/_stats.html:6 events/models.py:384
 msgid "automatique"
 msgstr "automatic"
 
@@ -5111,10 +5143,6 @@ msgstr "Name (optional)"
 msgid "Famille de la mariée"
 msgstr "Bride's family"
 
-#: templates/dashboard/seating/event.html:39 templates/dashboard/seating/event.html:53
-msgid "Places"
-msgstr "Seats"
-
 #: templates/dashboard/seating/event.html:41
 msgid "Ajouter"
 msgstr "Add"
@@ -5463,7 +5491,7 @@ msgstr[1] "<strong class=\"text-body\">%(n)s people</strong> are looking for som
 msgid "Voir les personnes"
 msgstr "See the people"
 
-#: templates/ensemble/_event_block.html:15 templates/ensemble/people.html:56
+#: templates/ensemble/_event_block.html:15 templates/ensemble/people.html:61
 msgid "Ne plus vous afficher pour cet événement ?"
 msgstr "Stop being listed for this event?"
 
@@ -5479,11 +5507,15 @@ msgstr "I'm looking for someone to go with"
 msgid "Seules les personnes qui ont acheté leur billet apparaissent dans la liste et peuvent faire des demandes."
 msgstr "Only people who bought their ticket appear in the list and can send requests."
 
+#: templates/ensemble/_event_block.html:21
+msgid "Seules les personnes inscrites avec « Je participe » apparaissent dans la liste et peuvent faire des demandes."
+msgstr "Only people who signed up with \"I'm going\" appear in the list and can send requests."
+
 #: templates/ensemble/_event_block.html:22
 msgid "Réservé aux membres connectés de 18 ans ou plus. Personne ne voit votre numéro ni votre e-mail."
 msgstr "For logged-in members aged 18 or over. Nobody sees your phone number or e-mail."
 
-#: templates/ensemble/_report_modal.html:5 templates/ensemble/conversation.html:29 templates/ensemble/people.html:43 templates/ensemble/requests.html:30
+#: templates/ensemble/_report_modal.html:5 templates/ensemble/conversation.html:29 templates/ensemble/people.html:48 templates/ensemble/requests.html:30
 msgid "Signaler"
 msgstr "Report"
 
@@ -5527,11 +5559,11 @@ msgstr "No conversation yet. When a request is accepted, you can write to each o
 msgid "Conversations"
 msgstr "Conversations"
 
-#: templates/ensemble/conversation.html:28 templates/ensemble/people.html:42
+#: templates/ensemble/conversation.html:28 templates/ensemble/people.html:47
 msgid "Bloquer cette personne ? Elle ne pourra plus vous voir ni vous écrire."
 msgstr "Block this person? They will no longer be able to see you or write to you."
 
-#: templates/ensemble/conversation.html:28 templates/ensemble/people.html:42
+#: templates/ensemble/conversation.html:28 templates/ensemble/people.html:47
 msgid "Bloquer"
 msgstr "Block"
 
@@ -5551,7 +5583,7 @@ msgstr "Never give money. For a first meeting, meet at the event venue."
 msgid "Écrire un message..."
 msgstr "Write a message..."
 
-#: templates/ensemble/conversation.html:46 ensemble/views.py:279
+#: templates/ensemble/conversation.html:46 ensemble/views.py:281
 msgid "Cette conversation est fermée."
 msgstr "This conversation is closed."
 
@@ -5657,91 +5689,103 @@ msgstr "Who is going to <em>%(title)s</em>?"
 msgid "Mon petit profil"
 msgstr "My short profile"
 
-#: templates/ensemble/people.html:16
+#: templates/ensemble/people.html:17
 msgid "Achetez votre billet pour cet événement : sans billet, vous n'apparaissez pas dans la liste et vous ne pouvez pas proposer à quelqu'un d'y aller avec vous."
 msgstr "Buy your ticket for this event: without a ticket, you do not appear in the list and you cannot ask someone to go with you."
 
-#: templates/ensemble/people.html:17 templates/events/public_detail.html:58 templates/partials/_parade_card.html:46 templates/payments/ticketing.html:25
+#: templates/ensemble/people.html:18 templates/events/public_detail.html:58 templates/partials/_parade_card.html:46 templates/payments/ticketing.html:25
 msgid "Acheter un billet"
 msgstr "Buy a ticket"
 
-#: templates/ensemble/people.html:21
+#: templates/ensemble/people.html:20
+msgid "Inscrivez-vous à cet événement (c'est gratuit) : sans inscription, vous n'apparaissez pas dans la liste et vous ne pouvez pas proposer à quelqu'un d'y aller avec vous."
+msgstr "Sign up for this event (it's free): without signing up, you don't appear in the list and you can't ask someone to go with you."
+
+#: templates/ensemble/people.html:21 templates/events/public_detail.html:75 templates/events/public_detail.html:77
+msgid "Je participe"
+msgstr "I'm going"
+
+#: templates/ensemble/people.html:26
 msgid "Tout le monde"
 msgstr "Everyone"
 
-#: templates/ensemble/people.html:22 templates/ensemble/people.html:32 ensemble/forms.py:15
+#: templates/ensemble/people.html:27 templates/ensemble/people.html:37 ensemble/forms.py:15
 msgid "Partager le transport"
 msgstr "Share transport"
 
-#: templates/ensemble/people.html:23 templates/ensemble/people.html:32 ensemble/forms.py:16
+#: templates/ensemble/people.html:28 templates/ensemble/people.html:37 ensemble/forms.py:16
 msgid "Un groupe d'amis"
 msgstr "A group of friends"
 
-#: templates/ensemble/people.html:24
+#: templates/ensemble/people.html:29
 msgid "Ma ville"
 msgstr "My city"
 
-#: templates/ensemble/people.html:32 ensemble/forms.py:14
+#: templates/ensemble/people.html:37 ensemble/forms.py:14
 msgid "Quelqu'un pour y aller"
 msgstr "Someone to go with"
 
-#: templates/ensemble/people.html:34
+#: templates/ensemble/people.html:39
 msgid "Écrire"
 msgstr "Write"
 
-#: templates/ensemble/people.html:35
+#: templates/ensemble/people.html:40
 msgid "Demande envoyée"
 msgstr "Request sent"
 
-#: templates/ensemble/people.html:36
+#: templates/ensemble/people.html:41
 msgid "Vous a fait une demande"
 msgstr "Sent you a request"
 
-#: templates/ensemble/people.html:37
+#: templates/ensemble/people.html:42
 msgid "Billet requis pour proposer"
 msgstr "Ticket needed to ask"
 
-#: templates/ensemble/people.html:38
+#: templates/ensemble/people.html:42
+msgid "Inscription requise pour proposer"
+msgstr "Sign-up needed to ask"
+
+#: templates/ensemble/people.html:43
 msgid "Proposer d'y aller ensemble"
 msgstr "Suggest going together"
 
-#: templates/ensemble/people.html:40 templates/partials/_navbar.html:26 templates/payments/checkout.html:33
+#: templates/ensemble/people.html:45 templates/partials/_navbar.html:26 templates/payments/checkout.html:33
 msgid "Plus"
 msgstr "More"
 
-#: templates/ensemble/people.html:50
+#: templates/ensemble/people.html:55
 msgid "Personne pour ce choix pour le moment."
 msgstr "Nobody for this choice yet."
 
-#: templates/ensemble/people.html:50
+#: templates/ensemble/people.html:55
 msgid "Personne d'autre ne s'est encore affiché. Revenez un peu plus tard : vous verrez les nouvelles personnes ici."
 msgstr "Nobody else is listed yet. Come back a little later: new people will show up here."
 
-#: templates/ensemble/people.html:53
+#: templates/ensemble/people.html:58
 msgid "Personne ne voit votre numéro ni votre e-mail. Vous pourrez vous écrire seulement si l'autre personne accepte votre demande."
 msgstr "Nobody sees your phone number or e-mail. You can only write to each other if the other person accepts your request."
 
-#: templates/ensemble/people.html:55
+#: templates/ensemble/people.html:60
 msgid "Retour à l'événement"
 msgstr "Back to the event"
 
-#: templates/ensemble/people.html:56
+#: templates/ensemble/people.html:61
 msgid "Ne plus m'afficher pour cet événement"
 msgstr "Stop listing me for this event"
 
-#: templates/ensemble/people.html:62
+#: templates/ensemble/people.html:67
 msgid "Proposer à"
 msgstr "Suggest to"
 
-#: templates/ensemble/people.html:67 ensemble/forms.py:58
+#: templates/ensemble/people.html:72 ensemble/forms.py:58
 msgid "Un petit mot (facultatif)"
 msgstr "A short note (optional)"
 
-#: templates/ensemble/people.html:69
+#: templates/ensemble/people.html:74
 msgid "La personne verra votre petit profil et ce mot. Si elle accepte, vous pourrez vous écrire."
 msgstr "The person will see your short profile and this note. If they accept, you can write to each other."
 
-#: templates/ensemble/people.html:70
+#: templates/ensemble/people.html:75
 msgid "Envoyer la demande"
 msgstr "Send the request"
 
@@ -5857,7 +5901,7 @@ msgstr "This request could not be processed. If you were sending a file, it may 
 msgid "Revenir en arrière"
 msgstr "Go back"
 
-#: templates/errors/400.html:7 templates/errors/403.html:9 templates/errors/404.html:9 templates/errors/500.html:7 templates/invitation/entry_code.html:28 templates/payments/success.html:29
+#: templates/errors/400.html:7 templates/errors/403.html:9 templates/errors/404.html:9 templates/errors/500.html:7 templates/invitation/entry_code.html:28 templates/payments/success.html:38
 msgid "Retour à l'accueil"
 msgstr "Back to home"
 
@@ -6011,9 +6055,23 @@ msgid_plural "Plus que %(n)s billets"
 msgstr[0] "Only %(n)s ticket left"
 msgstr[1] "Only %(n)s tickets left"
 
-#: templates/events/public_detail.html:66
+#: templates/events/public_detail.html:68
 msgid "Voir mon invitation"
 msgstr "View my invitation"
+
+#: templates/events/public_detail.html:71 templates/invitation/ticket.html:29
+msgid "Entrée gratuite"
+msgstr "Free entry"
+
+#: templates/events/public_detail.html:72
+msgid "Inscrivez-vous pour recevoir votre billet d'entrée avec QR code."
+msgstr "Sign up to get your entry ticket with a QR code."
+
+#: templates/events/public_detail.html:79
+msgid "Plus que %(n)s place"
+msgid_plural "Plus que %(n)s places"
+msgstr[0] "Only %(n)s place left"
+msgstr[1] "Only %(n)s places left"
 
 #: templates/invitation/already_answered.html:8
 msgid "Votre réponse est <em style=\"color:inherit\">enregistrée</em>"
@@ -6109,7 +6167,7 @@ msgstr "Already checked in at %(time)s."
 msgid "Valider l'entrée"
 msgstr "Validate entry"
 
-#: templates/invitation/entry_code.html:22 events/models.py:435
+#: templates/invitation/entry_code.html:22 events/models.py:436
 msgid "QR inconnu"
 msgstr "QR unknown"
 
@@ -6435,9 +6493,23 @@ msgstr "With all our gratitude,"
 msgid "Billet d'entrée - %(titre)s"
 msgstr "Entry ticket - %(titre)s"
 
-#: templates/invitation/ticket.html:16
+#: templates/invitation/ticket.html:16 templates/payments/success.html:14
 msgid "Votre billet d'entrée"
 msgstr "Your entry ticket"
+
+#: templates/invitation/ticket.html:20
+msgid "Votre billet pour"
+msgstr "Your ticket for"
+
+#: templates/invitation/ticket.html:29 templates/invitation/ticket.html:29
+msgid "%(n)s place"
+msgid_plural "%(n)s places"
+msgstr[0] "%(n)s place"
+msgstr[1] "%(n)s places"
+
+#: templates/invitation/ticket.html:29
+msgid "Billet payé (%(ref)s)"
+msgstr "Paid ticket (%(ref)s)"
 
 #: templates/invitation/ticket.html:36
 msgid "Enregistrer dans mon téléphone"
@@ -6478,10 +6550,6 @@ msgstr "Learn more"
 #: templates/partials/_cookie_note.html:4
 msgid "J'ai compris"
 msgstr "Got it"
-
-#: templates/partials/_event_card.html:17 templates/partials/_parade_card.html:34
-msgid "Gratuit"
-msgstr "Free"
 
 #: templates/partials/_footer.html:7
 msgid "La plateforme élégante pour organiser vos mariages, galas et conférences en Haïti et dans la Caraïbe."
@@ -6771,27 +6839,41 @@ msgstr "Payment confirmed"
 msgid "Paiement <em>confirmé</em>"
 msgstr "Payment <em>confirmed</em>"
 
-#: templates/payments/success.html:11
+#: templates/payments/success.html:12
+msgid "Merci ! Votre billet est prêt."
+msgstr "Thank you! Your ticket is ready."
+
+#: templates/payments/success.html:15
+msgid "Vous le retrouvez aussi dans Mon espace, rubrique Mes billets."
+msgstr "You can also find it in My space, under My tickets."
+
+#: templates/payments/success.html:15
+msgid "%(n)s place, avec un QR code à montrer à l'entrée."
+msgid_plural "%(n)s places, avec un QR code à montrer à l'entrée."
+msgstr[0] "%(n)s place, with a QR code to show at the entrance."
+msgstr[1] "%(n)s places, with a QR code to show at the entrance."
+
+#: templates/payments/success.html:19
 msgid "Merci ! Conservez votre référence de transaction."
 msgstr "Thank you! Please keep your transaction reference."
 
-#: templates/payments/success.html:16
+#: templates/payments/success.html:25
 msgid "Copier la référence"
 msgstr "Copy reference"
 
-#: templates/payments/success.html:17
+#: templates/payments/success.html:26
 msgid "Imprimer le reçu"
 msgstr "Print receipt"
 
-#: templates/payments/success.html:21
+#: templates/payments/success.html:30
 msgid "Objet"
 msgstr "For"
 
-#: templates/payments/success.html:27
+#: templates/payments/success.html:36
 msgid "VIP activé"
 msgstr "VIP activated"
 
-#: templates/payments/success.html:27
+#: templates/payments/success.html:36
 msgid "Accéder au portail Organisateur"
 msgstr "Go to the Organizer portal"
 
@@ -6843,7 +6925,7 @@ msgstr "Golden VIP badge"
 msgid "Visible à côté de votre nom."
 msgstr "Shown next to your name."
 
-#: templates/payments/vip.html:23 payments/models.py:26 payments/views.py:135
+#: templates/payments/vip.html:23 payments/models.py:26 payments/views.py:137
 msgid "Accès Organisateur VIP"
 msgstr "VIP Organizer access"
 

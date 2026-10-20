@@ -62,8 +62,25 @@
             {% endif %}
           </div>
           {% endif %}
-          {% if invitation %}
+          {% if invitation.from_ticket %}
+          <div class="p-4" style="border-top:2px dashed var(--el-tint-strong)"><a href="{{ invitation.get_ticket_url }}" class="btn btn-primary w-100 btn-lg"><i class="bi bi-qr-code me-2"></i>{% trans "Voir mon billet" %}</a></div>
+          {% elif invitation %}
           <div class="p-4" style="border-top:2px dashed var(--el-tint-strong)"><a href="{{ invitation.get_invitation_url }}" class="btn btn-soft w-100">{% trans "Voir mon invitation" %}</a></div>
+          {% elif free_open %}
+          <div class="p-4" style="border-top:2px dashed var(--el-tint-strong)">
+            <div class="price-tag">{% trans "Entrée gratuite" %}</div>
+            <div class="text-muted small mb-3">{% trans "Inscrivez-vous pour recevoir votre billet d'entrée avec QR code." %}</div>
+            {% if places_left %}
+            {% if user.is_authenticated %}
+            <form method="post" action="{% url 'events:participate' event.pk %}">{% csrf_token %}<button type="submit" class="btn btn-primary w-100 btn-lg"><i class="bi bi-check2-circle me-2"></i>{% trans "Je participe" %}</button></form>
+            {% else %}
+            <a href="{% url 'accounts:login' %}?next={{ request.path|urlencode }}" class="btn btn-primary w-100 btn-lg"><i class="bi bi-check2-circle me-2"></i>{% trans "Je participe" %}</a>
+            {% endif %}
+            {% if places_left <= 20 %}<div class="small text-muted text-center mt-2">{% blocktranslate trimmed count n=places_left %}Plus que {{ n }} place{% plural %}Plus que {{ n }} places{% endblocktranslate %}</div>{% endif %}
+            {% else %}
+            <div class="btn btn-light w-100 btn-lg disabled" aria-disabled="true"><i class="bi bi-x-circle me-2"></i>{% trans "Complet" %}</div>
+            {% endif %}
+          </div>
           {% endif %}
         </div>
       </div>

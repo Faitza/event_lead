@@ -6,7 +6,7 @@ from django.urls import reverse
 from django.utils import timezone
 
 from accounts.models import CustomUser
-from events.models import Event
+from events.models import Event, Guest
 
 from .models import Block, Listing, MeetRequest, Message, Profile, Report
 
@@ -24,8 +24,17 @@ def make_event(days=10, **extra):
     return Event.objects.create(**data)
 
 
-def show(user, event, city="Delmas", **flags):
+def register(user, event):
+    """Inscription « Je participe » à un événement gratuit."""
+    return Guest.objects.create(event=event, user=user, name=user.first_name, email=user.email,
+                                status=Guest.Status.CONFIRMED, replied_at=timezone.now(), from_ticket=True)
+
+
+def show(user, event, city="Delmas", registered=True, **flags):
+    """S'affiche pour l'événement ; pour un événement gratuit, inscrit d'abord la personne (sauf registered=False)."""
     now = timezone.now()
+    if registered and not event.price_htg and not event.guests.filter(user=user).exists():
+        register(user, event)
     profile, _ = Profile.objects.get_or_create(user=user, defaults=dict(
         first_name=user.first_name, city=city, about="Bonjour", adult_confirmed_at=now, rules_accepted_at=now))
     return Listing.objects.create(user=user, event=event, **flags)
@@ -328,12 +337,22 @@ class TicketRuleTests(TestCase):
         self.client.post(self.url, {"note": ""})
         self.assertTrue(MeetRequest.objects.exists())
 
-    def test_free_event_needs_no_ticket(self):
+    def test_free_event_needs_registration(self):
+        """Entrée gratuite : seules les personnes inscrites avec « Je participe » sont dans la liste et font des demandes."""
         free = make_event()
-        show(self.marie, free)
+        show(self.marie, free, registered=False)
         show(self.jessica, free)
+        sarah = make_user("sarah@test.ht", "Sarah")
+        show(sarah, free, registered=False)
+        r = self.client.get(reverse("ensemble:people", args=[free.pk]))
+        self.assertContains(r, "Jessica")
+        self.assertNotContains(r, "Sarah")
+        self.assertContains(r, "Inscription requise pour proposer")
         self.client.post(reverse("ensemble:send_request", args=[free.pk, self.jessica.pk]), {"note": ""})
-        self.assertTrue(MeetRequest.objects.filter(event=free).exists())
+        self.assertFalse(MeetRequest.objects.filter(event=free).exists())
+        register(self.marie, free)
+        self.client.post(reverse("ensemble:send_request", args=[free.pk, self.jessica.pk]), {"note": ""})
+        self.assertTrue(MeetRequest.objects.filter(event=free, receiver=self.jessica).exists())
 
     def test_people_without_ticket_are_not_in_the_list(self):
         self.pay("success")

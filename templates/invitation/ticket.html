@@ -6,7 +6,7 @@
 <div class="inv-shell ticket-shell">
   <div class="inv-topbar">
     <div class="inv-container d-flex align-items-center justify-content-between">
-      <a href="{{ guest.get_invitation_url }}" class="ticket-back" aria-label="{% trans 'Retour' %}"><i class="bi bi-arrow-left"></i></a>
+      <a href="{% if guest.from_ticket %}{% url 'accounts:guest_space' %}{% else %}{{ guest.get_invitation_url }}{% endif %}" class="ticket-back" aria-label="{% trans 'Retour' %}"><i class="bi bi-arrow-left"></i></a>
       {% include "partials/_language_switcher.html" %}
       <a href="{% url 'core:landing' %}" aria-label="{% trans 'EventLead, accueil' %}">{% include "partials/_logo.html" %}</a>
     </div>
@@ -17,7 +17,7 @@
     <div class="ticket-card">
       <div class="ticket-inner">
         <div class="ticket-head">
-          <span class="eyebrow">{% trans "Vous êtes invité(e) à" %}</span>
+          <span class="eyebrow">{% if paid_refs or guest.from_ticket %}{% trans "Votre billet pour" %}{% else %}{% trans "Vous êtes invité(e) à" %}{% endif %}</span>
           <h1 class="disp">{{ event.title }}</h1>
           <span class="ticket-meta">{{ event.date|date:_("l j F Y")|capfirst }} &middot; {{ event.time|time:_("H\\hi") }}</span>
           {% if event.venue %}<span class="ticket-meta">{{ event.venue }}</span>{% endif %}
@@ -26,7 +26,7 @@
         <div class="ticket-qr"><div class="qr-box">{{ qr }}</div></div>
         <div class="ticket-foot">
           <span class="disp ticket-name">{{ guest.name }}</span>
-          <span class="ticket-meta">{{ party }}</span>
+          <span class="ticket-meta">{% if paid_refs %}{% blocktranslate trimmed count n=guest.party_size %}{{ n }} place{% plural %}{{ n }} places{% endblocktranslate %} &middot; {% blocktranslate trimmed with ref=paid_refs %}Billet payé ({{ ref }}){% endblocktranslate %}{% elif guest.from_ticket %}{% blocktranslate trimmed count n=guest.party_size %}{{ n }} place{% plural %}{{ n }} places{% endblocktranslate %} &middot; {% trans "Entrée gratuite" %}{% else %}{{ party }}{% endif %}</span>
           {% if guest.table %}<span class="ticket-table">{{ guest.table.label }}</span>{% endif %}
           <span class="ticket-code">{{ guest.entry_code }}</span>
         </div>

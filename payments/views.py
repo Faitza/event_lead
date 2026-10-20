@@ -78,6 +78,8 @@ def _process(request, form, *, kind, amount, event=None, quantity=1):
             user.is_vip = True
             user.vip_since = timezone.now()
             user.save(update_fields=["role", "is_vip", "vip_since"])
+        if kind == Payment.Kind.TICKET and status == Payment.Status.SUCCESS:
+            tickets.issue(payment)
     if status == Payment.Status.SUCCESS:
         utm.record(request, Attribution.Kind.PAYMENT, f"{payment.reference} - {payment.amount_htg} HTG")
         return redirect("payments:success", reference=payment.reference)
@@ -142,7 +144,10 @@ def success(request, reference):
     payment = get_object_or_404(Payment.objects.select_related("event"), reference=reference)
     if payment.user_id != request.user.pk and not request.user.is_admin_role:
         raise PermissionDenied
-    return render(request, "payments/success.html", {"payment": payment})
+    ticket_guest = None
+    if payment.kind == Payment.Kind.TICKET and payment.status == Payment.Status.SUCCESS and payment.guest_id:
+        ticket_guest = payment.guest
+    return render(request, "payments/success.html", {"payment": payment, "ticket_guest": ticket_guest})
 
 
 @admin_required

@@ -8,7 +8,16 @@
     <div class="frame"><div class="frame-in text-center p-4 p-md-5">
       <div class="success-check mb-3"><i class="bi bi-check-lg"></i></div>
       <h1 class="mt-3 em-on-light">{% blocktranslate trimmed %}Paiement <em>confirmé</em>{% endblocktranslate %}</h1>
+      {% if ticket_guest %}
+      <p class="text-muted">{% trans "Merci ! Votre billet est prêt." %}</p>
+      <div class="inv-pane my-4">
+        <div class="d-flex align-items-center justify-content-center gap-2 mb-2"><i class="bi bi-ticket-perforated fs-3" style="color:var(--el-primary-dark)"></i><strong class="fs-5">{% trans "Votre billet d'entrée" %}</strong></div>
+        <p class="small text-muted mb-3">{% blocktranslate trimmed count n=ticket_guest.party_size %}{{ n }} place, avec un QR code à montrer à l'entrée.{% plural %}{{ n }} places, avec un QR code à montrer à l'entrée.{% endblocktranslate %}<br>{% trans "Vous le retrouvez aussi dans Mon espace, rubrique Mes billets." %}</p>
+        <a href="{{ ticket_guest.get_ticket_url }}" class="btn btn-primary btn-lg"><i class="bi bi-qr-code me-2"></i>{% trans "Voir mon billet" %}</a>
+      </div>
+      {% else %}
       <p class="text-muted">{% trans "Merci ! Conservez votre référence de transaction." %}</p>
+      {% endif %}
       <div class="inv-pane my-4">
         <div class="small text-muted">{% trans "Référence" %}</div>
         <div class="disp fs-2 fig" style="letter-spacing:.06em;color:var(--el-primary-dark)">{{ payment.reference }}</div>
@@ -26,7 +35,7 @@
       {% if payment.kind == 'organizer_access' %}
         <div class="mt-4"><span class="badge-el badge-vip mb-3"><i class="bi bi-gem"></i>{% trans "VIP activé" %}</span><br><a href="{% url 'events:organizer_portal' %}" class="btn btn-primary btn-lg mt-2">{% trans "Accéder au portail Organisateur" %}</a></div>
       {% else %}
-        <a href="{% url 'core:landing' %}#affiche" class="btn btn-primary btn-lg mt-4">{% trans "Retour à l'accueil" %}</a>
+        <a href="{% url 'core:landing' %}#affiche" class="btn {% if ticket_guest %}btn-light{% else %}btn-primary btn-lg{% endif %} mt-4">{% trans "Retour à l'accueil" %}</a>
       {% endif %}
     </div></div>
   </div>

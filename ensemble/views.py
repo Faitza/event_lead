@@ -12,7 +12,7 @@ from django.views.decorators.http import require_POST
 
 from accounts.models import CustomUser
 from core.ratelimit import ratelimit
-from events.models import Event
+from events.models import Event, Guest
 from payments.models import Payment
 
 from .forms import LISTING_FILTERS, MessageForm, ProfileForm, ReportForm, RequestForm
@@ -37,13 +37,14 @@ def shown_listings(event):
     """Personnes qui apparaissent dans la liste : actives, pas retirées par l'équipe et, quand l'entrée est payante,
     avec un billet payé pour l'événement (décision du 20 octobre 2026 : sans billet, on ne reçoit pas de demande)."""
     listings = Listing.objects.filter(event=event, user__is_active=True, user__ensemble_profile__removed_at__isnull=True)
-    if needs_ticket(event):
-        listings = listings.filter(user_id__in=_ticket_holders(event))
-    return listings
+    return listings.filter(user_id__in=_ticket_holders(event))
 
 
 def _ticket_holders(event):
-    return Payment.objects.filter(event=event, kind=Payment.Kind.TICKET, status=Payment.Status.SUCCESS).values("user_id")
+    """Entrée payante : billet payé. Entrée gratuite : inscription « Je participe » (ou invitation acceptée)."""
+    if needs_ticket(event):
+        return Payment.objects.filter(event=event, kind=Payment.Kind.TICKET, status=Payment.Status.SUCCESS).values("user_id")
+    return Guest.objects.filter(event=event, status=Guest.Status.CONFIRMED, user__isnull=False).values("user_id")
 
 
 def visible_listings(event, user):
@@ -64,7 +65,7 @@ def event_block_context(event, user):
         others = others.exclude(user=user).exclude(user_id__in=Block.hidden_ids(user))
     others = others.select_related("user__ensemble_profile")
     return {"count": others.count(), "preview": [l.user.ensemble_profile for l in others[:4]], "mine": mine,
-            "ticket_needed": needs_ticket(event) and not (user.is_authenticated and can_ask(user, event))}
+            "ticket_needed": not (user.is_authenticated and can_ask(user, event)), "paid": needs_ticket(event)}
 
 
 def needs_ticket(event):
@@ -72,17 +73,17 @@ def needs_ticket(event):
 
 
 def can_ask(user, event):
-    """Proposer d'y aller ensemble demande un billet payé quand l'entrée est payante (décision du 20 octobre 2026).
-    Un paiement en attente ou échoué ne compte pas. Entrée gratuite : pas de billet à acheter, donc pas de condition."""
-    if not needs_ticket(event):
-        return True
+    """Proposer d'y aller ensemble demande un billet payé quand l'entrée est payante, une inscription « Je participe »
+    quand elle est gratuite (décisions du 20 octobre 2026). Un paiement en attente ou échoué ne compte pas."""
     return _ticket_holders(event).filter(user=user).exists()
 
 
 def _with_ticket_or_free(requests, user):
-    """Garde les demandes reçues pour un événement gratuit ou pour lequel `user` a un billet payé."""
+    """Garde les demandes reçues pour un événement où `user` a son billet payé, ou son inscription si l'entrée est gratuite."""
     paid_events = Payment.objects.filter(user=user, kind=Payment.Kind.TICKET, status=Payment.Status.SUCCESS).values("event_id")
-    return requests.filter(Q(event__price_htg__isnull=True) | Q(event__price_htg__lte=0) | Q(event_id__in=paid_events))
+    registered = Guest.objects.filter(user=user, status=Guest.Status.CONFIRMED).values("event_id")
+    free = Q(event__price_htg__isnull=True) | Q(event__price_htg__lte=0)
+    return requests.filter((free & Q(event_id__in=registered)) | (~free & Q(event_id__in=paid_events)))
 
 
 def _blocked_by_team(request, profile):
@@ -168,6 +169,7 @@ def people(request, pk):
         "event": event, "listings": listings, "counts": counts, "active": active,
         "profile": profile, "pending": pending_count(request.user), "request_form": RequestForm(), "report_form": ReportForm(),
         "can_ask": can_ask(request.user, event),
+        "paid": needs_ticket(event),
     })
 
 

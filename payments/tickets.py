@@ -10,7 +10,7 @@ from django.db import IntegrityError, transaction
 from django.db.models import Q, Sum
 from django.utils import timezone
 
-from events.models import Event
+from events.models import Event, Guest
 
 from .models import Payment
 
@@ -59,3 +59,30 @@ def reserve(key, event, quantity, **fields):
         if key is None:
             raise
         return Payment.objects.get(idempotency_key=key), False
+
+
+def issue(payment):
+    """Billet payé : l'acheteur reçoit son billet d'entrée avec QR code (un seul code pour toutes ses places).
+
+    S'il était déjà invité à l'événement, on garde son invitation et on y ajoute ses places ;
+    sinon on l'inscrit sur la liste des invités, présence confirmée.
+    """
+    user, event = payment.user, payment.event
+    seats = Payment.objects.filter(
+        user=user, event=event, kind=Payment.Kind.TICKET, status=Payment.Status.SUCCESS,
+    ).aggregate(n=Sum("quantity"))["n"] or payment.quantity
+    guest = payment.guest or event.guests.filter(user=user).first()
+    if guest is None:
+        guest = Guest(
+            event=event, user=user, name=user.display_name, email=user.email, phone=user.phone,
+            sent_via=Guest.Channel.EMAIL, language=user.language or Guest._meta.get_field("language").default,
+            from_ticket=True,
+        )
+    guest.status = Guest.Status.CONFIRMED
+    guest.replied_at = guest.replied_at or timezone.now()
+    guest.companions = max(guest.companions, seats - 1)
+    guest.save()
+    if payment.guest_id != guest.pk:
+        payment.guest = guest
+        payment.save(update_fields=["guest"])
+    return guest

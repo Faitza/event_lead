@@ -1,16 +1,20 @@
 """Pages publiques d'événements et portail Organisateur VIP."""
 from django.contrib import messages
+from django.contrib.auth.decorators import login_required
 from django.db.models import Prefetch
 from django.http import Http404
 from django.shortcuts import get_object_or_404, redirect, render
 from django.utils import timezone
 from django.utils.translation import gettext as _
+from django.views.decorators.http import require_POST
 
 from accounts.decorators import vip_organizer_required
 from core.paging import paginate
 from ads.models import Ad
+from core.ratelimit import ratelimit
 from ensemble.views import event_block_context
 
+from . import registration
 from .forms import EvaluationForm
 from .listing import public_events_by_category
 from .models import Event, EventEvaluation, Guest
@@ -38,10 +42,31 @@ def public_detail(request, pk):
     if event.price_htg:
         from payments.tickets import tickets_left as left_for  # payments dépend déjà de events
         tickets_left = left_for(event)
+    free_open = registration.is_open(event)
     return render(request, "events/public_detail.html", {
         "event": event, "invitation": invitation, "tickets_left": tickets_left,
+        "free_open": free_open, "places_left": registration.places_left(event) if free_open else None,
         "ensemble": event_block_context(event, request.user),
     })
+
+
+@login_required
+@require_POST
+@ratelimit("participate", 10, 600)
+def participate(request, pk):
+    """Bouton « Je participe » d'un événement public gratuit."""
+    event = get_object_or_404(Event, pk=pk)
+    if not registration.is_open(event):
+        raise Http404(_("Événement introuvable."))
+    try:
+        guest = registration.register(event, request.user)
+    except registration.FullError:
+        messages.error(request, _("Désolé, il n'y a plus de place pour cet événement."))
+        return redirect("events:public_detail", pk=event.pk)
+    if guest.status != Guest.Status.CONFIRMED or not guest.replied_at:
+        return redirect(guest.get_invitation_url())  # déjà invité : il répond à son invitation
+    messages.success(request, _("Vous êtes inscrit(e). Voici votre billet d'entrée."))
+    return redirect(guest.get_ticket_url())
 
 
 def _can_evaluate(event, user, invitation=False):

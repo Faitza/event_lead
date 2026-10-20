@@ -1,6 +1,7 @@
 from django.contrib import messages
 from django.contrib.auth import login, logout
 from django.contrib.auth.decorators import login_required
+from django.db.models import Q
 from django.shortcuts import redirect, render
 from django.urls import reverse
 from django.utils.http import url_has_allowed_host_and_scheme
@@ -14,6 +15,7 @@ from core.ratelimit import ratelimit
 from core.middleware import set_language_cookie
 from ensemble.views import pending_count as ensemble_pending
 from events.models import Guest
+from payments.models import Payment
 
 from .forms import LoginForm, ProfileForm, RegisterForm
 from .models import CustomUser
@@ -108,9 +110,19 @@ def become_organizer(request):
 def guest_space(request):
     user = request.user
     invitations = (
-        Guest.objects.filter(user=user).select_related("event").order_by("event__date")
+        Guest.objects.filter(user=user, from_ticket=False).select_related("event").order_by("event__date")
     )
-    return render(request, "accounts/guest_space.html", {"invitations": invitations, "ensemble_pending": ensemble_pending(user)})
+    tickets = (
+        Payment.objects.filter(user=user, kind=Payment.Kind.TICKET, status=Payment.Status.SUCCESS, guest__isnull=False)
+        .select_related("event", "guest").order_by("event__date", "created_at")
+    )
+    free_tickets = (  # inscriptions « Je participe » aux événements gratuits
+        Guest.objects.filter(user=user, from_ticket=True).filter(Q(event__price_htg__isnull=True) | Q(event__price_htg__lte=0))
+        .select_related("event").order_by("event__date")
+    )
+    return render(request, "accounts/guest_space.html", {
+        "invitations": invitations, "tickets": tickets, "free_tickets": free_tickets, "ensemble_pending": ensemble_pending(user),
+    })
 
 
 @login_required

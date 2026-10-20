@@ -6,9 +6,37 @@
 <section class="section">
   <div class="container">
     <div class="page-head">
-      <div><div class="eyebrow-row mb-3"><span class="diamond"></span><span class="eyebrow">{% trans "Mon espace" %}</span></div><h1 class="em-on-light">{% blocktranslate trimmed with name=user.display_name %}Bonjour <em>{{ name }}</em>{% endblocktranslate %}</h1><p>{% trans "Vos invitations et les événements à découvrir." %}</p></div>
+      <div><div class="eyebrow-row mb-3"><span class="diamond"></span><span class="eyebrow">{% trans "Mon espace" %}</span></div><h1 class="em-on-light">{% blocktranslate trimmed with name=user.display_name %}Bonjour <em>{{ name }}</em>{% endblocktranslate %}</h1><p>{% trans "Vos billets, vos invitations et les événements à découvrir." %}</p></div>
       <a href="{% url 'events:explore' %}" class="btn btn-primary"><i class="bi bi-compass me-2"></i>{% trans "Explorer les événements" %}</a>
     </div>
+    {% if tickets or free_tickets %}
+    <div class="el-card mb-4">
+      <div class="el-card-header"><h2><i class="bi bi-ticket-perforated me-2"></i>{% trans "Mes billets" %}</h2></div>
+      <div class="table-wrap"><table class="table table-el">
+        <thead><tr><th>{% trans "Événement" %}</th><th>{% trans "Date" %}</th><th>{% trans "Places" %}</th><th>{% trans "Paiement" %}</th><th></th></tr></thead>
+        <tbody>
+        {% for t in tickets %}
+          <tr>
+            <td class="fw-semibold">{{ t.event.title }}</td>
+            <td>{{ t.event.date|date:_("j F Y") }}</td>
+            <td>{{ t.quantity }}</td>
+            <td><span class="badge-el badge-success">{% trans "Payé" %}</span> <span class="small text-muted ms-1">{{ t.reference }}</span></td>
+            <td class="text-end"><a href="{{ t.guest.get_ticket_url }}" class="btn btn-sm btn-soft"><i class="bi bi-qr-code me-1"></i>{% trans "Voir mon billet" %}</a></td>
+          </tr>
+        {% endfor %}
+        {% for g in free_tickets %}
+          <tr>
+            <td class="fw-semibold">{{ g.event.title }}</td>
+            <td>{{ g.event.date|date:_("j F Y") }}</td>
+            <td>{{ g.party_size }}</td>
+            <td><span class="badge-el badge-success">{% trans "Gratuit" %}</span></td>
+            <td class="text-end"><a href="{{ g.get_ticket_url }}" class="btn btn-sm btn-soft"><i class="bi bi-qr-code me-1"></i>{% trans "Voir mon billet" %}</a></td>
+          </tr>
+        {% endfor %}
+        </tbody>
+      </table></div>
+    </div>
+    {% endif %}
     <div class="el-card mb-4">
       <div class="el-card-header"><h2><i class="bi bi-envelope-heart me-2"></i>{% trans "Mes invitations" %}</h2></div>
       {% if invitations %}
