@@ -1439,51 +1439,55 @@ msgstr "siyalman"
 msgid "signalements"
 msgstr "siyalman"
 
-#: ensemble/views.py:27 events/views.py:33
+#: ensemble/views.py:28 events/views.py:33
 msgid "Événement introuvable."
 msgstr "Evènman an pa jwenn."
 
-#: ensemble/views.py:57
+#: ensemble/views.py:71
 msgid "L'équipe EventLead vous a retiré de Y aller ensemble. Écrivez-nous depuis la page Aide si vous pensez que c'est une erreur."
 msgstr "Ekip EventLead la retire w nan Ale ansanm. Ekri nou nan paj Èd la si w panse se yon erè."
 
-#: ensemble/views.py:88
+#: ensemble/views.py:102
 msgid "Vous êtes affiché pour cet événement. Vous pouvez maintenant voir les autres personnes."
 msgstr "Ou afiche pou evènman sa a. Kounye a ou ka wè lòt moun yo."
 
-#: ensemble/views.py:100
+#: ensemble/views.py:114
 msgid "Vous n'êtes plus affiché pour cet événement."
 msgstr "Ou pa afiche ankò pou evènman sa a."
 
-#: ensemble/views.py:152
+#: ensemble/views.py:165
+msgid "Achetez d'abord votre billet pour cet événement : ensuite vous pourrez proposer à quelqu'un d'y aller avec vous."
+msgstr "Achte tikè w pou evènman sa a anvan : apre sa ou ka pwopoze yon moun ale avè w."
+
+#: ensemble/views.py:170
 msgid "Cette personne n'est plus affichée pour cet événement."
 msgstr "Moun sa a pa afiche ankò pou evènman sa a."
 
-#: ensemble/views.py:156
+#: ensemble/views.py:174
 msgid "Votre petit mot est trop long (300 caractères au plus)."
 msgstr "Ti mo w la twò long (300 karaktè pou pi plis)."
 
-#: ensemble/views.py:160
+#: ensemble/views.py:178
 msgid "Cette personne vous a déjà fait une demande. Répondez-lui dans Mes demandes."
 msgstr "Moun sa a deja voye w yon demann. Reponn li nan Demann mwen yo."
 
-#: ensemble/views.py:167
+#: ensemble/views.py:185
 msgid "Demande envoyée. Vous pourrez vous écrire si la personne accepte."
 msgstr "Demann voye. Nou ka ekri youn lòt si moun nan aksepte."
 
-#: ensemble/views.py:203
+#: ensemble/views.py:221
 msgid "Demande acceptée. Vous pouvez maintenant vous écrire."
 msgstr "Demann aksepte. Kounye a nou ka ekri youn lòt."
 
-#: ensemble/views.py:207
+#: ensemble/views.py:225
 msgid "Demande refusée."
 msgstr "Demann refize."
 
-#: ensemble/views.py:267
+#: ensemble/views.py:285
 msgid "Personne bloquée. Elle ne peut plus vous voir ni vous écrire."
 msgstr "Moun nan bloke. Li pa ka wè w ni ekri w ankò."
 
-#: ensemble/views.py:283
+#: ensemble/views.py:301
 msgid "Merci. L'équipe EventLead va lire votre signalement."
 msgstr "Mèsi. Ekip EventLead la ap li siyalman w lan."
 
@@ -2203,15 +2207,15 @@ msgstr "%(name)s fenk resevwa remèsiman an."
 msgid "Plafond d'e-mails du jour atteint : le merci de %(name)s partira demain."
 msgstr "Limit imèl jodi a rive : mèsi %(name)s ap pati demen."
 
-#: events/views.py:91
+#: events/views.py:92
 msgid "L'évaluation de cet événement n'est pas encore ouverte."
 msgstr "Evalyasyon evènman sa a poko louvri."
 
-#: events/views.py:95
+#: events/views.py:96
 msgid "Vous avez déjà évalué cet événement. Merci."
 msgstr "Ou deja evalye evènman sa a. Mèsi."
 
-#: events/views.py:103
+#: events/views.py:104
 msgid "Merci pour votre évaluation."
 msgstr "Mèsi pou evalyasyon ou."
 
@@ -3389,7 +3393,7 @@ msgstr "Opinyon ou"
 msgid "Partagez votre expérience avec EventLead"
 msgstr "Pataje eksperyans ou avèk EventLead"
 
-#: templates/core/landing.html:238 templates/core/landing.html:269 templates/ensemble/people.html:58 templates/ensemble/profile_form.html:13 accounts/forms.py:33 core/forms.py:15
+#: templates/core/landing.html:238 templates/core/landing.html:269 templates/ensemble/people.html:65 templates/ensemble/profile_form.html:13 accounts/forms.py:33 core/forms.py:15
 msgid "Ne pas remplir"
 msgstr "Pa ranpli"
 
@@ -3811,7 +3815,7 @@ msgstr "Louvri kontwòl la"
 msgid "Dernières arrivées"
 msgstr "Dènye moun ki rive"
 
-#: templates/dashboard/checkin/_recent.html:5 templates/dashboard/reminders/_table.html:5 templates/ensemble/people.html:14
+#: templates/dashboard/checkin/_recent.html:5 templates/dashboard/reminders/_table.html:5 templates/ensemble/people.html:20
 msgid "Filtrer"
 msgstr "Filtre"
 
@@ -3961,7 +3965,7 @@ msgstr "Non oswa kòd EL-XXXX-XXXX"
 msgid "Ajouter un invité sur place"
 msgstr "Ajoute yon envite sou plas"
 
-#: templates/dashboard/checkin/event.html:65 templates/dashboard/seating/event.html:36 templates/dashboard/seating/event.html:50 templates/ensemble/_report_modal.html:5 templates/ensemble/people.html:55 templates/invitation/step_thanks.html:6
+#: templates/dashboard/checkin/event.html:65 templates/dashboard/seating/event.html:36 templates/dashboard/seating/event.html:50 templates/ensemble/_report_modal.html:5 templates/ensemble/people.html:62 templates/invitation/step_thanks.html:6
 msgid "Fermer"
 msgstr "Fèmen"
 
@@ -3977,7 +3981,7 @@ msgstr "Moun k ap akonpanye w"
 msgid "Téléphone (optionnel)"
 msgstr "Telefòn (opsyonèl)"
 
-#: templates/dashboard/checkin/event.html:75 templates/dashboard/confirm_delete.html:17 templates/dashboard/seating/event.html:41 templates/dashboard/seating/event.html:56 templates/ensemble/_report_modal.html:14 templates/ensemble/people.html:63
+#: templates/dashboard/checkin/event.html:75 templates/dashboard/confirm_delete.html:17 templates/dashboard/seating/event.html:41 templates/dashboard/seating/event.html:56 templates/ensemble/_report_modal.html:14 templates/ensemble/people.html:70
 msgid "Annuler"
 msgstr "Anile"
 
@@ -5459,7 +5463,7 @@ msgstr[1] "<strong class=\"text-body\">%(n)s moun</strong> ap chèche yon moun p
 msgid "Voir les personnes"
 msgstr "Wè moun yo"
 
-#: templates/ensemble/_event_block.html:15 templates/ensemble/people.html:49
+#: templates/ensemble/_event_block.html:15 templates/ensemble/people.html:56
 msgid "Ne plus vous afficher pour cet événement ?"
 msgstr "Pa afiche ankò pou evènman sa a ?"
 
@@ -5472,10 +5476,14 @@ msgid "Je cherche quelqu'un pour y aller"
 msgstr "M ap chèche yon moun pou m ale avè l"
 
 #: templates/ensemble/_event_block.html:21
+msgid "Pour proposer à quelqu'un d'y aller avec vous, il faut d'abord acheter votre billet."
+msgstr "Pou w pwopoze yon moun ale avè w, fòk ou achte tikè w anvan."
+
+#: templates/ensemble/_event_block.html:22
 msgid "Réservé aux membres connectés de 18 ans ou plus. Personne ne voit votre numéro ni votre e-mail."
 msgstr "Se pou manm ki konekte epi ki gen 18 an oswa plis. Pèsonn pa wè nimewo w ni imèl ou."
 
-#: templates/ensemble/_report_modal.html:5 templates/ensemble/conversation.html:29 templates/ensemble/people.html:36 templates/ensemble/requests.html:30
+#: templates/ensemble/_report_modal.html:5 templates/ensemble/conversation.html:29 templates/ensemble/people.html:43 templates/ensemble/requests.html:30
 msgid "Signaler"
 msgstr "Siyale"
 
@@ -5519,11 +5527,11 @@ msgstr "Poko gen konvèsasyon. Lè yon demann aksepte, nou ka ekri youn lòt la 
 msgid "Conversations"
 msgstr "Konvèsasyon"
 
-#: templates/ensemble/conversation.html:28 templates/ensemble/people.html:35
+#: templates/ensemble/conversation.html:28 templates/ensemble/people.html:42
 msgid "Bloquer cette personne ? Elle ne pourra plus vous voir ni vous écrire."
 msgstr "Bloke moun sa a ? Li p ap ka wè w ni ekri w ankò."
 
-#: templates/ensemble/conversation.html:28 templates/ensemble/people.html:35
+#: templates/ensemble/conversation.html:28 templates/ensemble/people.html:42
 msgid "Bloquer"
 msgstr "Bloke"
 
@@ -5543,7 +5551,7 @@ msgstr "Pa janm bay lajan. Pou premye rankont, rankontre sou plas evènman an."
 msgid "Écrire un message..."
 msgstr "Ekri yon mesaj..."
 
-#: templates/ensemble/conversation.html:46 ensemble/views.py:241
+#: templates/ensemble/conversation.html:46 ensemble/views.py:259
 msgid "Cette conversation est fermée."
 msgstr "Konvèsasyon sa a fèmen."
 
@@ -5649,79 +5657,91 @@ msgstr "Kiyès k ap ale nan <em>%(title)s</em> ?"
 msgid "Mon petit profil"
 msgstr "Ti pwofil mwen"
 
-#: templates/ensemble/people.html:15
+#: templates/ensemble/people.html:16
+msgid "Pour proposer à quelqu'un d'y aller avec vous, achetez d'abord votre billet pour cet événement."
+msgstr "Pou w pwopoze yon moun ale avè w, achte tikè w pou evènman sa a anvan."
+
+#: templates/ensemble/people.html:17 templates/events/public_detail.html:58 templates/partials/_parade_card.html:46 templates/payments/ticketing.html:25
+msgid "Acheter un billet"
+msgstr "Achte yon biyè"
+
+#: templates/ensemble/people.html:21
 msgid "Tout le monde"
 msgstr "Tout moun"
 
-#: templates/ensemble/people.html:16 templates/ensemble/people.html:26 ensemble/forms.py:15
+#: templates/ensemble/people.html:22 templates/ensemble/people.html:32 ensemble/forms.py:15
 msgid "Partager le transport"
 msgstr "Pataje transpò"
 
-#: templates/ensemble/people.html:17 templates/ensemble/people.html:26 ensemble/forms.py:16
+#: templates/ensemble/people.html:23 templates/ensemble/people.html:32 ensemble/forms.py:16
 msgid "Un groupe d'amis"
 msgstr "Yon gwoup zanmi"
 
-#: templates/ensemble/people.html:18
+#: templates/ensemble/people.html:24
 msgid "Ma ville"
 msgstr "Vil mwen"
 
-#: templates/ensemble/people.html:26 ensemble/forms.py:14
+#: templates/ensemble/people.html:32 ensemble/forms.py:14
 msgid "Quelqu'un pour y aller"
 msgstr "Yon moun pou m ale avè l"
 
-#: templates/ensemble/people.html:28
+#: templates/ensemble/people.html:34
 msgid "Écrire"
 msgstr "Ekri"
 
-#: templates/ensemble/people.html:29
+#: templates/ensemble/people.html:35
 msgid "Demande envoyée"
 msgstr "Demann voye"
 
-#: templates/ensemble/people.html:30
+#: templates/ensemble/people.html:36
 msgid "Vous a fait une demande"
 msgstr "Voye w yon demann"
 
-#: templates/ensemble/people.html:31
+#: templates/ensemble/people.html:37
+msgid "Billet requis pour proposer"
+msgstr "Fò w gen tikè pou w pwopoze"
+
+#: templates/ensemble/people.html:38
 msgid "Proposer d'y aller ensemble"
 msgstr "Pwopoze ale ansanm"
 
-#: templates/ensemble/people.html:33 templates/partials/_navbar.html:26 templates/payments/checkout.html:33
+#: templates/ensemble/people.html:40 templates/partials/_navbar.html:26 templates/payments/checkout.html:33
 msgid "Plus"
 msgstr "Plis"
 
-#: templates/ensemble/people.html:43
+#: templates/ensemble/people.html:50
 msgid "Personne pour ce choix pour le moment."
 msgstr "Pa gen pèsonn pou chwa sa a pou kounye a."
 
-#: templates/ensemble/people.html:43
+#: templates/ensemble/people.html:50
 msgid "Personne d'autre ne s'est encore affiché. Revenez un peu plus tard : vous verrez les nouvelles personnes ici."
 msgstr "Poko gen lòt moun ki afiche. Tounen pi ta : nouvo moun yo ap parèt la a."
 
-#: templates/ensemble/people.html:46
+#: templates/ensemble/people.html:53
 msgid "Personne ne voit votre numéro ni votre e-mail. Vous pourrez vous écrire seulement si l'autre personne accepte votre demande."
 msgstr "Pèsonn pa wè nimewo w ni imèl ou. Nou ka ekri youn lòt sèlman si lòt moun nan aksepte demann ou."
 
-#: templates/ensemble/people.html:48
+#: templates/ensemble/people.html:55
 msgid "Retour à l'événement"
 msgstr "Retounen nan evènman an"
 
-#: templates/ensemble/people.html:49
+#: templates/ensemble/people.html:56
 msgid "Ne plus m'afficher pour cet événement"
 msgstr "Pa afiche m ankò pou evènman sa a"
 
-#: templates/ensemble/people.html:55
+#: templates/ensemble/people.html:62
 msgid "Proposer à"
 msgstr "Pwopoze"
 
-#: templates/ensemble/people.html:60 ensemble/forms.py:58
+#: templates/ensemble/people.html:67 ensemble/forms.py:58
 msgid "Un petit mot (facultatif)"
 msgstr "Yon ti mo (si w vle)"
 
-#: templates/ensemble/people.html:62
+#: templates/ensemble/people.html:69
 msgid "La personne verra votre petit profil et ce mot. Si elle accepte, vous pourrez vous écrire."
 msgstr "Moun nan ap wè ti pwofil ou ak ti mo sa a. Si l aksepte, nou ka ekri youn lòt."
 
-#: templates/ensemble/people.html:63
+#: templates/ensemble/people.html:70
 msgid "Envoyer la demande"
 msgstr "Voye demann nan"
 
@@ -5984,10 +6004,6 @@ msgstr "Kopye adrès la"
 #: templates/events/public_detail.html:49
 msgid "Copier le lien"
 msgstr "Kopye lyen an"
-
-#: templates/events/public_detail.html:58 templates/partials/_parade_card.html:46 templates/payments/ticketing.html:25
-msgid "Acheter un billet"
-msgstr "Achte yon biyè"
 
 #: templates/events/public_detail.html:59 templates/payments/checkout.html:35
 msgid "Plus que %(n)s billet"

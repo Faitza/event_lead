@@ -13,6 +13,7 @@ from django.views.decorators.http import require_POST
 from accounts.models import CustomUser
 from core.ratelimit import ratelimit
 from events.models import Event
+from payments.models import Payment
 
 from .forms import LISTING_FILTERS, MessageForm, ProfileForm, ReportForm, RequestForm
 from .models import Block, Listing, MeetRequest, Message, Profile, Report
@@ -49,7 +50,20 @@ def event_block_context(event, user):
         mine = Listing.objects.filter(event=event, user=user).first()
         others = others.exclude(user=user).exclude(user_id__in=Block.hidden_ids(user))
     others = others.select_related("user__ensemble_profile")
-    return {"count": others.count(), "preview": [l.user.ensemble_profile for l in others[:4]], "mine": mine}
+    return {"count": others.count(), "preview": [l.user.ensemble_profile for l in others[:4]], "mine": mine,
+            "ticket_needed": needs_ticket(event) and not (user.is_authenticated and can_ask(user, event))}
+
+
+def needs_ticket(event):
+    return bool(event.price_htg and event.price_htg > 0)
+
+
+def can_ask(user, event):
+    """Proposer d'y aller ensemble demande un billet payé quand l'entrée est payante (décision du 20 octobre 2026).
+    Un paiement en attente ou échoué ne compte pas. Entrée gratuite : pas de billet à acheter, donc pas de condition."""
+    if not needs_ticket(event):
+        return True
+    return Payment.objects.filter(user=user, event=event, kind=Payment.Kind.TICKET, status=Payment.Status.SUCCESS).exists()
 
 
 def _blocked_by_team(request, profile):
@@ -133,6 +147,7 @@ def people(request, pk):
     return render(request, "ensemble/people.html", {
         "event": event, "listings": listings, "counts": counts, "active": active,
         "profile": profile, "pending": pending_count(request.user), "request_form": RequestForm(), "report_form": ReportForm(),
+        "can_ask": can_ask(request.user, event),
     })
 
 
@@ -146,6 +161,9 @@ def send_request(request, pk, user_id):
         return redirect(event.get_absolute_url())
     target = get_object_or_404(CustomUser, pk=user_id, is_active=True)
     back = redirect("ensemble:people", pk=event.pk)
+    if not can_ask(request.user, event):
+        messages.error(request, _("Achetez d'abord votre billet pour cet événement : ensuite vous pourrez proposer à quelqu'un d'y aller avec vous."))
+        return back
     if target == request.user or not Listing.objects.filter(event=event, user=request.user).exists():
         return back
     if not visible_listings(event, request.user).filter(user=target).exists():

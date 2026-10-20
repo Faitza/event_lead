@@ -11,6 +11,12 @@
       <div class="d-flex flex-wrap gap-2"><a href="{% url 'ensemble:join' event.pk %}" class="btn btn-light"><i class="bi bi-pencil me-1"></i>{% trans "Mon petit profil" %}</a><a href="{% url 'ensemble:requests' %}" class="btn btn-soft"><i class="bi bi-inbox me-1"></i>{% trans "Mes demandes" %}{% if pending %} <span class="badge-el badge-gold ms-1">{{ pending }}</span>{% endif %}</a></div>
     </div>
     {% include "ensemble/_warning.html" %}
+    {% if not can_ask %}
+    <div class="ya-safe d-flex flex-wrap align-items-center justify-content-between gap-3 mb-4">
+      <div><i class="bi bi-ticket-perforated me-2"></i>{% trans "Pour proposer à quelqu'un d'y aller avec vous, achetez d'abord votre billet pour cet événement." %}</div>
+      <a href="{% url 'payments:checkout' event.pk %}" class="btn btn-primary btn-sm"><i class="bi bi-ticket-perforated me-1"></i>{% trans "Acheter un billet" %}</a>
+    </div>
+    {% endif %}
     <div class="d-flex flex-wrap gap-2 mb-4" aria-label="{% trans 'Filtrer' %}">
       <a href="?" class="btn btn-sm {% if not active %}btn-primary{% else %}btn-light{% endif %}">{% trans "Tout le monde" %} ({{ counts.all }})</a>
       <a href="?filtre=transport" class="btn btn-sm {% if active == 'transport' %}btn-primary{% else %}btn-light{% endif %}">{% trans "Partager le transport" %} ({{ counts.transport }})</a>
@@ -28,6 +34,7 @@
             {% if r.status == "accepted" %}<a href="{% url 'ensemble:conversation' r.pk %}" class="btn btn-soft w-100"><i class="bi bi-chat-dots me-1"></i>{% trans "Écrire" %}</a>
             {% elif r and r.sender_id == user.pk %}<span class="btn btn-light w-100 disabled"><i class="bi bi-hourglass-split me-1"></i>{% trans "Demande envoyée" %}</span>
             {% elif r %}<a href="{% url 'ensemble:requests' %}" class="btn btn-soft w-100"><i class="bi bi-inbox me-1"></i>{% trans "Vous a fait une demande" %}</a>
+            {% elif not can_ask %}<a href="{% url 'payments:checkout' event.pk %}" class="btn btn-light w-100"><i class="bi bi-ticket-perforated me-1"></i>{% trans "Billet requis pour proposer" %}</a>
             {% else %}<button type="button" class="btn btn-primary w-100" data-bs-toggle="modal" data-bs-target="#ya-ask" data-ya-url="{% url 'ensemble:send_request' event.pk l.user_id %}" data-ya-name="{{ p.first_name }}" data-ya-city="{{ p.city }}"><i class="bi bi-hand-thumbs-up me-1"></i>{% trans "Proposer d'y aller ensemble" %}</button>{% endif %}
             <div class="dropdown">
               <button type="button" class="btn btn-light" data-bs-toggle="dropdown" aria-expanded="false" aria-label="{% trans 'Plus' %}"><i class="bi bi-three-dots"></i></button>

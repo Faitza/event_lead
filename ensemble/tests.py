@@ -286,3 +286,49 @@ class PhotoTests(TestCase):
             self.assertTrue(profile.photo.name.startswith("ensemble/"))
             with Image.open(profile.photo.path) as img:
                 self.assertLessEqual(max(img.size), 600)
+
+
+class TicketRuleTests(TestCase):
+    """Entrée payante : il faut un billet payé pour proposer à quelqu'un d'y aller ensemble."""
+
+    def setUp(self):
+        from decimal import Decimal
+        self.event = make_event(price_htg=Decimal("3500"))
+        self.marie = make_user("marie@test.ht", "Marie")
+        self.jessica = make_user("jessica@test.ht", "Jessica")
+        show(self.marie, self.event)
+        show(self.jessica, self.event)
+        self.client.force_login(self.marie)
+        self.url = reverse("ensemble:send_request", args=[self.event.pk, self.jessica.pk])
+
+    def pay(self, status):
+        from payments.models import Payment
+        return Payment.objects.create(user=self.marie, event=self.event, kind=Payment.Kind.TICKET, method=Payment.Method.MONCASH,
+                                      amount_htg=3500, reference=f"T-{status}", status=status)
+
+    def test_without_ticket_the_request_is_refused_and_the_page_offers_the_ticket(self):
+        r = self.client.get(reverse("ensemble:people", args=[self.event.pk]))
+        self.assertContains(r, "abord votre billet pour cet événement")
+        self.assertContains(r, reverse("payments:checkout", args=[self.event.pk]))
+        self.assertNotContains(r, 'data-bs-target="#ya-ask"')
+        self.client.post(self.url, {"note": "On y va ?"})
+        self.assertFalse(MeetRequest.objects.exists())
+
+    def test_pending_or_failed_payment_does_not_count(self):
+        self.pay("pending")
+        self.pay("failed")
+        self.client.post(self.url, {"note": ""})
+        self.assertFalse(MeetRequest.objects.exists())
+
+    def test_paid_ticket_allows_the_request(self):
+        self.pay("success")
+        self.assertContains(self.client.get(reverse("ensemble:people", args=[self.event.pk])), 'data-bs-target="#ya-ask"')
+        self.client.post(self.url, {"note": ""})
+        self.assertTrue(MeetRequest.objects.exists())
+
+    def test_free_event_needs_no_ticket(self):
+        free = make_event()
+        show(self.marie, free)
+        show(self.jessica, free)
+        self.client.post(reverse("ensemble:send_request", args=[free.pk, self.jessica.pk]), {"note": ""})
+        self.assertTrue(MeetRequest.objects.filter(event=free).exists())
