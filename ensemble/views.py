@@ -33,9 +33,22 @@ def profile_of(user):
     return Profile.objects.filter(user=user).first()
 
 
+def shown_listings(event):
+    """Personnes qui apparaissent dans la liste : actives, pas retirées par l'équipe et, quand l'entrée est payante,
+    avec un billet payé pour l'événement (décision du 20 octobre 2026 : sans billet, on ne reçoit pas de demande)."""
+    listings = Listing.objects.filter(event=event, user__is_active=True, user__ensemble_profile__removed_at__isnull=True)
+    if needs_ticket(event):
+        listings = listings.filter(user_id__in=_ticket_holders(event))
+    return listings
+
+
+def _ticket_holders(event):
+    return Payment.objects.filter(event=event, kind=Payment.Kind.TICKET, status=Payment.Status.SUCCESS).values("user_id")
+
+
 def visible_listings(event, user):
-    """Les autres personnes affichées pour l'événement, sans les personnes bloquées ni retirées par l'équipe."""
-    return (Listing.objects.filter(event=event, user__is_active=True, user__ensemble_profile__removed_at__isnull=True)
+    """Les autres personnes de la liste, sans les personnes bloquées."""
+    return (shown_listings(event)
             .exclude(user=user).exclude(user_id__in=Block.hidden_ids(user))
             .select_related("user__ensemble_profile"))
 
@@ -44,7 +57,7 @@ def event_block_context(event, user):
     """Données du bloc « Y aller ensemble » de la page d'un événement (None quand le bloc ne s'affiche pas)."""
     if not event.is_public or event.status != Event.Status.ACTIVE or event.is_past:
         return None
-    others = Listing.objects.filter(event=event, user__is_active=True, user__ensemble_profile__removed_at__isnull=True)
+    others = shown_listings(event)
     mine = None
     if user.is_authenticated:
         mine = Listing.objects.filter(event=event, user=user).first()
@@ -63,7 +76,13 @@ def can_ask(user, event):
     Un paiement en attente ou échoué ne compte pas. Entrée gratuite : pas de billet à acheter, donc pas de condition."""
     if not needs_ticket(event):
         return True
-    return Payment.objects.filter(user=user, event=event, kind=Payment.Kind.TICKET, status=Payment.Status.SUCCESS).exists()
+    return _ticket_holders(event).filter(user=user).exists()
+
+
+def _with_ticket_or_free(requests, user):
+    """Garde les demandes reçues pour un événement gratuit ou pour lequel `user` a un billet payé."""
+    paid_events = Payment.objects.filter(user=user, kind=Payment.Kind.TICKET, status=Payment.Status.SUCCESS).values("event_id")
+    return requests.filter(Q(event__price_htg__isnull=True) | Q(event__price_htg__lte=0) | Q(event_id__in=paid_events))
 
 
 def _blocked_by_team(request, profile):
@@ -74,7 +93,8 @@ def _blocked_by_team(request, profile):
 
 
 def pending_count(user):
-    return MeetRequest.objects.filter(receiver=user, status=MeetRequest.Status.PENDING, event__date__gte=timezone.localdate()).exclude(sender_id__in=Block.hidden_ids(user)).count()
+    received = MeetRequest.objects.filter(receiver=user, status=MeetRequest.Status.PENDING, event__date__gte=timezone.localdate())
+    return _with_ticket_or_free(received, user).exclude(sender_id__in=Block.hidden_ids(user)).count()
 
 
 # --- S'afficher pour un événement ------------------------------------------------------------------------------
@@ -194,7 +214,7 @@ def requests_list(request):
     hidden = Block.hidden_ids(user)
     today = timezone.localdate()
     base = MeetRequest.objects.select_related("event", "sender__ensemble_profile", "receiver__ensemble_profile")
-    received = base.filter(receiver=user, status=MeetRequest.Status.PENDING, event__date__gte=today).exclude(sender_id__in=hidden)
+    received = _with_ticket_or_free(base.filter(receiver=user, status=MeetRequest.Status.PENDING, event__date__gte=today), user).exclude(sender_id__in=hidden)
     # Une demande refusée reste « envoyée » pour la personne qui l'a faite : elle n'est pas prévenue du refus.
     sent = base.filter(sender=user, status__in=[MeetRequest.Status.PENDING, MeetRequest.Status.DECLINED], event__date__gte=today).exclude(receiver_id__in=hidden)
     accepted = base.filter(Q(sender=user) | Q(receiver=user), status=MeetRequest.Status.ACCEPTED).exclude(sender_id__in=hidden).exclude(receiver_id__in=hidden)
@@ -212,7 +232,7 @@ def requests_list(request):
 @require_POST
 def answer_request(request, pk):
     item = get_object_or_404(MeetRequest, pk=pk, receiver=request.user, status=MeetRequest.Status.PENDING)
-    if _blocked_by_team(request, profile_of(request.user)) or Block.between(item.sender, item.receiver):
+    if _blocked_by_team(request, profile_of(request.user)) or Block.between(item.sender, item.receiver) or not can_ask(request.user, item.event):
         return redirect("ensemble:requests")
     item.responded_at = timezone.now()
     if request.POST.get("action") == "accept":

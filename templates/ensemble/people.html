@@ -13,7 +13,7 @@
     {% include "ensemble/_warning.html" %}
     {% if not can_ask %}
     <div class="ya-safe d-flex flex-wrap align-items-center justify-content-between gap-3 mb-4">
-      <div><i class="bi bi-ticket-perforated me-2"></i>{% trans "Pour proposer à quelqu'un d'y aller avec vous, achetez d'abord votre billet pour cet événement." %}</div>
+      <div><i class="bi bi-ticket-perforated me-2"></i>{% trans "Achetez votre billet pour cet événement : sans billet, vous n'apparaissez pas dans la liste et vous ne pouvez pas proposer à quelqu'un d'y aller avec vous." %}</div>
       <a href="{% url 'payments:checkout' event.pk %}" class="btn btn-primary btn-sm"><i class="bi bi-ticket-perforated me-1"></i>{% trans "Acheter un billet" %}</a>
     </div>
     {% endif %}

@@ -1443,51 +1443,51 @@ msgstr "reports"
 msgid "Événement introuvable."
 msgstr "Event not found."
 
-#: ensemble/views.py:71
+#: ensemble/views.py:90
 msgid "L'équipe EventLead vous a retiré de Y aller ensemble. Écrivez-nous depuis la page Aide si vous pensez que c'est une erreur."
 msgstr "The EventLead team removed you from Go together. Write to us from the Help page if you think this is a mistake."
 
-#: ensemble/views.py:102
+#: ensemble/views.py:122
 msgid "Vous êtes affiché pour cet événement. Vous pouvez maintenant voir les autres personnes."
 msgstr "You are listed for this event. You can now see the other people."
 
-#: ensemble/views.py:114
+#: ensemble/views.py:134
 msgid "Vous n'êtes plus affiché pour cet événement."
 msgstr "You are no longer listed for this event."
 
-#: ensemble/views.py:165
+#: ensemble/views.py:185
 msgid "Achetez d'abord votre billet pour cet événement : ensuite vous pourrez proposer à quelqu'un d'y aller avec vous."
 msgstr "Buy your ticket for this event first: then you can ask someone to go with you."
 
-#: ensemble/views.py:170
+#: ensemble/views.py:190
 msgid "Cette personne n'est plus affichée pour cet événement."
 msgstr "This person is no longer listed for this event."
 
-#: ensemble/views.py:174
+#: ensemble/views.py:194
 msgid "Votre petit mot est trop long (300 caractères au plus)."
 msgstr "Your note is too long (300 characters at most)."
 
-#: ensemble/views.py:178
+#: ensemble/views.py:198
 msgid "Cette personne vous a déjà fait une demande. Répondez-lui dans Mes demandes."
 msgstr "This person already sent you a request. Answer it in My requests."
 
-#: ensemble/views.py:185
+#: ensemble/views.py:205
 msgid "Demande envoyée. Vous pourrez vous écrire si la personne accepte."
 msgstr "Request sent. You can write to each other if the person accepts."
 
-#: ensemble/views.py:221
+#: ensemble/views.py:241
 msgid "Demande acceptée. Vous pouvez maintenant vous écrire."
 msgstr "Request accepted. You can now write to each other."
 
-#: ensemble/views.py:225
+#: ensemble/views.py:245
 msgid "Demande refusée."
 msgstr "Request declined."
 
-#: ensemble/views.py:285
+#: ensemble/views.py:305
 msgid "Personne bloquée. Elle ne peut plus vous voir ni vous écrire."
 msgstr "Person blocked. They can no longer see you or write to you."
 
-#: ensemble/views.py:301
+#: ensemble/views.py:321
 msgid "Merci. L'équipe EventLead va lire votre signalement."
 msgstr "Thank you. The EventLead team will read your report."
 
@@ -5476,8 +5476,8 @@ msgid "Je cherche quelqu'un pour y aller"
 msgstr "I'm looking for someone to go with"
 
 #: templates/ensemble/_event_block.html:21
-msgid "Pour proposer à quelqu'un d'y aller avec vous, il faut d'abord acheter votre billet."
-msgstr "To ask someone to go with you, you first need to buy your ticket."
+msgid "Seules les personnes qui ont acheté leur billet apparaissent dans la liste et peuvent faire des demandes."
+msgstr "Only people who bought their ticket appear in the list and can send requests."
 
 #: templates/ensemble/_event_block.html:22
 msgid "Réservé aux membres connectés de 18 ans ou plus. Personne ne voit votre numéro ni votre e-mail."
@@ -5551,7 +5551,7 @@ msgstr "Never give money. For a first meeting, meet at the event venue."
 msgid "Écrire un message..."
 msgstr "Write a message..."
 
-#: templates/ensemble/conversation.html:46 ensemble/views.py:259
+#: templates/ensemble/conversation.html:46 ensemble/views.py:279
 msgid "Cette conversation est fermée."
 msgstr "This conversation is closed."
 
@@ -5658,8 +5658,8 @@ msgid "Mon petit profil"
 msgstr "My short profile"
 
 #: templates/ensemble/people.html:16
-msgid "Pour proposer à quelqu'un d'y aller avec vous, achetez d'abord votre billet pour cet événement."
-msgstr "To ask someone to go with you, first buy your ticket for this event."
+msgid "Achetez votre billet pour cet événement : sans billet, vous n'apparaissez pas dans la liste et vous ne pouvez pas proposer à quelqu'un d'y aller avec vous."
+msgstr "Buy your ticket for this event: without a ticket, you do not appear in the list and you cannot ask someone to go with you."
 
 #: templates/ensemble/people.html:17 templates/events/public_detail.html:58 templates/partials/_parade_card.html:46 templates/payments/ticketing.html:25
 msgid "Acheter un billet"

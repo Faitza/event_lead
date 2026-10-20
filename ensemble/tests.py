@@ -300,15 +300,17 @@ class TicketRuleTests(TestCase):
         show(self.jessica, self.event)
         self.client.force_login(self.marie)
         self.url = reverse("ensemble:send_request", args=[self.event.pk, self.jessica.pk])
+        self.pay("success", self.jessica)
 
-    def pay(self, status):
+    def pay(self, status, user=None):
         from payments.models import Payment
-        return Payment.objects.create(user=self.marie, event=self.event, kind=Payment.Kind.TICKET, method=Payment.Method.MONCASH,
-                                      amount_htg=3500, reference=f"T-{status}", status=status)
+        user = user or self.marie
+        return Payment.objects.create(user=user, event=self.event, kind=Payment.Kind.TICKET, method=Payment.Method.MONCASH,
+                                      amount_htg=3500, reference=f"T-{status}-{user.pk}", status=status)
 
     def test_without_ticket_the_request_is_refused_and_the_page_offers_the_ticket(self):
         r = self.client.get(reverse("ensemble:people", args=[self.event.pk]))
-        self.assertContains(r, "abord votre billet pour cet événement")
+        self.assertContains(r, "sans billet, vous n")
         self.assertContains(r, reverse("payments:checkout", args=[self.event.pk]))
         self.assertNotContains(r, 'data-bs-target="#ya-ask"')
         self.client.post(self.url, {"note": "On y va ?"})
@@ -332,3 +334,23 @@ class TicketRuleTests(TestCase):
         show(self.jessica, free)
         self.client.post(reverse("ensemble:send_request", args=[free.pk, self.jessica.pk]), {"note": ""})
         self.assertTrue(MeetRequest.objects.filter(event=free).exists())
+
+    def test_people_without_ticket_are_not_in_the_list(self):
+        self.pay("success")
+        sarah = make_user("sarah@test.ht", "Sarah")
+        show(sarah, self.event)
+        r = self.client.get(reverse("ensemble:people", args=[self.event.pk]))
+        self.assertContains(r, "Jessica")
+        self.assertNotContains(r, "Sarah")
+        self.client.post(reverse("ensemble:send_request", args=[self.event.pk, sarah.pk]), {"note": ""})
+        self.assertFalse(MeetRequest.objects.filter(receiver=sarah).exists())
+
+    def test_people_without_ticket_receive_no_request(self):
+        sarah = make_user("sarah@test.ht", "Sarah")
+        show(sarah, self.event)
+        req = MeetRequest.objects.create(sender=self.jessica, receiver=sarah, event=self.event, note="Salut")
+        self.client.force_login(sarah)
+        self.assertNotContains(self.client.get(reverse("ensemble:requests")), "Salut")
+        self.client.post(reverse("ensemble:answer", args=[req.pk]), {"action": "accept"})
+        req.refresh_from_db()
+        self.assertEqual(req.status, "pending")

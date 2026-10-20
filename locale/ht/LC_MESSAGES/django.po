@@ -1443,51 +1443,51 @@ msgstr "siyalman"
 msgid "Événement introuvable."
 msgstr "Evènman an pa jwenn."
 
-#: ensemble/views.py:71
+#: ensemble/views.py:90
 msgid "L'équipe EventLead vous a retiré de Y aller ensemble. Écrivez-nous depuis la page Aide si vous pensez que c'est une erreur."
 msgstr "Ekip EventLead la retire w nan Ale ansanm. Ekri nou nan paj Èd la si w panse se yon erè."
 
-#: ensemble/views.py:102
+#: ensemble/views.py:122
 msgid "Vous êtes affiché pour cet événement. Vous pouvez maintenant voir les autres personnes."
 msgstr "Ou afiche pou evènman sa a. Kounye a ou ka wè lòt moun yo."
 
-#: ensemble/views.py:114
+#: ensemble/views.py:134
 msgid "Vous n'êtes plus affiché pour cet événement."
 msgstr "Ou pa afiche ankò pou evènman sa a."
 
-#: ensemble/views.py:165
+#: ensemble/views.py:185
 msgid "Achetez d'abord votre billet pour cet événement : ensuite vous pourrez proposer à quelqu'un d'y aller avec vous."
 msgstr "Achte tikè w pou evènman sa a anvan : apre sa ou ka pwopoze yon moun ale avè w."
 
-#: ensemble/views.py:170
+#: ensemble/views.py:190
 msgid "Cette personne n'est plus affichée pour cet événement."
 msgstr "Moun sa a pa afiche ankò pou evènman sa a."
 
-#: ensemble/views.py:174
+#: ensemble/views.py:194
 msgid "Votre petit mot est trop long (300 caractères au plus)."
 msgstr "Ti mo w la twò long (300 karaktè pou pi plis)."
 
-#: ensemble/views.py:178
+#: ensemble/views.py:198
 msgid "Cette personne vous a déjà fait une demande. Répondez-lui dans Mes demandes."
 msgstr "Moun sa a deja voye w yon demann. Reponn li nan Demann mwen yo."
 
-#: ensemble/views.py:185
+#: ensemble/views.py:205
 msgid "Demande envoyée. Vous pourrez vous écrire si la personne accepte."
 msgstr "Demann voye. Nou ka ekri youn lòt si moun nan aksepte."
 
-#: ensemble/views.py:221
+#: ensemble/views.py:241
 msgid "Demande acceptée. Vous pouvez maintenant vous écrire."
 msgstr "Demann aksepte. Kounye a nou ka ekri youn lòt."
 
-#: ensemble/views.py:225
+#: ensemble/views.py:245
 msgid "Demande refusée."
 msgstr "Demann refize."
 
-#: ensemble/views.py:285
+#: ensemble/views.py:305
 msgid "Personne bloquée. Elle ne peut plus vous voir ni vous écrire."
 msgstr "Moun nan bloke. Li pa ka wè w ni ekri w ankò."
 
-#: ensemble/views.py:301
+#: ensemble/views.py:321
 msgid "Merci. L'équipe EventLead va lire votre signalement."
 msgstr "Mèsi. Ekip EventLead la ap li siyalman w lan."
 
@@ -5476,8 +5476,8 @@ msgid "Je cherche quelqu'un pour y aller"
 msgstr "M ap chèche yon moun pou m ale avè l"
 
 #: templates/ensemble/_event_block.html:21
-msgid "Pour proposer à quelqu'un d'y aller avec vous, il faut d'abord acheter votre billet."
-msgstr "Pou w pwopoze yon moun ale avè w, fòk ou achte tikè w anvan."
+msgid "Seules les personnes qui ont acheté leur billet apparaissent dans la liste et peuvent faire des demandes."
+msgstr "Se sèlman moun ki achte tikè yo ki parèt nan lis la epi ki ka fè demann."
 
 #: templates/ensemble/_event_block.html:22
 msgid "Réservé aux membres connectés de 18 ans ou plus. Personne ne voit votre numéro ni votre e-mail."
@@ -5551,7 +5551,7 @@ msgstr "Pa janm bay lajan. Pou premye rankont, rankontre sou plas evènman an."
 msgid "Écrire un message..."
 msgstr "Ekri yon mesaj..."
 
-#: templates/ensemble/conversation.html:46 ensemble/views.py:259
+#: templates/ensemble/conversation.html:46 ensemble/views.py:279
 msgid "Cette conversation est fermée."
 msgstr "Konvèsasyon sa a fèmen."
 
@@ -5658,8 +5658,8 @@ msgid "Mon petit profil"
 msgstr "Ti pwofil mwen"
 
 #: templates/ensemble/people.html:16
-msgid "Pour proposer à quelqu'un d'y aller avec vous, achetez d'abord votre billet pour cet événement."
-msgstr "Pou w pwopoze yon moun ale avè w, achte tikè w pou evènman sa a anvan."
+msgid "Achetez votre billet pour cet événement : sans billet, vous n'apparaissez pas dans la liste et vous ne pouvez pas proposer à quelqu'un d'y aller avec vous."
+msgstr "Achte tikè w pou evènman sa a : san tikè, ou pa parèt nan lis la epi ou pa ka pwopoze yon moun ale avè w."
 
 #: templates/ensemble/people.html:17 templates/events/public_detail.html:58 templates/partials/_parade_card.html:46 templates/payments/ticketing.html:25
 msgid "Acheter un billet"
