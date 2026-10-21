@@ -1,16 +1,28 @@
 {% extends "invitation/base_invitation.html" %}
+{% load el_tags %}
+{% load i18n %}
 {% block inv_content %}
-<div class="el-card overflow-hidden mb-3">{% include "invitation/_event_summary.html" %}</div>
-<div class="el-card el-card-body text-center">
-  <span class="icon-bubble success lg mb-3"><i class="bi bi-patch-check"></i></span>
-  <h1 class="h5 fw-bold text-primary">Votre réponse est enregistrée</h1>
-  <p class="text-muted">Vous avez confirmé votre présence le {{ guest.replied_at|date:"j F Y à H:i" }}{% if guest.companions %}, avec {{ guest.companions }} accompagnant{{ guest.companions|pluralize }}{% endif %}. Cette réponse est définitive.</p>
+{% include "invitation/_event_summary.html" %}
+<div class="text-center d-flex flex-column gap-3 align-items-center">
+  <span class="icon-bubble success lg"><i class="bi bi-patch-check"></i></span>
+  <h1>{% blocktranslate trimmed %}Votre réponse est <em style="color:inherit">enregistrée</em>{% endblocktranslate %}</h1>
+  {% with when=guest.replied_at|date:_("j F Y à H:i") %}
+  <p class="text-muted mb-0">{% if guest.companions %}{% blocktranslate trimmed with date=when count counter=guest.companions %}Vous avez confirmé votre présence le {{ date }}, avec {{ counter }} accompagnant.{% plural %}Vous avez confirmé votre présence le {{ date }}, avec {{ counter }} accompagnants.{% endblocktranslate %}{% else %}{% blocktranslate trimmed with date=when %}Vous avez confirmé votre présence le {{ date }}.{% endblocktranslate %}{% endif %} {% trans "Cette réponse est définitive." %}</p>
+  {% endwith %}
   {% if claims %}
-  <div class="bg-soft rounded-4 p-3 mb-3 text-start">
-    <div class="small text-muted mb-2">Vos cadeaux réservés</div>
+  <div class="inv-pane w-100 text-start">
+    <div class="small text-muted mb-2">{% trans "Vos cadeaux réservés" %}</div>
     {% for c in claims %}<div class="fw-semibold"><i class="bi {{ c.gift.icon_name }} text-primary me-2"></i>{{ c.gift.name }}</div>{% endfor %}
   </div>
   {% endif %}
-  <a href="{% url 'events:explore' %}" class="btn btn-primary">Découvrir les événements publics</a>
+  {% if contribution %}
+  <div class="inv-pane w-100 text-start">
+    <div class="small text-muted mb-2">{% trans "Votre contribution" %}</div>
+    <div class="fw-semibold"><i class="bi bi-cash-coin text-primary me-2"></i>{{ contribution.amount_htg|htg }} HTG &middot; {{ contribution.payment.get_method_display }}</div>
+  </div>
+  {% endif %}
+  {% if thanks_ready %}<a href="{% url 'events:invitation_thanks' guest.magic_token %}" class="btn btn-gold w-100"><i class="bi bi-images me-2"></i>{% trans "Voir les remerciements et l'album" %}</a>{% endif %}
+  {% if guest.status == 'confirmed' %}<a href="{{ guest.get_ticket_url }}" class="btn btn-primary w-100"><i class="bi bi-qr-code me-2"></i>{% trans "Voir mon QR code d'entrée" %}</a>{% endif %}
+  <a href="{% url 'core:landing' %}#affiche" class="btn btn-outline-primary">{% trans "Découvrir les événements publics" %}</a>
 </div>
 {% endblock %}

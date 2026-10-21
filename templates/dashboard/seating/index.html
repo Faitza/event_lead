@@ -1,0 +1,24 @@
+{% extends "dashboard/base_dashboard.html" %}
+{% load i18n %}
+{% block title %}{% trans "Plan de table" %}{% endblock %}
+{% block dash_content %}
+<div class="page-head">
+  <div><h1>{% trans "Plan de table" %}</h1><p>{% trans "Placez les invités qui ont confirmé à leur table, avec leurs accompagnants. Choisissez l'événement." %}</p></div>
+</div>
+{% if upcoming or past %}
+  {% if upcoming %}
+  <h2 class="h6 fw-bold text-primary mb-3">{% trans "À venir" %}</h2>
+  <div class="row g-3 mb-4">
+    {% for c in upcoming %}{% include "dashboard/seating/_event_card.html" %}{% endfor %}
+  </div>
+  {% endif %}
+  {% if past %}
+  <h2 class="h6 fw-bold text-primary mb-3">{% trans "Événements passés" %}</h2>
+  <div class="row g-3">
+    {% for c in past %}{% include "dashboard/seating/_event_card.html" %}{% endfor %}
+  </div>
+  {% endif %}
+{% else %}
+  <div class="el-card"><div class="empty-state"><i class="bi bi-grid-3x3-gap"></i><p class="mt-2">{% trans "Aucun événement n'a encore d'invités qui ont confirmé leur présence." %}</p><a href="{% url 'dashboard:guest_list' %}" class="btn btn-primary">{% trans "Voir les invités" %}</a></div></div>
+{% endif %}
+{% endblock %}

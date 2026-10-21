@@ -1,0 +1,81 @@
+{% extends "base.html" %}
+{% load i18n el_tags %}
+{% block body_class %}espace-perso{% endblock %}
+{% block title %}{% trans "Y aller ensemble" %} &middot; {{ event.title }}{% endblock %}
+{% block extra_head %}{% include "ensemble/_head.html" %}{% endblock %}
+{% block content %}
+<section class="section">
+  <div class="container">
+    <div class="page-head">
+      <div><div class="eyebrow-row mb-3"><span class="diamond"></span><span class="eyebrow">{% trans "Y aller ensemble" %}</span></div><h1 class="em-on-light">{% blocktranslate trimmed with title=event.title %}Qui va à <em>{{ title }}</em> ?{% endblocktranslate %}</h1><p>{{ event.date|date:_("j F Y") }} &middot; {{ event.venue }}. {% trans "Ces personnes cherchent quelqu'un pour y aller." %}</p></div>
+      <div class="d-flex flex-wrap gap-2"><a href="{% url 'ensemble:join' event.pk %}" class="btn btn-light"><i class="bi bi-pencil me-1"></i>{% trans "Mon petit profil" %}</a><a href="{% url 'ensemble:requests' %}" class="btn btn-soft"><i class="bi bi-inbox me-1"></i>{% trans "Mes demandes" %}{% if pending %} <span class="badge-el badge-gold ms-1">{{ pending }}</span>{% endif %}</a></div>
+    </div>
+    {% include "ensemble/_warning.html" %}
+    {% if not can_ask %}
+    <div class="ya-safe d-flex flex-wrap align-items-center justify-content-between gap-3 mb-4">
+      {% if paid %}
+      <div><i class="bi bi-ticket-perforated me-2"></i>{% trans "Achetez votre billet pour cet événement : sans billet, vous n'apparaissez pas dans la liste et vous ne pouvez pas proposer à quelqu'un d'y aller avec vous." %}</div>
+      <a href="{% url 'payments:checkout' event.pk %}" class="btn btn-primary btn-sm"><i class="bi bi-ticket-perforated me-1"></i>{% trans "Acheter un billet" %}</a>
+      {% else %}
+      <div><i class="bi bi-check2-circle me-2"></i>{% trans "Inscrivez-vous à cet événement (c'est gratuit) : sans inscription, vous n'apparaissez pas dans la liste et vous ne pouvez pas proposer à quelqu'un d'y aller avec vous." %}</div>
+      <a href="{% url 'events:public_detail' event.pk %}" class="btn btn-primary btn-sm"><i class="bi bi-check2-circle me-1"></i>{% trans "Je participe" %}</a>
+      {% endif %}
+    </div>
+    {% endif %}
+    <div class="d-flex flex-wrap gap-2 mb-4" aria-label="{% trans 'Filtrer' %}">
+      <a href="?" class="btn btn-sm {% if not active %}btn-primary{% else %}btn-light{% endif %}">{% trans "Tout le monde" %} ({{ counts.all }})</a>
+      <a href="?filtre=transport" class="btn btn-sm {% if active == 'transport' %}btn-primary{% else %}btn-light{% endif %}">{% trans "Partager le transport" %} ({{ counts.transport }})</a>
+      <a href="?filtre=groupe" class="btn btn-sm {% if active == 'groupe' %}btn-primary{% else %}btn-light{% endif %}">{% trans "Un groupe d'amis" %} ({{ counts.groupe }})</a>
+      <a href="?filtre=ville" class="btn btn-sm {% if active == 'ville' %}btn-primary{% else %}btn-light{% endif %}">{% trans "Ma ville" %} ({{ counts.ville }})</a>
+    </div>
+    <div class="row g-4">
+      {% for l in listings %}{% with p=l.user.ensemble_profile r=l.req %}
+      <div class="col-sm-6 col-lg-4">
+        <div class="ya-person">
+          <div class="d-flex align-items-center gap-3">{% include "ensemble/_avatar.html" with p=p size="" %}<div><strong class="d-block ya-name">{{ p.first_name }}</strong><span class="small text-muted"><i class="bi bi-geo-alt me-1"></i>{{ p.city }}</span></div></div>
+          {% if p.about %}<p class="mb-0 small ya-note">{{ p.about }}</p>{% endif %}
+          <div class="d-flex flex-wrap gap-1">{% if l.wants_company %}<span class="ya-tag">{% trans "Quelqu'un pour y aller" %}</span>{% endif %}{% if l.wants_transport %}<span class="ya-tag">{% trans "Partager le transport" %}</span>{% endif %}{% if l.wants_group %}<span class="ya-tag">{% trans "Un groupe d'amis" %}</span>{% endif %}</div>
+          <div class="mt-auto d-flex gap-2">
+            {% if r.status == "accepted" %}<a href="{% url 'ensemble:conversation' r.pk %}" class="btn btn-soft w-100"><i class="bi bi-chat-dots me-1"></i>{% trans "Écrire" %}</a>
+            {% elif r and r.sender_id == user.pk %}<span class="btn btn-light w-100 disabled"><i class="bi bi-hourglass-split me-1"></i>{% trans "Demande envoyée" %}</span>
+            {% elif r %}<a href="{% url 'ensemble:requests' %}" class="btn btn-soft w-100"><i class="bi bi-inbox me-1"></i>{% trans "Vous a fait une demande" %}</a>
+            {% elif not can_ask %}<a href="{% if paid %}{% url 'payments:checkout' event.pk %}{% else %}{% url 'events:public_detail' event.pk %}{% endif %}" class="btn btn-light w-100"><i class="bi bi-ticket-perforated me-1"></i>{% if paid %}{% trans "Billet requis pour proposer" %}{% else %}{% trans "Inscription requise pour proposer" %}{% endif %}</a>
+            {% else %}<button type="button" class="btn btn-primary w-100" data-bs-toggle="modal" data-bs-target="#ya-ask" data-ya-url="{% url 'ensemble:send_request' event.pk l.user_id %}" data-ya-name="{{ p.first_name }}" data-ya-city="{{ p.city }}"><i class="bi bi-hand-thumbs-up me-1"></i>{% trans "Proposer d'y aller ensemble" %}</button>{% endif %}
+            <div class="dropdown">
+              <button type="button" class="btn btn-light" data-bs-toggle="dropdown" aria-expanded="false" aria-label="{% trans 'Plus' %}"><i class="bi bi-three-dots"></i></button>
+              <ul class="dropdown-menu dropdown-menu-end">
+                <li><form method="post" action="{% url 'ensemble:block' l.user_id %}" data-confirm="{% trans 'Bloquer cette personne ? Elle ne pourra plus vous voir ni vous écrire.' %}">{% csrf_token %}<input type="hidden" name="next" value="{{ request.path }}"><button class="dropdown-item"><i class="bi bi-slash-circle me-2"></i>{% trans "Bloquer" %}</button></form></li>
+                <li><button type="button" class="dropdown-item text-danger" data-bs-toggle="modal" data-bs-target="#ya-report" data-ya-url="{% url 'ensemble:report' l.user_id %}" data-ya-name="{{ p.first_name }}" data-ya-event="{{ event.pk }}"><i class="bi bi-flag me-2"></i>{% trans "Signaler" %}</button></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+      {% endwith %}{% empty %}
+      <div class="col-12"><div class="el-card empty-state"><i class="bi bi-people"></i><p class="mt-2 mb-0">{% if active %}{% trans "Personne pour ce choix pour le moment." %}{% else %}{% trans "Personne d'autre ne s'est encore affiché. Revenez un peu plus tard : vous verrez les nouvelles personnes ici." %}{% endif %}</p></div></div>
+      {% endfor %}
+    </div>
+    <div class="ya-safe mt-4"><i class="bi bi-shield-check me-2"></i>{% trans "Personne ne voit votre numéro ni votre e-mail. Vous pourrez vous écrire seulement si l'autre personne accepte votre demande." %}</div>
+    <div class="mt-3 d-flex flex-wrap gap-2 justify-content-between">
+      <a href="{{ event.get_absolute_url }}" class="btn btn-light btn-sm"><i class="bi bi-arrow-left me-1"></i>{% trans "Retour à l'événement" %}</a>
+      <form method="post" action="{% url 'ensemble:leave' event.pk %}" data-confirm="{% trans 'Ne plus vous afficher pour cet événement ?' %}">{% csrf_token %}<button class="btn btn-light btn-sm">{% trans "Ne plus m'afficher pour cet événement" %}</button></form>
+    </div>
+  </div>
+</section>
+<div class="modal fade" id="ya-ask" tabindex="-1" aria-labelledby="ya-ask-title" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered"><div class="modal-content">
+    <div class="modal-header border-0"><h2 class="modal-title" id="ya-ask-title">{% trans "Proposer à" %} <span data-ya-fill="name"></span></h2><button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="{% trans 'Fermer' %}"></button></div>
+    <form method="post" class="modal-body" data-ya-form="ask">
+      {% csrf_token %}
+      <div class="hp-field" aria-hidden="true"><label for="ya-website">{% trans "Ne pas remplir" %}</label><input type="text" name="website" id="ya-website" tabindex="-1" autocomplete="off"></div>
+      <p class="small text-muted mb-3"><i class="bi bi-geo-alt me-1"></i><span data-ya-fill="city"></span></p>
+      <label class="form-label fw-semibold" for="ya-note">{% trans "Un petit mot (facultatif)" %}</label>
+      <textarea name="note" id="ya-note" class="form-control mb-2" rows="3" maxlength="300"></textarea>
+      <div class="form-text mb-3">{% trans "La personne verra votre petit profil et ce mot. Si elle accepte, vous pourrez vous écrire." %}</div>
+      <div class="d-flex gap-2 justify-content-end"><button type="button" class="btn btn-light" data-bs-dismiss="modal">{% trans "Annuler" %}</button><button class="btn btn-primary"><i class="bi bi-send me-1"></i>{% trans "Envoyer la demande" %}</button></div>
+    </form>
+  </div></div>
+</div>
+{% include "ensemble/_report_modal.html" %}
+{% endblock %}
+{% block extra_js %}<script src="{% static_v 'js/ensemble.js' %}"></script>{% endblock %}

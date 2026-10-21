@@ -1,24 +1,27 @@
+from django.conf import settings
 from django.contrib.auth.models import AbstractUser
 from django.db import models
+from django.utils.translation import gettext_lazy as _
 
 
 class CustomUser(AbstractUser):
     class Role(models.TextChoices):
-        ADMIN = "admin", "Administrateur"
-        ORGANIZER = "organizer", "Organisateur"
-        GUEST = "guest", "Invité"
+        ADMIN = "admin", _("Administrateur")
+        ORGANIZER = "organizer", _("Organisateur")
+        GUEST = "guest", _("Invité")
 
-    email = models.EmailField("adresse e-mail", unique=True)
-    role = models.CharField("rôle", max_length=20, choices=Role.choices, default=Role.GUEST)
-    phone = models.CharField("téléphone", max_length=30, blank=True)
-    avatar = models.ImageField("avatar", upload_to="avatars/", blank=True, null=True)
+    email = models.EmailField(_("adresse e-mail"), unique=True)
+    role = models.CharField(_("rôle"), max_length=20, choices=Role.choices, default=Role.GUEST)
+    phone = models.CharField(_("téléphone"), max_length=30, blank=True)
+    avatar = models.ImageField(_("avatar"), upload_to="avatars/", blank=True, null=True)
     # Statut VIP : attribue uniquement apres un paiement "organizer_access" valide.
-    is_vip = models.BooleanField("organisateur VIP", default=False)
-    vip_since = models.DateTimeField("VIP depuis", null=True, blank=True)
+    is_vip = models.BooleanField(_("organisateur VIP"), default=False)
+    vip_since = models.DateTimeField(_("VIP depuis"), null=True, blank=True)
+    language = models.CharField(_("langue"), max_length=5, choices=settings.LANGUAGES, blank=True)
 
     class Meta:
-        verbose_name = "utilisateur"
-        verbose_name_plural = "utilisateurs"
+        verbose_name = _("utilisateur")
+        verbose_name_plural = _("utilisateurs")
 
     def __str__(self):
         return self.get_full_name() or self.email or self.username

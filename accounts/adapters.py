@@ -1,11 +1,12 @@
 from allauth.account.adapter import DefaultAccountAdapter
 from allauth.socialaccount.adapter import DefaultSocialAccountAdapter
-from django.urls import reverse
 
 
 class AccountAdapter(DefaultAccountAdapter):
     def get_login_redirect_url(self, request):
-        return reverse("accounts:dispatch")
+        from .views import post_login_url_for
+
+        return post_login_url_for(request.user)
 
     def populate_username(self, request, user):
         if not user.username:

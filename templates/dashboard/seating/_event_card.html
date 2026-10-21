@@ -1,0 +1,13 @@
+{% load i18n %}
+<div class="col-md-6 col-xl-4">
+  <a href="{% url 'dashboard:seating_event' c.event.pk %}" class="el-card el-card-body d-block text-decoration-none h-100 checkin-card">
+    <div class="d-flex justify-content-between align-items-start gap-2 mb-2">
+      <strong class="text-dark">{{ c.event.title }}</strong>
+      {% if c.stats.unseated %}<span class="badge-el badge-warning">{% blocktranslate trimmed with n=c.stats.unseated %}{{ n }} sans table{% endblocktranslate %}</span>{% elif c.stats.tables %}<span class="badge-el badge-success">{% trans "Tout le monde est placé" %}</span>{% endif %}
+    </div>
+    <div class="small text-muted mb-3">{{ c.event.date|date:_("j F Y") }} &middot; {{ c.event.time|time:_("H\\hi") }}</div>
+    <div class="small mb-1">{% if c.stats.tables %}{% blocktranslate trimmed with t=c.stats.tables p=c.stats.placed s=c.stats.seats %}{{ t }} tables &middot; {{ p }} personnes placées sur {{ s }} places{% endblocktranslate %}{% else %}{% trans "Aucune table pour l'instant" %}{% endif %}</div>
+    <div class="progress-el gold"><span style="width:{% if c.stats.seats %}{% widthratio c.stats.placed c.stats.seats 100 %}{% else %}0{% endif %}%"></span></div>
+    <span class="btn btn-sm btn-soft mt-3"><i class="bi bi-grid-3x3-gap me-2"></i>{% trans "Ouvrir le plan de table" %}</span>
+  </a>
+</div>

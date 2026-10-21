@@ -1,0 +1,24 @@
+{% extends "dashboard/base_dashboard.html" %}
+{% load i18n %}
+{% block title %}{% trans "Pointage" %}{% endblock %}
+{% block dash_content %}
+<div class="page-head">
+  <div><h1>{% trans "Pointage" %}</h1><p>{% trans "Le jour J, lisez le QR code de chaque invité à l'entrée. Choisissez l'événement." %}</p></div>
+</div>
+{% if upcoming or past %}
+  {% if upcoming %}
+  <h2 class="h6 fw-bold text-primary mb-3">{% trans "Aujourd'hui et à venir" %}</h2>
+  <div class="row g-3 mb-4">
+    {% for e in upcoming %}{% include "dashboard/checkin/_event_card.html" %}{% endfor %}
+  </div>
+  {% endif %}
+  {% if past %}
+  <h2 class="h6 fw-bold text-primary mb-3">{% trans "Événements passés" %}</h2>
+  <div class="row g-3">
+    {% for e in past %}{% include "dashboard/checkin/_event_card.html" %}{% endfor %}
+  </div>
+  {% endif %}
+{% else %}
+  <div class="el-card"><div class="empty-state"><i class="bi bi-qr-code-scan"></i><p class="mt-2">{% trans "Aucun événement n'a encore d'invités." %}</p><a href="{% url 'dashboard:guest_create' %}" class="btn btn-primary">{% trans "Ajouter un invité" %}</a></div></div>
+{% endif %}
+{% endblock %}

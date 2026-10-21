@@ -1,0 +1,7 @@
+{% extends "errors/_standalone.html" %}{% load i18n %}
+{% block title %}{% trans "Un peu de patience" %}{% endblock %}
+{% block content %}
+<h1>{% trans "Un peu de patience" %}</h1>
+<p>{{ message }}</p>
+<a class="btn" href="javascript:history.back()">{% trans "Revenir en arrière" %}</a>
+{% endblock %}

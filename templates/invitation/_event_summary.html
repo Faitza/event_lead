@@ -1,10 +1,4 @@
-<div class="inv-event-cover">
-  <img src="{{ event.cover_url }}" alt="{{ event.title }}" loading="lazy" onerror="this.style.visibility='hidden'">
-  <div class="title"><span class="eyebrow">Vous êtes invité(e)</span><h1>{{ event.title }}</h1></div>
-</div>
-<div class="el-card-body">
-  <div class="meta-row"><i class="bi bi-calendar3"></i><span>{{ event.date|date:"l j F Y"|capfirst }}</span></div>
-  <div class="meta-row"><i class="bi bi-clock"></i><span>{{ event.time|time:"H\hi" }}</span></div>
-  <div class="meta-row mb-0"><i class="bi bi-geo-alt"></i><span>{{ event.venue }}</span></div>
-  {% if event.description %}<p class="text-muted small mt-3 mb-0">{{ event.description|linebreaksbr }}</p>{% endif %}
+<div>
+  <div class="meta-row"><i class="bi bi-geo-alt"></i><span>{{ event.venue }}</span></div>
+  {% if event.description %}<p class="text-muted small mt-2 mb-0">{{ event.description|linebreaksbr }}</p>{% endif %}
 </div>

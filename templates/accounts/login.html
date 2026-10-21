@@ -1,18 +1,19 @@
 {% extends "accounts/auth_base.html" %}
-{% block title %}Connexion{% endblock %}
+{% load i18n %}
+{% block title %}{% trans "Connexion" %}{% endblock %}
 {% block panel %}
-<h1 class="h3 fw-bold text-primary mb-1">Connexion</h1>
-<p class="text-muted mb-4">Accédez à votre espace EventLead.</p>
+<h1>{% trans "Connexion" %}</h1>
+<p class="text-muted text-center mb-4">{% trans "Administrateur, Organisateur ou invité inscrit" %}</p>
 {% include "partials/_google_button.html" with next_url=next %}
-<div class="divider">ou avec votre e-mail</div>
+<div class="divider"><span class="diamond"></span></div>
 <form method="post" novalidate>
   {% csrf_token %}
   <input type="hidden" name="next" value="{{ next }}">
   {% if form.non_field_errors %}<div class="notice notice-danger mb-3"><i class="bi bi-exclamation-circle"></i><div>{{ form.non_field_errors|join:" " }}</div></div>{% endif %}
   {% include "partials/_field.html" with field=form.email %}
   {% include "partials/_field.html" with field=form.password %}
-  <button class="btn btn-primary w-100 btn-lg mt-2">Se connecter</button>
+  <button class="btn btn-primary w-100 btn-lg mt-2">{% trans "Se connecter" %}</button>
 </form>
-<p class="text-center text-muted small mt-4 mb-0">Pas encore de compte ? <a href="{% url 'accounts:register' %}" class="fw-semibold">Créer un compte</a></p>
-<p class="text-center text-muted small mt-2 mb-0">Professionnel de l'événementiel ? <a href="{% url 'accounts:register_organizer' %}" class="fw-semibold">Devenir Organisateur VIP</a></p>
+<p class="text-center text-muted small mt-4 mb-3">{% trans "Pas encore de compte ?" %} <a href="{% url 'accounts:register' %}" class="fw-semibold">{% trans "Créer un compte" %}</a></p>
+<a class="vip-link" href="{% url 'accounts:register_organizer' %}"><span class="disp">VIP</span>{% trans "Devenir Organisateur VIP" %}</a>
 {% endblock %}

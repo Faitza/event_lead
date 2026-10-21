@@ -1,6 +1,50 @@
+import os
+import uuid
+
 from django import template
+from django.contrib.staticfiles import finders
+from django.templatetags.static import static
 
 register = template.Library()
+
+
+@register.simple_tag
+def static_v(path):
+    """Adresse d'un fichier statique avec sa date de modification (?v=...).
+
+    Le navigateur garde le CSS et le JS en cache : sans ce numéro, une modification du site
+    (fond, couleurs, menu) peut rester invisible tant qu'on n'a pas vidé le cache. Le numéro
+    change dès que le fichier change, donc le navigateur recharge tout seul.
+    """
+    url = static(path)
+    found = finders.find(path)
+    if isinstance(found, (list, tuple)):
+        found = found[0] if found else None
+    try:
+        return "%s?v=%d" % (url, os.stat(found).st_mtime) if found else url
+    except (OSError, TypeError):
+        return url
+
+
+@register.simple_tag(takes_context=True)
+def page_url(context, number, param="page"):
+    """Adresse de la page `number` d'une liste, en gardant les filtres de l'adresse actuelle (?q=, ?statut=...)."""
+    query = context["request"].GET.copy()
+    query[param] = number
+    return "?" + query.urlencode()
+
+
+@register.simple_tag
+def page_numbers(page):
+    """Numéros à afficher sous une liste : 1 … 4 5 [6] 7 8 … 20 (None pour les points de suspension)."""
+    ellipsis = page.paginator.ELLIPSIS
+    return [None if n == ellipsis else n for n in page.paginator.get_elided_page_range(page.number, on_each_side=2, on_ends=1)]
+
+
+@register.simple_tag
+def new_idem_key():
+    """Numéro anti-doublon d'un formulaire de paiement : nouveau à chaque affichage (voir payments/idempotency.py)."""
+    return uuid.uuid4().hex
 
 
 @register.filter
@@ -44,3 +88,32 @@ def percent(value, total):
 @register.filter
 def stars_range(value):
     return range(1, 6)
+
+
+def _grouped(value, decimals=0):
+    """Nombre avec séparateurs : « 25 000 » en français et en créole, « 25,000 » en anglais (comme les scripts de la page)."""
+    from decimal import Decimal, InvalidOperation
+
+    from django.utils.translation import get_language
+
+    try:
+        number = Decimal(str(value))
+    except (InvalidOperation, ValueError):
+        return value
+    english = (get_language() or "fr").startswith("en")
+    text = f"{number:,.{decimals}f}"  # 25,000.50
+    if english:
+        return text
+    return text.replace(",", " ").replace(".", ",")
+
+
+@register.filter
+def htg(value):
+    """Montant en gourdes sans décimales, avec séparateurs de milliers selon la langue."""
+    return _grouped(value, 0)
+
+
+@register.filter
+def usd(value):
+    """Montant en dollars à deux décimales, avec séparateurs selon la langue."""
+    return _grouped(value, 2)

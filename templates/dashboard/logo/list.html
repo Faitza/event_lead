@@ -1,0 +1,60 @@
+{% extends "dashboard/base_dashboard.html" %}
+{% load i18n static %}
+{% block title %}{% trans "Logo" %}{% endblock %}
+{% block dash_content %}
+<div class="page-head">
+  <div><h1>{% trans "Logo du site" %}</h1><p>{% trans "Changez la couleur du logo pour une période (Noël, Saint-Valentin, fête du drapeau...). En dehors de ces dates, le site revient tout seul au logo original." %}</p></div>
+  <a href="{% url 'dashboard:logo_create' %}" class="btn btn-primary"><i class="bi bi-plus-lg me-2"></i>{% trans "Programmer une couleur" %}</a>
+</div>
+<div class="row g-4">
+  <div class="col-xl-4">
+    <div class="el-card el-card-body h-100">
+      <h2 class="h6 fw-bold text-primary mb-3"><i class="bi bi-eye me-2"></i>{% trans "Affiché aujourd'hui" %}</h2>
+      {% with logo=site_logo %}
+      <div class="logo-preview mb-3"><span class="on-light"><img src="{{ logo.light }}" alt=""></span><span class="on-dark"><img src="{{ logo.dark }}" alt=""></span></div>
+      {% endwith %}
+      <p class="mb-0">{% if current %}<strong>{{ current.name }}</strong><br><span class="small text-muted">{% blocktranslate trimmed with start=current.start_date|date:_("j F Y") end=current.end_date|date:_("j F Y") %}du {{ start }} au {{ end }}{% endblocktranslate %}</span>{% else %}{% trans "Logo original (aucune couleur programmée aujourd'hui)." %}{% endif %}</p>
+    </div>
+  </div>
+  <div class="col-xl-8">
+    <div class="el-card el-card-body h-100">
+      <h2 class="h6 fw-bold text-primary mb-3"><i class="bi bi-palette me-2"></i>{% trans "Couleurs prêtes" %}</h2>
+      <div class="logo-choices">
+        {% for value, label in presets %}
+        <a href="{% url 'dashboard:logo_create' %}?couleur={{ value }}" class="text-center text-body d-flex flex-column align-items-center gap-2 p-2 el-card" style="text-decoration:none">
+          <span class="logo-preview"><span class="on-light"><img src="{% static 'img/logo/eventlead-'|add:value|add:'.png' %}" alt=""></span><span class="on-dark"><img src="{% static 'img/logo/eventlead-'|add:value|add:'-sombre.png' %}" alt=""></span></span>
+          <span class="small fw-semibold">{{ label }}</span>
+        </a>
+        {% endfor %}
+      </div>
+      <p class="small text-muted mt-3 mb-0">{% trans "Seule la couleur des lettres change : le dessin, les flûtes, l'enveloppe et le petit « EventLead » au centre restent ceux du logo original." %}</p>
+    </div>
+  </div>
+</div>
+<div class="el-card mt-4">
+  <div class="el-card-body pb-0"><h2 class="h6 fw-bold text-primary mb-0"><i class="bi bi-calendar-range me-2"></i>{% trans "Couleurs programmées" %}</h2></div>
+  {% if variants %}
+  <div class="table-responsive">
+    <table class="table table-el mb-0">
+      <thead><tr><th>{% trans "Nom" %}</th><th>{% trans "Logo" %}</th><th>{% trans "Dates" %}</th><th>{% trans "Statut" %}</th><th></th></tr></thead>
+      <tbody>
+      {% for v, st in variants %}
+        <tr>
+          <td><strong>{{ v.name }}</strong><div class="small text-muted">{{ v.get_preset_display }}</div></td>
+          <td>{% with u=v.urls %}<span class="logo-preview"><span class="on-light" style="width:52px;height:56px"><img src="{{ u.0 }}" alt="" style="max-height:48px"></span><span class="on-dark" style="width:52px;height:56px"><img src="{{ u.1 }}" alt="" style="max-height:48px"></span></span>{% endwith %}</td>
+          <td class="text-nowrap">{{ v.start_date|date:"d/m/Y" }} &rarr; {{ v.end_date|date:"d/m/Y" }}</td>
+          <td><span class="badge-el {% if st.0 == 'live' %}badge-success{% elif st.0 == 'soon' %}badge-primary{% else %}badge-muted{% endif %}">{{ st.1 }}</span></td>
+          <td class="text-end text-nowrap">
+            <a href="{% url 'dashboard:logo_edit' v.pk %}" class="btn btn-sm btn-light" title="{% trans 'Modifier' %}" aria-label="{% trans 'Modifier' %}"><i class="bi bi-pencil"></i></a>
+            <a href="{% url 'dashboard:logo_delete' v.pk %}" class="btn btn-sm btn-light text-danger" title="{% trans 'Supprimer' %}" aria-label="{% trans 'Supprimer' %}"><i class="bi bi-trash3"></i></a>
+          </td>
+        </tr>
+      {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  {% else %}
+  <div class="empty-state"><i class="bi bi-palette"></i><p class="mt-2 mb-0">{% trans "Aucune couleur programmée : le logo original s'affiche toute l'année." %}</p></div>
+  {% endif %}
+</div>
+{% endblock %}

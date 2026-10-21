@@ -1,0 +1,21 @@
+{% load i18n %}{% comment %}
+Sélecteur de langue FR | EN | KR. Sans paramètre : trois boutons en ligne.
+variant="menu" : bouton compact avec liste déroulante (barre du haut sur grand écran).
+Fonctionne sans JavaScript et sans compte : un formulaire envoie le choix, mémorisé dans un cookie.
+{% endcomment %}{% get_current_language as CURRENT_LANGUAGE %}
+<form action="{% url 'core:set_language' %}" method="post" class="lang-switch{% if variant == 'menu' %} lang-menu dropdown{% endif %}">
+  {% csrf_token %}
+  <input type="hidden" name="next" value="{{ request.get_full_path }}">
+  {% if variant == 'menu' %}
+  <button type="button" class="lang-toggle" data-bs-toggle="dropdown" aria-expanded="false" aria-label="{% trans 'Langue' %}"><i class="bi bi-translate" aria-hidden="true"></i>{% for code, short, name in LANGUAGE_OPTIONS %}{% if code == CURRENT_LANGUAGE %}<span>{{ short }}</span>{% endif %}{% endfor %}<i class="bi bi-chevron-down small" aria-hidden="true"></i></button>
+  <ul class="dropdown-menu dropdown-menu-end shadow border-0 rounded-4 p-2">
+    {% for code, short, name in LANGUAGE_OPTIONS %}
+    <li><button type="submit" name="language" value="{{ code }}" lang="{{ code }}" class="dropdown-item rounded-3{% if code == CURRENT_LANGUAGE %} active{% endif %}"{% if code == CURRENT_LANGUAGE %} aria-current="true"{% endif %}>{{ name }}</button></li>
+    {% endfor %}
+  </ul>
+  {% else %}
+  <div class="lang-group" role="group" aria-label="{% trans 'Langue' %}">
+    {% for code, short, name in LANGUAGE_OPTIONS %}<button type="submit" name="language" value="{{ code }}" lang="{{ code }}" title="{{ name }}" aria-label="{{ name }}"{% if code == CURRENT_LANGUAGE %} class="on" aria-current="true"{% endif %}>{{ short }}</button>{% endfor %}
+  </div>
+  {% endif %}
+</form>

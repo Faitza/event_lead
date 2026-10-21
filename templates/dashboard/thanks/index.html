@@ -1,0 +1,24 @@
+{% extends "dashboard/base_dashboard.html" %}
+{% load i18n %}
+{% block title %}{% trans "Remerciements" %}{% endblock %}
+{% block dash_content %}
+<div class="page-head">
+  <div><h1>{% trans "Remerciements" %}</h1><p>{% trans "Après l'événement, remerciez les invités présents et partagez l'album photo. Choisissez l'événement." %}</p></div>
+</div>
+{% if past or upcoming %}
+  {% if past %}
+  <h2 class="h6 fw-bold text-primary mb-3">{% trans "Événements passés ou du jour" %}</h2>
+  <div class="row g-3 mb-4">
+    {% for c in past %}{% include "dashboard/thanks/_event_card.html" %}{% endfor %}
+  </div>
+  {% endif %}
+  {% if upcoming %}
+  <h2 class="h6 fw-bold text-primary mb-3">{% trans "À venir" %}</h2>
+  <div class="row g-3">
+    {% for c in upcoming %}{% include "dashboard/thanks/_event_card.html" %}{% endfor %}
+  </div>
+  {% endif %}
+{% else %}
+  <div class="el-card"><div class="empty-state"><i class="bi bi-images"></i><p class="mt-2">{% trans "Aucun événement n'a encore d'invités présents ni de photos." %}</p><a href="{% url 'dashboard:event_list' %}" class="btn btn-primary">{% trans "Voir les événements" %}</a></div></div>
+{% endif %}
+{% endblock %}

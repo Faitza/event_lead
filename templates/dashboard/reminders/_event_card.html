@@ -1,0 +1,13 @@
+{% load i18n %}
+<div class="col-md-6 col-xl-4">
+  <a href="{% url 'dashboard:reminder_event' c.event.pk %}" class="el-card el-card-body d-block text-decoration-none h-100 checkin-card">
+    <div class="d-flex justify-content-between align-items-start gap-2 mb-2">
+      <strong class="text-dark">{{ c.event.title }}</strong>
+      {% if c.stats.due and c.open %}<span class="badge-el badge-warning">{% blocktranslate trimmed with n=c.stats.due %}{{ n }} à relancer{% endblocktranslate %}</span>{% endif %}
+    </div>
+    <div class="small text-muted mb-3">{{ c.event.date|date:_("j F Y") }} &middot; {{ c.event.time|time:_("H\\hi") }}</div>
+    <div class="small mb-1">{% blocktranslate trimmed with n=c.stats.no_reply total=c.stats.total %}{{ n }} sans réponse sur {{ total }} invités{% endblocktranslate %}</div>
+    <div class="progress-el gold"><span style="width:{% if c.stats.total %}{% widthratio c.stats.no_reply c.stats.total 100 %}{% else %}0{% endif %}%"></span></div>
+    <span class="btn btn-sm btn-soft mt-3"><i class="bi bi-bell me-2"></i>{% trans "Ouvrir les relances" %}</span>
+  </a>
+</div>

@@ -1,0 +1,71 @@
+/* ==========================================================================
+   Accueil seulement : les éléments apparaissent un par un, comme les
+   diapositives d'une présentation. Chargé uniquement par core/landing.html.
+   Sans JavaScript ou avec « mouvement réduit », la classe .anim-on n'est pas
+   posée et tout s'affiche normalement.
+   ========================================================================== */
+.anim-on [data-anim] {
+  opacity: 0;
+  transition: opacity .7s cubic-bezier(.2, .7, .2, 1), transform .7s cubic-bezier(.2, .7, .2, 1);
+  transition-delay: var(--anim-delay, 0s);
+}
+.anim-on [data-anim="up"] { transform: translateY(36px); }
+.anim-on [data-anim="left"] { transform: translateX(-56px); }
+.anim-on [data-anim="right"] { transform: translateX(56px); }
+.anim-on [data-anim="zoom"] { transform: scale(.86); }
+.anim-on [data-anim="pop"] { transform: scale(.4) rotate(-20deg); transition-timing-function: ease, cubic-bezier(.34, 1.56, .64, 1); }
+.anim-on [data-anim].is-in { opacity: 1; transform: none; }
+
+/* Sur téléphone, les entrées par le côté deviennent des montées (pas de débordement horizontal) */
+@media (max-width: 991.98px) {
+  .anim-on [data-anim="left"], .anim-on [data-anim="right"] { transform: translateY(36px); }
+  .anim-on [data-anim].is-in { transform: none; }
+}
+
+/* Petites réactions au survol */
+.how-step .icon-bubble, .service-cell .icon-bubble { transition: transform .25s ease; }
+.how-step:hover .icon-bubble, .service-cell:hover .icon-bubble { transform: translateY(-4px) scale(1.08); }
+@media (prefers-reduced-motion: reduce) {
+  .how-step:hover .icon-bubble, .service-cell:hover .icon-bubble { transform: none; }
+}
+
+@media print {
+  [data-anim] { opacity: 1 !important; transform: none !important; }
+}
+
+/* ==========================================================================
+   Accueil public : grande photo plein écran. À gauche, un dégradé nuit
+   (violet presque noir) bien marqué pour le texte ; à droite la photo reste
+   claire.
+   ========================================================================== */
+.hero-salle { min-height: min(720px, calc(100vh - 160px)); display: flex; background: #0D0112; isolation: isolate; }
+.hero.hero-salle .hero-bg-sombre { display: none; }
+.hero.hero-salle .hero-bg { object-position: 50% 50%; }
+/* Mode sombre : la photo des bougies remplace la table longue */
+[data-theme="dark"] .hero.hero-salle .hero-bg-clair { display: none; }
+[data-theme="dark"] .hero.hero-salle .hero-bg-sombre { display: block; }
+.hero.hero-salle .hero-veil {
+  background:
+    linear-gradient(90deg, #0D0112 0%, rgba(13, 1, 18, .96) 24%, rgba(22, 2, 30, .78) 40%, rgba(30, 2, 40, .32) 58%, rgba(30, 2, 40, 0) 74%),
+    linear-gradient(0deg, rgba(13, 1, 18, .55) 0%, rgba(13, 1, 18, 0) 26%);
+}
+.hero-salle .hero-inner { position: relative; z-index: 2; display: flex; flex-direction: column; justify-content: center; width: 100%; padding-top: 72px; padding-bottom: 72px; }
+.hero-salle .hero-text { max-width: 560px; }
+.hero-eyebrow { display: flex; align-items: center; gap: 14px; }
+.hero-eyebrow::before { content: ""; width: 40px; height: 1px; background: var(--el-gold); flex: none; }
+.hero-eyebrow .eyebrow { color: var(--el-gold-soft); letter-spacing: .18em; }
+.hero.hero-salle h1 { font-size: clamp(2.4rem, 4.8vw, 4rem); line-height: 1.04; }
+.hero.hero-salle h1 em { color: var(--el-gold); font-style: italic; }
+.hero.hero-salle .lead { color: #E9E2EC; max-width: 30em; }
+.hero-salle .btn-gold { padding: 1rem 1.6rem; }
+
+@media (max-width: 991.98px) {
+  .hero-salle { min-height: 0; }
+  .hero.hero-salle .hero-bg { height: 62%; }
+  .hero.hero-salle .hero-bg-clair { object-position: 50% 30%; }
+  .hero.hero-salle .hero-bg-sombre { object-position: 50% 55%; }
+  .hero.hero-salle .hero-veil {
+    background: linear-gradient(180deg, rgba(13, 1, 18, 0) 0%, rgba(13, 1, 18, .2) 18%, rgba(13, 1, 18, .85) 42%, #0D0112 60%);
+  }
+  .hero-salle .hero-inner { padding-top: 300px; padding-bottom: 56px; }
+}

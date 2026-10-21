@@ -1,5 +1,5 @@
-<!DOCTYPE html>
-<html lang="fr"><head><meta charset="utf-8">
+{% load i18n %}{% get_current_language as CURRENT_LANGUAGE %}<!DOCTYPE html>
+<html lang="{{ CURRENT_LANGUAGE }}"><head><meta charset="utf-8">
 <style>
   @page { size: A4 landscape; margin: 1.5cm; }
   body { font-family: Helvetica, Arial, sans-serif; color: #1F2937; font-size: 10pt; }
@@ -11,10 +11,10 @@
   .gold { color: #B8962A; }
 </style></head>
 <body>
-  <h1>EventLead - Liste des invités</h1>
-  <div class="sub">{% if event %}{{ event.title }} - {{ event.date|date:"j F Y" }} - {{ event.venue }}{% else %}Tous les événements{% endif %} | Généré le {{ generated_at|date:"j F Y H:i" }}</div>
+  <h1>{% trans "EventLead - Liste des invités" %}</h1>
+  <div class="sub">{% if event %}{{ event.title }} - {{ event.date|date:_("j F Y") }} - {{ event.venue }}{% else %}{% trans "Tous les événements" %}{% endif %} | {% with gen=generated_at|date:_("j F Y H:i") %}{% blocktranslate trimmed with d=gen %}Généré le {{ d }}{% endblocktranslate %}{% endwith %}</div>
   <table>
-    <thead><tr>{% if not event %}<th>Événement</th>{% endif %}<th>Nom</th><th>Contact</th><th>Canal</th><th>Statut</th><th>Acc.</th><th>Cadeaux</th></tr></thead>
+    <thead><tr>{% if not event %}<th>{% trans "Événement" %}</th>{% endif %}<th>{% trans "Nom" %}</th><th>{% trans "Contact" %}</th><th>{% trans "Canal" %}</th><th>{% trans "Statut" %}</th><th>{% trans "Acc." %}</th><th>{% trans "Cadeaux" %}</th></tr></thead>
     <tbody>
     {% for g in guests %}
       <tr>{% if not event %}<td>{{ g.event.title }}</td>{% endif %}<td>{{ g.name }}</td><td>{{ g.email }} {{ g.phone }}</td><td>{{ g.get_sent_via_display }}</td><td>{{ g.get_status_display }}</td><td>{{ g.companions }}</td>

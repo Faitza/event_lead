@@ -7,6 +7,9 @@
   var counter = document.getElementById("selected-count");
   var submit = document.getElementById("confirm-gifts");
   var liveNote = document.getElementById("live-note");
+  // Textes traduits posés par le gabarit (data-*) ; le français sert de repli.
+  var takenLabel = root.dataset.takenLabel || "Déjà pris";
+  var lostNote = root.dataset.lostNote || "Un cadeau de votre sélection vient d'être choisi par un autre invité.";
 
   function refreshCount() {
     var n = root.querySelectorAll(".gift-item input:checked:not(:disabled)").length;
@@ -27,10 +30,10 @@
     input.disabled = true;
     item.classList.remove("is-checked");
     item.classList.add("is-taken");
-    item.querySelector(".gift-qty").textContent = "Déjà pris";
+    item.querySelector(".gift-qty").textContent = takenLabel;
     if (wasChecked) {
       item.classList.add("just-locked");
-      liveNote.textContent = "Un cadeau de votre sélection vient d'être choisi par un autre invité.";
+      liveNote.textContent = lostNote;
       liveNote.parentElement.classList.remove("d-none");
     }
   }
@@ -47,7 +50,8 @@
           if (!g.available && !input.disabled) {
             lock(item, input);
           } else if (g.available) {
-            item.querySelector(".gift-qty").textContent = g.remaining + (g.remaining > 1 ? " disponibles" : " disponible");
+            // g.label vient du serveur, déjà traduit et accordé (singulier / pluriel)
+            item.querySelector(".gift-qty").textContent = g.label || (g.remaining + (g.remaining > 1 ? " disponibles" : " disponible"));
             if (input.disabled) {
               input.disabled = false;
               item.classList.remove("is-taken");

@@ -1,13 +1,23 @@
 from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib import admin
+from django.shortcuts import redirect
+from django.templatetags.static import static as static_url
 from django.urls import include, path
+
+from core import seo, views_errors
 
 admin.site.site_header = "EventLead - Back-office"
 admin.site.site_title = "EventLead"
 admin.site.index_title = "Administration"
 
 urlpatterns = [
+    # Les navigateurs demandent /favicon.ico tout seuls : on renvoie vers l'icône tirée du logo original.
+    path("favicon.ico", lambda request: redirect(static_url("favicon.ico"), permanent=True)),
+    path("robots.txt", seo.robots_txt, name="robots_txt"),
+    path("sitemap.xml", seo.sitemap_xml, name="sitemap"),
+    path("sante/", views_errors.health, name="health"),
+    path("journal/erreur-navigateur/", views_errors.browser_error, name="browser_error"),
     path("django-admin/", admin.site.urls),
     path("accounts/", include("allauth.urls")),  # connexion Google (django-allauth)
     path("admin-dashboard/", include("core.dashboard_urls")),
@@ -15,11 +25,14 @@ urlpatterns = [
     path("", include("events.urls")),
     path("", include("payments.urls")),
     path("", include("ads.urls")),
+    path("", include("ensemble.urls")),
     path("", include("core.urls")),
 ]
 
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
+handler400 = "core.views_errors.bad_request"
 handler403 = "core.views_errors.permission_denied"
 handler404 = "core.views_errors.page_not_found"
+handler500 = "core.views_errors.server_error"

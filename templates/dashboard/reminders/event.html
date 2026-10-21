@@ -1,0 +1,78 @@
+{% extends "dashboard/base_dashboard.html" %}
+{% load static %}
+{% load i18n %}
+{% block title %}{% blocktranslate trimmed with titre=event.title %}Relances - {{ titre }}{% endblocktranslate %}{% endblock %}
+{% block dash_content %}
+<div id="reminders"
+     data-live-url="{% url 'dashboard:reminder_live' event.pk %}"
+     data-send-url="{% url 'dashboard:reminder_send_one' event.pk 0 %}"
+     data-send-due-url="{% url 'dashboard:reminder_send_due' event.pk %}"
+     data-msg-sending="{% trans 'Envoi en cours...' %}"
+     data-msg-sent-email="{% trans 'Relance envoyée par e-mail à' %}"
+     data-msg-sent-whatsapp="{% trans 'Relance WhatsApp enregistrée pour' %}"
+     data-msg-error="{% trans 'Une erreur est survenue. Réessayez.' %}"
+     data-msg-confirm="{% trans 'Envoyer maintenant les relances par e-mail ? Les relances WhatsApp restent à envoyer depuis votre téléphone.' %}">
+  {% csrf_token %}
+  <div class="page-head">
+    <div>
+      <span class="eyebrow-row"><span class="diamond"></span><span class="eyebrow">{% trans "Invités sans réponse" %}</span></span>
+      <h1>{% trans "Relancer les invités" %}</h1>
+      <p>{{ event.title }} &middot; {{ event.date|date:_("l j F Y") }} &middot; {{ event.time|time:_("H\\hi") }}</p>
+    </div>
+    <div class="d-flex flex-wrap gap-2 align-items-center" data-slot="action" id="action-slot">{% include "dashboard/reminders/_action.html" %}</div>
+  </div>
+
+  <div class="notice notice-success mb-3" id="remind-flash" role="status" aria-live="polite" hidden></div>
+  {% if not accepts %}<div class="notice notice-warning mb-3"><i class="bi bi-info-circle"></i><div>{% trans "Cet événement est passé, annulé ou en brouillon : il n'accepte plus de relances." %}</div></div>{% endif %}
+  {% if email_demo %}<div class="notice notice-warning mb-3"><i class="bi bi-info-circle"></i><div>{% trans "Mode démonstration : les e-mails de relance s'affichent dans la console du serveur au lieu de partir. Ils partent vraiment une fois la messagerie configurée (variables EMAIL_* du fichier .env)." %}</div></div>{% endif %}
+
+  <div id="stats-slot" data-slot="stats">{% include "dashboard/reminders/_stats.html" %}</div>
+
+  <div class="row g-4 mb-4">
+    <div class="col-xl-6">
+      <form method="post" action="{% url 'dashboard:reminder_settings' event.pk %}" class="el-card h-100">
+        {% csrf_token %}
+        <div class="el-card-header"><h2><i class="bi bi-sliders me-2"></i>{% trans "Réglages" %}</h2></div>
+        <div class="el-card-body">
+          <div class="row g-3">
+            <div class="col-sm-6"><label class="form-label" for="r-first">{% trans "Première relance" %}</label>
+              <select class="form-select" id="r-first" name="first_after">{% for v in first_choices %}<option value="{{ v }}" {% if v == event.reminder_first_after_days %}selected{% endif %}>{% blocktranslate trimmed with n=v %}{{ n }} jours après l'invitation{% endblocktranslate %}</option>{% endfor %}</select></div>
+            <div class="col-sm-6"><label class="form-label" for="r-every">{% trans "Fréquence" %}</label>
+              <select class="form-select" id="r-every" name="every">{% for v in every_choices %}<option value="{{ v }}" {% if v == event.reminder_every_days %}selected{% endif %}>{% blocktranslate trimmed with n=v %}Tous les {{ n }} jours{% endblocktranslate %}</option>{% endfor %}</select></div>
+            <div class="col-sm-6"><label class="form-label" for="r-max">{% trans "Maximum par invité" %}</label>
+              <select class="form-select" id="r-max" name="max">{% for v in max_choices %}<option value="{{ v }}" {% if v == event.reminder_max %}selected{% endif %}>{% blocktranslate trimmed count counter=v %}{{ counter }} relance{% plural %}{{ counter }} relances{% endblocktranslate %}</option>{% endfor %}</select></div>
+            <div class="col-sm-6"><label class="form-label" for="r-hour">{% trans "Heure d'envoi" %}</label>
+              <select class="form-select" id="r-hour" name="hour">{% for v, t in hour_choices %}<option value="{{ v }}" {% if v == event.reminder_hour %}selected{% endif %}>{{ t|time:_("H\\hi") }}</option>{% endfor %}</select></div>
+          </div>
+          <div class="form-check form-switch mt-3">
+            <input class="form-check-input" type="checkbox" role="switch" id="r-auto" name="auto" {% if event.reminders_auto %}checked{% endif %}>
+            <label class="form-check-label fw-semibold" for="r-auto">{% trans "Envoi automatique des relances par e-mail" %}</label>
+            <div class="small text-muted">{% trans "Les e-mails partent seuls à l'heure choisie. Les relances WhatsApp restent à envoyer en un clic depuis cette page." %}</div>
+          </div>
+          <p class="small text-muted mt-3 mb-3"><i class="bi bi-info-circle me-1"></i>{% trans "Une relance s'arrête dès que l'invité répond. Elle part par le même canal que l'invitation, WhatsApp ou e-mail, jamais par SMS." %}</p>
+          <button class="btn btn-primary"><i class="bi bi-check2 me-2"></i>{% trans "Enregistrer les réglages" %}</button>
+        </div>
+      </form>
+    </div>
+    <div class="col-xl-6">
+      <div class="el-card h-100">
+        <div class="el-card-header flex-wrap gap-2">
+          <h2><i class="bi bi-chat-text me-2"></i>{% trans "Message envoyé" %}</h2>
+          <div class="chip-tabs" role="group" aria-label="{% trans 'Canal' %}">
+            <button type="button" class="active" data-preview="whatsapp">WhatsApp</button>
+            <button type="button" data-preview="email">{% trans "E-mail" %}</button>
+          </div>
+        </div>
+        <div class="el-card-body">
+          <div class="reminder-preview" data-pane="whatsapp"><div class="bubble-wa">{{ preview_body }}</div></div>
+          <div class="reminder-preview" data-pane="email" hidden><div class="fw-semibold mb-2">{{ preview_subject }}</div><div class="bubble-mail">{{ preview_body }}</div></div>
+          <p class="small text-muted mt-3 mb-0">{% trans "Le message s'écrit dans la langue de chaque invité. Le lien ouvre la page de réponse, sans connexion." %}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="table-slot" data-slot="table">{% include "dashboard/reminders/_table.html" %}</div>
+</div>
+{% endblock %}
+{% block extra_js %}<script src="{% static 'js/reminders.js' %}" defer></script>{% endblock %}

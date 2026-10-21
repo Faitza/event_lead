@@ -7,7 +7,7 @@ from .models import CustomUser
 @receiver(post_save, sender=CustomUser)
 def link_existing_invitations(sender, instance, created, **kwargs):
     """Rattache à un nouveau compte (e-mail ou Google) les invitations déjà envoyées à son e-mail."""
-    if created and instance.email:
+    if created and instance.email and not kwargs.get("raw"):  # pas pendant une restauration (loaddata)
         from events.models import Guest
 
         Guest.objects.filter(email__iexact=instance.email, user__isnull=True).update(user=instance)
