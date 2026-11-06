@@ -59,6 +59,21 @@
 .hero.hero-salle .lead { color: #E9E2EC; max-width: 30em; }
 .hero-salle .btn-gold { padding: 1rem 1.6rem; }
 
+/* Ordinateur : fond violet de nuit et collage de trois photos nettes à droite (pas de grande photo agrandie) */
+@media (min-width: 992px) {
+  .hero.hero-salle { background: radial-gradient(ellipse at 78% 45%, #3A0850 0%, #1A0224 50%, #0D0112 100%); }
+  .hero.hero-salle .hero-bg, .hero.hero-salle .hero-veil { display: none !important; }
+  .hero-salle .hero-inner { flex-direction: row; align-items: center; justify-content: space-between; gap: 48px; }
+  .hero-salle .hero-text { flex: 0 1 560px; }
+  [data-theme="dark"] .hero-salle .hero-collage-clair { display: none !important; }
+  [data-theme="dark"] .hero-salle .hero-collage-sombre { display: block !important; }
+}
+.hero-collage { position: relative; flex: 0 0 auto; width: min(560px, 42vw); aspect-ratio: 560 / 600; }
+.hero-collage img { position: absolute; width: 42.86%; height: 60%; object-fit: cover; border-radius: 14px; outline: 1px solid rgba(212, 175, 55, .75); outline-offset: 6px; box-shadow: 0 24px 60px rgba(0, 0, 0, .55); }
+.hero-collage .c1 { left: 0; top: 25%; }
+.hero-collage .c2 { left: 28.57%; top: 3.33%; width: 44.64%; height: 62.5%; z-index: 2; }
+.hero-collage .c3 { left: 57.14%; top: 33.33%; }
+
 @media (max-width: 991.98px) {
   .hero-salle { min-height: 0; }
   .hero.hero-salle .hero-bg { height: 62%; }
