@@ -7,6 +7,7 @@ Une image avec transparence (logo d'un partenaire) reste en PNG pour ne pas perd
 """
 import io
 import os
+import struct
 
 from django import forms
 from django.core.files.base import ContentFile
@@ -58,3 +59,58 @@ def check_video(uploaded):
     if uploaded.size > VIDEO_MAX_BYTES:
         raise forms.ValidationError(_("Vidéo trop lourde (40 Mo au plus). Raccourcissez-la ou compressez-la avant de l'envoyer."))
     return uploaded
+
+
+def _mp4_boxes(handle, start, end):
+    """Boîtes (type, début du contenu, fin) d'un fichier MP4/MOV entre `start` et `end`."""
+    pos = start
+    while pos + 8 <= end:
+        handle.seek(pos)
+        header = handle.read(8)
+        if len(header) < 8:
+            return
+        size, kind = struct.unpack(">I4s", header)
+        body = pos + 8
+        if size == 1:
+            large = handle.read(8)
+            if len(large) < 8:
+                return
+            size = struct.unpack(">Q", large)[0]
+            body = pos + 16
+        elif size == 0:
+            size = end - pos
+        if size < 8:
+            return
+        yield kind, body, min(pos + size, end)
+        pos += size
+
+
+def video_duration(uploaded):
+    """Durée en secondes d'une vidéo MP4 ou MOV (lue dans l'en-tête « mvhd »), ou None si elle est illisible (WebM...)."""
+    try:
+        handle = uploaded.file if hasattr(uploaded, "file") else uploaded
+        handle.seek(0, os.SEEK_END)
+        total = handle.tell()
+        for kind, body, end in _mp4_boxes(handle, 0, total):
+            if kind != b"moov":
+                continue
+            for sub, sub_body, _sub_end in _mp4_boxes(handle, body, end):
+                if sub != b"mvhd":
+                    continue
+                handle.seek(sub_body)
+                version = handle.read(4)[0]
+                if version == 1:
+                    handle.read(16)
+                    scale, length = struct.unpack(">IQ", handle.read(12))
+                else:
+                    handle.read(8)
+                    scale, length = struct.unpack(">II", handle.read(8))
+                return length / scale if scale else None
+        return None
+    except (OSError, struct.error, IndexError, ValueError):
+        return None
+    finally:
+        try:
+            handle.seek(0)
+        except Exception:  # noqa: BLE001 - le fichier reste utilisable même si on ne peut pas revenir au début
+            pass

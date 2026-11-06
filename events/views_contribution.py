@@ -12,7 +12,7 @@ from payments.forms import PaymentForm
 from payments.models import Payment
 
 from .models import Guest
-from .views_invitation import _ctx, _get_state, _guard, _load_guest, _session_key
+from .views_invitation import _ctx, _get_state, _guard, _load_guest, _session_key, after_reply_redirect
 
 
 @ratelimit("payment", 10, 600)
@@ -52,7 +52,7 @@ def invitation_contribution(request, token):
             if payment.status == Payment.Status.SUCCESS:
                 request.session.pop(_session_key(guest), None)
                 request.session[f"invitation_done_{token}"] = True
-                return redirect("events:invitation_done", token=token)
+                return after_reply_redirect(request, guest)
             # Paiement refusé : la fenêtre se rouvre sur le même mode avec le motif, la réponse reste ouverte
             form.add_error(None, _("%(message)s Référence : %(reference)s.") % {"message": text, "reference": payment.reference})
 

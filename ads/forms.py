@@ -1,9 +1,10 @@
 from django import forms
+from django.core.files.uploadedfile import UploadedFile
 from django.utils.translation import gettext_lazy as _
 
-from core.uploads import check_video, compress_photo
+from core.uploads import check_video, compress_photo, video_duration
 
-from .models import Ad, is_facebook_video, youtube_id
+from .models import AD_MAX_SECONDS, Ad, is_facebook_video, youtube_id
 
 AD_ICONS = [
     ("bi-megaphone", _("Annonce")), ("bi-shop", _("Boutique")), ("bi-cup-straw", _("Boissons")), ("bi-camera", _("Photo")),
@@ -18,7 +19,7 @@ class AdForm(forms.ModelForm):
 
     class Meta:
         model = Ad
-        fields = ["advertiser", "advertiser_phone", "is_paid", "amount_htg", "start_date", "end_date", "title", "icon_name", "message", "image", "video", "video_url", "sponsor_link", "skip_after_seconds",
+        fields = ["advertiser", "advertiser_phone", "is_paid", "amount_htg", "start_date", "end_date", "title", "icon_name", "message", "image", "video", "video_url", "sponsor_link",
                   "is_active", "show_after_reply", "order"]
         widgets = {
             "message": forms.Textarea(attrs={"rows": 3}),
@@ -34,14 +35,21 @@ class AdForm(forms.ModelForm):
         super().__init__(*args, **kwargs)
         self.fields["advertiser"].required = True
         self.fields["image"].help_text = _("JPEG, PNG ou WebP, 12 Mo au plus. L'image est réduite et allégée automatiquement.")
-        self.fields["video"].help_text = _("MP4, WebM ou MOV, 40 Mo au plus. Jouée sans le son et en boucle ; l'image sert d'affiche avant qu'elle démarre.")
+        self.fields["video"].help_text = _("MP4, WebM ou MOV, 40 Mo au plus, 15 secondes au plus. Filmée en hauteur (format téléphone) de préférence : elle remplit tout l'écran après la réponse d'un invité.")
         self.fields["video_url"].help_text = _("Ou collez le lien d'une vidéo YouTube ou Facebook (utilisé s'il n'y a pas de fichier vidéo).")
 
     def clean_image(self):
         return compress_photo(self.cleaned_data.get("image"), max_side=1600)
 
     def clean_video(self):
-        return check_video(self.cleaned_data.get("video"))
+        video = check_video(self.cleaned_data.get("video"))
+        if isinstance(video, UploadedFile):
+            seconds = video_duration(video)
+            if seconds is not None and seconds > AD_MAX_SECONDS + 0.5:
+                raise forms.ValidationError(
+                    _("Vidéo trop longue (%(n)s s) : une publicité dure %(max)s secondes au plus. Raccourcissez-la avant de l'envoyer.")
+                    % {"n": round(seconds), "max": AD_MAX_SECONDS})
+        return video
 
     def clean_video_url(self):
         url = (self.cleaned_data.get("video_url") or "").strip()
@@ -56,8 +64,3 @@ class AdForm(forms.ModelForm):
             self.add_error("end_date", _("La fin de diffusion doit venir après le début."))
         return cleaned
 
-    def clean_skip_after_seconds(self):
-        value = self.cleaned_data["skip_after_seconds"]
-        if value > 30:
-            raise forms.ValidationError(_("30 secondes maximum."))
-        return value

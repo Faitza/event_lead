@@ -6,11 +6,12 @@ from django.db.models import F
 from django.http import HttpResponse, JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
+from django.utils import timezone
 from django.utils.translation import gettext as _
 from django.utils.translation import gettext_lazy, ngettext
 from django.views.decorators.http import require_GET
 
-from ads.models import Ad
+from ads.models import AD_IMAGE_SECONDS, AD_MAX_SECONDS, Ad
 from core.ratelimit import ratelimit
 from gifts.models import GiftClaim
 from payments.models import Contribution
@@ -205,7 +206,7 @@ def invitation_recap(request, token):
             return redirect("events:invitation", token=token)
         request.session.pop(_session_key(guest), None)
         request.session[f"invitation_done_{token}"] = True
-        return redirect("events:invitation_done", token=token)
+        return after_reply_redirect(request, guest)
 
     return render(
         request,
@@ -215,47 +216,53 @@ def invitation_recap(request, token):
     )
 
 
-def _ad_sequence():
-    return list(Ad.objects.live().filter(show_after_reply=True).values_list("pk", flat=True))
+AD_SEEN_KEY = "ad_seen_on"
 
 
-def _after_ads_url():
-    """Fin du parcours : la page d'accueil, au défilé des publications et des événements publics."""
-    return reverse("core:landing") + "#affiche"
+def pick_reply_ad(request, guest):
+    """La publicité plein écran à montrer après une réponse, ou None.
+
+    Aucune si l'organisateur l'a refusée pour son événement, ou si cette personne en a déjà vu une aujourd'hui.
+    Sinon la publicité payée en cours la moins vue : chaque partenaire passe à son tour.
+    """
+    if guest.event.no_ads or request.session.get(AD_SEEN_KEY) == timezone.localdate().isoformat():
+        return None
+    return Ad.objects.live().filter(show_after_reply=True).order_by("views", "order", "pk").first()
+
+
+def after_reply_redirect(request, guest):
+    """Juste après la réponse : la publicité plein écran (si il y en a une), puis la confirmation."""
+    ad = pick_reply_ad(request, guest)
+    if ad is not None:
+        return redirect("events:invitation_ad", token=guest.magic_token, ad_id=ad.pk)
+    return redirect("events:invitation_done", token=guest.magic_token)
 
 
 def invitation_done(request, token):
-    """Étape 5 : « c'est confirmé » (avec le QR code d'entrée), puis une publication et l'accueil."""
+    """Étape 5 : « c'est confirmé », avec le QR code d'entrée. La page reste affichée : l'invité garde son billet."""
     guest = _load_guest(token)
     if guest.replied_at is None:
         return redirect("events:invitation", token=token)
-    ads = _ad_sequence()
-    next_url = reverse("events:invitation_ad", args=[token, ads[0]]) if ads else _after_ads_url()
     claims = GiftClaim.objects.filter(guest=guest).select_related("gift")
     contribution = Contribution.objects.filter(guest=guest).first()
-    # Un invité présent a le temps de toucher « Voir mon QR code d'entrée » avant la redirection
-    delay = 8 if guest.status == Guest.Status.CONFIRMED else 3
     return render(request, "invitation/step_done.html", _ctx(
-        guest, "confirmation", next_url=next_url, claims=claims, delay=delay, ads_follow=bool(ads), contribution=contribution,
+        guest, "confirmation", home_url=reverse("core:landing") + "#affiche", claims=claims, contribution=contribution,
     ))
 
 
 def invitation_ad(request, token, ad_id):
-    """Page publicité affichée après la réponse (section 7), puis retour à l'accueil."""
+    """Publicité courte en plein écran juste après la réponse (15 s au plus, « Passer » tout de suite), puis la confirmation."""
     guest = _load_guest(token)
+    done_url = reverse("events:invitation_done", args=[token])
+    if guest.replied_at is None:
+        return redirect("events:invitation", token=token)
+    if guest.event.no_ads:
+        return redirect(done_url)
     ad = get_object_or_404(Ad.objects.live(), pk=ad_id)
     Ad.objects.filter(pk=ad.pk).update(views=F("views") + 1)
-    ads = _ad_sequence()
-    try:
-        position = ads.index(ad.pk)
-    except ValueError:
-        position = len(ads) - 1
-    following = ads[position + 1] if position + 1 < len(ads) else None
-    next_url = reverse("events:invitation_ad", args=[token, following]) if following else _after_ads_url()
-    return render(request, "ads/ad_page.html", {
-        "ad": ad, "guest": guest, "next_url": next_url,
-        "position": position + 1, "total": len(ads),
-    })
+    request.session[AD_SEEN_KEY] = timezone.localdate().isoformat()
+    seconds = AD_MAX_SECONDS if ad.has_video else AD_IMAGE_SECONDS
+    return render(request, "ads/ad_page.html", {"ad": ad, "guest": guest, "next_url": done_url, "seconds": seconds})
 
 
 # ---------------------------------------------------------------------------

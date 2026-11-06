@@ -77,7 +77,7 @@ msgstr "adrès imèl"
 msgid "rôle"
 msgstr "wòl"
 
-#: accounts/models.py:15 core/models.py:28 events/models.py:307
+#: accounts/models.py:15 core/models.py:28 events/models.py:311
 msgid "téléphone"
 msgstr "telefòn"
 
@@ -125,203 +125,203 @@ msgstr "Ou dekonekte."
 msgid "Profil mis à jour."
 msgstr "Pwofil la mete ajou."
 
-#: ads/forms.py:9
+#: ads/forms.py:10
 msgid "Annonce"
 msgstr "Anons"
 
-#: ads/forms.py:9
+#: ads/forms.py:10
 msgid "Boutique"
 msgstr "Boutik"
 
-#: ads/forms.py:9
+#: ads/forms.py:10
 msgid "Boissons"
 msgstr "Bwason"
 
-#: ads/forms.py:10 events/forms.py:16 gifts/models.py:29
+#: ads/forms.py:11 events/forms.py:16 gifts/models.py:29
 msgid "Musique"
 msgstr "Mizik"
 
-#: ads/forms.py:10
+#: ads/forms.py:11
 msgid "Fleuriste"
 msgstr "Machann flè"
 
-#: ads/forms.py:10
+#: ads/forms.py:11
 msgid "Transport"
 msgstr "Transpò"
 
-#: ads/forms.py:11
+#: ads/forms.py:12
 msgid "Hôtel"
 msgstr "Otèl"
 
-#: ads/forms.py:11
+#: ads/forms.py:12
 msgid "Banque"
 msgstr "Bank"
 
-#: ads/forms.py:11
+#: ads/forms.py:12
 msgid "Téléphonie"
 msgstr "Telefoni"
 
-#: ads/forms.py:11
+#: ads/forms.py:12
 msgid "Bijouterie"
 msgstr "Bijou"
 
-#: ads/forms.py:12 gifts/models.py:21
+#: ads/forms.py:13 gifts/models.py:21
 msgid "Voyage"
 msgstr "Vwayaj"
 
-#: ads/forms.py:12
+#: ads/forms.py:13
 msgid "Pâtisserie"
 msgstr "Patisri"
 
-#: ads/forms.py:12
+#: ads/forms.py:13
 msgid "Beauté"
 msgstr "Bote"
 
-#: ads/forms.py:17 events/forms.py:70 gifts/forms.py:8
+#: ads/forms.py:18 events/forms.py:70 gifts/forms.py:8
 msgid "Icône"
 msgstr "Ikòn"
 
-#: ads/forms.py:36
+#: ads/forms.py:37
 msgid "JPEG, PNG ou WebP, 12 Mo au plus. L'image est réduite et allégée automatiquement."
 msgstr "JPEG, PNG oswa WebP, 12 Mo pou pi plis. Imaj la vin pi piti e pi lejè otomatikman."
 
-#: ads/forms.py:37
-msgid "MP4, WebM ou MOV, 40 Mo au plus. Jouée sans le son et en boucle ; l'image sert d'affiche avant qu'elle démarre."
-msgstr "MP4, WebM oswa MOV, 40 Mo pou pi plis. Li jwe san son epi an bouk ; imaj la parèt anvan li kòmanse."
-
 #: ads/forms.py:38
+msgid "MP4, WebM ou MOV, 40 Mo au plus, 15 secondes au plus. Filmée en hauteur (format téléphone) de préférence : elle remplit tout l'écran après la réponse d'un invité."
+msgstr "MP4, WebM oswa MOV, 40 Mo pi plis, 15 segonn pi plis. Pi bon si li filme kanpe (fòma telefòn) : li ranpli tout ekran an apre yon envite fin reponn."
+
+#: ads/forms.py:39
 msgid "Ou collez le lien d'une vidéo YouTube ou Facebook (utilisé s'il n'y a pas de fichier vidéo)."
 msgstr "Oswa kole lyen yon videyo YouTube oswa Facebook (li sèvi si pa gen fichye videyo)."
 
-#: ads/forms.py:49
+#: ads/forms.py:50
+msgid "Vidéo trop longue (%(n)s s) : une publicité dure %(max)s secondes au plus. Raccourcissez-la avant de l'envoyer."
+msgstr "Videyo a twò long (%(n)s s) : yon piblisite dire %(max)s segonn pi plis. Koupe l anvan ou voye l."
+
+#: ads/forms.py:57
 msgid "Collez le lien d'une vidéo YouTube ou Facebook."
 msgstr "Kole lyen yon videyo YouTube oswa Facebook."
 
-#: ads/forms.py:56
+#: ads/forms.py:64
 msgid "La fin de diffusion doit venir après le début."
 msgstr "Dat fen an dwe vini apre dat kòmansman an."
 
-#: ads/forms.py:62
-msgid "30 secondes maximum."
-msgstr "30 segonn maksimòm."
-
-#: ads/models.py:47
+#: ads/models.py:49
 msgid "annonceur"
 msgstr "anonsè"
 
-#: ads/models.py:48
+#: ads/models.py:50
 msgid "Le partenaire ou la personne qui paie cette publicité."
 msgstr "Patnè a oswa moun k ap peye piblisite sa a."
 
-#: ads/models.py:49
+#: ads/models.py:51
 msgid "téléphone ou WhatsApp de l'annonceur"
 msgstr "telefòn oswa WhatsApp anonsè a"
 
-#: ads/models.py:50
+#: ads/models.py:52
 msgid "payée"
 msgstr "peye"
 
-#: ads/models.py:51
+#: ads/models.py:53
 msgid "La publicité n'apparaît sur le site qu'une fois cochée « payée »."
 msgstr "Piblisite a parèt sou sit la sèlman lè yo make l « peye »."
 
-#: ads/models.py:52
+#: ads/models.py:54
 msgid "montant payé (HTG)"
 msgstr "kantite lajan ki peye (HTG)"
 
-#: ads/models.py:53
+#: ads/models.py:55
 msgid "début de diffusion"
 msgstr "kòmansman difizyon"
 
-#: ads/models.py:54
+#: ads/models.py:56
 msgid "fin de diffusion"
 msgstr "fen difizyon"
 
-#: ads/models.py:55
+#: ads/models.py:57
 msgid "Après cette date, la publicité ne s'affiche plus. Vide : sans fin."
 msgstr "Apre dat sa a, piblisite a pa parèt ankò. Vid : san fen."
 
-#: ads/models.py:56 events/models.py:133
+#: ads/models.py:58 events/models.py:133
 msgid "titre"
 msgstr "tit"
 
-#: ads/models.py:57 events/models.py:65 gifts/models.py:44
+#: ads/models.py:59 events/models.py:65 gifts/models.py:44
 msgid "icône"
 msgstr "ikòn"
 
-#: ads/models.py:58 core/models.py:29 core/models.py:63 ensemble/models.py:135 ensemble/models.py:140
+#: ads/models.py:60 core/models.py:29 core/models.py:63 ensemble/models.py:135 ensemble/models.py:140
 msgid "message"
 msgstr "mesaj"
 
-#: ads/models.py:59
+#: ads/models.py:61
 msgid "image"
 msgstr "imaj"
 
-#: ads/models.py:61
+#: ads/models.py:63
 msgid "vidéo"
 msgstr "videyo"
 
-#: ads/models.py:62
+#: ads/models.py:64
 msgid "Jouée sans le son, en boucle. L'image ci-dessus s'affiche avant qu'elle démarre."
 msgstr "Li jwe san son, an bouk. Imaj ki anwo a parèt anvan li kòmanse."
 
-#: ads/models.py:65
+#: ads/models.py:67
 msgid "lien d'une vidéo YouTube ou Facebook"
 msgstr "lyen yon videyo YouTube oswa Facebook"
 
-#: ads/models.py:66
+#: ads/models.py:68
 msgid "Utilisé seulement s'il n'y a pas de fichier vidéo."
 msgstr "Li sèvi sèlman si pa gen fichye videyo."
 
-#: ads/models.py:68
+#: ads/models.py:70
 msgid "lien du sponsor"
 msgstr "lyen sponsor a"
 
-#: ads/models.py:69
+#: ads/models.py:71
 msgid "passer après (secondes)"
 msgstr "pase apre (segonn)"
 
-#: ads/models.py:72
+#: ads/models.py:74
 msgid "active"
 msgstr "aktif"
 
-#: ads/models.py:74
+#: ads/models.py:76
 msgid "afficher après la réponse d'un invité"
 msgstr "montre apre repons yon envite"
 
-#: ads/models.py:75
+#: ads/models.py:77
 msgid "Si coché, la publicité fait partie de la séquence affichée après une réponse."
 msgstr "Si ou make l, piblisite a fè pati sekans yo montre apre yon repons."
 
-#: ads/models.py:77 events/models.py:66
+#: ads/models.py:79 events/models.py:66
 msgid "ordre d'affichage"
 msgstr "lòd afichaj"
 
-#: ads/models.py:85
+#: ads/models.py:87
 msgid "publicité"
 msgstr "piblisite"
 
-#: ads/models.py:86
+#: ads/models.py:88
 msgid "publicités"
 msgstr "piblisite"
 
-#: ads/models.py:96
+#: ads/models.py:98
 msgid "En attente de paiement"
 msgstr "Ap tann peman"
 
-#: ads/models.py:98
+#: ads/models.py:100
 msgid "Désactivée"
 msgstr "Dezaktive"
 
-#: ads/models.py:100
+#: ads/models.py:102
 msgid "Commence le %(date)s"
 msgstr "Kòmanse %(date)s"
 
-#: ads/models.py:102
+#: ads/models.py:104
 msgid "Terminée"
 msgstr "Fini"
 
-#: ads/models.py:103
+#: ads/models.py:105
 msgid "En ligne"
 msgstr "Sou sit la"
 
@@ -827,11 +827,11 @@ msgid_plural "This password is too short. It must contain at least %(min_length)
 msgstr[0] "Modpas sa a two kout. Li dwe gen omwen %(min_length)d karaktè."
 msgstr[1] "Modpas sa a two kout. Li dwe gen omwen %(min_length)d karaktè."
 
-#: core/models.py:9 core/models.py:26 core/models.py:60 core/models.py:147 events/models.py:63 events/models.py:268
+#: core/models.py:9 core/models.py:26 core/models.py:60 core/models.py:147 events/models.py:63 events/models.py:272
 msgid "nom"
 msgstr "non"
 
-#: core/models.py:10 events/models.py:475
+#: core/models.py:10 events/models.py:479
 msgid "note"
 msgstr "nòt"
 
@@ -847,7 +847,7 @@ msgstr "pibliye"
 msgid "Un avis envoyé depuis le site attend la validation de l'équipe avant d'apparaître sur l'accueil."
 msgstr "Yon avi ki soti sou sit la ap tann ekip la valide l anvan li parèt sou paj akèy la."
 
-#: core/models.py:27 events/models.py:306
+#: core/models.py:27 events/models.py:310
 msgid "email"
 msgstr "imèl"
 
@@ -899,7 +899,7 @@ msgstr "imèl oswa telefòn"
 msgid "sujet"
 msgstr "sijè"
 
-#: core/models.py:64 ensemble/models.py:102 ensemble/models.py:188 events/models.py:135 events/models.py:308 payments/models.py:44
+#: core/models.py:64 ensemble/models.py:102 ensemble/models.py:188 events/models.py:135 events/models.py:312 payments/models.py:44
 msgid "statut"
 msgstr "estati"
 
@@ -1103,11 +1103,11 @@ msgstr "Done nou kenbe yo ak poukisa, cookies yo."
 msgid "Les règles d'utilisation du site."
 msgstr "Règ pou sèvi ak sit la."
 
-#: core/uploads.py:57
+#: core/uploads.py:58
 msgid "Vidéo refusée : choisissez un fichier MP4, WebM ou MOV."
 msgstr "Videyo a refize : chwazi yon fichye MP4, WebM oswa MOV."
 
-#: core/uploads.py:59
+#: core/uploads.py:60
 msgid "Vidéo trop lourde (40 Mo au plus). Raccourcissez-la ou compressez-la avant de l'envoyer."
 msgstr "Videyo a twò lou (40 Mo pou pi plis). Fè l pi kout oswa konprese l anvan w voye l."
 
@@ -1291,7 +1291,7 @@ msgstr "Rezon"
 msgid "prénom affiché"
 msgstr "non k ap parèt"
 
-#: ensemble/models.py:36 events/models.py:409
+#: ensemble/models.py:36 events/models.py:413
 msgid "photo"
 msgstr "foto"
 
@@ -1347,7 +1347,7 @@ msgstr "moun ki afiche"
 msgid "personnes affichées"
 msgstr "moun ki afiche"
 
-#: ensemble/models.py:94 events/models.py:291 payments/models.py:20
+#: ensemble/models.py:94 events/models.py:295 payments/models.py:20
 msgid "En attente"
 msgstr "Ap tann"
 
@@ -1693,7 +1693,7 @@ msgstr "Ou bezwen yon nimewo pou voye sou WhatsApp."
 msgid "Cet événement a atteint son nombre maximum d'invités (%(max)d)."
 msgstr "Evènman sa a rive nan kantite maksimòm envite li yo (%(max)d)."
 
-#: events/forms.py:163 events/models.py:294
+#: events/forms.py:163 events/models.py:298
 msgid "Peut-être"
 msgstr "Petèt"
 
@@ -1881,219 +1881,227 @@ msgstr "aksepte kontribisyon lajan"
 msgid "Les invités peuvent contribuer en argent (MonCash ou NatCash) à la place d'un cadeau."
 msgstr "Envite yo ka kontribye ak lajan (MonCash oswa NatCash) olye yon kado."
 
-#: events/models.py:155
+#: events/models.py:156
+msgid "pas de publicité pour mes invités"
+msgstr "pa gen piblisite pou envite m yo"
+
+#: events/models.py:157
+msgid "Si coché, vos invités ne voient aucune publicité après avoir répondu à l'invitation."
+msgstr "Si ou koche l, envite ou yo p ap wè okenn piblisite apre yo fin reponn envitasyon an."
+
+#: events/models.py:159
 msgid "message de remerciement"
 msgstr "mesaj remèsiman"
 
-#: events/models.py:156
+#: events/models.py:160
 msgid "remerciements publiés le"
 msgstr "remèsiman pibliye le"
 
-#: events/models.py:157
+#: events/models.py:161
 msgid "description"
 msgstr "deskripsyon"
 
-#: events/models.py:158
+#: events/models.py:162
 msgid "photo de couverture"
 msgstr "foto kouvèti"
 
-#: events/models.py:159
+#: events/models.py:163
 msgid "vidéo de couverture"
 msgstr "videyo kouvèti"
 
-#: events/models.py:161
+#: events/models.py:165
 msgid "prix du billet (HTG)"
 msgstr "pri biyè a (HTG)"
 
-#: events/models.py:162
+#: events/models.py:166
 msgid "Laisser vide si l'événement est gratuit."
 msgstr "Kite l vid si evènman an gratis."
 
-#: events/models.py:166
+#: events/models.py:170
 msgid "catégorie"
 msgstr "kategori"
 
-#: events/models.py:170
+#: events/models.py:174
 msgid "créé par"
 msgstr "kreye pa"
 
-#: events/models.py:172 payments/models.py:52
+#: events/models.py:176 payments/models.py:52
 msgid "créé le"
 msgstr "dat kreyasyon"
 
-#: events/models.py:183 events/models.py:266 events/models.py:300 events/models.py:405 events/models.py:448 gifts/models.py:42
+#: events/models.py:187 events/models.py:270 events/models.py:304 events/models.py:409 events/models.py:452 gifts/models.py:42
 msgid "événement"
 msgstr "evènman"
 
-#: events/models.py:267
+#: events/models.py:271
 msgid "numéro"
 msgstr "nimewo"
 
-#: events/models.py:276 events/models.py:322
+#: events/models.py:280 events/models.py:326
 msgid "table"
 msgstr "tab"
 
-#: events/models.py:285
+#: events/models.py:289
 msgid "Table %(n)d"
 msgstr "Tab %(n)d"
 
-#: events/models.py:292
+#: events/models.py:296
 msgid "Présent"
 msgstr "Prezan"
 
-#: events/models.py:293
+#: events/models.py:297
 msgid "Absent"
 msgstr "Absan"
 
-#: events/models.py:297
+#: events/models.py:301
 msgid "Email"
 msgstr "Imèl"
 
-#: events/models.py:303
+#: events/models.py:307
 msgid "compte lié"
 msgstr "kont ki lye"
 
-#: events/models.py:310
+#: events/models.py:314
 msgid "canal d'envoi"
 msgstr "chanèl pou voye"
 
-#: events/models.py:311
+#: events/models.py:315
 msgid "langue de l'invitation"
 msgstr "lang envitasyon an"
 
-#: events/models.py:312
+#: events/models.py:316
 msgid "lien magique"
 msgstr "lyen majik"
 
-#: events/models.py:313
+#: events/models.py:317
 msgid "invitation envoyée le"
 msgstr "dat envitasyon an te voye"
 
-#: events/models.py:314
+#: events/models.py:318
 msgid "répondu le"
 msgstr "dat repons"
 
-#: events/models.py:315
+#: events/models.py:319
 msgid "souhaite offrir un cadeau"
 msgstr "vle bay yon kado"
 
-#: events/models.py:316
+#: events/models.py:320
 msgid "code d'entrée"
 msgstr "kòd antre"
 
-#: events/models.py:317
+#: events/models.py:321
 msgid "arrivé le"
 msgstr "rive le"
 
-#: events/models.py:318
+#: events/models.py:322
 msgid "remerciement envoyé le"
 msgstr "remèsiman voye le"
 
-#: events/models.py:319
+#: events/models.py:323
 msgid "ajouté sur place"
 msgstr "ajoute sou plas"
 
-#: events/models.py:320
+#: events/models.py:324
 msgid "billet acheté"
 msgstr "tikè achte"
 
-#: events/models.py:334 events/models.py:382 events/models.py:449 gifts/models.py:79 payments/models.py:34 payments/models.py:85
+#: events/models.py:338 events/models.py:386 events/models.py:453 gifts/models.py:79 payments/models.py:34 payments/models.py:85
 msgid "invité"
 msgstr "envite"
 
-#: events/models.py:383
+#: events/models.py:387
 msgid "canal"
 msgstr "chanèl"
 
-#: events/models.py:386
+#: events/models.py:390
 msgid "envoyée le"
 msgstr "voye le"
 
-#: events/models.py:390
+#: events/models.py:394
 msgid "relance"
 msgstr "rapèl"
 
-#: events/models.py:391
+#: events/models.py:395
 msgid "relances"
 msgstr "rapèl"
 
-#: events/models.py:407
+#: events/models.py:411
 msgid "ajoutée par"
 msgstr "ajoute pa"
 
-#: events/models.py:410
+#: events/models.py:414
 msgid "miniature"
 msgstr "vinyèt"
 
-#: events/models.py:411
+#: events/models.py:415
 msgid "ajoutée le"
 msgstr "ajoute le"
 
-#: events/models.py:415
+#: events/models.py:419
 msgid "photo de l'album"
 msgstr "foto albòm"
 
-#: events/models.py:416
+#: events/models.py:420
 msgid "photos de l'album"
 msgstr "foto albòm yo"
 
-#: events/models.py:434
+#: events/models.py:438
 msgid "Entrée validée"
 msgstr "Antre valide"
 
-#: events/models.py:435
+#: events/models.py:439
 msgid "QR déjà utilisé"
 msgstr "Kòd QR deja itilize"
 
-#: events/models.py:437
+#: events/models.py:441
 msgid "Autre événement"
 msgstr "Lòt evènman"
 
-#: events/models.py:438
+#: events/models.py:442
 msgid "Ajouté sur place"
 msgstr "Ajoute sou plas"
 
-#: events/models.py:439
+#: events/models.py:443
 msgid "Pointage annulé"
 msgstr "Kontwòl anile"
 
-#: events/models.py:442
+#: events/models.py:446
 msgid "QR code"
 msgstr "Kòd QR"
 
-#: events/models.py:444
+#: events/models.py:448
 msgid "Sur place"
 msgstr "Sou plas"
 
-#: events/models.py:450
+#: events/models.py:454
 msgid "code lu"
 msgstr "kòd ki li"
 
-#: events/models.py:451
+#: events/models.py:455
 msgid "résultat"
 msgstr "rezilta"
 
-#: events/models.py:452
+#: events/models.py:456
 msgid "origine"
 msgstr "orijin"
 
-#: events/models.py:459
+#: events/models.py:463
 msgid "pointage"
 msgstr "kontwòl antre"
 
-#: events/models.py:460
+#: events/models.py:464
 msgid "pointages"
 msgstr "kontwòl antre yo"
 
-#: events/models.py:476
+#: events/models.py:480
 msgid "commentaire"
 msgstr "kòmantè"
 
-#: events/models.py:481
+#: events/models.py:485
 msgid "évaluation"
 msgstr "evalyasyon"
 
-#: events/models.py:482
+#: events/models.py:486
 msgid "évaluations"
 msgstr "evalyasyon"
 
@@ -2341,39 +2349,39 @@ msgstr "Ekri non moun nan."
 msgid "%(message)s Référence : %(reference)s."
 msgstr "%(message)s Referans : %(reference)s."
 
-#: events/views_invitation.py:51
+#: events/views_invitation.py:52
 msgid "Sélection"
 msgstr "Seleksyon"
 
-#: events/views_invitation.py:52
+#: events/views_invitation.py:53
 msgid "Récapitulatif"
 msgstr "Rezime"
 
-#: events/views_invitation.py:53
+#: events/views_invitation.py:54
 msgid "Confirmation"
 msgstr "Konfimasyon"
 
-#: events/views_invitation.py:149
+#: events/views_invitation.py:150
 msgid "Un cadeau sélectionné n'est plus disponible. La liste a été actualisée."
 msgstr "Yon kado ou te chwazi pa disponib ankò. Lis la mete ajou."
 
-#: events/views_invitation.py:164
+#: events/views_invitation.py:165
 msgid "%(n)d disponible"
 msgid_plural "%(n)d disponibles"
 msgstr[0] "%(n)d disponib"
 msgstr[1] "%(n)d disponib"
 
-#: events/views_invitation.py:197
+#: events/views_invitation.py:198
 msgid "Désolé, ce cadeau vient d'être choisi par un autre invité : %(cadeaux)s. Merci de revoir votre sélection."
 msgid_plural "Désolé, ces cadeaux viennent d'être choisis par d'autres invités : %(cadeaux)s. Merci de revoir votre sélection."
 msgstr[0] "Dezole, yon lòt envite fenk chwazi kado sa a : %(cadeaux)s. Tanpri, revize seleksyon ou an."
 msgstr[1] "Dezole, lòt envite fenk chwazi kado sa yo : %(cadeaux)s. Tanpri, revize seleksyon ou an."
 
-#: events/views_invitation.py:277
+#: events/views_invitation.py:284
 msgid "Mon billet d'entrée pour « %(title)s » : %(url)s"
 msgstr "Biyè antre mwen pou « %(title)s » : %(url)s"
 
-#: events/views_invitation.py:278
+#: events/views_invitation.py:285
 msgid "QR code d'entrée de %(name)s"
 msgstr "Kòd QR antre pou %(name)s"
 
@@ -2967,7 +2975,7 @@ msgstr "Kreye yon kont"
 msgid "Mon profil"
 msgstr "Pwofil mwen"
 
-#: templates/accounts/profile.html:19 templates/dashboard/ads/form.html:44 templates/dashboard/categories/form.html:31 templates/dashboard/gifts/form.html:19 templates/dashboard/guests/form.html:30 templates/dashboard/help/list.html:38
+#: templates/accounts/profile.html:19 templates/dashboard/ads/form.html:43 templates/dashboard/categories/form.html:31 templates/dashboard/gifts/form.html:19 templates/dashboard/guests/form.html:30 templates/dashboard/help/list.html:38
 msgid "Enregistrer"
 msgstr "Anrejistre"
 
@@ -3023,49 +3031,45 @@ msgstr "Lè w kreye yon kont, ou aksepte <a href=\"%(terms_url)s\">kondisyon iti
 msgid "Déjà inscrit ?"
 msgstr "Ou deja enskri ?"
 
-#: templates/ads/ad_page.html:9 templates/invitation/base_invitation.html:10 templates/invitation/ticket.html:11 templates/partials/_footer.html:6 templates/partials/_navbar.html:15
-msgid "EventLead, accueil"
-msgstr "EventLead, akèy"
+#: templates/ads/ad_page.html:16 templates/partials/_ad_media.html:5
+msgid "Vidéo : %(title)s"
+msgstr "Videyo : %(title)s"
 
-#: templates/ads/ad_page.html:10
-msgid "Publicité partenaire"
-msgstr "Piblisite patnè"
+#: templates/ads/ad_page.html:26
+msgid "Durée de la publicité"
+msgstr "Tan piblisite a"
 
-#: templates/ads/ad_page.html:10
-msgid "%(pos)s sur %(tot)s"
-msgstr "%(pos)s sou %(tot)s"
+#: templates/ads/ad_page.html:29
+msgid "Votre réponse est bien enregistrée."
+msgstr "Repons ou anrejistre byen."
 
-#: templates/ads/ad_page.html:18
-msgid "Merci %(name)s, votre réponse est enregistrée. %(title)s : l'hôte est prévenu."
-msgstr "Mèsi %(name)s, repons ou anrejistre. %(title)s : òganizatè a jwenn nouvèl la."
+#: templates/ads/ad_page.html:30 templates/dashboard/ads/list.html:18
+msgid "Publicité"
+msgstr "Piblisite"
 
-#: templates/ads/ad_page.html:24
-msgid "Offre pour les invités"
-msgstr "Òf pou envite yo"
+#: templates/ads/ad_page.html:35 templates/ads/ad_page.html:35
+msgid "Mettre le son"
+msgstr "Mete son an"
 
-#: templates/ads/ad_page.html:27 templates/ads/list.html:18 templates/partials/_parade_card.html:9 templates/partials/_parade_card.html:19
-msgid "Visiter le site"
-msgstr "Vizite sit la"
+#: templates/ads/ad_page.html:35
+msgid "Couper le son"
+msgstr "Koupe son an"
 
-#: templates/ads/ad_page.html:31
-msgid "Temps avant de pouvoir passer"
-msgstr "Tan anvan ou ka pase"
+#: templates/ads/ad_page.html:44 templates/partials/_cookie_note.html:3
+msgid "En savoir plus"
+msgstr "Konn plis"
 
-#: templates/ads/ad_page.html:32
-msgid "Passer dans {n} s"
-msgstr "Pase nan {n} s"
-
-#: templates/ads/ad_page.html:32
+#: templates/ads/ad_page.html:45
 msgid "Passer"
 msgstr "Pase"
 
-#: templates/ads/ad_page.html:33
-msgid "Passer dans %(n)s s"
-msgstr "Pase nan %(n)s s"
+#: templates/ads/ad_page.html:47
+msgid "Ensuite : votre confirmation et votre QR code d'entrée."
+msgstr "Apre sa : konfimasyon ou ak kòd QR pou antre a."
 
-#: templates/ads/ad_page.html:34
-msgid "Ensuite : l'accueil, avec les événements publics à venir."
-msgstr "Apre sa : paj akèy la, ak pwochen evènman piblik yo."
+#: templates/ads/ad_page.html:47
+msgid "Ensuite : votre confirmation."
+msgstr "Apre sa : konfimasyon ou."
 
 #: templates/ads/list.html:3 templates/ads/list.html:7 templates/events/explore.html:19
 msgid "Nos partenaires"
@@ -3078,6 +3082,10 @@ msgstr "Òf patnè yo"
 #: templates/ads/list.html:7
 msgid "Des prestataires de confiance pour réussir vos événements."
 msgstr "Pwofesyonèl serye pou ede ou reyisi evènman ou yo."
+
+#: templates/ads/list.html:18 templates/partials/_parade_card.html:9 templates/partials/_parade_card.html:19
+msgid "Visiter le site"
+msgstr "Vizite sit la"
 
 #: templates/ads/list.html:22
 msgid "Aucune offre pour le moment."
@@ -3215,7 +3223,7 @@ msgstr "Akèy"
 msgid "Publications, événements publics et billets du moment, rassemblés pour vous."
 msgstr "Piblikasyon, evènman piblik ak biyè ki disponib kounye a, tout rasanble pou ou."
 
-#: templates/core/landing.html:24 templates/dashboard/events/form.html:64 templates/partials/_footer.html:14 templates/partials/_navbar.html:23 templates/payments/ticketing.html:4 templates/payments/ticketing.html:10
+#: templates/core/landing.html:24 templates/dashboard/events/form.html:65 templates/partials/_footer.html:14 templates/partials/_navbar.html:23 templates/payments/ticketing.html:4 templates/payments/ticketing.html:10
 msgid "Billetterie"
 msgstr "Vant biyè"
 
@@ -3493,7 +3501,7 @@ msgstr "Rechèch : %(q)s"
 msgid "Rechercher un événement, une catégorie, une question de l'aide ou une page du site EventLead."
 msgstr "Chèche yon evènman, yon kategori, yon kesyon nan èd la oswa yon paj sou sit EventLead la."
 
-#: templates/core/search.html:6 core/visits.py:31 events/models.py:443
+#: templates/core/search.html:6 core/visits.py:31 events/models.py:447
 msgid "Recherche"
 msgstr "Rechèch"
 
@@ -3583,21 +3591,17 @@ msgstr "Piblisite patnè"
 msgid "Les publicités des partenaires qui paient : elles s'affichent une fois payées, pendant leurs dates de diffusion. Suivez leurs vues et leurs clics."
 msgstr "Piblisite patnè ki peye yo : yo parèt lè yo fin peye, pandan dat difizyon yo. Swiv konbyen moun wè yo ak konbyen klik yo genyen."
 
-#: templates/dashboard/ads/list.html:11 ads/models.py:70 core/models.py:200
+#: templates/dashboard/ads/list.html:11 ads/models.py:72 core/models.py:200
 msgid "vues"
 msgstr "vi"
 
-#: templates/dashboard/ads/list.html:12 ads/models.py:71
+#: templates/dashboard/ads/list.html:12 ads/models.py:73
 msgid "clics"
 msgstr "klik"
 
 #: templates/dashboard/ads/list.html:13
 msgid "taux de clic (CTR)"
 msgstr "to klik (CTR)"
-
-#: templates/dashboard/ads/list.html:18
-msgid "Publicité"
-msgstr "Piblisite"
 
 #: templates/dashboard/ads/list.html:18
 msgid "Diffusion"
@@ -3795,7 +3799,7 @@ msgstr "Ajoute kategori default yo"
 msgid "Catégorie"
 msgstr "Kategori"
 
-#: templates/dashboard/categories/list.html:18 templates/invitation/step_thanks.html:54 ads/forms.py:9 ensemble/forms.py:23
+#: templates/dashboard/categories/list.html:18 templates/invitation/step_thanks.html:54 ads/forms.py:10 ensemble/forms.py:23
 msgid "Photo"
 msgstr "Foto"
 
@@ -4261,15 +4265,15 @@ msgstr "Sèvis lokalizasyon an pa disponib. Klike sou kat la pou mete mak la."
 msgid "Invitations"
 msgstr "Envitasyon"
 
-#: templates/dashboard/events/form.html:58
+#: templates/dashboard/events/form.html:59
 msgid "Médias"
 msgstr "Medya"
 
-#: templates/dashboard/events/form.html:67
+#: templates/dashboard/events/form.html:68
 msgid "Créer l'événement"
 msgstr "Kreye evènman an"
 
-#: templates/dashboard/events/form.html:67
+#: templates/dashboard/events/form.html:68
 msgid "Enregistrer les modifications"
 msgstr "Anrejistre chanjman yo"
 
@@ -4533,7 +4537,7 @@ msgid_plural "%(counter)s demandes d'aide nouvelles"
 msgstr[0] "%(counter)s nouvo demann èd"
 msgstr[1] "%(counter)s nouvo demann èd"
 
-#: templates/dashboard/home.html:14 events/models.py:184
+#: templates/dashboard/home.html:14 events/models.py:188
 msgid "événements"
 msgstr "evènman"
 
@@ -4541,7 +4545,7 @@ msgstr "evènman"
 msgid "%(n)s à venir"
 msgstr "%(n)s k ap vini"
 
-#: templates/dashboard/home.html:15 templates/events/organizer_event_detail.html:8 events/models.py:335
+#: templates/dashboard/home.html:15 templates/events/organizer_event_detail.html:8 events/models.py:339
 msgid "invités"
 msgstr "envite"
 
@@ -4773,7 +4777,7 @@ msgstr "%(n)s de fwa"
 msgid "%(n)s trois fois"
 msgstr "%(n)s twa fwa"
 
-#: templates/dashboard/reminders/_stats.html:6 events/models.py:384
+#: templates/dashboard/reminders/_stats.html:6 events/models.py:388
 msgid "automatique"
 msgstr "otomatik"
 
@@ -4959,7 +4963,7 @@ msgstr "Voye rapèl ak yon sèl klik bay envite ki poko reponn yo, pa WhatsApp o
 msgid "À venir"
 msgstr "Ki ap vini"
 
-#: templates/dashboard/seating/_board.html:3 events/models.py:277
+#: templates/dashboard/seating/_board.html:3 events/models.py:281
 msgid "tables"
 msgstr "tab"
 
@@ -4971,7 +4975,7 @@ msgstr "%(n)s plas chak"
 msgid "de %(a)s à %(b)s places"
 msgstr "de %(a)s a %(b)s plas"
 
-#: templates/dashboard/seating/_board.html:4 events/models.py:270
+#: templates/dashboard/seating/_board.html:4 events/models.py:274
 msgid "places"
 msgstr "plas"
 
@@ -5981,7 +5985,7 @@ msgstr "Konsè, gala, konferans : dekouvri sa k ap pase tou pre ou."
 msgid "Aucun événement public à venir pour le moment."
 msgstr "Pa gen okenn evènman piblik k ap vini pou kounye a."
 
-#: templates/events/organizer_event_detail.html:10 events/models.py:309
+#: templates/events/organizer_event_detail.html:10 events/models.py:313
 msgid "accompagnants"
 msgstr "moun k ap akonpanye w"
 
@@ -6095,11 +6099,11 @@ msgstr[1] "Ou konfime prezans ou nan dat %(date)s, avèk %(counter)s moun k ap a
 msgid "Vous avez confirmé votre présence le %(date)s."
 msgstr "Ou konfime prezans ou nan dat %(date)s."
 
-#: templates/invitation/already_answered.html:14 templates/invitation/step_done.html:16
+#: templates/invitation/already_answered.html:14 templates/invitation/step_done.html:15
 msgid "Vos cadeaux réservés"
 msgstr "Kado ou rezève yo"
 
-#: templates/invitation/already_answered.html:20 templates/invitation/step_done.html:22
+#: templates/invitation/already_answered.html:20 templates/invitation/step_done.html:21
 msgid "Votre contribution"
 msgstr "Kontribisyon w lan"
 
@@ -6107,7 +6111,7 @@ msgstr "Kontribisyon w lan"
 msgid "Voir les remerciements et l'album"
 msgstr "Wè remèsiman yo ak albòm nan"
 
-#: templates/invitation/already_answered.html:25 templates/invitation/step_done.html:27
+#: templates/invitation/already_answered.html:25 templates/invitation/step_done.html:26
 msgid "Voir mon QR code d'entrée"
 msgstr "Wè kòd QR antre mwen"
 
@@ -6122,6 +6126,10 @@ msgstr "Envitasyon - %(titre)s"
 #: templates/invitation/base_invitation.html:6
 msgid "Étape %(index)s sur %(total)s"
 msgstr "Etap %(index)s sou %(total)s"
+
+#: templates/invitation/base_invitation.html:10 templates/invitation/ticket.html:11 templates/partials/_footer.html:6 templates/partials/_navbar.html:15
+msgid "EventLead, accueil"
+msgstr "EventLead, akèy"
 
 #: templates/invitation/base_invitation.html:11
 msgid "Bonjour %(name)s"
@@ -6167,7 +6175,7 @@ msgstr "Deja valide a %(time)s."
 msgid "Valider l'entrée"
 msgstr "Valide antre a"
 
-#: templates/invitation/entry_code.html:22 events/models.py:436
+#: templates/invitation/entry_code.html:22 events/models.py:440
 msgid "QR inconnu"
 msgstr "Kòd QR pa konnen"
 
@@ -6239,45 +6247,33 @@ msgstr "Mwen prefere chwazi yon kado"
 msgid "Contribution en argent"
 msgstr "Kontribisyon lajan"
 
-#: templates/invitation/step_done.html:8
+#: templates/invitation/step_done.html:7
 msgid "Merci <em style=\"color:inherit\">%(name)s</em>"
 msgstr "Mèsi <em style=\"color:inherit\">%(name)s</em>"
 
-#: templates/invitation/step_done.html:10
+#: templates/invitation/step_done.html:9
 msgid "Votre présence est confirmée."
 msgstr "Prezans ou konfime."
 
-#: templates/invitation/step_done.html:10
+#: templates/invitation/step_done.html:9
 msgid "Votre présence est confirmée avec %(counter)s accompagnant."
 msgid_plural "Votre présence est confirmée avec %(counter)s accompagnants."
 msgstr[0] "Prezans ou konfime, avèk %(counter)s moun k ap akonpanye w."
 msgstr[1] "Prezans ou konfime, avèk %(counter)s moun k ap akonpanye w."
 
-#: templates/invitation/step_done.html:11
+#: templates/invitation/step_done.html:10
 msgid "Votre réponse a bien été transmise à l'hôte."
 msgstr "Yo voye repons ou an bay òganizatè a."
 
-#: templates/invitation/step_done.html:12
+#: templates/invitation/step_done.html:11
 msgid "Votre réponse « Peut-être » a été enregistrée."
 msgstr "Repons ou an « Petèt » anrejistre."
 
-#: templates/invitation/step_done.html:24
+#: templates/invitation/step_done.html:23
 msgid "Merci, les hôtes seront touchés par ce geste."
 msgstr "Mèsi, jès sa a pral touche òganizatè yo."
 
-#: templates/invitation/step_done.html:28
-msgid "Redirection"
-msgstr "Redireksyon"
-
-#: templates/invitation/step_done.html:29
-msgid "Redirection vers nos partenaires..."
-msgstr "Ap voye w bò patnè nou yo..."
-
-#: templates/invitation/step_done.html:29
-msgid "Redirection automatique vers l'accueil..."
-msgstr "N ap mennen w sou paj akèy la otomatikman..."
-
-#: templates/invitation/step_done.html:30
+#: templates/invitation/step_done.html:27
 msgid "Continuer"
 msgstr "Kontinye"
 
@@ -6395,7 +6391,7 @@ msgstr "Lyen sa a se pou ou sèl : se sa ou bezwen pou reponn, san kont ni modpa
 msgid "Récapitulatif de votre <em style=\"color:inherit\">réponse</em>"
 msgstr "Rezime <em style=\"color:inherit\">repons</em> ou an"
 
-#: templates/invitation/step_recap.html:7 events/views_invitation.py:49
+#: templates/invitation/step_recap.html:7 events/views_invitation.py:50
 msgid "Présence"
 msgstr "Prezans"
 
@@ -6527,10 +6523,6 @@ msgstr "Kopye kòd la"
 msgid "Présentez ce code à l'entrée. Enregistrez-le dans votre téléphone pour l'avoir même sans réseau."
 msgstr "Montre kòd sa a nan antre a. Anrejistre l nan telefòn ou pou w gen li menm san rezo."
 
-#: templates/partials/_ad_media.html:5
-msgid "Vidéo : %(title)s"
-msgstr "Videyo : %(title)s"
-
 #: templates/partials/_category_filter.html:3
 msgid "Filtrer les événements par catégorie"
 msgstr "Filtre evènman yo pa kategori"
@@ -6542,10 +6534,6 @@ msgstr "Cookies"
 #: templates/partials/_cookie_note.html:3
 msgid "Ce site utilise seulement les cookies nécessaires à son fonctionnement : rester connecté, protéger les formulaires et garder votre langue. Aucun cookie publicitaire ni de mesure d'audience."
 msgstr "Sit sa a sèvi sèlman ak cookies li bezwen pou l mache : kenbe w konekte, pwoteje fòmilè yo ak sonje lang ou. Pa gen cookies piblisite ni pou mezire odyans."
-
-#: templates/partials/_cookie_note.html:3
-msgid "En savoir plus"
-msgstr "Konn plis"
 
 #: templates/partials/_cookie_note.html:4
 msgid "J'ai compris"

@@ -1,39 +1,54 @@
 {% extends "base.html" %}
 {% load static %}
+{% load el_tags %}
 {% load i18n %}
 {% block title %}{{ ad.title }}{% endblock %}
+{% block body_class %}story-page{% endblock %}
 {% block body %}
-<div class="ad-shell">
-  <div class="ad-topbar">
-    <div class="container d-flex align-items-center justify-content-between" style="max-width:560px">
-      <a href="{% url 'core:landing' %}" aria-label="{% trans 'EventLead, accueil' %}">{% include "partials/_logo.html" %}</a>
-      <span class="eyebrow">{% trans "Publicité partenaire" %}{% if total > 1 %} &middot; {% blocktranslate trimmed with pos=position tot=total %}{{ pos }} sur {{ tot }}{% endblocktranslate %}{% endif %}</span>
+{# Publicité courte en plein écran après la réponse d'un invité : 15 s au plus, « Passer » possible tout de suite. #}
+<main class="story" id="contenu" tabindex="-1" data-seconds="{{ seconds }}" data-next="{{ next_url }}">
+  <div class="story-backdrop" aria-hidden="true"{% if ad.image %} style="background-image:url('{{ ad.image.url }}')"{% endif %}></div>
+  <div class="story-frame">
+    <div class="story-media">
+      {% if ad.video %}
+      <video id="story-video" src="{{ ad.video.url }}"{% if ad.image %} poster="{{ ad.image.url }}"{% endif %} autoplay muted playsinline preload="auto" aria-label="{{ ad.title }}"></video>
+      {% elif ad.video_embed_url %}
+      <iframe id="story-embed" src="{{ ad.video_embed_url }}" title="{% blocktranslate trimmed with title=ad.title %}Vidéo : {{ title }}{% endblocktranslate %}" allow="autoplay; encrypted-media; picture-in-picture" tabindex="-1"></iframe>
+      {% elif ad.image %}
+      <img src="{{ ad.image.url }}" alt="{{ ad.title }}">
+      {% else %}
+      <div class="story-icon"><i class="bi {{ ad.icon_name }}" aria-hidden="true"></i></div>
+      {% endif %}
     </div>
-  </div>
-  <div class="sunburst" aria-hidden="true" style="left:50%;top:60px;margin-left:-360px;width:720px;height:720px"></div>
-  <div class="ad-body" id="contenu" tabindex="-1">
-    {% if guest and guest.replied_at %}
-    <div class="ad-thanks">
-      <span class="tick"><i class="bi bi-check-lg"></i></span>
-      <span>{% blocktranslate trimmed with name=guest.name title=guest.event.title %}Merci {{ name }}, votre réponse est enregistrée. {{ title }} : l'hôte est prévenu.{% endblocktranslate %}</span>
-    </div>
-    {% endif %}
-    <article class="ad-card">
-      <div class="in">
-        <div class="ad-media{% if ad.has_video %} has-video{% endif %}">{% include "partials/_ad_media.html" with alt=ad.title controls=True %}</div>
-        <span class="eyebrow">{% trans "Offre pour les invités" %}</span>
-        <h1 class="disp">{{ ad.title }}</h1>
-        <p>{{ ad.message|linebreaksbr }}</p>
-        <a href="{% url 'ads:click' ad.pk %}" target="_blank" rel="noopener sponsored" class="btn btn-gold btn-lg" style="color:var(--el-primary-dark)">{% trans "Visiter le site" %}</a>
+    <div class="story-shade" aria-hidden="true"></div>
+
+    <div class="story-top">
+      <div class="story-progress" role="progressbar" aria-label="{% trans 'Durée de la publicité' %}"><span id="story-fill"></span></div>
+      <div class="story-who">
+        <span class="story-avatar"><i class="bi {{ ad.icon_name }}" aria-hidden="true"></i></span>
+        <span class="story-name"><b>{{ ad.advertiser|default:ad.title }}</b>{% if guest and guest.replied_at %}<small>{% trans "Votre réponse est bien enregistrée." %}</small>{% endif %}</span>
+        <span class="story-tag">{% trans "Publicité" %}</span>
       </div>
-    </article>
-    <div class="d-flex flex-column gap-2">
-      <div class="countdown-bar" role="progressbar" aria-label="{% trans 'Temps avant de pouvoir passer' %}"><span id="countdown-fill"></span></div>
-      {% trans "Passer dans {n} s" as wait_label %}{% trans "Passer" as skip_label %}
-      <a href="{{ next_url }}" id="skip-btn" class="btn-skip disabled" aria-disabled="true" tabindex="-1" data-seconds="{{ ad.skip_after_seconds }}" data-label-wait="{{ wait_label }}" data-label-skip="{{ skip_label }}"><span id="skip-label">{% blocktranslate trimmed with n=ad.skip_after_seconds %}Passer dans {{ n }} s{% endblocktranslate %}</span></a>
-      <p class="text-center small mb-0" style="color:var(--el-tint-strong)">{% trans "Ensuite : l'accueil, avec les événements publics à venir." %}</p>
+    </div>
+
+    {% if ad.video or ad.video_embed_url %}
+    <button type="button" class="story-sound" id="story-sound" aria-pressed="false" aria-label="{% trans 'Mettre le son' %}" data-label-on="{% trans 'Couper le son' %}" data-label-off="{% trans 'Mettre le son' %}">
+      <i class="bi bi-volume-mute-fill" aria-hidden="true"></i>
+    </button>
+    {% endif %}
+
+    <div class="story-bottom">
+      <h1 class="disp">{{ ad.title }}</h1>
+      <p>{{ ad.message|linebreaksbr }}</p>
+      <div class="story-actions">
+        <a href="{% url 'ads:click' ad.pk %}" target="_blank" rel="noopener sponsored" class="story-cta" id="story-cta">{% trans "En savoir plus" %}</a>
+        <a href="{{ next_url }}" class="story-skip" id="story-skip">{% trans "Passer" %}<i class="bi bi-chevron-right ms-1" aria-hidden="true"></i></a>
+      </div>
+      <p class="story-next">{% if guest.status == 'confirmed' %}{% trans "Ensuite : votre confirmation et votre QR code d'entrée." %}{% else %}{% trans "Ensuite : votre confirmation." %}{% endif %}</p>
     </div>
   </div>
-</div>
+</main>
 {% endblock %}
-{% block extra_js %}<script src="{% static 'js/ad.js' %}"></script>{% endblock %}
+{% block help_fab %}{% endblock %}
+{% block cookie_note %}{% endblock %}
+{% block extra_js %}<script src="{% static_v 'js/ad.js' %}"></script>{% endblock %}

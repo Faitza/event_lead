@@ -124,7 +124,7 @@ class InvitationFlowTests(TestCase):
             self.assertNotIn(login, r.get("Location", ""), name)
             self.assertIn(r.status_code, (200, 302), name)
         self.assertEqual(self.client.get(self.url("invitation")).status_code, 200)
-        self.assertEqual(self.client.get(self.url("invitation_ad", self.ad.pk)).status_code, 200)
+        self.assertIn(self.client.get(self.url("invitation_ad", self.ad.pk)).status_code, (200, 302))
 
     def test_full_flow_with_gift(self):
         r = self.client.get(self.url("invitation"))
@@ -138,20 +138,22 @@ class InvitationFlowTests(TestCase):
         self.assertRedirects(r, self.url("invitation_recap"))
         self.assertContains(self.client.get(self.url("invitation_recap")), "Confirmer définitivement")
         r = self.client.post(self.url("invitation_recap"))
-        self.assertRedirects(r, self.url("invitation_done"), fetch_redirect_response=False)
+        # Juste après la réponse : la publicité plein écran, puis la confirmation
+        self.assertRedirects(r, self.url("invitation_ad", self.ad.pk), fetch_redirect_response=False)
         self.guest.refresh_from_db()
         self.assertEqual(self.guest.status, "confirmed")
         self.assertEqual(self.guest.companions, 2)
         self.assertTrue(self.guest.wants_gift)
         self.assertIsNotNone(self.guest.replied_at)
         self.assertEqual(self.gift.claims.get().guest, self.guest)
-        # Confirmation (avec le QR code d'entrée) -> redirection automatique vers la publicité -> accueil
+        r = self.client.get(self.url("invitation_ad", self.ad.pk))
+        self.assertContains(r, 'class="story"')
+        self.assertContains(r, f'href="{self.url("invitation_done")}" class="story-skip"')
+        self.assertContains(r, "votre QR code d'entrée")
+        # La confirmation reste affichée (plus de redirection) avec le QR code
         r = self.client.get(self.url("invitation_done"))
         self.assertContains(r, self.guest.get_ticket_url())
-        self.assertContains(r, f'url={self.url("invitation_ad", self.ad.pk)}')
-        r = self.client.get(self.url("invitation_ad", self.ad.pk))
-        self.assertContains(r, reverse("core:landing") + "#affiche")
-        self.assertContains(r, "Merci Carla")
+        self.assertNotContains(r, 'http-equiv="refresh"')
         self.ad.refresh_from_db()
         self.assertEqual(self.ad.views, 1)
         self.client.get(reverse("ads:click", args=[self.ad.pk]))
@@ -162,21 +164,47 @@ class InvitationFlowTests(TestCase):
         self.assertContains(r, "Cette réponse est définitive")
         self.assertNotContains(r, 'name="status"')
 
-    def test_without_ads_done_page_leads_to_home(self):
+    def test_without_ads_reply_goes_straight_to_confirmation(self):
         Ad.objects.all().delete()
         self.client.post(self.url("invitation"), {"status": "declined"})
-        self.client.post(self.url("invitation_recap"))
-        r = self.client.get(self.url("invitation_done"))
-        self.assertContains(r, reverse("core:landing") + "#affiche")
+        r = self.client.post(self.url("invitation_recap"))
+        self.assertRedirects(r, self.url("invitation_done"), fetch_redirect_response=False)
+        self.assertContains(self.client.get(self.url("invitation_done")), reverse("core:landing") + "#affiche")
 
-    def test_ads_chain_ends_on_home(self):
+    def test_one_ad_only_then_confirmation_and_partners_take_turns(self):
         second = Ad.objects.create(title="Pub 2", is_paid=True, message="m", sponsor_link="https://example.com/2", order=2)
+        Ad.objects.filter(pk=self.ad.pk).update(views=10)
+        self.client.post(self.url("invitation"), {"status": "declined"})
+        r = self.client.post(self.url("invitation_recap"))
+        # La moins vue passe en premier
+        self.assertRedirects(r, self.url("invitation_ad", second.pk), fetch_redirect_response=False)
+        r = self.client.get(self.url("invitation_ad", second.pk))
+        self.assertContains(r, self.url("invitation_done"))
+        self.assertNotContains(r, self.url("invitation_ad", self.ad.pk))
+
+    def test_at_most_one_ad_per_day_for_the_same_person(self):
+        other = Guest.objects.create(event=make_event(), name="Dora", phone="+509 3712 0000")
         self.client.post(self.url("invitation"), {"status": "declined"})
         self.client.post(self.url("invitation_recap"))
-        r = self.client.get(self.url("invitation_ad", self.ad.pk))
-        self.assertContains(r, self.url("invitation_ad", second.pk))
-        r = self.client.get(self.url("invitation_ad", second.pk))
-        self.assertContains(r, reverse("core:landing") + "#affiche")
+        self.client.get(self.url("invitation_ad", self.ad.pk))
+        token = other.magic_token
+        self.client.post(reverse("events:invitation", args=[token]), {"status": "declined"})
+        r = self.client.post(reverse("events:invitation_recap", args=[token]))
+        self.assertRedirects(r, reverse("events:invitation_done", args=[token]), fetch_redirect_response=False)
+
+    def test_organizer_can_refuse_ads_for_their_guests(self):
+        Event.objects.filter(pk=self.event.pk).update(no_ads=True)
+        self.client.post(self.url("invitation"), {"status": "declined"})
+        r = self.client.post(self.url("invitation_recap"))
+        self.assertRedirects(r, self.url("invitation_done"), fetch_redirect_response=False)
+        self.assertRedirects(self.client.get(self.url("invitation_ad", self.ad.pk)), self.url("invitation_done"),
+                             fetch_redirect_response=False)
+        self.ad.refresh_from_db()
+        self.assertEqual(self.ad.views, 0)
+
+    def test_ad_page_needs_a_reply_first(self):
+        self.assertRedirects(self.client.get(self.url("invitation_ad", self.ad.pk)), self.url("invitation"),
+                             fetch_redirect_response=False)
 
     def test_gift_steps_skipped_when_declining(self):
         r = self.client.post(self.url("invitation"), {"status": "declined"})

@@ -8,6 +8,8 @@ from django.utils.translation import gettext_lazy as _
 
 YOUTUBE_HOSTS = {"youtube.com", "www.youtube.com", "m.youtube.com", "youtu.be", "www.youtube-nocookie.com"}
 FACEBOOK_HOSTS = {"facebook.com", "www.facebook.com", "m.facebook.com", "web.facebook.com", "fb.watch"}
+AD_MAX_SECONDS = 15  # une publicité plein écran dure 15 secondes au plus, même si la vidéo est plus longue
+AD_IMAGE_SECONDS = 7  # durée d'affichage d'une publicité sans vidéo
 YOUTUBE_ID = re.compile(r"^[A-Za-z0-9_-]{6,20}$")
 
 

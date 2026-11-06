@@ -5,6 +5,7 @@ import tempfile
 from django.core.files.uploadedfile import SimpleUploadedFile
 from django.test import TestCase, override_settings
 from django.urls import reverse
+from django.utils import timezone
 
 from core.tests import make_event, make_user
 from events.models import Guest
@@ -66,9 +67,12 @@ class AdVideoTests(TestCase):
         self.assertContains(landing, 'class="ad-video"')
         self.assertContains(landing, "autoplay muted loop playsinline")
         self.assertContains(landing, 'id="parade-toggle"')
-        guest = Guest.objects.create(event=make_event(), name="Carla", phone="+509 3712 3456")
+        guest = Guest.objects.create(event=make_event(), name="Carla", phone="+509 3712 3456", status="declined",
+                                     replied_at=timezone.now())
         page = self.client.get(reverse("events:invitation_ad", args=[guest.magic_token, ad.pk]))
-        self.assertContains(page, "autoplay muted loop playsinline preload=\"metadata\" controls")
+        self.assertContains(page, 'id="story-video"')
+        self.assertContains(page, "autoplay muted playsinline")
+        self.assertContains(page, 'data-seconds="15"')
         self.assertContains(self.client.get(reverse("ads:list")), 'class="ad-video"')
 
     def test_youtube_ad_in_parade_keeps_link_outside_player(self):
@@ -110,7 +114,8 @@ class PaidAdTests(TestCase):
     def test_unpaid_ad_page_and_click_are_closed(self):
         ad = self.make()
         self.assertEqual(self.client.get(reverse("ads:click", args=[ad.pk])).status_code, 404)
-        guest = Guest.objects.create(event=make_event(), name="Carla", phone="+509 3712 3456")
+        guest = Guest.objects.create(event=make_event(), name="Carla", phone="+509 3712 3456", status="declined",
+                                     replied_at=timezone.now())
         self.assertEqual(self.client.get(reverse("events:invitation_ad", args=[guest.magic_token, ad.pk])).status_code, 404)
 
     def test_form_needs_advertiser_and_ordered_dates(self):
@@ -127,3 +132,42 @@ class PaidAdTests(TestCase):
         ad.refresh_from_db()
         self.assertTrue(ad.is_paid)
         self.assertContains(self.client.get(reverse("dashboard:ad_list")), "En ligne")
+
+
+def mp4(seconds, scale=1000):
+    """Petit fichier MP4 : une boîte « ftyp » puis « moov » avec l'en-tête « mvhd » qui donne la durée."""
+    import struct
+    mvhd_body = bytes(4) + struct.pack(">IIII", 0, 0, scale, int(seconds * scale)) + bytes(80)
+    mvhd = struct.pack(">I4s", 8 + len(mvhd_body), b"mvhd") + mvhd_body
+    moov = struct.pack(">I4s", 8 + len(mvhd), b"moov") + mvhd
+    ftyp = struct.pack(">I4s", 16, b"ftyp") + b"isom" + bytes(4)
+    mdat = struct.pack(">I4s", 16, b"mdat") + bytes(8)
+    return ftyp + mdat + moov
+
+
+@override_settings(MEDIA_ROOT=MEDIA)
+class ShortAdTests(TestCase):
+    """Publicité courte : 15 secondes au plus, « Passer » tout de suite."""
+
+    def test_duration_is_read_from_mp4(self):
+        from core.uploads import video_duration
+        self.assertAlmostEqual(video_duration(SimpleUploadedFile("a.mp4", mp4(12.5), content_type="video/mp4")), 12.5)
+        self.assertIsNone(video_duration(SimpleUploadedFile("a.webm", b"\x1aE\xdf\xa3" + bytes(40), content_type="video/webm")))
+
+    def test_form_refuses_a_video_longer_than_15_seconds(self):
+        long_clip = SimpleUploadedFile("long.mp4", mp4(40), content_type="video/mp4")
+        form = AdForm(form_data(), {"video": long_clip})
+        self.assertIn("video", form.errors)
+        self.assertIn("15", str(form.errors["video"]))
+        short_clip = SimpleUploadedFile("court.mp4", mp4(14), content_type="video/mp4")
+        self.assertTrue(AdForm(form_data(), {"video": short_clip}).is_valid())
+
+    def test_skip_button_works_right_away(self):
+        ad = Ad.objects.create(title="Traiteur", is_paid=True, message="m", sponsor_link="https://example.com", skip_after_seconds=5)
+        guest = Guest.objects.create(event=make_event(), name="Carla", phone="+509 3712 3456", status="declined",
+                                     replied_at=timezone.now())
+        page = self.client.get(reverse("events:invitation_ad", args=[guest.magic_token, ad.pk]))
+        self.assertContains(page, 'class="story-skip"')
+        self.assertNotContains(page, "disabled")
+        self.assertContains(page, 'data-seconds="7"')  # sans vidéo : 7 secondes
+        self.assertContains(page, "Publicité")

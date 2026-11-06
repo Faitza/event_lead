@@ -152,6 +152,10 @@ class Event(models.Model):
         _("accepter les contributions en argent"), default=False,
         help_text=_("Les invités peuvent contribuer en argent (MonCash ou NatCash) à la place d'un cadeau."),
     )
+    no_ads = models.BooleanField(
+        _("pas de publicité pour mes invités"), default=False,
+        help_text=_("Si coché, vos invités ne voient aucune publicité après avoir répondu à l'invitation."),
+    )
     thanks_message = models.TextField(_("message de remerciement"), blank=True)
     thanks_published_at = models.DateTimeField(_("remerciements publiés le"), null=True, blank=True)
     description = models.TextField(_("description"), blank=True)
