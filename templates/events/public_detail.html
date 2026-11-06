@@ -26,6 +26,7 @@
         <div class="el-card el-card-body mb-4">
           <h2 class="h4 mb-3">{% trans "À propos de l'événement" %}</h2>
           <p class="mb-0">{{ event.description|default:_("Plus d'informations bientôt.")|linebreaksbr }}</p>
+          {% if side_ad %}{% include "partials/_ad_strip.html" with ad=side_ad %}{% endif %}
         </div>
         {% if ensemble %}{% include "ensemble/_event_block.html" %}{% endif %}
         {% if event.cover_video %}

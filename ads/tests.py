@@ -171,3 +171,34 @@ class ShortAdTests(TestCase):
         self.assertNotContains(page, "disabled")
         self.assertContains(page, 'data-seconds="7"')  # sans vidéo : 7 secondes
         self.assertContains(page, "Publicité")
+
+
+class DiscreetAdTests(TestCase):
+    """Ailleurs sur le site, les publicités restent discrètes : une carte dans la liste, un encadré sur un événement public."""
+
+    def setUp(self):
+        self.ad = Ad.objects.create(title="Fleurs livrées le jour J", advertiser="Fleurs Caraïbe", is_paid=True,
+                                    message="m", sponsor_link="https://example.com")
+
+    def test_card_in_the_events_list(self):
+        from events.models import Event
+        for i in range(3):
+            make_event(title=f"Concert {i}", event_type=Event.EventType.PUBLIC)
+        r = self.client.get(reverse("events:explore"))
+        self.assertContains(r, 'class="ad-inline"', count=1)
+        self.assertContains(r, "Fleurs Caraïbe")
+
+    def test_strip_on_public_event_only_and_respects_no_ads(self):
+        from events.models import Event
+        event = make_event(event_type=Event.EventType.PUBLIC)
+        url = reverse("events:public_detail", args=[event.pk])
+        self.assertContains(self.client.get(url), 'class="ad-strip"')
+        Event.objects.filter(pk=event.pk).update(no_ads=True)
+        self.assertNotContains(self.client.get(url), 'class="ad-strip"')
+
+    def test_unpaid_ad_never_shown(self):
+        from events.models import Event
+        Ad.objects.update(is_paid=False)
+        event = make_event(event_type=Event.EventType.PUBLIC)
+        self.assertNotContains(self.client.get(reverse("events:public_detail", args=[event.pk])), 'class="ad-strip"')
+        self.assertNotContains(self.client.get(reverse("events:explore")), 'class="ad-inline"')

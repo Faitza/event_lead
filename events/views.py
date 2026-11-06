@@ -27,6 +27,7 @@ def explore(request):
     page = paginate(request, events, 12)
     return render(request, "events/explore.html", {
         "events": page.object_list, "page_obj": page, "categories": categories, "selected_category": selected, "ads": ads,
+        "inline_ad": Ad.objects.live().order_by("?").first(),
     })
 
 
@@ -47,6 +48,8 @@ def public_detail(request, pk):
         "event": event, "invitation": invitation, "tickets_left": tickets_left,
         "free_open": free_open, "places_left": registration.places_left(event) if free_open else None,
         "ensemble": event_block_context(event, request.user),
+        # Petit encadré partenaire, seulement sur un événement public dont l'organisateur accepte la publicité
+        "side_ad": Ad.objects.live().order_by("?").first() if event.is_public and not event.no_ads else None,
     })
 
 

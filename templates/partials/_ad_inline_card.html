@@ -1,0 +1,10 @@
+{% load i18n %}{# Carte « Publicité » glissée dans la liste des événements : vidéo sans le son en boucle, ou image. #}
+<a href="{% url 'ads:click' ad.pk %}" target="_blank" rel="noopener sponsored" class="ad-inline">
+  <span class="ad-inline-media">{% include "partials/_ad_media.html" with lazy=True %}</span>
+  <span class="ad-inline-tag">{% trans "Publicité" %}</span>
+  <span class="ad-inline-text">
+    <b>{{ ad.advertiser|default:ad.title }}</b>
+    <span>{{ ad.title }}</span>
+    <span class="ad-inline-cta">{% trans "En savoir plus" %}</span>
+  </span>
+</a>
