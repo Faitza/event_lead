@@ -1,0 +1,6 @@
+{% load i18n %}{# Image, vidéo ou icône d'une publicité. « controls » : l'invité peut mettre en pause et remettre le son. #}{% if ad.video %}
+<video class="ad-video" src="{{ ad.video.url }}"{% if ad.image %} poster="{{ ad.image.url }}"{% endif %} autoplay muted loop playsinline preload="metadata"{% if controls %} controls{% endif %} aria-label="{{ ad.title }}">{% if ad.image %}<img src="{{ ad.image.url }}" alt="">{% endif %}</video>
+{% elif ad.video_embed_url %}
+{% if ad.image %}<img src="{{ ad.image.url }}" alt="" loading="lazy">{% else %}<i class="bi {{ ad.icon_name }}"></i>{% endif %}
+<iframe class="ad-embed{% if not controls %} no-touch{% endif %}" src="{{ ad.video_embed_url }}" title="{% blocktranslate trimmed with title=ad.title %}Vidéo : {{ title }}{% endblocktranslate %}" loading="lazy" allow="autoplay; encrypted-media; picture-in-picture; fullscreen" allowfullscreen{% if not controls %} tabindex="-1"{% endif %}></iframe>
+{% elif ad.image %}<img src="{{ ad.image.url }}" alt="{{ alt|default:'' }}"{% if lazy %} loading="lazy"{% endif %}>{% else %}<i class="bi {{ ad.icon_name }}"></i>{% endif %}

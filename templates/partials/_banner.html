@@ -1,0 +1,12 @@
+{% load static %}
+<section class="page-banner">
+  <img class="hero-bg" src="{% static photo|default:'img/photos/hero-bg.jpg' %}" alt="">
+  <div class="hero-veil"></div>
+  <div class="sunburst" aria-hidden="true"></div>
+  <div class="container inner">
+    <div class="eyebrow-row light mb-3"><span class="diamond"></span><span class="eyebrow">{{ eyebrow }}</span></div>
+    <h1 class="disp">{{ title }}{% if accent %} <em>{{ accent }}</em>{% endif %}</h1>
+    {% if text %}<p class="mb-0 mt-3">{{ text }}</p>{% endif %}
+    {% if extra %}<div class="mt-3">{{ extra }}</div>{% endif %}
+  </div>
+</section>

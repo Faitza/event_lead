@@ -1,0 +1,5 @@
+{% load i18n %}{# Bandeau cookies : le site n'utilise que des cookies nécessaires, il informe sans demander de choix. #}
+<div class="cookie-note" data-cookie-note hidden role="region" aria-label="{% trans 'Cookies' %}">
+  <p class="mb-0">{% trans "Ce site utilise seulement les cookies nécessaires à son fonctionnement : rester connecté, protéger les formulaires et garder votre langue. Aucun cookie publicitaire ni de mesure d'audience." %} <a href="{% url 'core:privacy' %}">{% trans "En savoir plus" %}</a></p>
+  <button type="button" class="btn btn-primary btn-sm" data-cookie-ok>{% trans "J'ai compris" %}</button>
+</div>

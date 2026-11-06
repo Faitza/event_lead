@@ -1,0 +1,24 @@
+{% extends "dashboard/base_dashboard.html" %}
+{% load i18n %}
+{% block title %}{% trans "Relances" %}{% endblock %}
+{% block dash_content %}
+<div class="page-head">
+  <div><h1>{% trans "Relances" %}</h1><p>{% trans "Relancez en un clic les invités qui n'ont pas répondu, par WhatsApp ou par e-mail. Choisissez l'événement." %}</p></div>
+</div>
+{% if upcoming or past %}
+  {% if upcoming %}
+  <h2 class="h6 fw-bold text-primary mb-3">{% trans "À venir" %}</h2>
+  <div class="row g-3 mb-4">
+    {% for c in upcoming %}{% include "dashboard/reminders/_event_card.html" %}{% endfor %}
+  </div>
+  {% endif %}
+  {% if past %}
+  <h2 class="h6 fw-bold text-primary mb-3">{% trans "Événements passés" %}</h2>
+  <div class="row g-3">
+    {% for c in past %}{% include "dashboard/reminders/_event_card.html" %}{% endfor %}
+  </div>
+  {% endif %}
+{% else %}
+  <div class="el-card"><div class="empty-state"><i class="bi bi-bell"></i><p class="mt-2">{% trans "Aucun événement n'a encore d'invités." %}</p><a href="{% url 'dashboard:guest_create' %}" class="btn btn-primary">{% trans "Ajouter un invité" %}</a></div></div>
+{% endif %}
+{% endblock %}

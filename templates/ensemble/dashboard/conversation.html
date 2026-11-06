@@ -1,0 +1,22 @@
+{% extends "dashboard/base_dashboard.html" %}
+{% load i18n %}
+{% block title %}{% trans "Signalements" %}{% endblock %}
+{% block extra_head %}{% include "ensemble/_head.html" %}{% endblock %}
+{% block dash_content %}
+<div class="page-head">
+  <div><h1>{% trans "Conversation" %}</h1><p>{% blocktranslate trimmed with a=report.reporter.ensemble_profile.first_name|default:report.reporter.display_name b=report.reported.ensemble_profile.first_name|default:report.reported.display_name %}Échanges entre {{ a }} (qui signale) et {{ b }} (signalé).{% endblocktranslate %}</p></div>
+  <a href="{% url 'dashboard:ensemble_reports' %}" class="btn btn-light"><i class="bi bi-arrow-left me-2"></i>{% trans "Retour aux signalements" %}</a>
+</div>
+{% for t in threads %}
+<div class="el-card overflow-hidden mb-4">
+  <div class="p-3 border-bottom small text-muted">{{ t.event.title }} &middot; {{ t.get_status_display }} &middot; {{ t.created_at|date:_("j F Y") }}</div>
+  <div class="ya-chat" style="max-height:none">
+    {% if t.note %}<div class="ya-msg {% if t.sender_id == report.reported_id %}me{% endif %}"><strong class="d-block small">{{ t.sender.ensemble_profile.first_name }}</strong>{{ t.note }}<small>{{ t.created_at|date:"j/m H:i" }}</small></div>{% endif %}
+    {% for m in t.messages.all %}<div class="ya-msg {% if m.sender_id == report.reported_id %}me{% endif %}"><strong class="d-block small">{{ m.sender.ensemble_profile.first_name }}</strong>{{ m.body }}<small>{{ m.created_at|date:"j/m H:i" }}</small></div>{% endfor %}
+  </div>
+</div>
+{% empty %}
+<div class="el-card empty-state"><i class="bi bi-chat"></i><p class="mt-2 mb-0">{% trans "Ces deux personnes n'ont échangé aucun message." %}</p></div>
+{% endfor %}
+<p class="small text-muted">{% trans "En violet : les messages de la personne signalée." %}</p>
+{% endblock %}

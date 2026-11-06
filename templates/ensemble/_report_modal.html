@@ -1,0 +1,17 @@
+{% load i18n %}
+{# Fenêtre « Signaler » partagée : le bouton qui l'ouvre donne data-ya-report-url, data-ya-name et data-ya-event. #}
+<div class="modal fade" id="ya-report" tabindex="-1" aria-labelledby="ya-report-title" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered"><div class="modal-content">
+    <div class="modal-header border-0"><h2 class="modal-title" id="ya-report-title">{% trans "Signaler" %} <span data-ya-fill="name"></span></h2><button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="{% trans 'Fermer' %}"></button></div>
+    <form method="post" class="modal-body" data-ya-form="report">
+      {% csrf_token %}
+      <input type="hidden" name="next" value="{{ request.path }}">
+      <input type="hidden" name="event" value="">
+      <p class="small text-muted">{% trans "L'équipe EventLead lira votre signalement. La personne ne saura pas que c'est vous." %}</p>
+      {% for choice in report_form.reason %}<div class="form-check mb-2">{{ choice.tag }}<label class="form-check-label" for="{{ choice.id_for_label }}">{{ choice.choice_label }}</label></div>{% endfor %}
+      <textarea name="details" class="form-control mt-2 mb-2" rows="2" maxlength="500" placeholder="{% trans 'Expliquez en quelques mots (facultatif)' %}" aria-label="{% trans 'Explication' %}"></textarea>
+      <div class="form-check mb-3"><input class="form-check-input" type="checkbox" name="also_block" id="ya-also-block" checked><label class="form-check-label" for="ya-also-block">{% trans "Bloquer aussi cette personne" %}</label></div>
+      <div class="d-flex gap-2 justify-content-end"><button type="button" class="btn btn-light" data-bs-dismiss="modal">{% trans "Annuler" %}</button><button class="btn btn-primary">{% trans "Envoyer le signalement" %}</button></div>
+    </form>
+  </div></div>
+</div>

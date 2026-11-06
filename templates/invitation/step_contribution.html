@@ -1,0 +1,57 @@
+{% extends "invitation/base_invitation.html" %}
+{% load static %}
+{% load el_tags %}
+{% load i18n %}
+{% block inv_content %}
+<div id="contribution" class="d-flex flex-column gap-3"
+     data-rate="{{ rate }}" data-min="{{ min_amount }}" data-max="{{ max_amount }}"
+     data-label-pay="{% blocktranslate trimmed with n='{amount}' %}Contribuer {{ n }} HTG{% endblocktranslate %}"
+     data-msg-min="{% blocktranslate trimmed with n=min_amount|htg %}Le montant minimum est de {{ n }} HTG.{% endblocktranslate %}"
+     data-msg-max="{% blocktranslate trimmed with n=max_amount|htg %}Le montant maximum est de {{ n }} HTG.{% endblocktranslate %}"
+     data-msg-invalid="{% trans 'Indiquez un montant en gourdes.' %}">
+  <div class="text-center">
+    <span class="icon-bubble gold lg mb-3"><i class="bi bi-cash-coin"></i></span>
+    <h1>{% blocktranslate trimmed %}Contribuer en <em style="color:inherit">argent</em>{% endblocktranslate %}</h1>
+    <p class="text-muted mb-0">{% blocktranslate trimmed with title=event.title %}À la place d'un cadeau, vous offrez une contribution aux hôtes de « {{ title }} ».{% endblocktranslate %}</p>
+  </div>
+
+  <div>
+    <div class="form-label fw-semibold" id="amount-label">{% trans "Montant" %}</div>
+    <div class="amount-chips" role="radiogroup" aria-labelledby="amount-label">
+      {% for value in presets %}<button type="button" class="amount-chip{% if value == amount %} active{% endif %}" role="radio" aria-checked="{% if value == amount %}true{% else %}false{% endif %}" data-amount="{{ value }}"><strong>{{ value|htg }}</strong><small>HTG</small></button>{% endfor %}
+    </div>
+    <div class="mt-2"><label class="form-label small" for="other-amount">{% trans "Autre montant" %}</label>
+      <div class="input-group"><input type="text" inputmode="numeric" class="form-control" id="other-amount" autocomplete="off" placeholder="{% trans 'Autre montant' %}" value="{% if amount not in presets %}{{ amount }}{% endif %}"><span class="input-group-text">HTG</span></div>
+    </div>
+    <div class="small text-muted mt-2" id="usd-hint" aria-live="polite">{{ amount|htg }} HTG &asymp; {{ amount_usd|usd }} USD</div>
+    <div class="notice notice-danger mt-2" id="amount-error" role="alert" hidden></div>
+  </div>
+
+  <div>
+    <div class="form-label fw-semibold" id="method-label">{% trans "Payer avec" %}</div>
+    <div class="pay-choices" role="radiogroup" aria-labelledby="method-label">
+      <button type="button" class="pay-choice{% if method == 'moncash' %} active{% endif %}" role="radio" aria-checked="{% if method == 'moncash' %}true{% else %}false{% endif %}" data-method="moncash"><span class="pm-logo pm-moncash">MC</span><span><strong class="d-block">MonCash</strong><span class="small text-muted">Digicel</span></span></button>
+      <button type="button" class="pay-choice{% if method == 'natcash' %} active{% endif %}" role="radio" aria-checked="{% if method == 'natcash' %}true{% else %}false{% endif %}" data-method="natcash"><span class="pm-logo pm-natcash">NAT</span><span><strong class="d-block">NatCash</strong><span class="small text-muted">Natcom</span></span></button>
+    </div>
+  </div>
+
+  <div>
+    <label class="form-label fw-semibold" for="contribution-message">{% trans "Un petit mot pour les hôtes" %} <span class="fw-normal text-muted">{% trans "(facultatif)" %}</span></label>
+    <textarea class="form-control" id="contribution-message" rows="3" maxlength="{{ message_max }}" placeholder="{% trans 'Merci pour cette belle invitation !' %}">{{ message }}</textarea>
+  </div>
+  <p class="small text-muted mb-0"><i class="bi bi-lock me-1"></i>{% trans "Seuls les hôtes voient votre nom et votre montant. Les autres invités ne voient rien." %}</p>
+
+  <button type="button" class="btn btn-primary btn-lg w-100" id="contribute-btn"><i class="bi bi-lock me-2"></i><span id="contribute-label">{% blocktranslate trimmed with n=amount|htg %}Contribuer {{ n }} HTG{% endblocktranslate %}</span></button>
+  <div class="d-flex flex-column gap-2 align-items-center">
+    {% if has_gifts %}
+    <form method="post" action="{% url 'events:invitation_gift_question' guest.magic_token %}">{% csrf_token %}<input type="hidden" name="wants_gift" value="yes"><button class="btn btn-link">{% trans "Je préfère choisir un cadeau" %}</button></form>
+    {% endif %}
+    <a href="{% url 'events:invitation_gift_question' guest.magic_token %}" class="btn btn-link text-muted"><i class="bi bi-arrow-left me-1"></i>{% trans "Retour" %}</a>
+  </div>
+</div>
+{% include "payments/_payment_modal.html" with amount_htg=amount title=_("Contribution en argent") %}
+{% endblock %}
+{% block extra_js %}
+<script src="{% static 'js/payment.js' %}"></script>
+<script src="{% static 'js/contribution.js' %}"></script>
+{% endblock %}

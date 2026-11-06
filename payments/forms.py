@@ -2,6 +2,7 @@ import re
 from datetime import date
 
 from django import forms
+from django.utils.translation import gettext as _
 
 from .models import Payment
 
@@ -45,7 +46,7 @@ class PaymentForm(forms.Form):
     def _require(self, *names):
         for name in names:
             if not self.cleaned_data.get(name):
-                self.add_error(name, "Champ obligatoire.")
+                self.add_error(name, _("Champ obligatoire."))
 
     def clean(self):
         cleaned = super().clean()
@@ -54,30 +55,30 @@ class PaymentForm(forms.Form):
         if method in (Payment.Method.MONCASH, Payment.Method.NATCASH):
             phone = (cleaned.get("phone") or "").strip()
             if not PHONE_RE.match(phone):
-                self.add_error("phone", "Numéro haïtien invalide (8 chiffres, ex : 3712 3456).")
+                self.add_error("phone", _("Numéro haïtien invalide (8 chiffres, ex : 3712 3456)."))
             if method == Payment.Method.MONCASH and not re.fullmatch(r"\d{6}", cleaned.get("otp") or ""):
-                self.add_error("otp", "Le code OTP contient 6 chiffres.")
+                self.add_error("otp", _("Le code OTP contient 6 chiffres."))
             if method == Payment.Method.NATCASH and not re.fullmatch(r"\d{4}", cleaned.get("pin") or ""):
-                self.add_error("pin", "Le code PIN contient 4 chiffres.")
+                self.add_error("pin", _("Le code PIN contient 4 chiffres."))
             digits = re.sub(r"\D", "", phone)[-8:]
             cleaned["payer_detail"] = f"+509 **** {digits[-4:]}" if digits else ""
         elif method == Payment.Method.STRIPE:
             self._require("card_number", "card_expiry", "card_cvc", "card_name")
             number = re.sub(r"\D", "", cleaned.get("card_number") or "")
             if number and (len(number) < 13 or not luhn_ok(number)):
-                self.add_error("card_number", "Numéro de carte invalide.")
+                self.add_error("card_number", _("Numéro de carte invalide."))
             exp = cleaned.get("card_expiry") or ""
             m = re.fullmatch(r"(\d{2})/(\d{2})", exp)
             if exp and not m:
-                self.add_error("card_expiry", "Format MM/AA.")
+                self.add_error("card_expiry", _("Format MM/AA."))
             elif m:
                 month, year = int(m.group(1)), 2000 + int(m.group(2))
                 today = date.today()
                 if not 1 <= month <= 12 or (year, month) < (today.year, today.month):
-                    self.add_error("card_expiry", "Carte expirée ou date invalide.")
+                    self.add_error("card_expiry", _("Carte expirée ou date invalide."))
             cvc = cleaned.get("card_cvc") or ""
             if cvc and not re.fullmatch(r"\d{3,4}", cvc):
-                self.add_error("card_cvc", "CVC invalide.")
+                self.add_error("card_cvc", _("CVC invalide."))
             cleaned["card_digits"] = number
             cleaned["payer_detail"] = f"Carte **** {number[-4:]}" if number else ""
         elif method == Payment.Method.PAYPAL:

@@ -1,0 +1,6 @@
+{% load i18n %}
+<div class="d-flex flex-wrap gap-2 mb-4">
+  <a href="{% url 'ensemble:requests' %}" class="btn btn-sm {% if section == 'requests' %}btn-primary{% else %}btn-light{% endif %}"><i class="bi bi-inbox me-1"></i>{% trans "Mes demandes" %}</a>
+  <a href="{% url 'ensemble:inbox' %}" class="btn btn-sm {% if section == 'messages' %}btn-primary{% else %}btn-light{% endif %}"><i class="bi bi-chat-dots me-1"></i>{% trans "Mes messages" %}</a>
+  <a href="{% url 'events:explore' %}" class="btn btn-sm btn-light"><i class="bi bi-compass me-1"></i>{% trans "Trouver un événement" %}</a>
+</div>

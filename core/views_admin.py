@@ -1,7 +1,13 @@
+import csv
+from urllib.parse import parse_qsl, urlencode, urlsplit, urlunsplit
+
 from django.contrib import messages
 from django.db.models import Count, Sum
+from django.http import HttpResponse
 from django.shortcuts import get_object_or_404, redirect, render
+from django.urls import reverse
 from django.utils import timezone
+from django.utils.translation import gettext as _
 from django.views.decorators.http import require_POST
 
 from accounts.decorators import admin_required
@@ -11,7 +17,10 @@ from events.models import Event, Guest
 from gifts.models import Gift, GiftClaim
 from payments.models import Payment
 
-from .models import ContactMessage, Review
+from . import visits
+from .forms import LogoVariantForm
+from .models import Attribution, ContactMessage, HelpRequest, LogoVariant, Review
+from .paging import paginate
 
 
 @admin_required
@@ -46,14 +55,16 @@ def home(request):
         "recent_replies": guests.exclude(replied_at=None).select_related("event").order_by("-replied_at")[:6],
         "recent_payments": Payment.objects.select_related("event", "user")[:5],
         "unread_messages": ContactMessage.objects.filter(is_read=False).count(),
+        "new_help": HelpRequest.objects.filter(status=HelpRequest.Status.NEW).count(),
     }
     return render(request, "dashboard/home.html", context)
 
 
 @admin_required
 def inbox(request):
+    page = paginate(request, ContactMessage.objects.all(), 30)
     return render(request, "dashboard/inbox.html", {
-        "contact_messages": ContactMessage.objects.all()[:100],
+        "contact_messages": page.object_list, "page_obj": page,
         "reviews": Review.objects.all()[:100],
     })
 
@@ -73,5 +84,162 @@ def review_toggle(request, pk):
     review = get_object_or_404(Review, pk=pk)
     review.is_published = not review.is_published
     review.save(update_fields=["is_published"])
-    messages.success(request, "Avis publié." if review.is_published else "Avis masqué.")
+    messages.success(request, _("Avis publié.") if review.is_published else _("Avis masqué."))
     return redirect("dashboard:inbox")
+
+
+# ---------------------------------------------------------------------------
+# Demandes d'aide
+# ---------------------------------------------------------------------------
+
+
+def _csv_safe(value):
+    """Neutralise les cellules qui seraient lues comme une formule par un tableur (texte saisi par le public)."""
+    value = str(value)
+    if value[:1] in ("=", "@", "\t", "\r"):
+        return "'" + value
+    if value[:1] in ("+", "-") and not set(value[1:]) <= set("0123456789 .-()"):
+        return "'" + value
+    return value
+
+
+def _help_filter(request):
+    status = request.GET.get("statut", "")
+    return status if status in HelpRequest.Status.values else ""
+
+
+@admin_required
+def help_list(request):
+    status = _help_filter(request)
+    requests_qs = HelpRequest.objects.all()
+    counts = dict(HelpRequest.objects.values_list("status").annotate(n=Count("id")))
+    if status:
+        requests_qs = requests_qs.filter(status=status)
+    page = paginate(request, requests_qs, 30)
+    return render(request, "dashboard/help/list.html", {
+        "help_requests": page.object_list, "page_obj": page, "status": status, "statuses": HelpRequest.Status.choices,
+        "tabs": [(value, label, counts.get(value, 0)) for value, label in HelpRequest.Status.choices],
+        "total": sum(counts.values()),
+    })
+
+
+@admin_required
+@require_POST
+def help_set_status(request, pk):
+    help_request = get_object_or_404(HelpRequest, pk=pk)
+    new_status = request.POST.get("status", "")
+    if new_status in HelpRequest.Status.values:
+        help_request.status = new_status
+        help_request.save(update_fields=["status"])
+        messages.success(request, _("Demande de %(name)s : %(status)s.") % {
+            "name": help_request.name, "status": help_request.get_status_display().lower(),
+        })
+    back = request.POST.get("filter", "")
+    url = reverse("dashboard:help_list")
+    return redirect(f"{url}?statut={back}" if back in HelpRequest.Status.values else url)
+
+
+@admin_required
+def help_export_csv(request):
+    status = _help_filter(request)
+    rows = HelpRequest.objects.all()
+    if status:
+        rows = rows.filter(status=status)
+    response = HttpResponse(content_type="text/csv; charset=utf-8")
+    response["Content-Disposition"] = 'attachment; filename="%s.csv"' % _("demandes-aide-eventlead")
+    response.write("\ufeff")
+    writer = csv.writer(response, delimiter=";")
+    writer.writerow([_("Reçue le"), _("Nom"), _("E-mail ou téléphone"), _("Sujet"), _("Message"), _("Statut")])
+    for r in rows:
+        writer.writerow([
+            timezone.localtime(r.created_at).strftime("%d/%m/%Y %H:%M"), _csv_safe(r.name), _csv_safe(r.contact),
+            r.get_topic_display(), _csv_safe(r.message), r.get_status_display(),
+        ])
+    return response
+
+
+def _utm_link(request):
+    """Générateur de lien de campagne : adresse du site + utm_source / utm_medium / utm_campaign."""
+    values = {k: request.GET.get(k, "").strip()[:120] for k in ("page", "source", "medium", "campaign")}
+    if not (values["source"] and values["campaign"]):
+        return values, ""
+    page = values["page"] or "/"
+    if not page.startswith("/"):
+        page = "/" + page
+    parts = urlsplit(request.build_absolute_uri(page))
+    query = [(k, v) for k, v in parse_qsl(parts.query) if not k.startswith("utm_")]
+    query += [(f"utm_{k}", values[k]) for k in ("source", "medium", "campaign") if values[k]]
+    return values, urlunsplit(parts._replace(query=urlencode(query)))
+
+
+@admin_required
+def utm_report(request):
+    """Provenance des visites : d'où viennent les inscriptions, paiements, demandes d'aide et messages."""
+    kinds = Attribution.Kind.choices
+    rows = {}
+    for item in Attribution.objects.values("source", "medium", "campaign", "kind").annotate(n=Count("id")):
+        key = (item["source"], item["medium"], item["campaign"])
+        row = rows.setdefault(key, {"source": item["source"], "medium": item["medium"], "campaign": item["campaign"],
+                                    "counts": dict.fromkeys(k for k, _ in kinds), "total": 0})
+        row["counts"][item["kind"]] = (row["counts"].get(item["kind"]) or 0) + item["n"]
+        row["total"] += item["n"]
+    summary = sorted(rows.values(), key=lambda r: -r["total"])
+    for row in summary:
+        row["cells"] = [row["counts"].get(k) or 0 for k, _ in kinds]
+    page = paginate(request, Attribution.objects.select_related("user"), 30)
+    builder, built_link = _utm_link(request)
+    return render(request, "dashboard/utm/report.html", {
+        "kinds": kinds, "summary": summary, "items": page.object_list, "page_obj": page,
+        "builder": builder, "built_link": built_link, "visits": visits.summary(),
+    })
+
+
+# ---------------------------------------------------------------------------
+# Logo du site : versions en couleur pour une période
+# ---------------------------------------------------------------------------
+LOGO_PRESETS = [c for c in LogoVariant.Preset.choices if c[0] != LogoVariant.Preset.CUSTOM]
+
+
+@admin_required
+def logo_list(request):
+    today = timezone.localdate()
+    variants = list(LogoVariant.objects.all())
+    return render(request, "dashboard/logo/list.html", {
+        "variants": [(v, v.state(today)) for v in variants], "current": LogoVariant.current(today),
+        "presets": LOGO_PRESETS,
+    })
+
+
+def _logo_form(request, variant=None):
+    initial = {}
+    if variant is None:
+        initial = {"preset": request.GET.get("couleur") or LogoVariant.Preset.GOLD, "start_date": timezone.localdate()}
+    form = LogoVariantForm(request.POST or None, request.FILES or None, instance=variant, initial=initial)
+    if request.method == "POST" and form.is_valid():
+        form.save()
+        messages.success(request, _("Version du logo enregistrée.") if variant is None else _("Version du logo mise à jour."))
+        return redirect("dashboard:logo_list")
+    return render(request, "dashboard/logo/form.html", {"form": form, "variant": variant, "presets": LOGO_PRESETS})
+
+
+@admin_required
+def logo_create(request):
+    return _logo_form(request)
+
+
+@admin_required
+def logo_edit(request, pk):
+    return _logo_form(request, get_object_or_404(LogoVariant, pk=pk))
+
+
+@admin_required
+def logo_delete(request, pk):
+    variant = get_object_or_404(LogoVariant, pk=pk)
+    if request.method == "POST":
+        variant.delete()
+        messages.success(request, _("Version du logo supprimée. Le logo original revient pour ces dates."))
+        return redirect("dashboard:logo_list")
+    return render(request, "dashboard/confirm_delete.html", {
+        "object": variant, "kind": _("la version du logo"), "blocked": False, "note": "",
+        "cancel_url": reverse("dashboard:logo_list"),
+    })

@@ -1,13 +1,20 @@
 """Flux invité multi-étapes accessible par lien magique (section 6)."""
+from urllib.parse import quote
+
 from django.contrib import messages
 from django.db.models import F
-from django.http import JsonResponse
+from django.http import HttpResponse, JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
+from django.utils import timezone
+from django.utils.translation import gettext as _
+from django.utils.translation import gettext_lazy, ngettext
 from django.views.decorators.http import require_GET
 
-from ads.models import Ad
+from ads.models import AD_IMAGE_SECONDS, AD_MAX_SECONDS, Ad
+from core.ratelimit import ratelimit
 from gifts.models import GiftClaim
+from payments.models import Contribution
 from gifts.services import (
     GiftUnavailableError,
     ResponseLockedError,
@@ -16,8 +23,11 @@ from gifts.services import (
     gifts_for_guest,
 )
 
+from . import checkin, thanks
 from .forms import GiftSelectionForm, GiftWishForm, PresenceForm
-from .models import Event, Guest
+from .messaging import supported_language
+from .models import Event, Guest, normalize_entry_code
+from .qr import entry_url, qr_png, qr_svg
 
 
 def _session_key(guest):
@@ -35,16 +45,29 @@ def _set_state(request, guest, **values):
     return state
 
 
+# Étapes du parcours : identifiant interne -> libellé affiché (traduit) dans la barre de progression.
+STEP_LABELS = {
+    "presence": gettext_lazy("Présence"),
+    "gifts": gettext_lazy("Cadeaux"),
+    "selection": gettext_lazy("Sélection"),
+    "recap": gettext_lazy("Récapitulatif"),
+    "confirmation": gettext_lazy("Confirmation"),
+}
+
+
 def _steps(event):
     if event.gifts.exists():
-        return ["Présence", "Cadeaux", "Sélection", "Récapitulatif", "Confirmation"]
-    return ["Présence", "Récapitulatif", "Confirmation"]
+        return ["presence", "gifts", "selection", "recap", "confirmation"]
+    if event.accept_contributions:
+        return ["presence", "gifts", "recap", "confirmation"]  # sans liste de cadeaux : seulement la contribution en argent
+    return ["presence", "recap", "confirmation"]
 
 
 def _ctx(guest, step_name, **extra):
     steps = _steps(guest.event)
     index = steps.index(step_name) + 1 if step_name in steps else len(steps)
-    return {"guest": guest, "event": guest.event, "steps": steps, "step_index": index, "step_total": len(steps), **extra}
+    labels = [STEP_LABELS[s] for s in steps]
+    return {"guest": guest, "event": guest.event, "steps": labels, "step_index": index, "step_total": len(steps), **extra}
 
 
 def _load_guest(token):
@@ -56,9 +79,12 @@ def _guard(request, guest):
     event = guest.event
     if guest.is_locked:
         claims = GiftClaim.objects.filter(guest=guest).select_related("gift")
-        return render(request, "invitation/already_answered.html", _ctx(guest, "Confirmation", claims=claims))
+        contribution = Contribution.objects.filter(guest=guest).first()
+        return render(request, "invitation/already_answered.html", _ctx(
+            guest, "confirmation", claims=claims, contribution=contribution, thanks_ready=thanks.can_view(guest),
+        ))
     if event.status != Event.Status.ACTIVE or event.is_past:
-        return render(request, "invitation/closed.html", _ctx(guest, "Présence"))
+        return render(request, "invitation/closed.html", _ctx(guest, "presence"))
     return None
 
 
@@ -75,11 +101,11 @@ def invitation_presence(request, token):
     if request.method == "POST" and form.is_valid():
         status = form.cleaned_data["status"]
         _set_state(request, guest, status=status, companions=form.cleaned_data["companions"])
-        if status == Guest.Status.CONFIRMED and event.gifts.exists():
+        if status == Guest.Status.CONFIRMED and event.has_gift_step:
             return redirect("events:invitation_gift_question", token=token)
         _set_state(request, guest, wants_gift=None, gift_ids=[])
         return redirect("events:invitation_recap", token=token)
-    return render(request, "invitation/step_presence.html", _ctx(guest, "Présence", form=form))
+    return render(request, "invitation/step_presence.html", _ctx(guest, "presence", form=form))
 
 
 def invitation_gift_question(request, token):
@@ -89,17 +115,20 @@ def invitation_gift_question(request, token):
     if blocked:
         return blocked
     state = _get_state(request, guest)
-    if state.get("status") != Guest.Status.CONFIRMED or not guest.event.gifts.exists():
+    if state.get("status") != Guest.Status.CONFIRMED or not guest.event.has_gift_step:
         return redirect("events:invitation", token=token)
+    has_gifts = guest.event.gifts.exists()
     form = GiftWishForm(request.POST or None)
     if request.method == "POST" and form.is_valid():
-        wants = form.cleaned_data["wants_gift"]
+        wants = form.cleaned_data["wants_gift"] and has_gifts
         _set_state(request, guest, wants_gift=wants)
         if wants:
             return redirect("events:invitation_gift_list", token=token)
         _set_state(request, guest, gift_ids=[])
         return redirect("events:invitation_recap", token=token)
-    return render(request, "invitation/step_gift_question.html", _ctx(guest, "Cadeaux", form=form, state=state))
+    return render(request, "invitation/step_gift_question.html", _ctx(
+        guest, "gifts", form=form, state=state, has_gifts=has_gifts, can_contribute=guest.event.accept_contributions,
+    ))
 
 
 def invitation_gift_list(request, token):
@@ -118,11 +147,11 @@ def invitation_gift_list(request, token):
         if form.is_valid():
             _set_state(request, guest, gift_ids=form.cleaned_data["gifts"])
             return redirect("events:invitation_recap", token=token)
-        messages.error(request, "Un cadeau sélectionné n'est plus disponible. La liste a été actualisée.")
+        messages.error(request, _("Un cadeau sélectionné n'est plus disponible. La liste a été actualisée."))
     selected = set(state.get("gift_ids", []))
     for gift in gifts:
         gift.state = gift_state(gift, selected)
-    return render(request, "invitation/step_gift_list.html", _ctx(guest, "Sélection", form=form, gifts=gifts))
+    return render(request, "invitation/step_gift_list.html", _ctx(guest, "selection", form=form, gifts=gifts))
 
 
 @require_GET
@@ -130,7 +159,11 @@ def invitation_gift_availability(request, token):
     """Rafraîchissement AJAX (polling toutes les 5 s) de la disponibilité des cadeaux."""
     guest = _load_guest(token)
     data = [
-        {"id": g.pk, "remaining": g.remaining, "available": g.is_available, "mine": bool(g.mine)}
+        {
+            "id": g.pk, "remaining": g.remaining, "available": g.is_available, "mine": bool(g.mine),
+            # Libellé déjà traduit et accordé : la page l'affiche tel quel
+            "label": ngettext("%(n)d disponible", "%(n)d disponibles", g.remaining) % {"n": g.remaining},
+        }
         for g in gifts_for_guest(guest.event, guest)
     ]
     return JsonResponse({"gifts": data})
@@ -162,56 +195,122 @@ def invitation_recap(request, token):
             _set_state(request, guest, gift_ids=remaining)
             messages.error(
                 request,
-                f"Désolé, ce cadeau vient d'être choisi par un autre invité : {', '.join(g.name for g in exc.gifts)}. "
-                "Merci de revoir votre sélection.",
+                ngettext(
+                    "Désolé, ce cadeau vient d'être choisi par un autre invité : %(cadeaux)s. Merci de revoir votre sélection.",
+                    "Désolé, ces cadeaux viennent d'être choisis par d'autres invités : %(cadeaux)s. Merci de revoir votre sélection.",
+                    len(exc.gifts),
+                ) % {"cadeaux": ", ".join(g.name for g in exc.gifts)},
             )
             return redirect("events:invitation_gift_list", token=token)
         except ResponseLockedError:
             return redirect("events:invitation", token=token)
         request.session.pop(_session_key(guest), None)
         request.session[f"invitation_done_{token}"] = True
-        return redirect("events:invitation_done", token=token)
+        return after_reply_redirect(request, guest)
 
     return render(
         request,
         "invitation/step_recap.html",
-        _ctx(guest, "Récapitulatif", state=state, selected_gifts=selected_gifts,
+        _ctx(guest, "recap", state=state, selected_gifts=selected_gifts,
              status_label=dict(Guest.Status.choices).get(state["status"])),
     )
 
 
-def _ad_sequence():
-    return list(Ad.objects.filter(is_active=True, show_after_reply=True).values_list("pk", flat=True))
+AD_SEEN_KEY = "ad_seen_on"
 
 
-def _after_ads_url():
-    return reverse("events:explore")
+def pick_reply_ad(request, guest):
+    """La publicité plein écran à montrer après une réponse, ou None.
+
+    Aucune si l'organisateur l'a refusée pour son événement, ou si cette personne en a déjà vu une aujourd'hui.
+    Sinon la publicité payée en cours la moins vue : chaque partenaire passe à son tour.
+    """
+    if guest.event.no_ads or request.session.get(AD_SEEN_KEY) == timezone.localdate().isoformat():
+        return None
+    return Ad.objects.live().filter(show_after_reply=True).order_by("views", "order", "pk").first()
+
+
+def after_reply_redirect(request, guest):
+    """Juste après la réponse : la publicité plein écran (si il y en a une), puis la confirmation."""
+    ad = pick_reply_ad(request, guest)
+    if ad is not None:
+        return redirect("events:invitation_ad", token=guest.magic_token, ad_id=ad.pk)
+    return redirect("events:invitation_done", token=guest.magic_token)
 
 
 def invitation_done(request, token):
-    """Étape 5 : succès puis redirection automatique vers la publicité."""
+    """Étape 5 : « c'est confirmé », avec le QR code d'entrée. La page reste affichée : l'invité garde son billet."""
     guest = _load_guest(token)
     if guest.replied_at is None:
         return redirect("events:invitation", token=token)
-    ads = _ad_sequence()
-    next_url = reverse("events:invitation_ad", args=[token, ads[0]]) if ads else _after_ads_url()
     claims = GiftClaim.objects.filter(guest=guest).select_related("gift")
-    return render(request, "invitation/step_done.html", _ctx(guest, "Confirmation", next_url=next_url, claims=claims))
+    contribution = Contribution.objects.filter(guest=guest).first()
+    return render(request, "invitation/step_done.html", _ctx(
+        guest, "confirmation", home_url=reverse("core:landing") + "#affiche", claims=claims, contribution=contribution,
+    ))
 
 
 def invitation_ad(request, token, ad_id):
-    """Page publicité affichée après la réponse (section 7)."""
+    """Publicité courte en plein écran juste après la réponse (15 s au plus, « Passer » tout de suite), puis la confirmation."""
     guest = _load_guest(token)
-    ad = get_object_or_404(Ad, pk=ad_id, is_active=True)
+    done_url = reverse("events:invitation_done", args=[token])
+    if guest.replied_at is None:
+        return redirect("events:invitation", token=token)
+    if guest.event.no_ads:
+        return redirect(done_url)
+    ad = get_object_or_404(Ad.objects.live(), pk=ad_id)
     Ad.objects.filter(pk=ad.pk).update(views=F("views") + 1)
-    ads = _ad_sequence()
-    try:
-        position = ads.index(ad.pk)
-    except ValueError:
-        position = len(ads) - 1
-    following = ads[position + 1] if position + 1 < len(ads) else None
-    next_url = reverse("events:invitation_ad", args=[token, following]) if following else _after_ads_url()
-    return render(request, "ads/ad_page.html", {
-        "ad": ad, "guest": guest, "next_url": next_url,
-        "position": position + 1, "total": len(ads),
+    request.session[AD_SEEN_KEY] = timezone.localdate().isoformat()
+    seconds = AD_MAX_SECONDS if ad.has_video else AD_IMAGE_SECONDS
+    return render(request, "ads/ad_page.html", {"ad": ad, "guest": guest, "next_url": done_url, "seconds": seconds})
+
+
+# ---------------------------------------------------------------------------
+# QR code d'entrée
+# ---------------------------------------------------------------------------
+
+
+def _ticket_guest(token):
+    """Le billet d'entrée n'existe que pour un invité qui a confirmé sa présence."""
+    guest = _load_guest(token)
+    return guest if guest.status == Guest.Status.CONFIRMED and guest.replied_at else None
+
+
+def invitation_ticket(request, token):
+    guest = _ticket_guest(token)
+    if guest is None:
+        return redirect("events:invitation", token=token)
+    link = request.build_absolute_uri(guest.get_ticket_url()) + f"?lang={supported_language(guest.language)}"
+    share = _("Mon billet d'entrée pour « %(title)s » : %(url)s") % {"title": guest.event.title, "url": link}
+    qr = qr_svg(entry_url(request, guest), label=_("QR code d'entrée de %(name)s") % {"name": guest.name})
+    return render(request, "invitation/ticket.html", {
+        "guest": guest, "event": guest.event, "qr": qr, "party": checkin.party_text(guest),
+        "paid_refs": ", ".join(guest.payments.filter(kind="ticket", status="success").values_list("reference", flat=True)),
+        "whatsapp_url": f"https://wa.me/?text={quote(share)}",
+    })
+
+
+@require_GET
+def invitation_ticket_png(request, token):
+    guest = _ticket_guest(token)
+    if guest is None:
+        return redirect("events:invitation", token=token)
+    response = HttpResponse(qr_png(entry_url(request, guest)), content_type="image/png")
+    response["Content-Disposition"] = f'attachment; filename="billet-{guest.entry_code}.png"'
+    return response
+
+
+@ratelimit("entry-code", 30, 600, methods=("GET", "POST"))
+def entry_code(request, code):
+    """Adresse contenue dans le QR code. Public : rien sur l'invité. Équipe EventLead : validation de l'entrée."""
+    code = normalize_entry_code(code)
+    guest = Guest.objects.select_related("event").filter(entry_code=code).first()
+    user = request.user
+    staff = user.is_authenticated and user.is_admin_role
+    result = None
+    if staff and guest is not None and request.method == "POST":
+        result = checkin.describe(checkin.scan(guest.event, code, user))
+    return render(request, "invitation/entry_code.html", {
+        "guest": guest if staff else None, "code": code, "staff": staff, "known": guest is not None, "result": result,
+        "event": guest.event if guest and staff else None,
     })

@@ -1,0 +1,4 @@
+{% load i18n %}
+{% if profile.show_warning %}
+<div class="alert alert-warning d-flex gap-2 align-items-start" role="alert"><i class="bi bi-exclamation-triangle mt-1"></i><div>{% trans "L'équipe EventLead a reçu un signalement à votre sujet. Merci de respecter les règles de Y aller ensemble : sinon, votre accès sera retiré." %}</div></div>
+{% endif %}

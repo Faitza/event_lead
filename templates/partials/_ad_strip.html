@@ -1,0 +1,9 @@
+{% load i18n %}{# Petit encadré partenaire sous la description d'un événement public. #}
+<a href="{% url 'ads:click' ad.pk %}" target="_blank" rel="noopener sponsored" class="ad-strip">
+  <span class="ad-strip-media">{% include "partials/_ad_media.html" with lazy=True %}</span>
+  <span class="ad-strip-text">
+    <span class="ad-strip-tag">{% trans "Publicité" %}{% if ad.advertiser %} &middot; {{ ad.advertiser }}{% endif %}</span>
+    <b>{{ ad.title }}</b>
+    <span class="ad-strip-cta">{% trans "En savoir plus" %} <i class="bi bi-chevron-right" aria-hidden="true"></i></span>
+  </span>
+</a>

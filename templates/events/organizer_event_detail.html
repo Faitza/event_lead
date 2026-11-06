@@ -1,15 +1,16 @@
 {% extends "events/public_detail.html" %}
+{% load i18n %}
 {% block content %}
 {{ block.super }}
 <section class="pb-5">
   <div class="container">
     <div class="row g-3">
-      <div class="col-6 col-md-3"><div class="el-card stat-card"><span class="icon-bubble"><i class="bi bi-people"></i></span><div><div class="value">{{ stats.total }}</div><div class="label">invités</div></div></div></div>
-      <div class="col-6 col-md-3"><div class="el-card stat-card"><span class="icon-bubble success"><i class="bi bi-check2-circle"></i></span><div><div class="value">{{ stats.confirmed }}</div><div class="label">présents</div></div></div></div>
-      <div class="col-6 col-md-3"><div class="el-card stat-card"><span class="icon-bubble gold"><i class="bi bi-person-plus"></i></span><div><div class="value">{{ stats.companions }}</div><div class="label">accompagnants</div></div></div></div>
-      <div class="col-6 col-md-3"><div class="el-card stat-card"><span class="icon-bubble"><i class="bi bi-person-badge"></i></span><div><div class="value">{{ event.max_guests }}</div><div class="label">capacité</div></div></div></div>
+      <div class="col-6 col-md-3"><div class="el-card stat-card"><span class="icon-bubble"><i class="bi bi-people"></i></span><div><div class="value">{{ stats.total }}</div><div class="label">{% trans "invités" %}</div></div></div></div>
+      <div class="col-6 col-md-3"><div class="el-card stat-card"><span class="icon-bubble success"><i class="bi bi-check2-circle"></i></span><div><div class="value">{{ stats.confirmed }}</div><div class="label">{% trans "présents" %}</div></div></div></div>
+      <div class="col-6 col-md-3"><div class="el-card stat-card"><span class="icon-bubble gold"><i class="bi bi-person-plus"></i></span><div><div class="value">{{ stats.companions }}</div><div class="label">{% trans "accompagnants" %}</div></div></div></div>
+      <div class="col-6 col-md-3"><div class="el-card stat-card"><span class="icon-bubble"><i class="bi bi-person-badge"></i></span><div><div class="value">{{ event.max_guests }}</div><div class="label">{% trans "capacité" %}</div></div></div></div>
     </div>
-    {% if can_evaluate %}<div class="text-center mt-4"><a href="{% url 'events:evaluate' event.pk %}" class="btn btn-gold btn-lg"><i class="bi bi-star me-2"></i>Évaluer cet événement</a></div>{% endif %}
+    {% if can_evaluate %}<div class="text-center mt-4"><a href="{% url 'events:evaluate' event.pk %}" class="btn btn-gold btn-lg"><i class="bi bi-star me-2"></i>{% trans "Évaluer cet événement" %}</a></div>{% endif %}
   </div>
 </section>
 {% endblock %}

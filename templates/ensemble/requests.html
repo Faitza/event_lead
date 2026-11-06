@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+{% load i18n el_tags ensemble_tags %}
+{% block body_class %}espace-perso{% endblock %}
+{% block title %}{% trans "Mes demandes" %}{% endblock %}
+{% block extra_head %}{% include "ensemble/_head.html" %}{% endblock %}
+{% block content %}
+<section class="section">
+  <div class="container" style="max-width:960px">
+    <div class="page-head"><div><div class="eyebrow-row mb-3"><span class="diamond"></span><span class="eyebrow">{% trans "Mon espace" %} &middot; {% trans "Y aller ensemble" %}</span></div><h1 class="em-on-light">{% blocktranslate trimmed %}Mes <em>demandes</em>{% endblocktranslate %}</h1><p>{% trans "Acceptez seulement les personnes avec qui vous voulez parler." %}</p></div></div>
+    {% include "ensemble/_warning.html" %}
+    {% include "ensemble/_tabs_nav.html" with section="requests" %}
+    <div class="d-flex flex-wrap gap-2 mb-3">
+      <a href="?onglet=recues" class="btn btn-sm {% if tab == 'recues' %}btn-primary{% else %}btn-light{% endif %}">{% trans "Reçues" %} ({{ counts.recues }})</a>
+      <a href="?onglet=envoyees" class="btn btn-sm {% if tab == 'envoyees' %}btn-primary{% else %}btn-light{% endif %}">{% trans "Envoyées" %} ({{ counts.envoyees }})</a>
+      <a href="?onglet=acceptees" class="btn btn-sm {% if tab == 'acceptees' %}btn-primary{% else %}btn-light{% endif %}">{% trans "Acceptées" %} ({{ counts.acceptees }})</a>
+    </div>
+    <div class="el-card mb-4">
+      {% for r in items %}{% with other=r|ya_other:user %}{% with p=other.ensemble_profile %}
+      <div class="p-3 {% if not forloop.last %}border-bottom{% endif %} {% if tab == 'recues' %}bg-soft{% endif %}">
+        <div class="d-flex flex-wrap gap-3 align-items-start">
+          {% include "ensemble/_avatar.html" with p=p size="" %}
+          <div class="flex-grow-1" style="min-width:0">
+            <strong>{{ p.first_name }}</strong> <span class="small text-muted">&middot; {{ p.city }} &middot; {% trans "pour" %} {% if r.event.is_past %}{{ r.event.title }}{% else %}<a href="{% url 'ensemble:people' r.event.pk %}">{{ r.event.title }}</a>{% endif %}</span>
+            {% if p.about and tab == 'recues' %}<div class="small text-muted ya-note">{{ p.about }}</div>{% endif %}
+            {% if r.note %}<p class="small mb-2 mt-1 ya-note">« {{ r.note }} »</p>{% endif %}
+            <div class="d-flex flex-wrap gap-2 mt-2">
+              {% if tab == 'recues' %}
+              <form method="post" action="{% url 'ensemble:answer' r.pk %}">{% csrf_token %}<input type="hidden" name="action" value="accept"><button class="btn btn-primary btn-sm"><i class="bi bi-check2 me-1"></i>{% trans "Accepter" %}</button></form>
+              <form method="post" action="{% url 'ensemble:answer' r.pk %}">{% csrf_token %}<input type="hidden" name="action" value="decline"><button class="btn btn-light btn-sm">{% trans "Refuser" %}</button></form>
+              <button type="button" class="btn btn-light btn-sm text-danger" data-bs-toggle="modal" data-bs-target="#ya-report" data-ya-url="{% url 'ensemble:report' other.pk %}" data-ya-name="{{ p.first_name }}" data-ya-event="{{ r.event_id }}"><i class="bi bi-flag me-1"></i>{% trans "Signaler" %}</button>
+              {% elif tab == 'acceptees' %}
+              <a href="{% url 'ensemble:conversation' r.pk %}" class="btn btn-soft btn-sm"><i class="bi bi-chat-dots me-1"></i>{% trans "Ouvrir la conversation" %}</a>
+              {% else %}
+              <span class="badge-el badge-muted">{% trans "En attente de réponse" %}</span>
+              {% endif %}
+            </div>
+          </div>
+          <span class="small text-muted">{{ r.created_at|timesince }}</span>
+        </div>
+      </div>
+      {% endwith %}{% endwith %}{% empty %}
+      <div class="empty-state"><i class="bi bi-inbox"></i><p class="mt-2 mb-0">{% if tab == 'recues' %}{% trans "Aucune demande reçue pour le moment." %}{% elif tab == 'envoyees' %}{% trans "Aucune demande envoyée en attente." %}{% else %}{% trans "Aucune demande acceptée pour le moment." %}{% endif %}</p></div>
+      {% endfor %}
+    </div>
+    <div class="ya-safe"><i class="bi bi-info-circle me-2"></i>{% trans "La personne n'est pas prévenue quand vous refusez. Elle voit seulement que la demande n'a pas eu de réponse." %}</div>
+  </div>
+</section>
+{% include "ensemble/_report_modal.html" %}
+{% endblock %}
+{% block extra_js %}<script src="{% static_v 'js/ensemble.js' %}"></script>{% endblock %}

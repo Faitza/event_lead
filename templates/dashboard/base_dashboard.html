@@ -1,38 +1,52 @@
 {% extends "base.html" %}
 {% load el_tags %}
-{% block body_class %}bg-light{% endblock %}
+{% load i18n %}
+{% block body_class %}dash-page espace-perso{% endblock %}
+{% block help_fab %}{% endblock %}
 {% block body %}
 <div class="dash">
   <aside class="dash-sidebar">
-    <a href="{% url 'dashboard:home' %}" class="brand">{% include "partials/_logo.html" %}<span class="logo-word">EventLead</span></a>
-    <div class="nav-section">Pilotage</div>
-    <a class="side-link {% if request.resolver_match.url_name == 'home' %}active{% endif %}" href="{% url 'dashboard:home' %}"><i class="bi bi-speedometer2"></i>Tableau de bord</a>
-    <a class="side-link {% active '/admin-dashboard/evenements/' %}" href="{% url 'dashboard:event_list' %}"><i class="bi bi-calendar2-event"></i>Événements</a>
-    <a class="side-link {% active '/admin-dashboard/invites/' %}" href="{% url 'dashboard:guest_list' %}"><i class="bi bi-people"></i>Invités</a>
-    <a class="side-link {% active '/admin-dashboard/cadeaux/' %}" href="{% url 'dashboard:gift_list' %}"><i class="bi bi-gift"></i>Cadeaux</a>
-    <div class="nav-section">Revenus</div>
-    <a class="side-link {% active '/admin-dashboard/publicites/' %}" href="{% url 'dashboard:ad_list' %}"><i class="bi bi-megaphone"></i>Publicités</a>
-    <a class="side-link {% active '/admin-dashboard/paiements/' %}" href="{% url 'dashboard:payment_history' %}"><i class="bi bi-credit-card"></i>Paiements</a>
-    <div class="nav-section">Communauté</div>
-    <a class="side-link {% active '/admin-dashboard/messages/' %}" href="{% url 'dashboard:inbox' %}"><i class="bi bi-chat-square-heart"></i>Messages et avis</a>
-    <a class="side-link" href="{% url 'admin:index' %}"><i class="bi bi-database-gear"></i>Back-office Django</a>
-    <a class="side-link" href="{% url 'core:landing' %}" target="_blank"><i class="bi bi-box-arrow-up-right"></i>Voir le site</a>
+    <a href="{% url 'dashboard:home' %}" class="brand" aria-label="{% trans 'EventLead, tableau de bord' %}">{% include "partials/_logo.html" %}</a>
+    <div class="ornament brand-rule" aria-hidden="true"><span class="diamond"></span></div>
+    <div class="nav-section">{% trans "Pilotage" %}</div>
+    <a class="side-link {% if request.resolver_match.url_name == 'home' %}active{% endif %}" href="{% url 'dashboard:home' %}"><i class="bi bi-speedometer2"></i>{% trans "Tableau de bord" %}</a>
+    <a class="side-link {% active '/admin-dashboard/evenements/' %}" href="{% url 'dashboard:event_list' %}"><i class="bi bi-calendar2-event"></i>{% trans "Événements" %}</a>
+    <a class="side-link {% active '/admin-dashboard/logo/' %}" href="{% url 'dashboard:logo_list' %}"><i class="bi bi-palette"></i>{% trans "Logo" %}</a>
+    <a class="side-link {% active '/admin-dashboard/categories/' %}" href="{% url 'dashboard:category_list' %}"><i class="bi bi-tags"></i>{% trans "Catégories" %}</a>
+    <a class="side-link {% active '/admin-dashboard/invites/' %}" href="{% url 'dashboard:guest_list' %}"><i class="bi bi-people"></i>{% trans "Invités" %}</a>
+    <a class="side-link {% active '/admin-dashboard/pointage/' %}" href="{% url 'dashboard:checkin_index' %}"><i class="bi bi-qr-code-scan"></i>{% trans "Pointage" %}</a>
+    <a class="side-link {% active '/admin-dashboard/relances/' %}" href="{% url 'dashboard:reminder_index' %}"><i class="bi bi-bell"></i>{% trans "Relances" %}</a>
+    <a class="side-link {% active '/admin-dashboard/plan-de-table/' %}" href="{% url 'dashboard:seating_index' %}"><i class="bi bi-grid-3x3-gap"></i>{% trans "Plan de table" %}</a>
+    <a class="side-link {% active '/admin-dashboard/remerciements/' %}" href="{% url 'dashboard:thanks_index' %}"><i class="bi bi-images"></i>{% trans "Remerciements" %}</a>
+    <a class="side-link {% active '/admin-dashboard/cadeaux/' %}" href="{% url 'dashboard:gift_list' %}"><i class="bi bi-gift"></i>{% trans "Cadeaux" %}</a>
+    <div class="nav-section">{% trans "Revenus" %}</div>
+    <a class="side-link {% active '/admin-dashboard/publicites/' %}" href="{% url 'dashboard:ad_list' %}"><i class="bi bi-megaphone"></i>{% trans "Publicités" %}</a>
+    <a class="side-link {% active '/admin-dashboard/paiements/' %}" href="{% url 'dashboard:payment_history' %}"><i class="bi bi-credit-card"></i>{% trans "Paiements" %}</a>
+    <div class="nav-section">{% trans "Communauté" %}</div>
+    <a class="side-link {% active '/admin-dashboard/messages/' %}" href="{% url 'dashboard:inbox' %}"><i class="bi bi-chat-square-heart"></i>{% trans "Messages et avis" %}</a>
+    <a class="side-link {% active '/admin-dashboard/aide/' %}" href="{% url 'dashboard:help_list' %}"><i class="bi bi-life-preserver"></i>{% trans "Demandes d'aide" %}{% if new_help_requests %}<span class="side-count" title="{% trans 'Demandes nouvelles' %}">{{ new_help_requests }}</span>{% endif %}</a>
+    <a class="side-link {% active '/admin-dashboard/signalements/' %}" href="{% url 'dashboard:ensemble_reports' %}"><i class="bi bi-flag"></i>{% trans "Signalements" %}{% if new_ensemble_reports %}<span class="side-count" title="{% trans 'Signalements à traiter' %}">{{ new_ensemble_reports }}</span>{% endif %}</a>
+    <a class="side-link {% active '/admin-dashboard/provenance/' %}" href="{% url 'dashboard:utm_report' %}"><i class="bi bi-signpost-split"></i>{% trans "Provenance des visites" %}</a>
+    <a class="side-link" href="{% url 'admin:index' %}"><i class="bi bi-database-gear"></i>{% trans "Back-office Django" %}</a>
+    <a class="side-link" href="{% url 'core:landing' %}" target="_blank"><i class="bi bi-box-arrow-up-right"></i>{% trans "Voir le site" %}</a>
     <div class="mt-auto pt-4">
-      <form method="post" action="{% url 'accounts:logout' %}">{% csrf_token %}<button class="side-link w-100 border-0 bg-transparent text-start"><i class="bi bi-box-arrow-left"></i>Se déconnecter</button></form>
+      <form method="post" action="{% url 'accounts:logout' %}">{% csrf_token %}<button class="side-link w-100 border-0 bg-transparent text-start"><i class="bi bi-box-arrow-left"></i>{% trans "Se déconnecter" %}</button></form>
     </div>
   </aside>
   <div class="dash-main">
     <header class="dash-topbar">
       <div class="d-flex align-items-center gap-2">
-        <button class="btn btn-soft btn-sm dash-burger" aria-label="Menu"><i class="bi bi-list"></i></button>
-        <span class="text-muted small d-none d-md-inline">{% now "l j F Y" %}</span>
+        <button class="btn btn-soft btn-sm dash-burger" aria-label="{% trans 'Menu' %}"><i class="bi bi-list"></i></button>
+        <span class="text-muted small d-none d-md-inline">{{ TODAY|date:_("l j F Y") }}</span>
       </div>
       <div class="d-flex align-items-center gap-2">
-        <a href="{% url 'dashboard:event_create' %}" class="btn btn-primary btn-sm"><i class="bi bi-plus-lg me-1"></i>Nouvel événement</a>
+        {% include "partials/_theme_toggle.html" %}
+        {% include "partials/_language_switcher.html" %}
+        <a href="{% url 'dashboard:event_create' %}" class="btn btn-primary btn-sm text-nowrap" title="{% trans 'Nouvel événement' %}"><i class="bi bi-plus-lg me-1"></i><span class="d-none d-sm-inline">{% trans "Nouvel événement" %}</span><span class="visually-hidden d-sm-none">{% trans "Nouvel événement" %}</span></a>
         <span class="user-pill"><span class="avatar">{{ user.initials }}</span><span class="d-none d-sm-inline">{{ user.display_name }}</span><span class="badge-el badge-primary">Admin</span></span>
       </div>
     </header>
-    <div class="dash-content">{% block dash_content %}{% endblock %}</div>
+    <div class="dash-content" id="contenu" tabindex="-1">{% block dash_content %}{% endblock %}</div>
   </div>
 </div>
 {% endblock %}

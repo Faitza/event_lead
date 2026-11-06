@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% block title %}{% if q %}{% blocktrans %}Recherche : {{ q }}{% endblocktrans %}{% else %}{% trans "Rechercher" %}{% endif %}{% endblock %}
+{% block meta_description %}{% trans "Rechercher un événement, une catégorie, une question de l'aide ou une page du site EventLead." %}{% endblock %}
+{% block content %}
+{% include "partials/_banner.html" with eyebrow=_("Recherche") title=_("Rechercher") accent=_("sur tout le site") text=_("Événements, catégories, questions fréquentes et pages.") %}
+<section class="section pt-5">
+  <div class="container" style="max-width:52rem">
+    <form method="get" action="{% url 'core:search' %}" role="search" class="search-box mb-4">
+      <label class="visually-hidden" for="site-search-q">{% trans "Que cherchez-vous ?" %}</label>
+      <input type="search" id="site-search-q" name="q" value="{{ q }}" class="form-control form-control-lg" placeholder="{% trans 'Mariage, billet, MonCash, cadeau...' %}" maxlength="80" {% if not q %}autofocus{% endif %}>
+      <button class="btn btn-primary btn-lg"><i class="bi bi-search me-2" aria-hidden="true"></i>{% trans "Rechercher" %}</button>
+    </form>
+    {% if q %}
+      <p class="text-muted" role="status">{% blocktrans count counter=results.total %}{{ counter }} résultat pour « {{ q }} »{% plural %}{{ counter }} résultats pour « {{ q }} »{% endblocktrans %}</p>
+      {% if results.events %}
+      <h2 class="h4 mt-4 mb-3">{% trans "Événements publics" %}</h2>
+      <ul class="search-list list-unstyled">
+        {% for event in results.events %}
+        <li><a href="{{ event.get_absolute_url }}" class="search-hit"><i class="bi {{ event.category.icon_name|default:'bi-calendar2-event' }}" aria-hidden="true"></i><span><strong>{{ event.title }}</strong><span class="d-block small text-muted">{{ event.date|date:_("j F Y") }} &middot; {{ event.venue }}</span></span></a></li>
+        {% endfor %}
+      </ul>
+      {% endif %}
+      {% if results.categories %}
+      <h2 class="h4 mt-4 mb-3">{% trans "Catégories" %}</h2>
+      <div class="cat-filter justify-content-start">
+        {% for c in results.categories %}<a href="{% url 'events:explore' %}?categorie={{ c.slug }}#evenements" class="cat-chip"><i class="bi {{ c.icon_name }}"></i>{{ c.name }}</a>{% endfor %}
+      </div>
+      {% endif %}
+      {% if results.questions %}
+      <h2 class="h4 mt-4 mb-3">{% trans "Questions fréquentes" %}</h2>
+      <ul class="search-list list-unstyled">
+        {% for item in results.questions %}
+        <li><a href="{% url 'core:help' %}#faq-{{ item.slug }}" class="search-hit"><i class="bi bi-question-circle" aria-hidden="true"></i><span><strong>{{ item.question }}</strong><span class="d-block small text-muted">{{ item.profile }} &middot; {{ item.answer|truncatechars:120 }}</span></span></a></li>
+        {% endfor %}
+      </ul>
+      {% endif %}
+      {% if results.pages %}
+      <h2 class="h4 mt-4 mb-3">{% trans "Pages" %}</h2>
+      <ul class="search-list list-unstyled">
+        {% for page in results.pages %}
+        <li><a href="{{ page.url }}" class="search-hit"><i class="bi bi-file-earmark-text" aria-hidden="true"></i><span><strong>{{ page.title }}</strong><span class="d-block small text-muted">{{ page.text }}</span></span></a></li>
+        {% endfor %}
+      </ul>
+      {% endif %}
+      {% if not results.total %}
+      <div class="el-card empty-state"><i class="bi bi-search"></i><p class="mt-2 mb-2">{% trans "Aucun résultat. Essayez un autre mot, ou posez votre question à l'équipe." %}</p><a href="{% url 'core:help' %}#demande" class="btn btn-soft btn-sm">{% trans "Demander de l'aide" %}</a></div>
+      {% endif %}
+    {% endif %}
+  </div>
+</section>
+{% endblock %}

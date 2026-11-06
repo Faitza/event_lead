@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% block title %}{% blocktranslate trimmed with titre=event.title %}Billet d'entrée - {{ titre }}{% endblocktranslate %}{% endblock %}
+{% block help_fab %}{% endblock %}
+{% block body %}
+<div class="inv-shell ticket-shell">
+  <div class="inv-topbar">
+    <div class="inv-container d-flex align-items-center justify-content-between">
+      <a href="{% if guest.from_ticket %}{% url 'accounts:guest_space' %}{% else %}{{ guest.get_invitation_url }}{% endif %}" class="ticket-back" aria-label="{% trans 'Retour' %}"><i class="bi bi-arrow-left"></i></a>
+      {% include "partials/_language_switcher.html" %}
+      <a href="{% url 'core:landing' %}" aria-label="{% trans 'EventLead, accueil' %}">{% include "partials/_logo.html" %}</a>
+    </div>
+  </div>
+  <div class="inv-container ticket-wrap" id="contenu" tabindex="-1">
+    <div class="ticket-rays" aria-hidden="true"></div>
+    <div class="ticket-eyebrow"><span></span><em class="eyebrow">{% trans "Votre billet d'entrée" %}</em><span></span></div>
+    <div class="ticket-card">
+      <div class="ticket-inner">
+        <div class="ticket-head">
+          <span class="eyebrow">{% if paid_refs or guest.from_ticket %}{% trans "Votre billet pour" %}{% else %}{% trans "Vous êtes invité(e) à" %}{% endif %}</span>
+          <h1 class="disp">{{ event.title }}</h1>
+          <span class="ticket-meta">{{ event.date|date:_("l j F Y")|capfirst }} &middot; {{ event.time|time:_("H\\hi") }}</span>
+          {% if event.venue %}<span class="ticket-meta">{{ event.venue }}</span>{% endif %}
+        </div>
+        <div class="ticket-tear" aria-hidden="true"><i></i><i></i></div>
+        <div class="ticket-qr"><div class="qr-box">{{ qr }}</div></div>
+        <div class="ticket-foot">
+          <span class="disp ticket-name">{{ guest.name }}</span>
+          <span class="ticket-meta">{% if paid_refs %}{% blocktranslate trimmed count n=guest.party_size %}{{ n }} place{% plural %}{{ n }} places{% endblocktranslate %} &middot; {% blocktranslate trimmed with ref=paid_refs %}Billet payé ({{ ref }}){% endblocktranslate %}{% elif guest.from_ticket %}{% blocktranslate trimmed count n=guest.party_size %}{{ n }} place{% plural %}{{ n }} places{% endblocktranslate %} &middot; {% trans "Entrée gratuite" %}{% else %}{{ party }}{% endif %}</span>
+          {% if guest.table %}<span class="ticket-table">{{ guest.table.label }}</span>{% endif %}
+          <span class="ticket-code">{{ guest.entry_code }}</span>
+        </div>
+      </div>
+    </div>
+    <div class="ticket-actions">
+      <a href="{% url 'events:invitation_ticket_png' guest.magic_token %}" class="btn btn-light" download><i class="bi bi-download me-2"></i>{% trans "Enregistrer dans mon téléphone" %}</a>
+      <a href="{{ whatsapp_url }}" target="_blank" rel="noopener" class="btn btn-outline-gold-light"><i class="bi bi-whatsapp me-2"></i>{% trans "Envoyer sur mon WhatsApp" %}</a>
+      <button type="button" class="btn btn-outline-gold-light" data-copy="{{ guest.entry_code }}"><i class="bi bi-clipboard me-2"></i>{% trans "Copier le code" %}</button>
+      <button type="button" class="btn btn-outline-gold-light" data-print><i class="bi bi-printer me-2"></i>{% trans "Imprimer" %}</button>
+    </div>
+    <p class="ticket-note">{% trans "Présentez ce code à l'entrée. Enregistrez-le dans votre téléphone pour l'avoir même sans réseau." %}</p>
+  </div>
+</div>
+{% endblock %}

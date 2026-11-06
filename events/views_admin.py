@@ -1,22 +1,95 @@
 """Tableau de bord administrateur : CRUD événements et invités, suivi, exports."""
 import csv
-from urllib.parse import quote
 
 from django.contrib import messages
-from django.db.models import Count, Q
+from django.db import transaction
+from django.db.models import Count, Q, Sum
 from django.http import HttpResponse, JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.template.loader import render_to_string
 from django.urls import reverse
 from django.utils import timezone
+from django.utils.translation import gettext as _
+from django.utils.translation import ngettext
 from django.views.decorators.http import require_GET, require_POST
 
 from accounts.decorators import admin_required
+from core.paging import paginate
 from gifts.models import GiftClaim
+from payments.models import Contribution
 
-from .forms import EventForm, GuestForm
+from .forms import EventCategoryForm, EventForm, GuestForm
 from .geocoding import geocode_address
-from .models import Event, Guest
+from .messaging import invitation_links
+from .models import Event, EventCategory, Guest
+
+# ---------------------------------------------------------------------------
+# Catégories d'événements
+# ---------------------------------------------------------------------------
+
+
+@admin_required
+def category_list(request):
+    categories = EventCategory.objects.annotate(num_events=Count("events")).order_by("order", "name")
+    return render(request, "dashboard/categories/list.html", {
+        "categories": categories, "missing_defaults": EventCategory.missing_defaults(),
+    })
+
+
+@admin_required
+@require_POST
+def category_add_defaults(request):
+    created = EventCategory.add_missing_defaults()
+    if created:
+        messages.success(request, ngettext("%(n)d catégorie ajoutée.", "%(n)d catégories ajoutées.", created) % {"n": created})
+    else:
+        messages.info(request, _("Toutes les catégories par défaut existent déjà."))
+    return redirect("dashboard:category_list")
+
+
+@admin_required
+def category_create(request):
+    last = EventCategory.objects.order_by("-order").first()
+    initial = {"icon_name": "bi-calendar2-event", "order": (last.order + 1) if last else 1}
+    form = EventCategoryForm(request.POST or None, request.FILES or None, initial=initial)
+    if request.method == "POST" and form.is_valid():
+        form.save()
+        messages.success(request, _("Catégorie créée."))
+        return redirect("dashboard:category_list")
+    return render(request, "dashboard/categories/form.html", {"form": form, "is_new": True})
+
+
+@admin_required
+def category_edit(request, pk):
+    category = get_object_or_404(EventCategory, pk=pk)
+    form = EventCategoryForm(request.POST or None, request.FILES or None, instance=category)
+    if request.method == "POST" and form.is_valid():
+        form.save()
+        messages.success(request, _("Catégorie mise à jour."))
+        return redirect("dashboard:category_list")
+    return render(request, "dashboard/categories/form.html", {"form": form, "category": category, "is_new": False})
+
+
+@admin_required
+def category_delete(request, pk):
+    category = get_object_or_404(EventCategory, pk=pk)
+    if request.method == "POST":
+        category.delete()
+        messages.success(request, _("Catégorie supprimée. Ses événements sont conservés."))
+        return redirect("dashboard:category_list")
+    count = category.events.count()
+    note = ""
+    if count:
+        note = ngettext(
+            "Les %(n)d événement de cette catégorie ne sont pas supprimés : ils n'auront simplement plus de catégorie.",
+            "Les %(n)d événements de cette catégorie ne sont pas supprimés : ils n'auront simplement plus de catégorie.",
+            count,
+        ) % {"n": count}
+    return render(request, "dashboard/confirm_delete.html", {
+        "object": category, "kind": _("la catégorie"), "blocked": False, "note": note,
+        "cancel_url": reverse("dashboard:category_list"),
+    })
+
 
 # ---------------------------------------------------------------------------
 # Événements
@@ -29,14 +102,21 @@ def event_list(request):
         num_guests=Count("guests", distinct=True),
         num_confirmed=Count("guests", filter=Q(guests__status=Guest.Status.CONFIRMED), distinct=True),
         num_gifts=Count("gifts", distinct=True),
-    ).order_by("-date")
+    ).select_related("category").order_by("-date")
     q = request.GET.get("q", "").strip()
     etype = request.GET.get("type", "")
+    categories = EventCategory.objects.all()
+    category = next((c for c in categories if c.slug == request.GET.get("categorie", "")), None)
     if q:
         events = events.filter(Q(title__icontains=q) | Q(venue__icontains=q))
     if etype in dict(Event.EventType.choices):
         events = events.filter(event_type=etype)
-    return render(request, "dashboard/events/list.html", {"events": events, "q": q, "etype": etype})
+    if category:
+        events = events.filter(category=category)
+    page = paginate(request, events, 25)
+    return render(request, "dashboard/events/list.html", {
+        "events": page.object_list, "page_obj": page, "q": q, "etype": etype, "categories": categories, "category": category,
+    })
 
 
 def _save_event(request, form):
@@ -49,7 +129,7 @@ def _save_event(request, form):
         if coords:
             event.latitude, event.longitude = coords
         else:
-            messages.warning(request, "Adresse non localisée automatiquement. Placez le repère sur la carte si besoin.")
+            messages.warning(request, _("Adresse non localisée automatiquement. Placez le repère sur la carte si besoin."))
     event.save()
     return event
 
@@ -59,7 +139,7 @@ def event_create(request):
     form = EventForm(request.POST or None, request.FILES or None)
     if request.method == "POST" and form.is_valid():
         event = _save_event(request, form)
-        messages.success(request, "Événement créé. Ajoutez maintenant vos invités et votre liste de cadeaux.")
+        messages.success(request, _("Événement créé. Ajoutez maintenant vos invités et votre liste de cadeaux."))
         return redirect("dashboard:event_detail", pk=event.pk)
     return render(request, "dashboard/events/form.html", {"form": form, "is_new": True})
 
@@ -70,7 +150,7 @@ def event_edit(request, pk):
     form = EventForm(request.POST or None, request.FILES or None, instance=event)
     if request.method == "POST" and form.is_valid():
         _save_event(request, form)
-        messages.success(request, "Événement mis à jour.")
+        messages.success(request, _("Événement mis à jour."))
         return redirect("dashboard:event_detail", pk=event.pk)
     return render(request, "dashboard/events/form.html", {"form": form, "event": event, "is_new": False})
 
@@ -78,16 +158,16 @@ def event_edit(request, pk):
 @admin_required
 def event_delete(request, pk):
     event = get_object_or_404(Event, pk=pk)
-    has_claims = GiftClaim.objects.filter(gift__event=event).exists()
+    has_claims = GiftClaim.objects.filter(gift__event=event).exists() or Contribution.objects.filter(event=event).exists()
     if request.method == "POST":
         if has_claims:
-            messages.error(request, "Impossible de supprimer : des invités ont déjà choisi des cadeaux. Annulez plutôt l'événement.")
+            messages.error(request, _("Impossible de supprimer : des invités ont déjà choisi des cadeaux ou fait une contribution. Annulez plutôt l'événement."))
             return redirect("dashboard:event_detail", pk=pk)
         event.delete()
-        messages.success(request, "Événement supprimé.")
+        messages.success(request, _("Événement supprimé."))
         return redirect("dashboard:event_list")
     return render(request, "dashboard/confirm_delete.html", {
-        "object": event, "kind": "l'événement", "blocked": has_claims,
+        "object": event, "kind": _("l'événement"), "blocked": has_claims,
         "cancel_url": reverse("dashboard:event_detail", args=[pk]),
     })
 
@@ -98,6 +178,8 @@ def _tracking_context(event):
         "event": event,
         "stats": event.stats(),
         "gifts": gifts,
+        "contributions": list(event.contributions.select_related("guest", "payment")),
+        "contributions_total": event.contributions.aggregate(s=Sum("amount_htg"))["s"] or 0,
         "recent": event.guests.exclude(replied_at=None).order_by("-replied_at")[:8],
         "now": timezone.now(),
     }
@@ -135,25 +217,10 @@ def geocode(request):
 # ---------------------------------------------------------------------------
 
 
-def invitation_links(request, guest):
-    url = request.build_absolute_uri(guest.get_invitation_url())
-    event = guest.event
-    text = (
-        f"Bonjour {guest.name}, vous êtes invité(e) à « {event.title} » le "
-        f"{event.date:%d/%m/%Y} à {event.time:%H:%M}. Merci de confirmer votre présence ici : {url}"
-    )
-    phone = "".join(c for c in guest.phone if c.isdigit())
-    return {
-        "url": url,
-        "whatsapp": f"https://wa.me/{phone}?text={quote(text)}" if phone else f"https://wa.me/?text={quote(text)}",
-        "mailto": f"mailto:{guest.email}?subject={quote('Invitation : ' + event.title)}&body={quote(text)}",
-    }
-
-
 @admin_required
 def guest_list(request):
     guests = Guest.objects.select_related("event").annotate(num_gifts=Count("gift_claims"))
-    events = Event.objects.order_by("-date")
+    events = Event.objects.order_by("-date").only("pk", "title", "date")
     event_id = request.GET.get("event", "")
     status = request.GET.get("status", "")
     q = request.GET.get("q", "").strip()
@@ -165,10 +232,11 @@ def guest_list(request):
         guests = guests.filter(status=status)
     if q:
         guests = guests.filter(Q(name__icontains=q) | Q(email__icontains=q) | Q(phone__icontains=q))
-    for g in guests:
+    page = paginate(request, guests.order_by("name", "pk"), 50)
+    for g in page.object_list:  # liens calculés pour les seuls invités affichés
         g.links = invitation_links(request, g)
     return render(request, "dashboard/guests/list.html", {
-        "guests": guests, "events": events, "current_event": current_event,
+        "guests": page.object_list, "page_obj": page, "events": events, "current_event": current_event,
         "status": status, "q": q, "statuses": Guest.Status.choices,
         "export_qs": request.GET.urlencode(),
     })
@@ -180,9 +248,16 @@ def guest_create(request):
     if request.GET.get("event", "").isdigit():
         initial["event"] = request.GET["event"]
     form = GuestForm(request.POST or None, initial=initial)
-    if request.method == "POST" and form.is_valid():
-        guest = form.save()
-        messages.success(request, f"{guest.name} a été ajouté(e). Son lien d'invitation est prêt à être envoyé.")
+    if request.method == "POST":
+        with transaction.atomic():
+            # Verrou sur l'événement : deux personnes qui ajoutent le dernier invité en même temps ne dépassent pas la limite
+            if request.POST.get("event", "").isdigit():
+                Event.objects.select_for_update().filter(pk=request.POST["event"]).first()
+            guest = form.save() if form.is_valid() else None
+    if request.method == "POST" and guest:
+        messages.success(
+            request, _("%(name)s a été ajouté(e). Son lien d'invitation est prêt à être envoyé.") % {"name": guest.name}
+        )
         if "add_another" in request.POST:
             return redirect(f"{reverse('dashboard:guest_create')}?event={guest.event_id}")
         return redirect(f"{reverse('dashboard:guest_list')}?event={guest.event_id}")
@@ -195,7 +270,7 @@ def guest_edit(request, pk):
     form = GuestForm(request.POST or None, instance=guest)
     if request.method == "POST" and form.is_valid():
         form.save()
-        messages.success(request, "Invité mis à jour.")
+        messages.success(request, _("Invité mis à jour."))
         return redirect(f"{reverse('dashboard:guest_list')}?event={guest.event_id}")
     return render(request, "dashboard/guests/form.html", {
         "form": form, "guest": guest, "is_new": False, "links": invitation_links(request, guest),
@@ -205,17 +280,17 @@ def guest_edit(request, pk):
 @admin_required
 def guest_delete(request, pk):
     guest = get_object_or_404(Guest, pk=pk)
-    blocked = guest.gift_claims.exists()
+    blocked = guest.gift_claims.exists() or Contribution.objects.filter(guest=guest).exists()
     back = f"{reverse('dashboard:guest_list')}?event={guest.event_id}"
     if request.method == "POST":
         if blocked:
-            messages.error(request, "Cet invité a choisi des cadeaux : sa réponse est définitive et ne peut pas être supprimée.")
+            messages.error(request, _("Cet invité a choisi des cadeaux ou fait une contribution : sa réponse est définitive et ne peut pas être supprimée."))
         else:
             guest.delete()
-            messages.success(request, "Invité supprimé.")
+            messages.success(request, _("Invité supprimé."))
         return redirect(back)
     return render(request, "dashboard/confirm_delete.html", {
-        "object": guest, "kind": "l'invité", "blocked": blocked, "cancel_url": back,
+        "object": guest, "kind": _("l'invité"), "blocked": blocked, "cancel_url": back,
     })
 
 
@@ -228,7 +303,7 @@ def guest_mark_sent(request, pk):
     guest.save(update_fields=["invitation_sent_at"])
     if request.headers.get("x-requested-with") == "fetch":
         return JsonResponse({"ok": True, "sent_at": guest.invitation_sent_at.isoformat()})
-    messages.success(request, f"Invitation de {guest.name} marquée comme envoyée.")
+    messages.success(request, _("Invitation de %(name)s marquée comme envoyée.") % {"name": guest.name})
     return redirect(request.POST.get("next") or reverse("dashboard:guest_list"))
 
 
@@ -244,11 +319,11 @@ def _filtered_guests(request):
 @admin_required
 def guest_export_csv(request):
     response = HttpResponse(content_type="text/csv; charset=utf-8")
-    response["Content-Disposition"] = 'attachment; filename="invites-eventlead.csv"'
+    response["Content-Disposition"] = 'attachment; filename="%s.csv"' % _("invites-eventlead")
     response.write("﻿")  # BOM pour l'ouverture correcte dans Excel
     writer = csv.writer(response, delimiter=";")
-    writer.writerow(["Événement", "Nom", "E-mail", "Téléphone", "Canal", "Statut", "Accompagnants",
-                     "Cadeaux choisis", "Répondu le", "Lien d'invitation"])
+    writer.writerow([_("Événement"), _("Nom"), _("E-mail"), _("Téléphone"), _("Canal"), _("Statut"), _("Accompagnants"),
+                     _("Cadeaux choisis"), _("Répondu le"), _("Lien d'invitation")])
     for g in _filtered_guests(request):
         writer.writerow([
             g.event.title, g.name, g.email, g.phone, g.get_sent_via_display(), g.get_status_display(),
@@ -271,8 +346,8 @@ def guest_export_pdf(request):
         "guests": guests, "event": event, "generated_at": timezone.localtime(),
     })
     response = HttpResponse(content_type="application/pdf")
-    response["Content-Disposition"] = 'attachment; filename="invites-eventlead.pdf"'
+    response["Content-Disposition"] = 'attachment; filename="%s.pdf"' % _("invites-eventlead")
     result = pisa.CreatePDF(html, dest=response, encoding="utf-8")
     if result.err:
-        return HttpResponse("Erreur lors de la génération du PDF.", status=500)
+        return HttpResponse(_("Erreur lors de la génération du PDF."), status=500)
     return response

@@ -1,0 +1,39 @@
+{% load i18n %}
+<div class="el-card">
+  <div class="el-card-header flex-wrap gap-2">
+    <h2>{% trans "Invités sans réponse" %}</h2>
+    <div class="chip-tabs" role="group" aria-label="{% trans 'Filtrer' %}">
+      <button type="button" class="active" data-filter="all">{% trans "Tous" %}</button>
+      <button type="button" data-filter="never">{% blocktranslate trimmed with n=stats.never %}Jamais relancés · {{ n }}{% endblocktranslate %}</button>
+      {% for lvl in levels %}<button type="button" data-filter="{{ lvl.n }}">{% blocktranslate trimmed count counter=lvl.n with k=lvl.count %}Relancés {{ counter }} fois · {{ k }}{% plural %}Relancés {{ counter }} fois · {{ k }}{% endblocktranslate %}</button>{% endfor %}
+    </div>
+  </div>
+  {% if rows %}
+  <div class="table-wrap"><table class="table table-el reminder-table">
+    <thead><tr><th>{% trans "Invité" %}</th><th>{% trans "Canal" %}</th><th class="col-extra">{% trans "Relances" %}</th><th class="col-extra">{% trans "Prochaine" %}</th><th>{% trans "Statut" %}</th><th class="text-end"><span class="visually-hidden">{% trans "Actions" %}</span></th></tr></thead>
+    <tbody>
+    {% for r in rows %}
+      <tr data-count="{{ r.count }}" data-never="{% if r.count == 0 and r.state != 'not_invited' %}1{% else %}0{% endif %}">
+        <td><div class="fw-semibold">{{ r.guest.name }}</div><div class="small text-muted">{% if r.guest.invitation_sent_at %}{% blocktranslate trimmed with d=r.guest.invitation_sent_at|date:"d/m/Y" %}Invité le {{ d }}{% endblocktranslate %}{% else %}{% trans "Invitation non envoyée" %}{% endif %}</div></td>
+        <td>{% if r.channel == 'whatsapp' %}<span class="badge-el badge-success"><i class="bi bi-whatsapp me-1"></i><span class="ch-label">WhatsApp</span></span>{% elif r.channel == 'email' %}<span class="badge-el badge-primary"><i class="bi bi-envelope me-1"></i><span class="ch-label">{% trans "E-mail" %}</span></span>{% else %}<span class="text-muted">-</span>{% endif %}</td>
+        <td class="text-nowrap col-extra"><span class="reminder-dots" aria-hidden="true">{% for i in "123" %}<i class="{% if forloop.counter <= r.count %}on{% endif %}"></i>{% endfor %}</span> <span class="small">{{ r.count }}/{{ limit }}</span></td>
+        <td class="text-nowrap small col-extra">{% if r.state == 'due' %}<strong>{% trans "Aujourd'hui" %}</strong> &middot; {{ reminder_time|time:_("H\\hi") }}{% elif r.state == 'waiting' %}{{ r.due_on|date:_("j M") }}{% else %}<span class="text-muted">-</span>{% endif %}</td>
+        <td>{% if r.state == 'due' %}<span class="badge-el badge-warning">{% trans "À relancer" %}</span>{% elif r.state == 'maxed' %}<span class="badge-el badge-muted">{% trans "Maximum atteint" %}</span>{% elif r.state == 'no_contact' %}<span class="badge-el badge-danger">{% trans "Aucun contact" %}</span>{% elif r.state == 'not_invited' %}<span class="badge-el badge-muted">{% trans "Pas invité" %}</span>{% elif r.count %}<span class="badge-el badge-primary">{% blocktranslate trimmed count counter=r.count %}Relancé {{ counter }} fois{% plural %}Relancé {{ counter }} fois{% endblocktranslate %}</span>{% else %}<span class="badge-el badge-muted">{% trans "Jamais relancé" %}</span>{% endif %}</td>
+        <td class="text-end text-nowrap">
+          {% if accepts and r.can_remind %}
+            {% if r.channel == 'whatsapp' %}
+            <a href="{{ r.links.whatsapp }}" target="_blank" rel="noopener" class="btn btn-sm btn-whatsapp" data-remind="{{ r.guest.pk }}" title="{% trans 'Relancer' %}"><i class="bi bi-whatsapp me-1"></i><span class="btn-label">{% trans "Relancer" %}</span></a>
+            {% else %}
+            <button type="button" class="btn btn-sm {% if r.state == 'due' %}btn-primary{% else %}btn-soft{% endif %}" data-remind="{{ r.guest.pk }}" title="{% trans 'Relancer' %}"><i class="bi bi-envelope me-1"></i><span class="btn-label">{% trans "Relancer" %}</span></button>
+            {% endif %}
+          {% endif %}
+        </td>
+      </tr>
+    {% endfor %}
+    </tbody>
+  </table></div>
+  <p class="empty-filter small text-muted px-4 pb-3 mb-0" hidden>{% trans "Rien à afficher pour ce filtre." %}</p>
+  {% else %}
+  <div class="empty-state small"><i class="bi bi-check2-circle"></i><p class="mt-2 mb-0">{% trans "Tous les invités ont répondu : rien à relancer." %}</p></div>
+  {% endif %}
+</div>

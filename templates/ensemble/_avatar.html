@@ -1,0 +1,2 @@
+{# Photo du petit profil, ou son initiale. Paramètres : p (Profile), size ("", "sm", "lg") #}
+<span class="ya-av {{ size }} c{{ p.color }}" aria-hidden="true">{% if p.photo %}<img src="{{ p.photo.url }}" alt="" loading="lazy">{% else %}{{ p.initial }}{% endif %}</span>

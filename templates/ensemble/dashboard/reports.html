@@ -1,0 +1,47 @@
+{% extends "dashboard/base_dashboard.html" %}
+{% load i18n %}
+{% block title %}{% trans "Signalements" %}{% endblock %}
+{% block extra_head %}{% include "ensemble/_head.html" %}{% endblock %}
+{% block dash_content %}
+<div class="page-head"><div><h1>{% trans "Signalements" %}</h1><p>{% trans "Personnes signalées dans « Y aller ensemble ». Lisez la conversation avant de décider." %}</p></div></div>
+<div class="d-flex flex-wrap gap-2 mb-3">
+  <a href="?onglet=a-traiter" class="btn btn-sm {% if tab == 'a-traiter' %}btn-primary{% else %}btn-light{% endif %}">{% trans "À traiter" %} ({{ counts.new }})</a>
+  <a href="?onglet=traites" class="btn btn-sm {% if tab == 'traites' %}btn-primary{% else %}btn-light{% endif %}">{% trans "Traités" %} ({{ counts.done }})</a>
+  <a href="?onglet=suspendus" class="btn btn-sm {% if tab == 'suspendus' %}btn-primary{% else %}btn-light{% endif %}">{% trans "Comptes suspendus" %} ({{ counts.suspended }})</a>
+</div>
+<div class="el-card">
+  {% for r in page_obj %}{% with p=r.reported.ensemble_profile %}
+  <div class="p-3 border-bottom {% if r.status == 'new' %}bg-soft{% endif %}">
+    <div class="d-flex flex-wrap justify-content-between gap-2">
+      <div class="d-flex align-items-center gap-3">
+        {% if p %}{% include "ensemble/_avatar.html" with p=p size="sm" %}{% endif %}
+        <div>
+          <strong>{{ p.first_name|default:r.reported.display_name }}</strong>
+          <span class="small text-muted">{{ r.reported.email }} &middot; {% blocktranslate trimmed with name=r.reporter.ensemble_profile.first_name|default:r.reporter.display_name %}signalé par {{ name }}{% endblocktranslate %}{% if r.event %} &middot; {{ r.event.title }}{% endif %}</span>
+          <div class="small text-muted">{{ r.created_at|date:_("j F Y") }} {{ r.created_at|date:"H:i" }} &middot; {% blocktranslate trimmed count n=r.total %}signalé {{ n }} fois au total{% plural %}signalé {{ n }} fois au total{% endblocktranslate %}</div>
+        </div>
+      </div>
+      <span class="badge-el {% if r.status == 'new' %}badge-warning{% elif r.status == 'dismissed' %}badge-muted{% else %}badge-primary{% endif %}">{{ r.get_status_display }}</span>
+    </div>
+    <div class="mt-2"><span class="badge-el badge-gold">{{ r.get_reason_display }}</span></div>
+    {% if r.details %}<p class="small mt-2 mb-2 ya-note">« {{ r.details }} »</p>{% endif %}
+    <div class="d-flex flex-wrap gap-2 mt-2">
+      <a href="{% url 'dashboard:ensemble_report_conversation' r.pk %}" class="btn btn-sm btn-soft"><i class="bi bi-chat-text me-1"></i>{% trans "Lire la conversation" %}</a>
+      {% if r.status == 'new' %}
+      <form method="post" action="{% url 'dashboard:ensemble_report_action' r.pk %}" class="d-flex flex-wrap gap-2">{% csrf_token %}
+        <button name="action" value="warn" class="btn btn-sm btn-light"><i class="bi bi-exclamation-triangle me-1"></i>{% trans "Avertir" %}</button>
+        <button name="action" value="remove" class="btn btn-sm btn-light" data-confirm="{% trans 'Retirer cette personne de Y aller ensemble ?' %}"><i class="bi bi-eye-slash me-1"></i>{% trans "Retirer de Y aller ensemble" %}</button>
+        <button name="action" value="suspend" class="btn btn-sm btn-light text-danger" data-confirm="{% trans 'Suspendre ce compte ? La personne ne pourra plus se connecter.' %}"><i class="bi bi-person-x me-1"></i>{% trans "Suspendre le compte" %}</button>
+        <button name="action" value="dismiss" class="btn btn-sm btn-light">{% trans "Classer sans suite" %}</button>
+      </form>
+      {% elif r.status == 'suspended' and not r.reported.is_active %}
+      <form method="post" action="{% url 'dashboard:ensemble_report_action' r.pk %}">{% csrf_token %}<button name="action" value="reactivate" class="btn btn-sm btn-light" data-confirm="{% trans 'Réactiver ce compte ?' %}"><i class="bi bi-person-check me-1"></i>{% trans "Réactiver le compte" %}</button></form>
+      {% endif %}
+    </div>
+  </div>
+  {% endwith %}{% empty %}
+  <div class="empty-state"><i class="bi bi-flag"></i><p class="mt-2 mb-0">{% trans "Aucun signalement ici." %}</p></div>
+  {% endfor %}
+  <div class="px-3 pb-3">{% include "partials/_pagination.html" with page=page_obj %}</div>
+</div>
+{% endblock %}
